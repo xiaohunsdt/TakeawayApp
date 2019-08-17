@@ -10,11 +10,22 @@
           input-align="center"
           background="transparent"
           @change="searchChanged">
-          <view slot="action" @tap="onSearch">搜索</view>
+          <view slot="action" @tap="onSearch" style="font-weight: 700">搜索</view>
         </van-search>
       </div>
       <div id="scrollImg">
-
+        <swiper
+          indicator-dots="true"
+          autoplay="true"
+          easing-function="easeInOutCubic"
+          circular="true">
+          <swiper-item>
+            <img class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg" alt="">
+          </swiper-item>
+          <swiper-item>
+            <img class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg" alt="">
+          </swiper-item>
+        </swiper>
       </div>
     </div>
   </div>
@@ -45,18 +56,26 @@
   }
 </script>
 
+<style>
+  .van-search__action--hover {
+    background-color: transparent !important;
+  }
+</style>
+
 <style scoped>
-  .container {}
+  .container {
+  }
 
   .gradientDiv {
     position: absolute;
-    background: linear-gradient(#FFD200, white, white);
+    /*background: linear-gradient(#FFD200, white, white);*/
+    background: #FFD200;
     width: 100%;
-    height: 9rem;
+    height: 3rem;
     z-index: -1;
   }
 
-  #search {
-    background: transparent;
+  .itemImg {
+    width: 100%;
   }
 </style>
