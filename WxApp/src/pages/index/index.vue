@@ -2,17 +2,7 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div id="banner">
-      <div id="search">
-        <van-search
-          placeholder="请输入搜索关键词"
-          use-action-slot
-          shape="round"
-          input-align="center"
-          background="transparent"
-          @change="searchChanged">
-          <view slot="action" @tap="onSearch" style="font-weight: 700">搜索</view>
-        </van-search>
-      </div>
+      <search-bar></search-bar>
       <div id="scrollImg">
         <swiper
           indicator-dots="true"
@@ -28,27 +18,23 @@
         </swiper>
       </div>
     </div>
+    <div></div>
   </div>
 </template>
 
 <script>
   // Use Vuex
   // import store from '@/store/store'
+  import SearchBar from '@/components/SearchBar'
 
   export default {
+    components: {
+      SearchBar
+    },
     data () {
-      return {
-        searchValue: ''
-      }
+      return {}
     },
-    methods: {
-      searchChanged (event) {
-        this.searchValue = event.mp.detail
-      },
-      onSearch () {
-        console.log(this.searchValue)
-      }
-    },
+    methods: {},
     created () {
       let app = getApp()
       console.log(app)
@@ -56,15 +42,10 @@
   }
 </script>
 
-<style>
-  .van-search__action--hover {
-    background-color: transparent !important;
-  }
-</style>
+
 
 <style scoped>
-  .container {
-  }
+  .container {}
 
   .gradientDiv {
     position: absolute;
