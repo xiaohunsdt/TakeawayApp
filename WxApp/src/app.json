@@ -19,20 +19,20 @@
       {
         "text": "点餐",
         "pagePath": "pages/index/main",
-        "iconPath": "static/tabs/home.png",
-        "selectedIconPath": "static/tabs/home-active.png"
+        "iconPath": "static/tabs/order.png",
+        "selectedIconPath": "static/tabs/order_active.png"
       },
       {
         "text": "活动",
         "pagePath": "pages/index/main",
-        "iconPath": "static/tabs/orders.png",
-        "selectedIconPath": "static/tabs/orders-active.png"
+        "iconPath": "static/tabs/activity.png",
+        "selectedIconPath": "static/tabs/activity_active.png"
       },
       {
         "text": "我的",
         "pagePath": "pages/index/main",
-        "iconPath": "static/tabs/orders.png",
-        "selectedIconPath": "static/tabs/orders-active.png"
+        "iconPath": "static/tabs/my.png",
+        "selectedIconPath": "static/tabs/my_active.png"
       }
     ],
     "position": "bottom"

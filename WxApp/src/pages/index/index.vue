@@ -1,6 +1,22 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="gradientDiv"></div>
+    <div id="banner">
+      <div id="search">
+        <van-search
+          placeholder="请输入搜索关键词"
+          use-action-slot
+          shape="round"
+          input-align="center"
+          background="transparent"
+          @change="searchChanged">
+          <view slot="action" @tap="onSearch">搜索</view>
+        </van-search>
+      </div>
+      <div id="scrollImg">
 
+      </div>
+    </div>
   </div>
 </template>
 
@@ -10,67 +26,37 @@
 
   export default {
     data () {
-      return {}
+      return {
+        searchValue: ''
+      }
     },
-    methods: {},
+    methods: {
+      searchChanged (event) {
+        this.searchValue = event.mp.detail
+      },
+      onSearch () {
+        console.log(this.searchValue)
+      }
+    },
     created () {
-      // let app = getApp()
+      let app = getApp()
+      console.log(app)
     }
   }
 </script>
 
 <style scoped>
-  .userinfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .container {}
+
+  .gradientDiv {
+    position: absolute;
+    background: linear-gradient(#FFD200, white, white);
+    width: 100%;
+    height: 9rem;
+    z-index: -1;
   }
 
-  .userinfo-avatar {
-    width: 1.28rem;
-    height: 1.28rem;
-    margin: 0.20rem;
-    border-radius: 50%;
-  }
-
-  .userinfo-nickname {
-    color: #aaa;
-  }
-
-  .usermotto {
-    margin-top: 150px;
-  }
-
-  .form-control {
-    display: block;
-    padding: 0 12px;
-    margin-bottom: 5px;
-    border: 1px solid #ccc;
-  }
-
-  .all {
-    width: 7.5rem;
-    height: 1rem;
-    background-color: blue;
-  }
-
-  .all:after {
-    display: block;
-    content: '';
-    clear: both;
-  }
-
-  .left {
-    float: left;
-    width: 3rem;
-    height: 1rem;
-    background-color: red;
-  }
-
-  .right {
-    float: left;
-    width: 4.5rem;
-    height: 1rem;
-    background-color: green;
+  #search {
+    background: transparent;
   }
 </style>
