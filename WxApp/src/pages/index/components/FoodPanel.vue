@@ -13,8 +13,10 @@
         <van-panel custom-class="food-item-panel">
           <view class="food-item-content">
             <van-card
-              title="鸭血粉丝汤"
-              thumb="/static/images/food/food.jpg"
+              v-for="food in foodList"
+              :key="food.id"
+              :title="food.name"
+              :thumb="food.thumb"
               thumb-mode="aspectFill"
               custom-class="food-card-root"
               thumb-class="food-card-thumb"
@@ -22,16 +24,15 @@
               <view slot="desc" class="food-card-desc">
                 <div class="desc">
                   <van-icon name="label"/>
-                  好吃的鸭血粉丝汤好吃的鸭血粉鸭
+                  {{ food.desc }}
                 </div>
                 <div class="comment">
                   <div>
-                    月销 10
+                    月销 {{ food.monthSale }}
                   </div>
                   <div class="dividLine"></div>
-                  <div>
-                    评分 5
-                  </div>
+                  <div>评分&nbsp;</div>
+                  <div style="color: #FFD200">{{ food.rate }}</div>
                 </div>
               </view>
               <view slot="footer" style="height: 20rpx">
@@ -40,7 +41,8 @@
                   size="small"
                   type="primary"
                   custom-class="orderBtn"
-                  round>
+                  round
+                  @click="addCart(food.id)">
                   下单
                 </van-button>
               </view>
@@ -73,6 +75,11 @@
         }
         return style
       }
+    },
+    methods: {
+      addCart (id) {
+        console.log(`id is ${id}`)
+      }
     }
   }
 </script>
@@ -101,6 +108,10 @@
     height: 1.7rem;
   }
 
+  .food-card-root {
+    margin-bottom: 0.5rem;
+  }
+
   .food-card-thumb {
     border-radius: 0.2rem;
     overflow: hidden;
@@ -122,7 +133,8 @@
     display: flex;
     flex-direction: row;
   }
-  .food-card-desc .comment .dividLine{
+
+  .food-card-desc .comment .dividLine {
     border-right: #F3F3F3 0.01rem solid;
     width: 0.01rem;
     margin: 0 0.1rem;

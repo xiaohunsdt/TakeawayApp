@@ -46,38 +46,50 @@
         foodPanel: {
           new: [
             {
-              title: '鸭血粉丝汤',
+              id: 1,
+              name: '鸭血粉丝汤',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }, {
-              title: '鸭血粉丝汤2',
+              id: 2,
+              name: '鸭血粉丝汤2',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }, {
-              title: '鸭血粉丝汤3',
+              id: 3,
+              name: '鸭血粉丝汤3',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }
           ],
           hot: [
             {
-              title: '鸭血粉丝汤',
+              id: 4,
+              name: '鸭血粉丝汤',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }, {
-              title: '鸭血粉丝汤2',
+              id: 5,
+              name: '鸭血粉丝汤2',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }, {
-              title: '鸭血粉丝汤3',
+              id: 6,
+              name: '鸭血粉丝汤3',
+              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
-              image: '/static/images/food/food.jpg'
+              thumb: '/static/images/food/food.jpg'
             }
           ]
         }
