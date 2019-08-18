@@ -111,28 +111,7 @@
   }
 </script>
 
-<style>
-  page {
-    height: 100%;
-  }
-</style>
-
 <style scoped>
-  .container {
-    background-color: #F0F0F0;
-    min-height: 100%;
-    width: 100%;
-  }
-
-  .gradientDiv {
-    position: absolute;
-    /*background: linear-gradient(#FFD200, white, white);*/
-    background: #FFD200;
-    width: 100%;
-    height: 3rem;
-    z-index: -1;
-  }
-
   .itemImg {
     width: 100%;
   }

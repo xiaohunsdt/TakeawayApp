@@ -43,5 +43,8 @@
 </style>
 
 <style scoped>
-
+  #search{
+    position: relative;
+    z-index: 100;
+  }
 </style>

@@ -1,5 +1,10 @@
 <template>
-  <div></div>
+  <div class="container">
+    <div class="gradientDiv"></div>
+    <div>
+      asdadsada
+    </div>
+  </div>
 </template>
 
 <script>
