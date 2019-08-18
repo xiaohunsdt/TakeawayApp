@@ -5,7 +5,7 @@
       use-action-slot
       shape="round"
       input-align="center"
-      background="transparent"
+      :background="background"
       @change="searchChanged">
       <view slot="action" @tap="onSearch" style="font-weight: 700">搜索</view>
     </van-search>
@@ -13,21 +13,27 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      searchValue: ''
-    }
-  },
-  methods: {
-    searchChanged (event) {
-      this.searchValue = event.mp.detail
+  export default {
+    props: {
+      background: {
+        type: String,
+        default: 'transparent'
+      }
     },
-    onSearch () {
-      console.log(this.searchValue)
+    data () {
+      return {
+        searchValue: ''
+      }
+    },
+    methods: {
+      searchChanged (event) {
+        this.searchValue = event.mp.detail
+      },
+      onSearch () {
+        console.log(this.searchValue)
+      }
     }
   }
-}
 </script>
 
 <style>

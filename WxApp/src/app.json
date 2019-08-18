@@ -1,12 +1,14 @@
 {
   "pages": [
-    "pages/index/main"
+    "pages/index/main",
+    "pages/activity/main",
+    "pages/my/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFD200",
     "navigationStyle": "default",
-    "navigationBarTitleText": "川湘苑",
+    "navigationBarTitleText": "川湘苑品牌",
     "navigationBarTextStyle": "black",
     "backgroundColor": "FFD200"
   },
@@ -24,17 +26,24 @@
       },
       {
         "text": "活动",
-        "pagePath": "pages/index/main",
+        "pagePath": "pages/activity/main",
         "iconPath": "static/tabs/activity.png",
         "selectedIconPath": "static/tabs/activity_active.png"
       },
       {
         "text": "我的",
-        "pagePath": "pages/index/main",
+        "pagePath": "pages/my/main",
         "iconPath": "static/tabs/my.png",
         "selectedIconPath": "static/tabs/my_active.png"
       }
     ],
     "position": "bottom"
+  },
+  "usingComponents": {
+    "van-search": "/static/vant/search/index",
+    "van-panel": "/static/vant/panel/index",
+    "van-button": "/static/vant/button/index",
+    "van-tag": "/static/vant/tag/index",
+    "van-icon": "/static/vant/icon/index"
   }
 }
