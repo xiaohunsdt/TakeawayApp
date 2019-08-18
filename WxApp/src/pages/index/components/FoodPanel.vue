@@ -35,16 +35,17 @@
                   <div style="color: #FFD200">{{ food.rate }}</div>
                 </div>
               </view>
-              <view slot="footer" style="height: 20rpx">
-                <van-button
-                  icon="goods-collect"
-                  size="small"
-                  type="primary"
-                  custom-class="orderBtn"
-                  round
-                  @click="addCart(food.id)">
-                  下单
-                </van-button>
+              <view slot="footer" style="height: 40rpx">
+<!--                <van-button-->
+<!--                  icon="goods-collect"-->
+<!--                  size="small"-->
+<!--                  type="primary"-->
+<!--                  custom-class="orderBtn"-->
+<!--                  round-->
+<!--                  @click="addCart(food.id)">-->
+<!--                  下单-->
+<!--                </van-button>-->
+                <order-stepper />
               </view>
             </van-card>
           </view>
@@ -55,6 +56,8 @@
 </template>
 
 <script>
+  import OrderStepper from '@/components/OrderStepper'
+
   export default {
     name: 'FoodPanel',
     props: {
@@ -66,6 +69,9 @@
         type: Array,
         require: true
       }
+    },
+    components: {
+      OrderStepper
     },
     computed: {
       titleStyle () {
@@ -109,7 +115,7 @@
   }
 
   .food-card-root {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
   }
 
   .food-card-thumb {
@@ -146,6 +152,12 @@
     display: block;
     position: relative;
     top: -0.5rem;
+    right: 0rem;
+  }
+
+  .order-stepper-root{
+    position: relative;
+    top: -0.4rem;
     right: 0rem;
   }
 </style>

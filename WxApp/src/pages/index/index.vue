@@ -49,7 +49,7 @@
               id: 1,
               name: '鸭血粉丝汤',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
+              monthSale: 1000,
               rate: 5,
               thumb: '/static/images/food/food.jpg'
             }, {
