@@ -116,6 +116,7 @@
 
   .food-card-root {
     margin-bottom: 0.35rem;
+    background-color: transparent !important;
   }
 
   .food-card-thumb {
@@ -124,7 +125,7 @@
   }
 
   .food-card-title {
-    font-size: 0.4rem;
+    font-size: 0.35rem;
     font-weight: 800;
     margin-bottom: 0.2rem;
   }

@@ -1,32 +1,34 @@
 <template>
   <div class="container">
     <div class="gradientDiv"></div>
-    <div id="banner">
-      <search-bar background="#FFD200"></search-bar>
-      <div id="scrollImg">
-        <swiper
-          indicator-dots="true"
-          autoplay="true"
-          easing-function="easeInOutCubic"
-          circular="true"
-          style="height: 300rpx">
-          <swiper-item>
-            <img class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg" alt="">
-          </swiper-item>
-          <swiper-item>
-            <img class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg" alt="">
-          </swiper-item>
-        </swiper>
+    <div class="container-contain">
+      <div id="banner">
+        <search-bar background="#FFD200"></search-bar>
+        <div id="scrollImg">
+          <swiper
+            indicator-dots="true"
+            autoplay="true"
+            easing-function="easeInOutCubic"
+            circular="true"
+            style="height: 300rpx">
+            <swiper-item>
+              <img class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg" alt="">
+            </swiper-item>
+            <swiper-item>
+              <img class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg" alt="">
+            </swiper-item>
+          </swiper>
+        </div>
       </div>
+      <div id="newUserCoupon">
+        <img src="/static/images/newcoupon.png"
+             mode="widthFix"
+             style="width: 100%"
+             alt=""/>
+      </div>
+      <food-panel title="新品" :foodList="foodPanel.new"/>
+      <food-panel title="热门" :foodList="foodPanel.hot"/>
     </div>
-    <div id="newUserCoupon">
-      <img src="/static/images/newcoupon.png"
-           mode="widthFix"
-           style="width: 100%"
-           alt=""/>
-    </div>
-    <food-panel title="新品" :foodList="foodPanel.new"/>
-    <food-panel title="热门" :foodList="foodPanel.hot"/>
   </div>
 </template>
 

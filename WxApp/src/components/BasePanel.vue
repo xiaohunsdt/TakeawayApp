@@ -1,0 +1,26 @@
+<template>
+  <div class="base-panel">
+    <div class="panel-content">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'BasePanel'
+  }
+</script>
+
+<style scoped>
+  .base-panel {
+    padding: 0 0.2rem;
+  }
+
+  .panel-content {
+    padding: 0.25rem;
+    background-color: white;
+    border-radius: 0.2rem;
+    box-shadow: 0 5px 25px 0 rgba(0,0,0,.13);
+  }
+</style>

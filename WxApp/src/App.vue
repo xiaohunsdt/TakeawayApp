@@ -17,10 +17,15 @@
     width: 100%;
   }
 
+  .container-contain {
+    position: relative;
+    z-index: 100;
+  }
+
   .gradientDiv {
     position: absolute;
     background: linear-gradient(#FFD200, white, #F0F0F0);
     width: 100%;
-    height: 3rem;
+    height: 7rem;
   }
 </style>

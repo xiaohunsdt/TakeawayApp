@@ -9,8 +9,8 @@
     "navigationBarBackgroundColor": "#FFD200",
     "navigationStyle": "default",
     "navigationBarTitleText": "川湘苑品牌",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "FFD200"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFD200"
   },
   "tabBar": {
     "color": "#ccc",
@@ -46,6 +46,9 @@
     "van-tag": "/static/vant/tag/index",
     "van-icon": "/static/vant/icon/index",
     "van-card": "/static/vant/card/index",
-    "van-stepper": "/static/vant/stepper/index"
+    "van-stepper": "/static/vant/stepper/index",
+    "van-row": "/static/vant/row/index",
+    "van-col": "/static/vant/col/index",
+    "van-cell": "/static/vant//cell/index"
   }
 }

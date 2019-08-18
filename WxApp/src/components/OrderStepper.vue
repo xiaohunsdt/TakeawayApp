@@ -2,6 +2,7 @@
   <van-stepper
     min="0"
     :value="initValue"
+    disable-input="true"
     custom-class="order-stepper-root"
     input-class="order-stepper-input"
     plus-class="order-stepper-plus"
@@ -45,6 +46,10 @@
     font-weight: 600 !important;
   }
 
+  .order-stepper-input.van-stepper__input--disabled {
+    color: black;
+  }
+
   .order-stepper-plus, .order-stepper-minus {
     background-color: #FFD200 !important;
     font-weight: 800 !important;
@@ -66,12 +71,7 @@
 
   .order-stepper-minus:after, .order-stepper-plus:after {
     width: 0.05rem !important;
-  }
-
-  .order-stepper-plus {
-  }
-
-  .order-stepper-minus {
+    height: 0.24rem !important;
   }
 </style>
 
