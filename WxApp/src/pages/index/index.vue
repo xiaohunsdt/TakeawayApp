@@ -34,7 +34,7 @@
   // Use Vuex
   // import store from '@/store/store'
   import SearchBar from '@/components/SearchBar'
-  import FoodPanel from '@/components/FoodPanel'
+  import FoodPanel from './components/FoodPanel'
 
   export default {
     components: {
@@ -108,7 +108,7 @@
 <style scoped>
   .container {
     background-color: #F0F0F0;
-    height: 100%;
+    min-height: 100%;
     width: 100%;
   }
 

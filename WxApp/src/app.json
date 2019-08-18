@@ -44,6 +44,7 @@
     "van-panel": "/static/vant/panel/index",
     "van-button": "/static/vant/button/index",
     "van-tag": "/static/vant/tag/index",
-    "van-icon": "/static/vant/icon/index"
+    "van-icon": "/static/vant/icon/index",
+    "van-card": "/static/vant/card/index"
   }
 }
