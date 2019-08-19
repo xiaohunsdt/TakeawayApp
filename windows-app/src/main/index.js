@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import {app, BrowserWindow, ipcMain} from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -20,13 +20,17 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
-    width: 1000
+    height: 700,
+    // useContentSize: true,
+    width: 1130,
+    frame: false,
+    transparent: true,
+    devTools: false
+    // titleBarStyle: 'hiddenInset',
   })
+  // mainWindow.setIgnoreMouseEvents(true)
 
   mainWindow.loadURL(winURL)
-
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -44,4 +48,21 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+const ipc = ipcMain
+// 登录窗口最小化
+ipc.on('window-min', function () {
+  mainWindow.minimize()
+})
+// 登录窗口最大化
+ipc.on('window-max', function () {
+  if (mainWindow.isMaximized()) {
+    mainWindow.restore()
+  } else {
+    mainWindow.maximize()
+  }
+})
+ipc.on('window-close', function () {
+  mainWindow.close()
 })
