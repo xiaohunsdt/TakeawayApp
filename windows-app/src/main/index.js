@@ -21,11 +21,11 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     height: 700,
-    // useContentSize: true,
+    useContentSize: true,
     width: 1130,
     frame: false,
     transparent: true,
-    devTools: false
+    devTools: true
     // titleBarStyle: 'hiddenInset',
   })
   // mainWindow.setIgnoreMouseEvents(true)

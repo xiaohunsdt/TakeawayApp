@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
+  import {ipcRenderer} from 'electron'
 
   export default {
     name: 'windows-app',
@@ -23,5 +23,4 @@
 </script>
 
 <style>
-
 </style>
