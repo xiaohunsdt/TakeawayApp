@@ -132,7 +132,7 @@
   }
 
   .myName {
-    font-weight: 600;
+    font-weight: bolder;
   }
 
   .memberType {
