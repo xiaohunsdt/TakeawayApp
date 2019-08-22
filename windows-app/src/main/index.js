@@ -25,7 +25,10 @@ function createWindow () {
     width: 1130,
     frame: false,
     transparent: true,
-    devTools: true
+    devTools: false,
+    fullscreen: false,
+    maximizable: true
+    // kiosk: true
     // titleBarStyle: 'hiddenInset',
   })
   // mainWindow.setIgnoreMouseEvents(true)
@@ -60,7 +63,8 @@ ipc.on('window-max', function () {
   if (mainWindow.isMaximized()) {
     mainWindow.restore()
   } else {
-    mainWindow.maximize()
+    // mainWindow.maximize()
+    mainWindow.setFullScreen(true)
   }
 })
 ipc.on('window-close', function () {
