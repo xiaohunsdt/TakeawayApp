@@ -15,12 +15,14 @@
 <style scoped>
   .base-panel {
     padding: 0 0.2rem;
+    position: relative;
+    z-index: 100;
   }
 
   .panel-content {
     padding: 0.25rem;
     background-color: white;
     border-radius: 0.2rem;
-    box-shadow: 0 5px 25px 0 rgba(0,0,0,.13);
+    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
   }
 </style>

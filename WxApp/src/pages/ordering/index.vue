@@ -20,13 +20,22 @@
           :active="tagActive"
           @change="onChange"
           animated
+          border
+          custom-class="foodTab"
+          nav-class="navClass"
           sticky
-          swipeable
-          nav-class="navClass">
+          swipeable>
           <van-tab title="素菜小炒">
             内容 1
           </van-tab>
-          <van-tab title="荤菜小炒">内容 2</van-tab>
+          <van-tab title="荤菜小炒">
+            <div class="foodContent">
+              <FoodCard
+                :food="food"
+                :key="food.id"
+                v-for="food in foodList"/>
+            </div>
+          </van-tab>
           <van-tab title="炖菜类">内容 3</van-tab>
           <van-tab title="主食">内容 4</van-tab>
           <van-tab title="饮料">内容 5</van-tab>
@@ -38,10 +47,12 @@
 
 <script>
   import BasePanel from '@/components/BasePanel'
+  import FoodCard from '@/components/FoodCard'
 
   export default {
     components: {
-      BasePanel
+      BasePanel,
+      FoodCard
     },
     data () {
       return {
@@ -100,5 +111,11 @@
 
   #order-content {
     margin-top: 0.2rem;
+    background-color: white;
+  }
+
+  .foodContent {
+    background-color: white;
+    padding: 0.2rem;
   }
 </style>
