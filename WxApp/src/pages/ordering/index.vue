@@ -9,9 +9,9 @@
             text="家的味道,优惠的价格! 留学的期间, 有我有你! 让我们共同成长!"
           />
           <div id="activityInfo">
-            <van-tag plain type="success">免费配送</van-tag>
-            <van-tag plain type="success">满1w5送月饼</van-tag>
-            <van-tag plain type="success">满2w送饮料</van-tag>
+            <van-tag type="success">免费配送</van-tag>
+            <van-tag type="success">满1w5送月饼</van-tag>
+            <van-tag type="success">满2w送饮料</van-tag>
           </div>
         </base-panel>
       </div>
@@ -19,12 +19,12 @@
         <van-tabs
           :active="tagActive"
           @change="onChange"
-          animated
-          border
           custom-class="foodTab"
           nav-class="navClass"
+          animated
           sticky
-          swipeable>
+          swipeable
+          border>
           <van-tab title="素菜小炒">
             内容 1
           </van-tab>
@@ -40,6 +40,17 @@
           <van-tab title="主食">内容 4</van-tab>
           <van-tab title="饮料">内容 5</van-tab>
         </van-tabs>
+      </div>
+      <div id="footer">
+        <van-submit-bar
+          :loading="submitLoading"
+          :price="3050"
+          :tip="true"
+          @submit="onSubmitOrder"
+          button-text="提交订单">
+          <van-tag type="primary">标签</van-tag>
+          <view slot="tip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>
+        </van-submit-bar>
       </div>
     </div>
   </div>
@@ -57,6 +68,7 @@
     data () {
       return {
         tagActive: 1,
+        submitLoading: false,
         foodList: [
           {
             id: 1,
@@ -89,20 +101,39 @@
           title: `切换到标签 ${event.mp.detail.index + 1}`,
           icon: 'none'
         })
+      },
+      onSubmitOrder () {
+        wx.showToast({
+          title: '提交订单',
+          icon: 'none'
+        })
       }
     }
   }
 </script>
 
 <style>
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+  }
+  .van-notice-bar{
+    height: auto !important;
+  }
   .navClass .van-tabs__line {
     background-color: #FFD200;
+  }
+
+  #activityInfo .van-tag {
+    display: unset !important;
   }
 </style>
 
 <style scoped>
   #activityInfo {
     padding: 0 0.2rem;
+    margin-top: 0.2rem;
   }
 
   #activityInfo > van-tag {
