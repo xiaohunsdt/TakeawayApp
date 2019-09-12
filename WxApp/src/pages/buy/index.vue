@@ -122,12 +122,6 @@
 </script>
 
 <style>
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    color: transparent;
-  }
-
   .van-notice-bar {
     height: auto !important;
   }
@@ -179,6 +173,7 @@
   #orderBarLeftContent {
     padding-left: 0.2rem;
     padding-top: 0.2rem;
+    display: flex;
   }
 
   #orderBarLeftContent img {

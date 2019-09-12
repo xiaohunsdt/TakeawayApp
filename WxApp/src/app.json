@@ -3,7 +3,8 @@
     "pages/index/main",
     "pages/activity/main",
     "pages/my/main",
-    "pages/ordering/main"
+    "pages/buy/main",
+    "pages/pay/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -51,6 +52,7 @@
     "van-row": "/static/vant/row/index",
     "van-col": "/static/vant/col/index",
     "van-cell": "/static/vant/cell/index",
+    "van-cell-group": "/static/vant/cell-group/index",
     "van-notice-bar": "/static/vant/notice-bar/index",
     "van-tab": "/static/vant/tab/index",
     "van-tabs": "/static/vant/tabs/index",
