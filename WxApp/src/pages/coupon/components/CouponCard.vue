@@ -46,6 +46,7 @@
     background-color: #FFD200 !important;
     padding: 0 .3rem !important;
     font-weight: bolder;
+    border: none !important;
   }
 </style>
 
