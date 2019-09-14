@@ -1,13 +1,14 @@
-<wxs src="../wxs/utils.wxs" module="utils"/>
+<wxs src="../wxs/utils.wxs" module="utils" />
 
-<view class="{{ utils.bem('search', { withaction: showAction || useActionSlot }) }} custom-class"
-      style="background: {{ background }}">
+<view
+  class="{{ utils.bem('search', { withaction: showAction || useActionSlot }) }} custom-class"
+  style="background: {{ background }}"
+>
   <view class="{{ utils.bem('search__content', [shape]) }}">
     <view class="van-search__label" wx:if="{{ label }}">{{ label }}</view>
-    <slot wx:else name="label"/>
+    <slot wx:else name="label" />
 
     <van-field
-      clearable
       type="search"
       left-icon="search"
       focus="{{ focus }}"
@@ -18,6 +19,7 @@
       value="{{ value }}"
       disabled="{{ disabled }}"
       readonly="{{ readonly }}"
+      clearable="{{ clearable }}"
       maxlength="{{ maxlength }}"
       input-align="{{ inputAlign }}"
       input-class="input-class"
@@ -38,7 +40,7 @@
     hover-class="van-search__action--hover"
     hover-stay-time="70"
   >
-    <slot wx:if="{{ useActionSlot }}" name="action"/>
+    <slot wx:if="{{ useActionSlot }}" name="action" />
     <view wx:else bind:tap="onCancel" class="cancel-class">取消</view>
   </view>
 </view>

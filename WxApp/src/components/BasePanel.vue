@@ -24,5 +24,6 @@
     background-color: white;
     border-radius: 0.2rem;
     box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
+    overflow: hidden;
   }
 </style>

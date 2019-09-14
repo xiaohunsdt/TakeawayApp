@@ -1,4 +1,4 @@
-<wxs src="../wxs/utils.wxs" module="utils"/>
+<wxs src="../wxs/utils.wxs" module="utils" />
 
 <van-popup
   show="{{ show }}"
@@ -31,12 +31,12 @@
     >
       <block wx:if="{{ !item.loading }}">
         {{ item.name }}
-        <text wx:if="{{ item.subname }}" class="van-action-sheet__subname">{{ item.subname }}</text>
+        <text wx:if="{{ item.subname }}" class="van-action-sheet__subname" >{{ item.subname }}</text>
       </block>
-      <van-loading wx:else size="20px"/>
+      <van-loading wx:else size="20px" />
     </button>
   </view>
-  <slot/>
+  <slot />
   <view
     wx:if="{{ cancelText }}"
     class="van-action-sheet__cancel"
