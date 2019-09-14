@@ -4,7 +4,8 @@
     "pages/activity/main",
     "pages/my/main",
     "pages/goods/main",
-    "pages/goods/buy/main"
+    "pages/goods/buy/main",
+    "pages/coupon/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
