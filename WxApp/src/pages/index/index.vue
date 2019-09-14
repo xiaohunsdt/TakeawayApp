@@ -10,7 +10,7 @@
             autoplay="true"
             easing-function="easeInOutCubic"
             circular="true"
-            style="height: 300rpx">
+            style="height: 10rem">
             <swiper-item>
               <img class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg" alt="">
             </swiper-item>
@@ -48,21 +48,21 @@
         foodPanel: {
           new: [
             {
-              id: 1,
+              goodsId: 1,
               name: '鸭血粉丝汤',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 1000,
               rate: 5,
               thumb: '/static/images/food/food.jpg'
             }, {
-              id: 2,
+              goodsId: 2,
               name: '鸭血粉丝汤2',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
               thumb: '/static/images/food/food.jpg'
             }, {
-              id: 3,
+              goodsId: 3,
               name: '鸭血粉丝汤3',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
@@ -72,21 +72,21 @@
           ],
           hot: [
             {
-              id: 4,
+              goodsId: 4,
               name: '鸭血粉丝汤',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
               thumb: '/static/images/food/food.jpg'
             }, {
-              id: 5,
+              goodsId: 5,
               name: '鸭血粉丝汤2',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,
               rate: 5,
               thumb: '/static/images/food/food.jpg'
             }, {
-              id: 6,
+              goodsId: 6,
               name: '鸭血粉丝汤3',
               desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
               monthSale: 10,

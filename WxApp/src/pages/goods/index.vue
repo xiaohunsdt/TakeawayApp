@@ -19,20 +19,20 @@
         <van-tabs
           :active="tagActive"
           @change="onChange"
+          animated
+          border
           custom-class="foodTab"
           nav-class="navClass"
-          animated
           sticky
-          swipeable
-          border>
+          swipeable>
           <van-tab title="素菜小炒">
             内容 1
           </van-tab>
           <van-tab title="荤菜小炒">
             <div class="foodContent">
-              <FoodCard
+              <goods-card
                 :food="food"
-                :key="food.id"
+                :key="food.goodsId"
                 v-for="food in foodList"/>
             </div>
           </van-tab>
@@ -43,16 +43,16 @@
       </div>
       <div id="footer">
         <van-submit-bar
-          custom-class="orderSubmitBar"
-          price-class="orderPrice"
-          button-class="submitBtn"
           :loading="submitLoading"
           :price="3050"
           :tip="true"
           @submit="onSubmitOrder"
-          button-text="提交订单">
+          button-class="submitBtn"
+          button-text="提交订单"
+          custom-class="orderSubmitBar"
+          price-class="orderPrice">
           <div id="orderBarLeftContent">
-            <img src="/static/images/order/cart.png" alt="">
+            <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
               {{ orderCount }}
             </div>
@@ -65,60 +65,60 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
-    import FoodCard from '@/components/FoodCard'
+  import BasePanel from '@/components/BasePanel'
+  import GoodsCard from '@/components/GoodsCard'
 
-    export default {
-        components: {
-            BasePanel,
-            FoodCard
-        },
-        data () {
-            return {
-                tagActive: 1,
-                submitLoading: false,
-                foodList: [
-                    {
-                        id: 1,
-                        name: '鸭血粉丝汤',
-                        desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-                        monthSale: 1000,
-                        rate: 5,
-                        thumb: '/static/images/food/food.jpg'
-                    }, {
-                        id: 2,
-                        name: '鸭血粉丝汤2',
-                        desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-                        monthSale: 10,
-                        rate: 5,
-                        thumb: '/static/images/food/food.jpg'
-                    }, {
-                        id: 3,
-                        name: '鸭血粉丝汤3',
-                        desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-                        monthSale: 10,
-                        rate: 5,
-                        thumb: '/static/images/food/food.jpg'
-                    }
-                ],
-                orderCount: 3
-            }
-        },
-        methods: {
-            onChange (event) {
-                wx.showToast({
-                    title: `切换到标签 ${event.mp.detail.index + 1}`,
-                    icon: 'none'
-                })
-            },
-            onSubmitOrder () {
-                wx.showToast({
-                    title: '提交订单',
-                    icon: 'none'
-                })
-            }
-        }
+  export default {
+    components: {
+      BasePanel,
+      GoodsCard
+    },
+    data () {
+      return {
+        tagActive: 1,
+        submitLoading: false,
+        foodList: [
+          {
+            goodsId: 1,
+            name: '鸭血粉丝汤',
+            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
+            monthSale: 1000,
+            rate: 5,
+            thumb: '/static/images/food/food.jpg'
+          }, {
+            goodsId: 2,
+            name: '鸭血粉丝汤2',
+            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
+            monthSale: 10,
+            rate: 5,
+            thumb: '/static/images/food/food.jpg'
+          }, {
+            goodsId: 3,
+            name: '鸭血粉丝汤3',
+            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
+            monthSale: 10,
+            rate: 5,
+            thumb: '/static/images/food/food.jpg'
+          }
+        ],
+        orderCount: 3
+      }
+    },
+    methods: {
+      onChange (event) {
+        wx.showToast({
+          title: `切换到标签 ${event.mp.detail.index + 1}`,
+          icon: 'none'
+        })
+      },
+      onSubmitOrder () {
+        wx.showToast({
+          title: '提交订单',
+          icon: 'none'
+        })
+      }
     }
+  }
 </script>
 
 <style>

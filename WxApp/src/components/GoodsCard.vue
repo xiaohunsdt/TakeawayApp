@@ -39,7 +39,7 @@
   import OrderStepper from '@/components/OrderStepper'
 
   export default {
-    name: 'FoodCard',
+    name: 'GoodsCard',
     props: {
       food: {
         type: Object,

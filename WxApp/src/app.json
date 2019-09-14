@@ -3,8 +3,8 @@
     "pages/index/main",
     "pages/activity/main",
     "pages/my/main",
-    "pages/buy/main",
-    "pages/pay/main"
+    "pages/goods/main",
+    "pages/goods/buy/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

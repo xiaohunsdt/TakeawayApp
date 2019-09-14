@@ -4,14 +4,14 @@
     <div class="container-contain">
       <div id="header">
         <base-panel>
-          <van-cell is-link title="地址" value="内容">
+          <van-cell is-link title="啊萨达萨达萨达萨达萨达撒旦撒大苏打撒旦啊实打实的撒大苏打">
             <view slot="icon" style="margin-right: 0.2rem">
-              <van-icon name="location" color="#FFD200" size="1.2rem"/>
+              <van-icon color="#FFD200" name="location" size="1.2rem"/>
             </view>
           </van-cell>
           <van-cell is-link title="01056511996">
             <view slot="icon" style="margin-right: 0.2rem">
-              <van-icon name="phone" color="#FFD200" size="1.2rem"/>
+              <van-icon color="#FFD200" name="phone" size="1.2rem"/>
             </view>
           </van-cell>
         </base-panel>
@@ -60,7 +60,18 @@
       BasePanel
     },
     data () {
-      return {}
+      return {
+        orderItems: [
+          {
+            orderId: null,
+            goodId: 1,
+            name: '鸭血粉丝汤',
+            thumb: '/static/images/food/food.jpg',
+            count: 1,
+            price: 2000
+          }
+        ]
+      }
     },
     methods: {}
   }
