@@ -18,7 +18,14 @@
       </div>
       <div id="buy-content">
         <base-panel>
-          详细
+          <order-item
+            :itemDetail="item"
+            :key="item.name"
+            v-for="item in orderItems"/>
+          <div id="order-amount">
+            共<span style="color: #FFD200">{{ orderItems.length }}</span>个商品,
+            小计 <span style="color: #FFD200">₩ {{ allAmount }}</span>
+          </div>
         </base-panel>
         <base-panel>
           优惠卷
@@ -54,18 +61,35 @@
 
 <script>
   import BasePanel from '@/components/BasePanel'
+  import OrderItem from '@/components/OrderItem'
 
   export default {
     components: {
-      BasePanel
+      BasePanel,
+      OrderItem
+    },
+    computed: {
+      allAmount () {
+        return this.orderItems
+          .map(item => item.count * item.price)
+          .reduce((x, y) => x + y)
+      }
     },
     data () {
       return {
         orderItems: [
           {
             orderId: null,
-            goodId: 1,
-            name: '鸭血粉丝汤',
+            goodsId: 1,
+            name: '鸭血粉丝汤1',
+            thumb: '/static/images/food/food.jpg',
+            count: 2,
+            price: 2000
+          },
+          {
+            orderId: null,
+            goodsId: 1,
+            name: '鸭血粉丝汤2',
             thumb: '/static/images/food/food.jpg',
             count: 1,
             price: 2000
@@ -84,5 +108,10 @@
 </style>
 
 <style scoped>
-
+  #order-amount {
+    font-weight: bolder;
+    padding-top: .2rem;
+    font-size: .25rem;
+    text-align: right;
+  }
 </style>

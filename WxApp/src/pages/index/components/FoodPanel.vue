@@ -31,11 +31,11 @@
     props: {
       title: {
         type: String,
-        require: true
+        required: true
       },
       foodList: {
         type: Array,
-        require: true
+        required: true
       }
     },
     components: {

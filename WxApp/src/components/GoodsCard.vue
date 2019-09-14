@@ -20,7 +20,7 @@
         <div style="color: #FFD200">{{ food.rate }}</div>
       </div>
     </view>
-    <view slot="footer" style="height: 40rpx">
+    <view slot="footer" style="height: 0.4rem">
       <van-button
         @click="addCart(food.id)"
         custom-class="orderBtn"
@@ -43,7 +43,7 @@
     props: {
       food: {
         type: Object,
-        require: true
+        required: true
       }
     },
     components: {

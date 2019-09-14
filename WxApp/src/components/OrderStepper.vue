@@ -15,7 +15,7 @@
     props: {
       foodId: {
         type: Number,
-        require: true
+        required: true
       },
       initValue: {
         type: Number,
