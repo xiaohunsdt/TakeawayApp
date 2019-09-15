@@ -17,13 +17,15 @@
     padding: 0 0.2rem;
     position: relative;
     z-index: 100;
+    background-color: transparent;
   }
 
   .panel-content {
+    position: relative;
     padding: 0.25rem;
     background-color: white;
     border-radius: 0.2rem;
-    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
     overflow: hidden;
+    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
   }
 </style>
