@@ -99,7 +99,7 @@
   }
 
   .priceInfo .price {
-    font-size: .2rem;
+    font-size: .3rem;
   }
 
   .priceInfo .price .price-number {
