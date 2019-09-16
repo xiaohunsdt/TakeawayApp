@@ -65,14 +65,14 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import GoodsCard from '@/components/GoodsCard'
+    import BasePanel from '@/components/BasePanel'
+    import GoodsCard from '@/components/GoodsCard'
 
-  export default {
-    components: {
-      BasePanel,
-      GoodsCard
-    },
+    export default {
+        components: {
+            BasePanel,
+            GoodsCard
+        },
     data () {
       return {
         tagActive: 1,

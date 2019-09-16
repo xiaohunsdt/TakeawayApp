@@ -14,7 +14,7 @@
 
 <style scoped>
   .base-panel {
-    padding: 0 0.2rem;
+    padding: 0 .2rem;
     position: relative;
     z-index: 100;
     background-color: transparent;

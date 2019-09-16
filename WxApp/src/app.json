@@ -6,7 +6,9 @@
     "pages/goods/main",
     "pages/buy/main",
     "pages/buy/remark/main",
-    "pages/coupon/main"
+    "pages/coupon/main",
+    "pages/order/main",
+    "pages/order/detail/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
