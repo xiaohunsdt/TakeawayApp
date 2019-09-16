@@ -1,24 +1,27 @@
 <template>
   <base-panel>
-    <div class="order-header">
-      <div class="header-left">{{order.createDate}}</div>
-      <div class="header-right">待支付</div>
+    <div @click.stop="openOrderDetail">
+      <div class="order-header">
+        <div class="header-left">{{order.createDate}}</div>
+        <div class="header-right">待支付</div>
+      </div>
+      <div class="order-items">
+        <order-item
+          :itemDetail="itemDetial"
+          :key="itemDetial.name"
+          v-for="itemDetial in order.orderItems"/>
+      </div>
+      <div class="order-amount">
+        共<span style="color: #FFD200">{{ order.orderItems.length }}</span>个商品,
+        小计 <span style="color: #FFD200">₩ {{ order.orderAmount }}</span>
+      </div>
     </div>
-    <div class="order-items">
-      <order-item
-        :itemDetail="itemDetial"
-        :key="itemDetial.name"
-        v-for="itemDetial in order.orderItems"/>
-    </div>
-    <div class="order-amount">
-      共<span style="color: #FFD200">{{ order.orderItems.length }}</span>个商品,
-      小计 <span style="color: #FFD200">₩ {{ order.orderAmount }}</span>
-    </div>
+
     <div class="action-btns">
-      <van-button color="#FFD200" custom-class="action-btn" round size="small">立刻付款</van-button>
-      <van-button color="#FFD200" custom-class="action-btn" round size="small">确认取餐</van-button>
-      <van-button color="#FFD200" custom-class="action-btn" round size="small">分享领红包</van-button>
-      <van-button color="#FFD200" custom-class="action-btn" round size="small">评价</van-button>
+      <van-button @click.stop="payNow" color="#FFD200" custom-class="action-btn" round size="small">立刻付款</van-button>
+      <van-button @click.stop="confirmGetFood" color="#FFD200" custom-class="action-btn" round size="small">确认取餐</van-button>
+      <van-button @click.stop="shareOrder" color="#FFD200" custom-class="action-btn" round size="small">分享领红包</van-button>
+      <van-button @click.stop="comment" color="#FFD200" custom-class="action-btn" round size="small">评价</van-button>
     </div>
   </base-panel>
 </template>
@@ -38,6 +41,23 @@
     components: {
       BasePanel,
       OrderItem
+    },
+    methods: {
+      openOrderDetail (event) {
+        console.log(event)
+      },
+      payNow (event) {
+        console.log(event)
+      },
+      confirmGetFood (event) {
+        console.log(event)
+      },
+      shareOrder (event) {
+        console.log(event)
+      },
+      comment (event) {
+        console.log(event)
+      }
     }
   }
 </script>

@@ -8,7 +8,8 @@
 
 <script>
   export default {
-    name: 'BasePanel'
+    name: 'BasePanel',
+    methods: {}
   }
 </script>
 
