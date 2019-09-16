@@ -1,45 +1,45 @@
 <template>
   <base-panel>
     <div class="order-header">
-      <div class="order-id">{{order.orderId}}</div>
-      <div class="pay-status">待支付</div>
+      <div class="header-left">{{order.createDate}}</div>
+      <div class="header-right">待支付</div>
     </div>
     <div class="order-items">
       <order-item
-        v-for="itemDetial in order.orderItems"
+        :itemDetail="itemDetial"
         :key="itemDetial.name"
-        :itemDetail="itemDetial"/>
+        v-for="itemDetial in order.orderItems"/>
     </div>
     <div class="order-amount">
       共<span style="color: #FFD200">{{ order.orderItems.length }}</span>个商品,
       小计 <span style="color: #FFD200">₩ {{ order.orderAmount }}</span>
     </div>
     <div class="action-btns">
-      <van-button custom-class="action-btn" color="#FFD200" round size="small">立刻付款</van-button>
-      <van-button custom-class="action-btn" color="#FFD200" round size="small">确认取餐</van-button>
-      <van-button custom-class="action-btn" color="#FFD200" round size="small">分享领红包</van-button>
-      <van-button custom-class="action-btn" color="#FFD200" round size="small">评价</van-button>
+      <van-button color="#FFD200" custom-class="action-btn" round size="small">立刻付款</van-button>
+      <van-button color="#FFD200" custom-class="action-btn" round size="small">确认取餐</van-button>
+      <van-button color="#FFD200" custom-class="action-btn" round size="small">分享领红包</van-button>
+      <van-button color="#FFD200" custom-class="action-btn" round size="small">评价</van-button>
     </div>
   </base-panel>
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
-    import OrderItem from '@/components/OrderItem'
+  import BasePanel from '@/components/BasePanel'
+  import OrderItem from '@/components/OrderItem'
 
-    export default {
-        name: 'OrderCard',
-        props: {
-            order: {
-                type: Object,
-                required: true
-            }
-        },
-        components: {
-            BasePanel,
-            OrderItem
-        }
+  export default {
+    name: 'OrderCard',
+    props: {
+      order: {
+        type: Object,
+        required: true
+      }
+    },
+    components: {
+      BasePanel,
+      OrderItem
     }
+  }
 </script>
 <style>
   .base-panel {
@@ -64,8 +64,17 @@
     text-align: right;
   }
 
-  .order-header{
+  .order-header {
     display: flex;
     justify-content: space-between;
+  }
+
+  .order-header .header-left {
+    padding: .2rem;
+  }
+
+  .order-header .header-right {
+    color: gray;
+    font-size: .25rem;
   }
 </style>

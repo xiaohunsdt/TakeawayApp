@@ -44,7 +44,7 @@
                         orderAmount: 67,
                         orderPayWay: 1,
                         orderState: 1,
-                        createDate: '2019-09-15 12:23:11'
+                        createDate: '2019-09-15 12:23'
                     },
                     {
                         orderId: '20190915cvbsdmgsma',
@@ -70,7 +70,7 @@
                         orderAmount: 67,
                         orderPayWay: 1,
                         orderState: 1,
-                        createDate: '2019-09-15 12:23:11'
+                        createDate: '2019-09-15 12:23'
                     }
                 ]
             }
