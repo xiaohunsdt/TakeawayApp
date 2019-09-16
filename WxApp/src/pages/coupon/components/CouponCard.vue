@@ -84,6 +84,7 @@
   }
 
   .priceInfo {
+    border-left: gainsboro 0.01rem solid;
     width: 30%;
     text-align: right;
   }
