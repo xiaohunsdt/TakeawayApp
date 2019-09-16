@@ -80,7 +80,7 @@
   }
 
   .action-btns {
-    margin-top: .2rem;
+    margin-top: .35rem;
     text-align: right;
   }
 
