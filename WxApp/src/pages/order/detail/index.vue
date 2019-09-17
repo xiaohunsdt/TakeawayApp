@@ -3,8 +3,25 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <base-panel>
-        <div class="order-number"></div>
-        <div class="estimated-arrival-time"></div>
+        <div class="order-header">
+          <div class="order-number">
+            <div class="number"># <span style="font-size: 2rem">{{order.orderNumber}}</span></div>
+            <div class="text">
+              <van-icon name="bell" color="#18c675" size="1rem" style="margin-right: .2rem"/>
+              订餐号
+            </div>
+          </div>
+          <div class="estimated-arrival-time">
+            <div class="time">
+              今天
+              <span style="font-size: 2rem">14:40</span>
+            </div>
+            <div class="text">
+              <van-icon name="underway" color="#FFD200" size="1rem" style="margin-right: .2rem"/>
+              预计到达
+            </div>
+          </div>
+        </div>
       </base-panel>
 
       <base-panel>
@@ -50,62 +67,62 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import OrderItem from '@/components/OrderItem'
+    import BasePanel from '@/components/BasePanel'
+    import OrderItem from '@/components/OrderItem'
 
-  export default {
-    components: {
-      BasePanel,
-      OrderItem
-    },
-    data () {
-      return {
-        order: {
-          orderId: '20190915gfhfghfbcvsdf',
-          orderNumber: 2,
-          orderItems: [
-            {
-              orderId: null,
-              goodsId: 1,
-              name: '鸭血粉丝汤1',
-              thumb: '/static/images/food/food.jpg',
-              count: 2,
-              price: 2000
-            },
-            {
-              orderId: null,
-              goodsId: 1,
-              name: '鸭血粉丝汤2',
-              thumb: '/static/images/food/food.jpg',
-              count: 1,
-              price: 2000
+    export default {
+        components: {
+            BasePanel,
+            OrderItem
+        },
+        data () {
+            return {
+                order: {
+                    orderId: '20190915gfhfghfbcvsdf',
+                    orderNumber: 2,
+                    orderItems: [
+                        {
+                            orderId: null,
+                            goodsId: 1,
+                            name: '鸭血粉丝汤1',
+                            thumb: '/static/images/food/food.jpg',
+                            count: 2,
+                            price: 2000
+                        },
+                        {
+                            orderId: null,
+                            goodsId: 1,
+                            name: '鸭血粉丝汤2',
+                            thumb: '/static/images/food/food.jpg',
+                            count: 1,
+                            price: 2000
+                        }
+                    ],
+                    orderAmount: 67,
+                    orderPayWay: 1,
+                    orderState: 1,
+                    createDate: '2019-09-15 12:23'
+                }
             }
-          ],
-          orderAmount: 67,
-          orderPayWay: 1,
-          orderState: 1,
-          createDate: '2019-09-15 12:23'
+        },
+        methods: {
+            openOrderDetail (event) {
+                console.log(event)
+            },
+            payNow (event) {
+                console.log(event)
+            },
+            confirmGetFood (event) {
+                console.log(event)
+            },
+            shareOrder (event) {
+                console.log(event)
+            },
+            comment (event) {
+                console.log(event)
+            }
         }
-      }
-    },
-    methods: {
-      openOrderDetail (event) {
-        console.log(event)
-      },
-      payNow (event) {
-        console.log(event)
-      },
-      confirmGetFood (event) {
-        console.log(event)
-      },
-      shareOrder (event) {
-        console.log(event)
-      },
-      comment (event) {
-        console.log(event)
-      }
     }
-  }
 </script>
 
 <style>
@@ -146,7 +163,24 @@
     color: gray;
     width: 1.5rem;
   }
-  .order-row .content {
 
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .order-number,.estimated-arrival-time {
+    text-align: center;
+    padding: .1rem .3rem;
+  }
+
+  .order-number .number,.estimated-arrival-time .time {
+    font-weight: bolder;
+
+  }
+
+  .order-number .text, .estimated-arrival-time .text{
+    font-size: .28rem;
+    display: flex;
   }
 </style>
