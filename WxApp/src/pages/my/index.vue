@@ -64,6 +64,14 @@
         </van-cell>
         <van-cell is-link custom-class="profile-cell">
           <view slot="title" class="profile-title">
+            <img class="title-img" src="/static/images/address/icon-location.png" alt="">
+            <div>
+              我的地址
+            </div>
+          </view>
+        </van-cell>
+        <van-cell is-link custom-class="profile-cell">
+          <view slot="title" class="profile-title">
             <img class="title-img" src="/static/images/profile/coupon.png" alt="">
             <div>
               优惠卷
