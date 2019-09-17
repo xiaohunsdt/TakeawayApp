@@ -7,7 +7,7 @@
           <div class="order-number">
             <div class="number"># <span style="font-size: 2rem">{{order.orderNumber}}</span></div>
             <div class="text">
-              <van-icon name="bell" color="#18c675" size="1rem" style="margin-right: .2rem"/>
+              <van-icon name="bell" color="#18c675" size="1rem" style="margin-right: .3rem"/>
               订餐号
             </div>
           </div>
@@ -17,7 +17,7 @@
               <span style="font-size: 2rem">14:40</span>
             </div>
             <div class="text">
-              <van-icon name="underway" color="#FFD200" size="1rem" style="margin-right: .2rem"/>
+              <van-icon name="underway" color="#FFD200" size="1rem" style="margin-right: .3rem"/>
               预计到达
             </div>
           </div>
@@ -176,11 +176,11 @@
 
   .order-number .number,.estimated-arrival-time .time {
     font-weight: bolder;
-
   }
 
   .order-number .text, .estimated-arrival-time .text{
     font-size: .28rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
   }
 </style>
