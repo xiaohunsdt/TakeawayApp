@@ -181,6 +181,6 @@
 
   .order-number .text, .estimated-arrival-time .text{
     font-size: .28rem;
-    display: flex;
+    text-align: center;
   }
 </style>
