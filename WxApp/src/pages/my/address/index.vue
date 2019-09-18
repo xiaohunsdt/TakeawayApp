@@ -6,7 +6,9 @@
         :address="address"
         :key="address.id"
         v-for="address in addressList"/>
-
+      <van-button custom-class="add-address-btn" color="#FFD200" size="large" round>
+        添加新地址
+      </van-button>
     </div>
   </div>
 </template>
@@ -50,7 +52,19 @@
         methods: {}
     }
 </script>
-
+<style>
+  .add-address-btn {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 70% !important;
+    margin-top: .2rem;
+    color: black !important;
+    font-weight: bolder !important;
+    height: .8rem !important;
+    line-height: .8rem !important;
+  }
+</style>
 <style scoped>
   .container-contain {
     padding: 0.3rem 0.1rem;
