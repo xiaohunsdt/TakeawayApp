@@ -44,12 +44,6 @@
   }
 </script>
 
-<style>
-  .base-panel {
-    margin-bottom: 0.2rem;
-  }
-</style>
-
 <style scoped>
 
 </style>

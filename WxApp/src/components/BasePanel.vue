@@ -19,6 +19,7 @@
     position: relative;
     z-index: 100;
     background-color: transparent;
+    margin-bottom: 0.2rem;
   }
 
   .panel-content {

@@ -2,9 +2,11 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div class="container-contain">
-      <address-card>
+      <address-card
+        :address="address"
+        :key="address.id"
+        v-for="address in addressList"/>
 
-      </address-card>
     </div>
   </div>
 </template>
@@ -25,18 +27,21 @@
                         id: 'dfgdfkaxva113',
                         region: '신촌포스빌 707호',
                         detail: '楼下密码🗝1234#',
-                        isDefault: true
+                        phone: '01056511996',
+                        isDefault: false
                     },
                     {
                         id: 'dfgdfkaxva113',
                         region: '신촌포스빌 707호',
                         detail: '楼下密码🗝1234#',
-                        isDefault: true
+                        phone: '01056511996',
+                        isDefault: false
                     },
                     {
                         id: 'dfgdfkaxva113',
                         region: '신촌포스빌 707호',
                         detail: '楼下密码🗝1234#',
+                        phone: '01056511996',
                         isDefault: true
                     }
                 ]

@@ -126,10 +126,6 @@
 </script>
 
 <style>
-  .base-panel {
-    margin-bottom: 0.2rem;
-  }
-
   .action-btn {
     color: black !important;
     margin-left: .1rem;

@@ -44,10 +44,6 @@
 </script>
 
 <style>
-  .base-panel {
-    margin-bottom: 0.2rem;
-  }
-
   .finish-btn {
     position: relative;
     left: 50%;

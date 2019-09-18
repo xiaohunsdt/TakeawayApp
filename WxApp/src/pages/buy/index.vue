@@ -101,12 +101,6 @@
   }
 </script>
 
-<style>
-  .base-panel {
-    margin-bottom: 0.2rem;
-  }
-</style>
-
 <style scoped>
   #order-amount {
     font-weight: bolder;
