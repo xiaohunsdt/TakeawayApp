@@ -27,6 +27,7 @@
             label="手机号"
             placeholder="请输入手机号, 请务必填写正确!!"
             @change="phoneInput"
+            required
             :border="false"/>
         </van-cell-group>
       </base-panel>
