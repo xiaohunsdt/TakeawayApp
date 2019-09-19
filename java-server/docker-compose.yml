@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: xiaohunsdt/mysql-seoul:5.7.22
+    environment:
+      MYSQL_ROOT_PASSWORD: wy1996
+      MYSQL_USER: takeaway
+      MYSQL_DATABASE: takeaway
+      MYSQL_PASSWORD: takeaway123!
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+      - "6379:6379"
+      - "15672:15672"
+      - "5672:5672"
+      - "8080:8080"
+#      - "8081:8081"
+#      - "8082:8082"
+
+    volumes:
+      - ~/betting_data/mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis
+    command: redis-server --requirepass wy1996 --appendonly yes
+    network_mode: "service:mysql"
+    volumes:
+      - ~/betting_data/redisdata:/data
+
+  rabbitmq:
+    image: rabbitmq:3.7.8-management
+    environment:
+      TZ: Asia/Seoul
+    network_mode: "service:mysql"
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: Dockerfile-admin
+    environment:
+      PARAMS: --spring.profiles.active=pro
+    volumes:
+      - ~/server_data/log_data/admin-web-logs:/admin-web-logs
+      - ~/server_data/upload:/upload
+      - /dev/shm:/dev/shm
+    depends_on:
+      - redis
+      - mysql
+      - rabbitmq
+    network_mode: "service:mysql"
