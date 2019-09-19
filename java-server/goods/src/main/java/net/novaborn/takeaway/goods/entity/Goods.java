@@ -25,8 +25,14 @@ public class Goods extends Model<Goods> {
     // 简介
     private String desc;
 
+    // 说明
+    private String detail;
+
     // 缩略图
     private String thumb;
+
+    // 所属类目
+    private String categoryId;
 
     // 月销
     private Integer monthSale;
@@ -39,6 +45,7 @@ public class Goods extends Model<Goods> {
 
     private Date createDate;
 
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 
     @Version

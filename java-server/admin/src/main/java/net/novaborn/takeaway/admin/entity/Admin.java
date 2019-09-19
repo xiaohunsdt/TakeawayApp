@@ -26,7 +26,6 @@ public class Admin extends Model<Admin> {
 
     private Date createDate;
 
-    //    @TableField(value = "update_time", update = "now()")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 }

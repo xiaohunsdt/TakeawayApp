@@ -1,9 +1,6 @@
 package net.novaborn.takeaway.category.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
@@ -24,10 +21,12 @@ public class Category extends Model<Category> {
     // 名称
     private String name;
 
+    // 父 id
     private String parentId;
 
     private Date createDate;
 
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 
     @TableLogic
