@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.exception;
+package net.novaborn.takeaway.admin.common.exception;
 
 /**
  * 封装guns的异常

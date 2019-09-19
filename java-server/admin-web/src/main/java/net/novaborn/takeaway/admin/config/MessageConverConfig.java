@@ -1,7 +1,7 @@
-package net.novaborn.takeaway.activity.config;
+package net.novaborn.takeaway.admin.config;
 
-import net.novaborn.takeaway.activity.common.auth.converter.WithSignMessageConverter;
-import net.novaborn.takeaway.activity.config.properties.RestProperties;
+import net.novaborn.takeaway.admin.common.auth.converter.WithSignMessageConverter;
+import net.novaborn.takeaway.admin.config.properties.RestProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,8 +1,8 @@
-package net.novaborn.takeaway.activity.common.auth.util;
+package net.novaborn.takeaway.admin.common.auth.util;
 
 import com.alibaba.fastjson.JSON;
-import net.novaborn.takeaway.activity.common.exception.SysException;
-import net.novaborn.takeaway.activity.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.admin.common.exception.SysException;
+import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common;
+package net.novaborn.takeaway.admin.common;
 
 /**
  * 测试用的

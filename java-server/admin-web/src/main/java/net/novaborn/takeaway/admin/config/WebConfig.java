@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.config;
+package net.novaborn.takeaway.admin.config;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -6,13 +6,13 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
-import net.novaborn.takeaway.activity.common.auth.filter.AuthFilter;
-import net.novaborn.takeaway.activity.common.auth.security.DataSecurityAction;
-import net.novaborn.takeaway.activity.common.auth.security.impl.Base64SecurityAction;
-import net.novaborn.takeaway.activity.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.activity.common.xss.XssFilter;
-import net.novaborn.takeaway.activity.config.properties.JwtProperties;
-import net.novaborn.takeaway.activity.config.properties.RestProperties;
+import net.novaborn.takeaway.admin.common.auth.filter.AuthFilter;
+import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
+import net.novaborn.takeaway.admin.common.auth.security.impl.Base64SecurityAction;
+import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.admin.common.xss.XssFilter;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
+import net.novaborn.takeaway.admin.config.properties.RestProperties;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;

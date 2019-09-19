@@ -1,6 +1,6 @@
-package net.novaborn.takeaway.activity.common.auth.security.impl;
+package net.novaborn.takeaway.admin.common.auth.security.impl;
 
-import net.novaborn.takeaway.activity.common.auth.security.DataSecurityAction;
+import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
 import org.springframework.util.Base64Utils;
 
 /**

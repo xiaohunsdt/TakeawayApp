@@ -1,12 +1,12 @@
-package net.novaborn.takeaway.activity.common.auth.filter;
+package net.novaborn.takeaway.admin.common.auth.filter;
 
 import io.jsonwebtoken.JwtException;
 import lombok.Data;
-import net.novaborn.takeaway.activity.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.activity.common.auth.util.RenderUtil;
-import net.novaborn.takeaway.activity.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.activity.common.tips.ErrorTip;
-import net.novaborn.takeaway.activity.config.properties.JwtProperties;
+import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
+import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.admin.common.tips.ErrorTip;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;

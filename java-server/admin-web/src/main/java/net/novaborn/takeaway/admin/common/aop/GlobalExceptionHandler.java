@@ -1,10 +1,10 @@
-package net.novaborn.takeaway.activity.common.aop;
+package net.novaborn.takeaway.admin.common.aop;
 
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.activity.common.exception.SysException;
-import net.novaborn.takeaway.activity.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.activity.common.tips.ErrorTip;
+import net.novaborn.takeaway.admin.common.exception.SysException;
+import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.admin.common.tips.ErrorTip;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,8 +1,8 @@
-package net.novaborn.takeaway.activity.common.auth.util;
+package net.novaborn.takeaway.admin.common.auth.util;
 
 import cn.hutool.core.util.RandomUtil;
 import io.jsonwebtoken.*;
-import net.novaborn.takeaway.activity.config.properties.JwtProperties;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

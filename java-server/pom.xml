@@ -23,7 +23,7 @@
     </parent>
 
     <groupId>net.novaborn.takeaway</groupId>
-    <artifactId>root-pom</artifactId>
+    <artifactId>takeaway-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>takeaway</name>
 

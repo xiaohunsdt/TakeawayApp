@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.auth.security;
+package net.novaborn.takeaway.admin.common.auth.security;
 
 /**
  * <pre>

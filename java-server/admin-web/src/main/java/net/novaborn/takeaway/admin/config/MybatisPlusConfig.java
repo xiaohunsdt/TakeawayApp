@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.config;
+package net.novaborn.takeaway.admin.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;

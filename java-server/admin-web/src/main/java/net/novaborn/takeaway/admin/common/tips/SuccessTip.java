@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.tips;
+package net.novaborn.takeaway.admin.common.tips;
 
 /**
  * 返回给前台的成功提示

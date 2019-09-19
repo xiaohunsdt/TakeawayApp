@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.auth.validator.impl;
+package net.novaborn.takeaway.admin.common.auth.validator.impl;
 
 /**
  * 账号密码验证

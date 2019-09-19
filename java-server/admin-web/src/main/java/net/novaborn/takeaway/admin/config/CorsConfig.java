@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.config;
+package net.novaborn.takeaway.admin.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

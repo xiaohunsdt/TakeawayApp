@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.xss;
+package net.novaborn.takeaway.admin.common.xss;
 
 
 import javax.servlet.http.HttpServletRequest;

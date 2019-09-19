@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.web.dto;
+package net.novaborn.takeaway.admin.web.dto;
 
 import java.io.Serializable;
 

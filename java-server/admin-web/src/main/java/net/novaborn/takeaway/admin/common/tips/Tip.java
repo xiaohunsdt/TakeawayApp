@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.activity.common.tips;
+package net.novaborn.takeaway.admin.common.tips;
 
 import lombok.Data;
 
