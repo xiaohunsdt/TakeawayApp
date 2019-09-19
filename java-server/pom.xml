@@ -7,6 +7,11 @@
     <modules>
         <module>admin-web</module>
         <module>user</module>
+        <module>order</module>
+        <module>goods</module>
+        <module>coupon</module>
+        <module>system</module>
+        <module>activity</module>
     </modules>
 
     <parent>
@@ -118,8 +123,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

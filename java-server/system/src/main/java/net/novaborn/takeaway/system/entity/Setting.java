@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.user.entity;
+package net.novaborn.takeaway.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2018-07-12
  */
 @Data
-@TableName("user")
-public class User extends Model<User> {
+@TableName("setting")
+public class Setting extends Model<Setting> {
 
 }
