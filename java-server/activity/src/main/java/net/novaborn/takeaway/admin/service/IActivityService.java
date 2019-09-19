@@ -1,8 +1,8 @@
-package net.novaborn.takeaway.activity.service;
+package net.novaborn.takeaway.admin.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.novaborn.takeaway.activity.entity.Activity;
+import net.novaborn.takeaway.admin.entity.Activity;
 
 /**
  * <p>
@@ -10,7 +10,7 @@ import net.novaborn.takeaway.activity.entity.Activity;
  * </p>
  *
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 public interface IActivityService extends IService<Activity> {
 }

@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.order.entity;
+package net.novaborn.takeaway.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2019-09-20
  */
 @Data
-@TableName("order")
-public class Order extends Model<Order> {
+@TableName("goods")
+public class Goods extends Model<Goods> {
 
 }

@@ -6,7 +6,7 @@ import net.novaborn.takeaway.system.entity.Setting;
 
 /**
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 public interface ISettingDao extends BaseMapper<Setting> {
 

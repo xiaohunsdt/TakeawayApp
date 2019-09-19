@@ -6,7 +6,7 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 
 /**
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 public interface ICouponDao extends BaseMapper<Coupon> {
 

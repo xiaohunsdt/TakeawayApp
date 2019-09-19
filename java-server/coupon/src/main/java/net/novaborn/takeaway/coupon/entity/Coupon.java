@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 @Data
 @TableName("coupon")

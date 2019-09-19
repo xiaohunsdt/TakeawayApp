@@ -6,7 +6,7 @@ import net.novaborn.takeaway.user.entity.User;
 
 /**
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 public interface IUserDao extends BaseMapper<User> {
 

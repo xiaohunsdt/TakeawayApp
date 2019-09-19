@@ -10,7 +10,7 @@ import net.novaborn.takeaway.order.entity.Order;
  * </p>
  *
  * @author xiaohun
- * @since 2018-07-12
+ * @since 2019-09-20
  */
 public interface IOrderService extends IService<Order> {
 }
