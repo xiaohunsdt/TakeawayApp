@@ -1,9 +1,9 @@
-package net.novaborn.takeaway.goods.service.impl;
+package net.novaborn.takeaway.activity.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.novaborn.takeaway.goods.dao.IGoodsDao;
-import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.service.IGoodsService;
+import net.novaborn.takeaway.activity.dao.IGoodsDao;
+import net.novaborn.takeaway.activity.entity.Goods;
+import net.novaborn.takeaway.activity.service.IGoodsService;
 import org.springframework.stereotype.Service;
 
 /**
