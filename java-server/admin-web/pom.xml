@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.novaborn.takeaway</groupId>
         <version>0.0.1-SNAPSHOT</version>
-        <artifactId>root-pom</artifactId>
+        <artifactId>takeaway-server</artifactId>
     </parent>
 
     <artifactId>admin-web</artifactId>
