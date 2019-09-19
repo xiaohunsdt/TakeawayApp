@@ -19,7 +19,7 @@
             :border="false"
             :value="address.detail"
             label="详细"
-            placeholder="请输入门牌号, 楼下密码等详细信息"
+            placeholder="楼下密码,送餐提示等详细信息"
             required
             @change="detailInput"/>
           <van-field
@@ -67,7 +67,7 @@
     },
     methods: {
       clickRightIcon () {
-        Toast('请输入街道名/小区名/道路名\r\n例如: 신촌 포스빌/신촌로 150')
+        Toast('请输入街道名/小区名/道路名/门牌号\r\n例如: 신촌 포스빌 xxx호/신촌로 150 xxx호')
         // Toast(`${this.address.region} ${this.address.detail}`)
       },
       regionInput (value) {
