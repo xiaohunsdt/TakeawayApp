@@ -56,10 +56,11 @@ spring:
     password: wy1996
   redis:
     host: 192.168.0.17
-#logging:
-#    level:
-#        root: info
-#        net.novaborn: debug
+
+logging:
+    level:
+        root: info
+        net.novaborn: debug
 
 
 ---

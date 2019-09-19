@@ -1,8 +1,8 @@
-package net.novaborn.takeaway.activity.service;
+package net.novaborn.takeaway.goods.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.novaborn.takeaway.activity.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Goods;
 
 /**
  * <p>
