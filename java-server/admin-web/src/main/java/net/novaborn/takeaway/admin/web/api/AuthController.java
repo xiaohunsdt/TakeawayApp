@@ -1,11 +1,11 @@
-package net.novaborn.takeaway.admin.web.api;
+package net.novaborn.takeaway.activity.web.api;
 
-import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.admin.common.auth.validator.IReqValidator;
-import net.novaborn.takeaway.admin.common.exception.SysException;
-import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.admin.web.dto.AuthRequest;
-import net.novaborn.takeaway.admin.web.dto.AuthResponse;
+import net.novaborn.takeaway.activity.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.activity.common.auth.validator.IReqValidator;
+import net.novaborn.takeaway.activity.common.exception.SysException;
+import net.novaborn.takeaway.activity.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.activity.web.dto.AuthRequest;
+import net.novaborn.takeaway.activity.web.dto.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

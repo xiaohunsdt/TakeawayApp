@@ -1,9 +1,9 @@
-package net.novaborn.takeaway.admin.service.impl;
+package net.novaborn.takeaway.activity.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.novaborn.takeaway.admin.dao.IActivityDao;
-import net.novaborn.takeaway.admin.entity.Activity;
-import net.novaborn.takeaway.admin.service.IActivityService;
+import net.novaborn.takeaway.activity.dao.IActivityDao;
+import net.novaborn.takeaway.activity.entity.Activity;
+import net.novaborn.takeaway.activity.service.IActivityService;
 import org.springframework.stereotype.Service;
 
 /**

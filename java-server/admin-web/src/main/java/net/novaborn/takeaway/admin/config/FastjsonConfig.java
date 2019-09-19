@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.config;
+package net.novaborn.takeaway.activity.config;
 
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;

@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin;
+package net.novaborn.takeaway.activity;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;

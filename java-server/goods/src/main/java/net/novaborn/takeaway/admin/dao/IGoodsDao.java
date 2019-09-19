@@ -1,8 +1,8 @@
-package net.novaborn.takeaway.admin.dao;
+package net.novaborn.takeaway.activity.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import net.novaborn.takeaway.admin.entity.Goods;
+import net.novaborn.takeaway.activity.entity.Goods;
 
 /**
  * @author xiaohun

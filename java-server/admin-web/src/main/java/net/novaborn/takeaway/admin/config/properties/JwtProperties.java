@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.config.properties;
+package net.novaborn.takeaway.activity.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

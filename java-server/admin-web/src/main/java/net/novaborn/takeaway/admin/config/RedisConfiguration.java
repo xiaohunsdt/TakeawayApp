@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.config;
+package net.novaborn.takeaway.activity.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

@@ -1,6 +1,6 @@
-package net.novaborn.takeaway.admin.web.dto;
+package net.novaborn.takeaway.activity.web.dto;
 
-import net.novaborn.takeaway.admin.common.auth.validator.dto.Credence;
+import net.novaborn.takeaway.activity.common.auth.validator.dto.Credence;
 
 /**
  * 认证的请求dto

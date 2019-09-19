@@ -1,6 +1,6 @@
-package net.novaborn.takeaway.admin.common.auth.validator;
+package net.novaborn.takeaway.activity.common.auth.validator;
 
-import net.novaborn.takeaway.admin.common.auth.validator.dto.Credence;
+import net.novaborn.takeaway.activity.common.auth.validator.dto.Credence;
 
 /**
  * <p>验证请求/auth接口时,请求参数的正确性</p>

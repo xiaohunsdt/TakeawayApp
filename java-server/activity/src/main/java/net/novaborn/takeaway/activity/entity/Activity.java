@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.entity;
+package net.novaborn.takeaway.activity.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;

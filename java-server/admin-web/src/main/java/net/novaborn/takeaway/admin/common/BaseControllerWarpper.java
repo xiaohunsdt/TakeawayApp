@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.common;
+package net.novaborn.takeaway.activity.common;
 
 import cn.hutool.core.bean.BeanUtil;
 

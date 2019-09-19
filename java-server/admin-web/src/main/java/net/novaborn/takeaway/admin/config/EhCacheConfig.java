@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.config;
+package net.novaborn.takeaway.activity.config;
 
 import net.sf.ehcache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;

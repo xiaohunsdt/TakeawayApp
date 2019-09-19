@@ -1,7 +1,7 @@
-package net.novaborn.takeaway.admin.common.auth.validator.impl;
+package net.novaborn.takeaway.activity.common.auth.validator.impl;
 
-import net.novaborn.takeaway.admin.common.auth.validator.IReqValidator;
-import net.novaborn.takeaway.admin.common.auth.validator.dto.Credence;
+import net.novaborn.takeaway.activity.common.auth.validator.IReqValidator;
+import net.novaborn.takeaway.activity.common.auth.validator.dto.Credence;
 import org.springframework.stereotype.Service;
 
 /**

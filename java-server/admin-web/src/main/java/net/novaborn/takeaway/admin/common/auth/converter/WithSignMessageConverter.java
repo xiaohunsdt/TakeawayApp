@@ -1,14 +1,14 @@
-package net.novaborn.takeaway.admin.common.auth.converter;
+package net.novaborn.takeaway.activity.common.auth.converter;
 
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
-import net.novaborn.takeaway.admin.common.auth.util.HttpKit;
-import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.admin.common.exception.SysException;
-import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.admin.config.properties.JwtProperties;
+import net.novaborn.takeaway.activity.common.auth.security.DataSecurityAction;
+import net.novaborn.takeaway.activity.common.auth.util.HttpKit;
+import net.novaborn.takeaway.activity.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.activity.common.exception.SysException;
+import net.novaborn.takeaway.activity.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.activity.config.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageNotReadableException;

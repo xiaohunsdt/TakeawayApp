@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.common.auth.converter;
+package net.novaborn.takeaway.activity.common.auth.converter;
 
 /**
  * 基础的传输bean

@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.common.exception;
+package net.novaborn.takeaway.activity.common.exception;
 
 /**
  * 抽象接口

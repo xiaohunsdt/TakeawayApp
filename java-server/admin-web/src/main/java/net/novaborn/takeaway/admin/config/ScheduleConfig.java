@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.config;
+package net.novaborn.takeaway.activity.config;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
