@@ -12,7 +12,7 @@ import java.util.Date;
  * @since 2019-09-20
  */
 @Data
-@TableName("goods")
+@TableName("`goods`")
 public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;
 
@@ -23,16 +23,16 @@ public class Goods extends Model<Goods> {
     private String name;
 
     // 简介
+    @TableField(value="`desc`")
     private String desc;
-
-    // 说明
-    private String detail;
 
     // 缩略图
     private String thumb;
 
     // 所属类目
     private String categoryId;
+
+    private Integer price;
 
     // 月销
     private Integer monthSale;

@@ -1,7 +1,9 @@
 package net.novaborn.takeaway.goods.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import lombok.Getter;
 
+@Getter
 public enum GoodsState {
     /**
      * 缺货
