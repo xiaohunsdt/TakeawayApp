@@ -13,4 +13,6 @@ import net.novaborn.takeaway.admin.entity.Admin;
  * @since 2019-09-20
  */
 public interface IAdminService extends IService<Admin> {
+
+    boolean login(String userName, String password);
 }
