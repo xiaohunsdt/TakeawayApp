@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.novaborn.takeaway.admin.dao.IAdminDao;
 import net.novaborn.takeaway.admin.entity.Admin;
 import net.novaborn.takeaway.admin.service.IAdminService;
+import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +20,7 @@ import java.util.Optional;
  */
 @Service
 public class AdminService extends ServiceImpl<IAdminDao, Admin> implements IAdminService {
+
     /**
      * 管理员登陆
      *
@@ -28,7 +31,12 @@ public class AdminService extends ServiceImpl<IAdminDao, Admin> implements IAdmi
     @Override
     public boolean login(String userName, String password) {
         Optional<Admin> admin = this.baseMapper.selectByName(userName);
+        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        return false;
+        if (!admin.get().getPassword().equals(password)) {
+            throw new SysException(SysExceptionEnum.AUTH_REQUEST_ERROR);
+        }
+
+        return true;
     }
 }

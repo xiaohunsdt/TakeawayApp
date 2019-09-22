@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.admin.entity;
 
+import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +35,7 @@ public class AdminTest {
 
     @Test
     public void selectByNameTest() {
-        Optional<Admin> admin = adminService.getBaseMapper().selectByName("admin");
-        admin.ifPresent(val -> System.out.println(val));
+        Optional<Admin> admin = adminService.getBaseMapper().selectByName("admin1");
+        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_ADMIN));
     }
 }

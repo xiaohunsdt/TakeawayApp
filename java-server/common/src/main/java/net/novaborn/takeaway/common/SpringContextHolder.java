@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.common;
+package net.novaborn.takeaway.common;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

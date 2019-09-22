@@ -4,8 +4,8 @@ import io.jsonwebtoken.JwtException;
 import lombok.Data;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
-import net.novaborn.takeaway.admin.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.admin.common.tips.ErrorTip;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import org.springframework.web.filter.OncePerRequestFilter;
 
