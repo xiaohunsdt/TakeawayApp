@@ -21,9 +21,9 @@ export function login(data) {
 //   })
 // }
 
-export function logout() {
-  return request({
-    url: '/user/logout',
-    method: 'post'
-  })
-}
+// export function logout() {
+//   return request({
+//     url: '/user/logout',
+//     method: 'post'
+//   })
+// }
