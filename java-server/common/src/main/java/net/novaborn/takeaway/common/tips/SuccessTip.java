@@ -9,7 +9,7 @@ package net.novaborn.takeaway.common.tips;
 public class SuccessTip extends Tip {
 	
 	public SuccessTip(){
-		super.code = 200;
+		super.code = 0;
 		super.message = "操作成功";
 	}
 }

@@ -2,7 +2,6 @@
 
 @mixin colorBtn($color) {
   background: $color;
-
   &:hover {
     color: $color;
 
@@ -10,6 +9,10 @@
     &:after {
       background: $color;
     }
+  }
+  &:focus {
+    background: $color;
+    color: white;
   }
 }
 

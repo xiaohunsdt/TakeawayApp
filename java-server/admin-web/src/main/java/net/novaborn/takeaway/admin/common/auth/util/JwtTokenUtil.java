@@ -6,6 +6,7 @@ import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,11 @@ public class JwtTokenUtil {
 
     @Autowired
     private JwtProperties jwtProperties;
+
+    public String getUsernameFromToken(HttpServletRequest request) {
+        String userName = this.getUsernameFromToken(request.getHeader(jwtProperties.getHeader()).replace("Bearer ", ""));
+        return userName;
+    }
 
     /**
      * 获取用户名从token中
