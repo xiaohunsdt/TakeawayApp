@@ -2,6 +2,7 @@ package net.novaborn.takeaway.admin.web.api;
 
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.validator.IReqValidator;
+import net.novaborn.takeaway.admin.common.auth.validator.impl.DbValidator;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.admin.web.dto.AuthRequest;
@@ -29,11 +30,11 @@ public class AuthController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Resource
-    private IReqValidator reqValidator;
+    private DbValidator dbValidator;
 
     @PostMapping(value = "${jwt.auth-path}")
     public ResponseEntity<?> createAuthenticationToken(@ModelAttribute AuthRequest authRequest) {
-        boolean validate = reqValidator.validate(authRequest);
+        boolean validate = dbValidator.validate(authRequest);
 
         if (validate) {
             final String randomKey = jwtTokenUtil.getRandomKey();

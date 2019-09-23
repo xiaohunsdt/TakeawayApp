@@ -24,8 +24,8 @@ public enum SysExceptionEnum implements ServiceExceptionEnum {
      * 其他
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误"),
-    WRITE_ERROR(500, "渲染界面错误"),
-    AUTH_HAVE_NO_USER(400, "找不到此用户名!请确认用户名输入正确");
+    AUTH_HAVE_NO_USER(400, "找不到此用户名!请确认用户名输入正确"),
+    WRITE_ERROR(500, "渲染界面错误");
 
     SysExceptionEnum(int code, String message) {
         this.code = code;

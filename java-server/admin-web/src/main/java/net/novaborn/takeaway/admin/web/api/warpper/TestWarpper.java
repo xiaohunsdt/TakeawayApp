@@ -1,6 +1,6 @@
 package net.novaborn.takeaway.admin.web.api.warpper;
 
-import net.novaborn.takeaway.admin.common.BaseControllerWarpper;
+import net.novaborn.takeaway.common.BaseControllerWarpper;
 
 import java.util.Map;
 

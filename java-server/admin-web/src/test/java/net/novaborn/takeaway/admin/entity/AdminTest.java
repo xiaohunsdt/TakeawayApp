@@ -36,6 +36,6 @@ public class AdminTest {
     @Test
     public void selectByNameTest() {
         Optional<Admin> admin = adminService.getBaseMapper().selectByName("admin1");
-        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_ADMIN));
+        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
     }
 }
