@@ -54,18 +54,18 @@ export const constantRoutes = [
     }]
   },
 
-  // {
-  //   path: '/userManagement',
-  //   component: Layout,
-  //   redirect: '/userManagement/index',
-  //   children: [{
-  //     path: 'index',
-  //     name: 'User Management',
-  //     props: true,
-  //     component: () => import('@/views/userManagement/index'),
-  //     meta: { title: '用户管理', icon: 'user' }
-  //   }]
-  // },
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/index',
+    children: [{
+      path: 'index',
+      name: 'UserManagement',
+      props: true,
+      component: () => import('@/views/user/index'),
+      meta: { title: '用户管理', icon: 'user' }
+    }]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/marketer-vue.iml" filepath="$PROJECT_DIR$/.idea/marketer-vue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/admin-web-app.iml" filepath="$PROJECT_DIR$/.idea/admin-web-app.iml" />
     </modules>
   </component>
 </project>
