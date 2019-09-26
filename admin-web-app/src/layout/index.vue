@@ -5,12 +5,11 @@
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar/>
-        <tags-view v-if="needTagsView" />
+        <tags-view v-if="needTagsView"/>
       </div>
       <app-main/>
-      <sys-setting />
-      <right-panel>
-        asdadasd
+      <right-panel v-if="showSettings">
+        <sys-setting />
       </right-panel>
     </div>
   </div>
@@ -18,7 +17,7 @@
 
 <script>
     import RightPanel from '@/components/RightPanel'
-    import { AppMain, Navbar, SysSetting, Sidebar, TagsView } from './components'
+    import { AppMain, Navbar, Sidebar, SysSetting, TagsView } from './components'
     import ResizeMixin from './mixin/ResizeHandler'
     import { mapState } from 'vuex'
 
