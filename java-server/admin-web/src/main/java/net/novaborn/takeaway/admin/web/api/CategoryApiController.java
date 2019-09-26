@@ -20,7 +20,7 @@ public class CategoryApiController {
     @GetMapping("getAllCategory")
     public ResponseEntity getAllCategory() {
         List<Category> categoryList = categoryService.list();
-        return ResponseEntity.ok(categoryList.get(0));
+        return ResponseEntity.ok(categoryList);
     }
 
     @PostMapping("getCategoryListByPage")

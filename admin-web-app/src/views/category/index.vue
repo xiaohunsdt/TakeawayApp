@@ -107,8 +107,7 @@
             }
         },
         created() {
-            // this.onSearch()
-            categoryApi.getAllCategory()
+            this.onSearch()
         }
     }
 </script>
