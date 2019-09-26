@@ -1,6 +1,5 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import com.alibaba.fastjson.JSON;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.entity.Admin;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
@@ -37,7 +36,7 @@ public class IndexApiController {
     public ResponseModel getUserInfo(HttpServletRequest request) {
         String userName = jwtTokenUtil.getUsernameFromToken(request);
         Optional<Admin> admin = adminService.getBaseMapper().selectByName(userName);
-        admin.orElseThrow(()->new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
+        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         ResponseModel responseModel = new ResponseModel(admin);
         return responseModel;
