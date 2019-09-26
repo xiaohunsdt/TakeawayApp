@@ -13,14 +13,13 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button @click="onCreate" size="mini" type="success">创建新分类</el-button>
+          <el-button @click="onCreateNewCategory" size="mini" type="success">创建新分类</el-button>
         </el-col>
       </el-row>
     </base-card>
     <base-card>
       <el-table
         :data="tableData"
-        border
         element-loading-text="正在加载中..."
         highlight-current-row
         stripe
@@ -30,7 +29,7 @@
         <el-table-column
           label="ID"
           prop="id"
-          width="250"
+          width="350"
         >
         </el-table-column>
         <el-table-column
@@ -38,7 +37,26 @@
           prop="name"
         >
         </el-table-column>
+        <el-table-column
+          label="操作"
+          width="150"
+        >
+          <template>
+            <el-button size="mini" type="danger">修改</el-button>
+          </template>
+        </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page="page.current"
+        :page-size="page.size"
+        :page-sizes="[15, 50, 100]"
+        :total="page.total"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top: 15px">
+      </el-pagination>
     </base-card>
   </div>
 </template>
@@ -71,7 +89,6 @@
                 this.listLoading = true
                 categoryApi.getCategoryListByPage(this.page, this.formData)
                     .then(response => {
-                        console.log(response)
                         this.tableData = response.records
                         this.page.total = parseInt(response.total)
                         this.listLoading = false
@@ -79,12 +96,19 @@
                     this.listLoading = false
                 })
             },
-            onCreate() {
+            onCreateNewCategory() {
                 console.log('asd')
+            },
+            handleSizeChange(val) {
+                this.onSearch()
+            },
+            handleCurrentChange(val) {
+                this.onSearch()
             }
         },
         created() {
-            this.onSearch()
+            // this.onSearch()
+            categoryApi.getAllCategory()
         }
     }
 </script>

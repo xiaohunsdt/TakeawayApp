@@ -15,6 +15,14 @@ export function getCategoryListByPage(page, args) {
   })
 }
 
+export function getAllCategory() {
+  return request({
+    url: '/category/getAllCategory',
+    method: 'get'
+  })
+}
+
 export default {
+  getAllCategory,
   getCategoryListByPage
 }

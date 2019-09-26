@@ -127,7 +127,7 @@
 </style>
 
 <style lang="scss" scoped>
-  $bg: #F3F3F9;
+  $bg: #304156;
   $dark_gray: #889aa4;
   $light_gray: #eee;
 

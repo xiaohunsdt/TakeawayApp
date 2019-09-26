@@ -1,8 +1,8 @@
 package net.novaborn.takeaway.goods.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 
@@ -24,7 +24,7 @@ public class Goods extends Model<Goods> {
     private String name;
 
     // 简介
-    @TableField(value="`desc`")
+    @TableField(value = "`desc`")
     private String desc;
 
     // 缩略图
@@ -52,7 +52,7 @@ public class Goods extends Model<Goods> {
     @Version
     private Integer version;
 
-    @JsonIgnore
+    @JSONField(serialize = false)
     @TableLogic
     private Integer deleted;
 }
