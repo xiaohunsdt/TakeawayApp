@@ -61,10 +61,9 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
     }]
   },
-
   {
     path: '/user',
     component: Layout,
@@ -75,6 +74,42 @@ export const constantRoutes = [
       props: true,
       component: () => import('@/views/user/index'),
       meta: { title: '用户管理', icon: 'user' }
+    }]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/index',
+    children: [{
+      path: 'index',
+      name: 'OrderManagement',
+      props: true,
+      component: () => import('@/views/order/index'),
+      meta: { title: '订单管理', icon: 'user' }
+    }]
+  },
+  {
+    path: '/goods',
+    component: Layout,
+    redirect: '/goods/index',
+    children: [{
+      path: 'index',
+      name: 'GoodsManagement',
+      props: true,
+      component: () => import('@/views/goods/index'),
+      meta: { title: '商品管理', icon: 'user' }
+    }]
+  },
+  {
+    path: '/category',
+    component: Layout,
+    redirect: '/category/index',
+    children: [{
+      path: 'index',
+      name: 'CategoryManagement',
+      props: true,
+      component: () => import('@/views/category/index'),
+      meta: { title: '分类管理', icon: 'user' }
     }]
   },
 

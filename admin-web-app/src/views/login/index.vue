@@ -31,14 +31,16 @@
           placeholder="Password"
           tabindex="2"
           auto-complete="on"
-          @keyup.enter.native="handleLogin"/>
+          @keyup.enter.native="handleLogin"
+        />
       </el-form-item>
 
       <el-button
         :loading="loading"
         type="primary"
         style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin">
+        @click.native.prevent="handleLogin"
+      >
         Login
       </el-button>
     </el-form>
@@ -125,7 +127,7 @@
 </style>
 
 <style lang="scss" scoped>
-  $bg: #2d3a4b;
+  $bg: #F3F3F9;
   $dark_gray: #889aa4;
   $light_gray: #eee;
 

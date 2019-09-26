@@ -1,11 +1,11 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
-    <sidebar :class="{hasTagsView:needTagsView}" class="sidebar-container"/>
-    <div class="main-container">
+    <sidebar class="sidebar-container"/>
+    <div class="main-container" :class="{hasTagsView}">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar/>
-        <tags-view v-if="needTagsView"/>
+        <tags-view v-if="hasTagsView"/>
       </div>
       <app-main/>
       <right-panel v-if="showSettings">
@@ -37,7 +37,7 @@
                 sidebar: state => state.app.sidebar,
                 device: state => state.app.device,
                 showSettings: state => state.settings.showSettings,
-                needTagsView: state => state.settings.tagsView,
+                hasTagsView: state => state.settings.tagsView,
                 fixedHeader: state => state.settings.fixedHeader
             }),
             classObj() {

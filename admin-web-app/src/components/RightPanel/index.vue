@@ -1,12 +1,12 @@
 <template>
-  <div ref="rightPanel" :class="{show:show}" class="rightPanel-container">
-    <div class="rightPanel-background" />
+  <div :class="{show:show}" class="rightPanel-container" ref="rightPanel">
+    <div class="rightPanel-background"/>
     <div class="rightPanel">
-      <div class="handle-button" :style="{'top':buttonTop+'px'}" @click="show=!show">
-        <i :class="show?'el-icon-close':'el-icon-user'" />
+      <div :style="{'top':buttonTop+'px'}" @click="show=!show" class="handle-button">
+        <i :class="show?'el-icon-close':'el-icon-user'"/>
       </div>
       <div class="rightPanel-items">
-        <slot />
+        <slot/>
       </div>
     </div>
   </div>
@@ -14,6 +14,7 @@
 
 <script>
     import { addClass, removeClass } from '@/utils'
+
     export default {
         name: 'RightPanel',
         props: {
@@ -93,6 +94,7 @@
     background: rgba(0, 0, 0, .2);
     z-index: -1;
   }
+
   .rightPanel {
     width: 100%;
     max-width: 260px;
@@ -106,18 +108,22 @@
     background: #fff;
     z-index: 40000;
   }
+
   .show {
     transition: all .3s cubic-bezier(.7, .3, .1, 1);
+
     .rightPanel-background {
       z-index: 20000;
       opacity: 1;
       width: 100%;
       height: 100%;
     }
+
     .rightPanel {
       transform: translate(0);
     }
   }
+
   .handle-button {
     width: 48px;
     height: 48px;
@@ -132,12 +138,14 @@
     cursor: pointer;
     color: #fff;
     line-height: 48px;
+
     i {
       font-size: 24px;
       line-height: 48px;
     }
   }
-  .rightPanel-items{
+
+  .rightPanel-items {
     padding: 22px 15px
   }
 </style>

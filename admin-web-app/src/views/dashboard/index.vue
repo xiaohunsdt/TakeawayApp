@@ -13,9 +13,6 @@
             ...mapGetters([
                 'userData'
             ])
-        },
-        created() {
-            console.log('created')
         }
     }
 </script>
