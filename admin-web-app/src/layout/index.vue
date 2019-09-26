@@ -8,8 +8,9 @@
         <tags-view v-if="needTagsView" />
       </div>
       <app-main/>
+      <sys-setting />
       <right-panel>
-        <settings></settings>
+        asdadasd
       </right-panel>
     </div>
   </div>
@@ -17,7 +18,7 @@
 
 <script>
     import RightPanel from '@/components/RightPanel'
-    import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+    import { AppMain, Navbar, SysSetting, Sidebar, TagsView } from './components'
     import ResizeMixin from './mixin/ResizeHandler'
     import { mapState } from 'vuex'
 
@@ -27,7 +28,7 @@
             Navbar,
             Sidebar,
             AppMain,
-            Settings,
+            SysSetting,
             TagsView,
             RightPanel
         },
