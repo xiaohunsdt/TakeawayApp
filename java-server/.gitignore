@@ -29,3 +29,14 @@ build/
 
 ### VS Code ###
 .vscode/
+activity/src/test/
+admin-web/src/main/webapp/
+admin-web/src/test/java/net/novaborn/takeaway/admin/common/
+admin/src/test/
+category/src/test/
+common/src/test/
+coupon/src/test/
+goods/src/test/
+order/src/test/
+system/src/test/
+user/src/test/
