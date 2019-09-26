@@ -3,7 +3,7 @@
     <div class="rightPanel-background"/>
     <div class="rightPanel">
       <div :style="{'top':buttonTop+'px'}" @click="show=!show" class="handle-button">
-        <i :class="show?'el-icon-close':'el-icon-user'"/>
+        <i :class="show?'el-icon-close':'el-icon-setting'"/>
       </div>
       <div class="rightPanel-items">
         <slot/>
