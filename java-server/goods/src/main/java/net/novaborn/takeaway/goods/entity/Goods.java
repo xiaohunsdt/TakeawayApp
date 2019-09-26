@@ -2,6 +2,7 @@ package net.novaborn.takeaway.goods.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 
@@ -51,6 +52,7 @@ public class Goods extends Model<Goods> {
     @Version
     private Integer version;
 
+    @JsonIgnore
     @TableLogic
     private Integer deleted;
 }

@@ -20,21 +20,23 @@
     <base-card>
       <el-table
         :data="tableData"
+        border
+        element-loading-text="正在加载中..."
+        highlight-current-row
         stripe
-        style="width: 100%">
+        style="width: 100%"
+        v-loading="listLoading"
+      >
         <el-table-column
-          label="日期"
-          prop="date"
-          width="180">
+          label="ID"
+          prop="id"
+          width="250"
+        >
         </el-table-column>
         <el-table-column
-          label="姓名"
+          label="名称"
           prop="name"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          label="地址"
-          prop="address">
+        >
         </el-table-column>
       </el-table>
     </base-card>
@@ -43,6 +45,7 @@
 
 <script>
     import BaseCard from '@/components/BaseCard/BaseCard'
+    import categoryApi from '@/api/category'
 
     export default {
         name: 'CategoryManagement',
@@ -51,19 +54,37 @@
         },
         data() {
             return {
+                page: {
+                    current: 1,
+                    size: 15,
+                    total: 0
+                },
                 formData: {
                     name: null
                 },
+                listLoading: false,
                 tableData: []
             }
         },
         methods: {
             onSearch() {
-                console.log('asd')
+                this.listLoading = true
+                categoryApi.getCategoryListByPage(this.page, this.formData)
+                    .then(response => {
+                        console.log(response)
+                        this.tableData = response.records
+                        this.page.total = parseInt(response.total)
+                        this.listLoading = false
+                    }).catch(() => {
+                    this.listLoading = false
+                })
             },
             onCreate() {
                 console.log('asd')
             }
+        },
+        created() {
+            this.onSearch()
         }
     }
 </script>

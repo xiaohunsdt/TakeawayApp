@@ -15,6 +15,14 @@ server:
 spring:
   profiles:
     active: dev-pc
+  mvc:
+    static-path-pattern: /res/**
+    view:
+      prefix: /view/
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: root
@@ -27,6 +35,9 @@ spring:
     port: 6379
     #连接超时时间
     timeout: 10000
+  jackson:
+    time-zone: Asia/Seoul
+    default-property-inclusion: non_null
 #    aop:
 #      proxy-target-class: true
 

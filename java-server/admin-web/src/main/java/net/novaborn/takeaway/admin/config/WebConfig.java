@@ -6,6 +6,7 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.filter.AuthFilter;
 import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
 import net.novaborn.takeaway.admin.common.auth.security.impl.Base64SecurityAction;
@@ -25,7 +26,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,20 +39,27 @@ import java.util.List;
  * @author fengshuonan
  * @date 2017-08-23 15:48
  */
+@Slf4j
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     private JwtProperties jwtProperties;
 
-//    @Bean
-//    @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
-//    public AuthFilter jwtAuthenticationTokenFilter() {
-//        return new AuthFilter();
-//    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/res/");
+
+        log.info(String.format("upload文件夹为：%s", System.getProperty("user.dir") + File.separator + "upload" + File.separator));
+        if (!"/".equals(System.getProperty("user.dir"))) {
+            registry.addResourceHandler("/upload/**").addResourceLocations("file:" + System.getProperty("user.dir") + File.separator + "upload" + File.separator);
+        } else {
+            registry.addResourceHandler("/upload/**").addResourceLocations("file:" + File.separator + "upload" + File.separator);
+        }
+    }
 
     @Bean
     @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
@@ -62,7 +73,6 @@ public class WebConfig {
         List<String> exclusions = new ArrayList<>();
         exclusions.add("/api/admin/" + jwtProperties.getAuthPath());
 //        exclusions.add("/api/client/" + jwtProperties.getAuthPath());
-        exclusions.add("/api/client/*");
         filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/api/*");

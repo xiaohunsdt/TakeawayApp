@@ -2,6 +2,7 @@ package net.novaborn.takeaway.category.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -29,6 +30,7 @@ public class Category extends Model<Category> {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 
+    @JsonIgnore
     @TableLogic
     private Integer deleted;
 }
