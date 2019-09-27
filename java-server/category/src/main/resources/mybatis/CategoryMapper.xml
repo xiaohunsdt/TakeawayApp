@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.category.dao.ICategoryDao">
 
+    <select id="selectByName" resultType="Category">
+        SELECT * FROM `category`
+        <where>
+            `name` = #{name}
+            AND deleted = 0
+        </where>
+    </select>
+
     <select id="getCategoryListByPage" resultType="Category">
         SELECT * FROM `category`
         <where>
@@ -12,12 +20,5 @@
             AND deleted = 0
         </where>
         ORDER BY `create_date` ASC
-    </select>
-    <select id="selectByName" resultType="Category">
-        SELECT * FROM `category`
-        <where>
-            `name` = #{name}
-            AND deleted = 0
-        </where>
     </select>
 </mapper>

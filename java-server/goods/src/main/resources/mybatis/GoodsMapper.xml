@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
     <mapper namespace="net.novaborn.takeaway.goods.dao.IGoodsDao" >
 
+    <select id="selectByName" resultType="Goods">
+        SELECT * FROM `goods`
+        <where>
+            `name` = #{name}
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="getGoodsListByPage" resultType="Goods">
+        SELECT * FROM `goods`
+        <where>
+            1 = 1
+            <if test="args.name != '' and args.name != null">
+                and `name` = #{args.name}
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` ASC
+    </select>
 </mapper>
