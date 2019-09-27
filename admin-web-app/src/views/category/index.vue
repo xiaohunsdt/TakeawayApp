@@ -20,23 +20,20 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-        class="tb-edit"
         :data="tableData"
+        class="tb-edit"
         element-loading-text="正在加载中..."
         highlight-current-row
         stripe
         style="width: 100%"
-        v-loading="listLoading"
-      >
+        v-loading="listLoading">
         <el-table-column
           label="ID"
           prop="id"
-          width="350"
-        >
+          width="350">
         </el-table-column>
         <el-table-column
-          label="名称"
-        >
+          label="名称">
           <template scope="scope">
             <el-input
               @change="onEdit(scope.$index, scope.row)"
