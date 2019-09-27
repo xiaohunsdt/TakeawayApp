@@ -13,12 +13,14 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <add-category-dialog />
+          <add-category-dialog
+            @createSuccess="onSearch"/>
         </el-col>
       </el-row>
     </base-card>
     <base-card class="container-main">
       <el-table
+        class="tb-edit"
         :data="tableData"
         element-loading-text="正在加载中..."
         highlight-current-row
@@ -37,19 +39,18 @@
         >
           <template scope="scope">
             <el-input
-              size="small"
-              v-model="scope.row.name"
+              @change="onEdit(scope.$index, scope.row)"
               placeholder="请输入内容"
-              @change="handleEdit(scope.$index, scope.row)"></el-input>
-            <span>{{scope.row.date}}</span>
+              size="small"
+              v-model="scope.row.name"></el-input>
+            <span>{{scope.row.name}}</span>
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
-          width="150"
-        >
-          <template>
-            <el-button size="mini" type="danger">修改</el-button>
+          width="150">
+          <template scope="scope">
+            <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,7 +91,7 @@
                     name: null
                 },
                 listLoading: false,
-                tableData: [],
+                tableData: []
             }
         },
         methods: {
@@ -105,11 +106,26 @@
                     this.listLoading = false
                 })
             },
-            handleEdit(index, row) {
-                console.log(index, row)
+            onEdit(index, row) {
+                categoryApi.updateCategory(row)
+                    .then((response) => {
+                        this.$message({
+                            message: response.message,
+                            type: 'success'
+                        })
+                    })
             },
-            handleDelete(index, row) {
-                console.log(index, row)
+            onDelete(id) {
+                this.$confirm('是否确定删除此分类?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    categoryApi.delteCategory(id)
+                        .then(() => {
+                            this.onSearch()
+                        })
+                })
             },
             handleSizeChange(val) {
                 this.onSearch()

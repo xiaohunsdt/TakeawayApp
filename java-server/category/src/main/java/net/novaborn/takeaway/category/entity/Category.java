@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -25,8 +26,10 @@ public class Category extends Model<Category> {
     // 父 id
     private String parentId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 

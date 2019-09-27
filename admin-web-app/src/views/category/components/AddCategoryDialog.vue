@@ -2,19 +2,19 @@
   <div style="text-align: left">
     <el-button @click="onCreateNewCategory" size="mini" type="success">创建新分类</el-button>
     <el-dialog
-      title="添加分类"
+      :destroy-on-close="true"
       :visible.sync="dialogVisible"
-      :destroy-on-close="true">
+      title="添加分类">
       <el-form :model="formData">
         <el-form-item label="分类名称">
-          <el-input v-model="formData.name" autocomplete="off"></el-input>
+          <el-input autocomplete="off" v-model="formData.name"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div class="dialog-footer" slot="footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
-          type="primary"
           @click="handleCreateNewCategory"
+          type="primary"
           v-loading.fullscreen.lock="createLoading">确 定
         </el-button>
       </div>
@@ -65,6 +65,7 @@
                             message: response.message,
                             type: 'success'
                         })
+                        this.$emit('createSuccess')
                     })
                     .catch(() => {
                         this.createLoading = false

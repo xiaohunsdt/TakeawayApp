@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.category.entity.Category;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -17,5 +18,7 @@ import java.util.Map;
  * @since 2019-09-20
  */
 public interface ICategoryService extends IService<Category> {
+    Optional<Category> selectByName(String name);
+
     IPage<Category> getCategoryListByPage(Page page, Map args);
 }

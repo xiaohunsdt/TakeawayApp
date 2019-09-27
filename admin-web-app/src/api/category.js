@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
+export function getAllCategory() {
+  return request({
+    url: '/category/getAllCategory',
+    method: 'get'
+  })
+}
+
 export function getCategoryListByPage(page, args) {
   const data = Object.assign({}, page, args)
   return request({
@@ -28,15 +35,38 @@ export function createNewCategory(data) {
   })
 }
 
-export function getAllCategory() {
+export function updateCategory(data) {
   return request({
-    url: '/category/getAllCategory',
-    method: 'get'
+    url: '/category/updateCategory',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function delteCategory(id) {
+  return request({
+    url: '/category/delteCategory',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: {
+      id
+    },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
   })
 }
 
 export default {
   getAllCategory,
   getCategoryListByPage,
-  createNewCategory
+  createNewCategory,
+  updateCategory,
+  delteCategory
 }

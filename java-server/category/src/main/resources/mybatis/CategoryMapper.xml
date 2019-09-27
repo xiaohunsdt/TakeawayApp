@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-    <mapper namespace="net.novaborn.takeaway.category.dao.ICategoryDao" >
+<mapper namespace="net.novaborn.takeaway.category.dao.ICategoryDao">
 
     <select id="getCategoryListByPage" resultType="Category">
         SELECT * FROM `category`
         <where>
+            1 = 1
             <if test="args.name != '' and args.name != null">
                 and `name` = #{args.name}
             </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` ASC
+    </select>
+    <select id="selectByName" resultType="Category">
+        SELECT * FROM `category`
+        <where>
+            `name` = #{name}
+            AND deleted = 0
         </where>
     </select>
 </mapper>

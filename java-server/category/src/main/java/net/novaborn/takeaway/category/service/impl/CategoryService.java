@@ -9,6 +9,7 @@ import net.novaborn.takeaway.category.service.ICategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -20,6 +21,10 @@ import java.util.Map;
  */
 @Service
 public class CategoryService extends ServiceImpl<ICategoryDao, Category> implements ICategoryService {
+    @Override
+    public Optional<Category> selectByName(String name) {
+        return this.baseMapper.selectByName(name);
+    }
 
     @Override
     public IPage<Category> getCategoryListByPage(Page page, Map args) {
