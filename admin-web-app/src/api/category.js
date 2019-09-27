@@ -15,6 +15,19 @@ export function getCategoryListByPage(page, args) {
   })
 }
 
+export function createNewCategory(data) {
+  return request({
+    url: '/category/createNewCategory',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function getAllCategory() {
   return request({
     url: '/category/getAllCategory',
@@ -24,5 +37,6 @@ export function getAllCategory() {
 
 export default {
   getAllCategory,
-  getCategoryListByPage
+  getCategoryListByPage,
+  createNewCategory
 }

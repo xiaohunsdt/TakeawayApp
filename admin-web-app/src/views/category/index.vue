@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <base-card class="header">
+    <base-card class="container-header">
       <el-row>
         <el-col :span="18">
           <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
@@ -13,11 +13,11 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button @click="onCreateNewCategory" size="mini" type="success">创建新分类</el-button>
+          <add-category-dialog />
         </el-col>
       </el-row>
     </base-card>
-    <base-card>
+    <base-card class="container-main">
       <el-table
         :data="tableData"
         element-loading-text="正在加载中..."
@@ -34,8 +34,15 @@
         </el-table-column>
         <el-table-column
           label="名称"
-          prop="name"
         >
+          <template scope="scope">
+            <el-input
+              size="small"
+              v-model="scope.row.name"
+              placeholder="请输入内容"
+              @change="handleEdit(scope.$index, scope.row)"></el-input>
+            <span>{{scope.row.date}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="操作"
@@ -64,11 +71,13 @@
 <script>
     import BaseCard from '@/components/BaseCard/BaseCard'
     import categoryApi from '@/api/category'
+    import AddCategoryDialog from './components/AddCategoryDialog'
 
     export default {
         name: 'CategoryManagement',
         components: {
-            BaseCard
+            BaseCard,
+            AddCategoryDialog
         },
         data() {
             return {
@@ -81,7 +90,7 @@
                     name: null
                 },
                 listLoading: false,
-                tableData: []
+                tableData: [],
             }
         },
         methods: {
@@ -96,8 +105,11 @@
                     this.listLoading = false
                 })
             },
-            onCreateNewCategory() {
-                console.log('asd')
+            handleEdit(index, row) {
+                console.log(index, row)
+            },
+            handleDelete(index, row) {
+                console.log(index, row)
             },
             handleSizeChange(val) {
                 this.onSearch()
@@ -116,6 +128,20 @@
   .el-form-item {
     margin-bottom: unset !important;
   }
+
+  .tb-edit {
+    .el-input {
+      display: none
+    }
+
+    .current-row .el-input {
+      display: block
+    }
+
+    .current-row .el-input + span {
+      display: none
+    }
+  }
 </style>
 <style lang="scss" scoped>
   $bg: #F3F3F9;
@@ -127,7 +153,7 @@
     background-color: $bg;
     overflow: hidden;
 
-    .header {
+    &-header {
       margin-bottom: 30px;
     }
   }
