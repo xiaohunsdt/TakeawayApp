@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @author xiaohun
  * @since 2019-09-20
  */
+
 @Data
 @TableName("`goods`")
 public class Goods extends Model<Goods> {

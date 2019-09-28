@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.goods.entity;
 
 import net.novaborn.takeaway.admin.AdminApplication;
+import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ public class GoodsTest {
     GoodsService goodsService;
 
     @Test
-    public void createAdminTest() {
+    public void createGoodsTest() {
         Goods goods = new Goods();
         goods.setName("蒜蓉黄瓜");
         goods.setDesc("美味好吃的蒜蓉黄瓜!");
@@ -26,9 +27,16 @@ public class GoodsTest {
     }
 
     @Test
-    public void updateAdminTest() {
+    public void getGoodsTest() {
+        Goods goods = goodsService.getById("761b1144c87e8be15d8ab3356c71556b");
+        System.out.println(goods);
+    }
+
+    @Test
+    public void updateGoodsTest() {
         Goods goods = goodsService.getById("761b1144c87e8be15d8ab3356c71556b");
         goods.setName("蒜蓉黄瓜1");
+        goods.setState(GoodsState.OFF);
         goods.updateById();
     }
 }

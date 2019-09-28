@@ -45,7 +45,6 @@ mybatis-plus:
   mapper-locations: classpath*:/mybatis/**Mapper.xml
   typeAliasesPackage: net.novaborn.**.entity
   type-enums-package: net.novaborn.**.enums
-
 log:
   path: admin-web-logs
 

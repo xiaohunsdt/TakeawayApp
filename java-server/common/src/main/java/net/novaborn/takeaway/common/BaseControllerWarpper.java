@@ -14,38 +14,30 @@ import java.util.Map;
  */
 public abstract class BaseControllerWarpper {
 
-    public Object obj = null;
+    public Object element;
 
-    public BaseControllerWarpper(Object obj) {
-        this.obj = obj;
+    public BaseControllerWarpper(Object element) {
+        this.element = element;
     }
 
     @SuppressWarnings("unchecked")
     public Object warp() {
-        if (this.obj instanceof List) {
-            List<Map<String, Object>> list = (List<Map<String, Object>>) this.obj;
-            for (Map<String, Object> map : list) {
+        if (this.element instanceof List) {
+            List elementList = (List) this.element;
+            List mapList = new ArrayList();
+            for (Object obj : elementList) {
+                Map map = BeanUtil.beanToMap(obj);
                 warpTheMap(map);
+                mapList.add(map);
             }
-            return list;
-        } else if (this.obj instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>) this.obj;
+            return mapList;
+        } else if (this.element instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) this.element;
             warpTheMap(map);
             return map;
         } else {
-            return this.obj;
+            return this.element;
         }
-    }
-
-    public <T> List warpObj(){
-        List<T> list = (List<T>) this.obj;
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (T obj : list) {
-            Map<String, Object> data = BeanUtil.beanToMap(obj);
-            warpTheMap(data);
-            result.add(data);
-        }
-        return result;
     }
 
     protected abstract void warpTheMap(Map<String, Object> map);

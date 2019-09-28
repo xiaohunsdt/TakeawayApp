@@ -28,15 +28,40 @@
         style="width: 100%"
         v-loading="listLoading">
         <el-table-column
-          label="名称">
+          label="名称"
+          prop="name">
+        </el-table-column>
+        <el-table-column
+          label="缩略图"
+          width="100">
           <template scope="scope">
-            <el-input
-              @change="onEdit(scope.$index, scope.row)"
-              placeholder="请输入内容"
-              size="small"
-              v-model="scope.row.name"></el-input>
-            <span>{{scope.row.name}}</span>
+            <img style="height: 30px;width: auto;" :src="scope.row.thumb" alt="">
           </template>
+        </el-table-column>
+        <el-table-column
+          label="简介"
+          prop="desc"
+        width="250">
+        </el-table-column>
+        <el-table-column
+          label="分类"
+          prop="category">
+        </el-table-column>
+        <el-table-column
+          label="价格"
+          prop="price">
+        </el-table-column>
+        <el-table-column
+          label="月销"
+          prop="monthSale">
+        </el-table-column>
+        <el-table-column
+          label="评分"
+          prop="rate">
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          prop="state">
         </el-table-column>
         <el-table-column
           label="操作"
@@ -132,25 +157,6 @@
     }
 </script>
 
-<style lang="scss">
-  .el-form-item {
-    margin-bottom: unset !important;
-  }
-
-  .tb-edit {
-    .el-input {
-      display: none
-    }
-
-    .current-row .el-input {
-      display: block
-    }
-
-    .current-row .el-input + span {
-      display: none
-    }
-  }
-</style>
 <style lang="scss" scoped>
   $bg: #F3F3F9;
 

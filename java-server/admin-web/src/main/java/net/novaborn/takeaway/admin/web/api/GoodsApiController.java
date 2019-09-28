@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -33,6 +34,7 @@ public class GoodsApiController {
     public ResponseEntity getGoodsListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page.setOptimizeCountSql(false);
         page = (Page) goodsService.getGoodsListByPage(page, args);
+        page.setRecords((List) new GoodsWarpper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
