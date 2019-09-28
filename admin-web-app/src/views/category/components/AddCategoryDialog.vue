@@ -1,9 +1,10 @@
 <template>
-  <div style="text-align: left">
+  <div>
     <el-button @click="onCreateNewCategory" size="mini" type="success">创建新分类</el-button>
     <el-dialog
       :destroy-on-close="true"
       :visible.sync="dialogVisible"
+      style="text-align: left"
       title="添加分类">
       <el-form :model="formData">
         <el-form-item label="分类名称">
@@ -39,7 +40,7 @@
         watch: {
             dialogVisible(newVal) {
                 if (newVal) {
-                    this.formData.name = null
+                    this.formData = {}
                 }
             }
         },

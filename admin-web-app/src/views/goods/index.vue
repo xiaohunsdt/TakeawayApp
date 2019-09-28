@@ -7,6 +7,17 @@
             <el-form-item label="名称">
               <el-input placeholder="商品名称" v-model="formData.name"></el-input>
             </el-form-item>
+            <el-form-item label="分类">
+              <el-select placeholder="选择分类" v-model="formData.categoryId">
+                <el-option label=" " value=""></el-option>
+                <el-option
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                  v-for="item in categoryList">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item>
               <el-button @click="onSearch" type="primary">查询</el-button>
             </el-form-item>
@@ -14,6 +25,7 @@
         </el-col>
         <el-col :span="6" style="text-align: right">
           <add-goods-dialog
+            :category-list="categoryList"
             @createSuccess="onSearch"/>
         </el-col>
       </el-row>
@@ -35,13 +47,13 @@
           label="缩略图"
           width="100">
           <template scope="scope">
-            <img style="height: 30px;width: auto;" :src="scope.row.thumb" alt="">
+            <img :src="scope.row.thumb" alt="" style="height: 30px;width: auto;">
           </template>
         </el-table-column>
         <el-table-column
           label="简介"
           prop="desc"
-        width="250">
+          width="250">
         </el-table-column>
         <el-table-column
           label="分类"
@@ -89,6 +101,7 @@
 <script>
     import BaseCard from '@/components/BaseCard/BaseCard'
     import goodsApi from '@/api/goods'
+    import categoryApi from '@/api/category'
     import AddGoodsDialog from './components/AddGoodsDialog'
 
     export default {
@@ -105,11 +118,20 @@
                     total: 0
                 },
                 formData: {
-                    name: null
+                    name: null,
+                    categoryId: null
                 },
                 listLoading: false,
-                tableData: []
+                tableData: [],
+                categoryList: []
             }
+        },
+        created() {
+            this.onSearch()
+            categoryApi.getAllCategory()
+                .then(response => {
+                    this.categoryList = response
+                })
         },
         methods: {
             onSearch() {
@@ -150,12 +172,15 @@
             handleCurrentChange(val) {
                 this.onSearch()
             }
-        },
-        created() {
-            this.onSearch()
         }
     }
 </script>
+
+<style lang="scss">
+  .el-table th, .el-table td {
+    padding: 8px 0px;
+  }
+</style>
 
 <style lang="scss" scoped>
   $bg: #F3F3F9;

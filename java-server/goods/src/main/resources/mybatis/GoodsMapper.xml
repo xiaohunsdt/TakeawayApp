@@ -15,7 +15,10 @@
         <where>
             1 = 1
             <if test="args.name != '' and args.name != null">
-                and `name` = #{args.name}
+                and `name` like '%${args.name}%'
+            </if>
+            <if test="args.categoryId != '' and args.categoryId != null">
+                and `category_id` = #{args.categoryId}
             </if>
             AND deleted = 0
         </where>
