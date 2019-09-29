@@ -1,9 +1,9 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
-import net.novaborn.takeaway.category.entity.Category;
-import net.novaborn.takeaway.category.service.impl.CategoryService;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -23,6 +23,12 @@ import java.util.Optional;
 public class GoodsApiController {
     @Autowired
     GoodsService goodsService;
+
+    @GetMapping("getByGoodsId")
+    public ResponseEntity getByGoodsId(String goodsId) {
+        Goods goods = goodsService.getById(goodsId);
+        return ResponseEntity.ok(goods);
+    }
 
     @GetMapping("getAllGoods")
     public ResponseEntity getAllGoods() {
@@ -61,9 +67,13 @@ public class GoodsApiController {
             return new ErrorTip(-1, "没有此商品名!");
         }
 
-        //修改名称
-        tempGoods.get().setName(goods.getName());
+        Optional<Goods> sameNameGoods = goodsService.selectByName(goods.getName());
+        if (sameNameGoods.isPresent()) {
+            return new ErrorTip(-1, "存在同名商品!");
+        }
 
+        //修改名称
+        BeanUtil.copyProperties(goods, tempGoods.get());
         if (goodsService.updateById(tempGoods.get())) {
             return new SuccessTip("修改成功!");
         } else {

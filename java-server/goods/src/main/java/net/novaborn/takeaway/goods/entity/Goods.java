@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.novaborn.takeaway.goods.enums.GoodsState;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -46,8 +47,10 @@ public class Goods extends Model<Goods> {
     //状态
     private GoodsState state;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
 

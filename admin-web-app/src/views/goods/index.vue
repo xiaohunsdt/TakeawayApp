@@ -24,9 +24,7 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <add-goods-dialog
-            :category-list="categoryList"
-            @createSuccess="onSearch"/>
+          <el-button @click="onCreateNewGoods" size="mini" type="success">创建新分类</el-button>
         </el-col>
       </el-row>
     </base-card>
@@ -46,7 +44,7 @@
         <el-table-column
           label="缩略图"
           width="100">
-          <template scope="scope">
+          <template v-slot="scope">
             <img :src="scope.row.thumb" alt="" style="height: 30px;width: auto;">
           </template>
         </el-table-column>
@@ -78,7 +76,8 @@
         <el-table-column
           label="操作"
           width="150">
-          <template scope="scope">
+          <template v-slot="scope">
+            <el-button @click="onEdit(scope.row)" size="mini" type="danger">编辑</el-button>
             <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
           </template>
         </el-table-column>
@@ -95,85 +94,92 @@
         style="margin-top: 15px">
       </el-pagination>
     </base-card>
+    <goods-dialog
+      :category-list="categoryList"
+      :dialog-visible.sync="dialogVisible"
+      :goods-data="currentGoods"
+      @event-success="onSearch"
+    />
   </div>
 </template>
 
 <script>
-    import BaseCard from '@/components/BaseCard/BaseCard'
-    import goodsApi from '@/api/goods'
-    import categoryApi from '@/api/category'
-    import AddGoodsDialog from './components/AddGoodsDialog'
+  import BaseCard from '@/components/BaseCard/BaseCard'
+  import goodsApi from '@/api/goods'
+  import categoryApi from '@/api/category'
+  import GoodsDialog from './components/GoodsDialog'
 
-    export default {
-        name: 'GoodsManagement',
-        components: {
-            BaseCard,
-            AddGoodsDialog
+  export default {
+    name: 'GoodsManagement',
+    components: {
+      BaseCard,
+      GoodsDialog
+    },
+    data() {
+      return {
+        page: {
+          current: 1,
+          size: 15,
+          total: 0
         },
-        data() {
-            return {
-                page: {
-                    current: 1,
-                    size: 15,
-                    total: 0
-                },
-                formData: {
-                    name: null,
-                    categoryId: null
-                },
-                listLoading: false,
-                tableData: [],
-                categoryList: []
-            }
+        formData: {
+          name: null,
+          categoryId: null
         },
-        created() {
-            this.onSearch()
-            categoryApi.getAllCategory()
-                .then(response => {
-                    this.categoryList = response
-                })
-        },
-        methods: {
-            onSearch() {
-                this.listLoading = true
-                goodsApi.getGoodsListByPage(this.page, this.formData)
-                    .then(response => {
-                        this.tableData = response.records
-                        this.page.total = parseInt(response.total)
-                        this.listLoading = false
-                    }).catch(() => {
-                    this.listLoading = false
-                })
-            },
-            onEdit(index, row) {
-                goodsApi.updateGoods(row)
-                    .then((response) => {
-                        this.$message({
-                            message: response.message,
-                            type: 'success'
-                        })
-                    })
-            },
-            onDelete(id) {
-                this.$confirm('是否确定删除此商品?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    goodsApi.deleteGoods(id)
-                        .then(() => {
-                            this.onSearch()
-                        })
-                })
-            },
-            handleSizeChange(val) {
-                this.onSearch()
-            },
-            handleCurrentChange(val) {
-                this.onSearch()
-            }
-        }
+        dialogVisible: false,
+        listLoading: false,
+        tableData: [],
+        categoryList: [],
+        currentGoods: null
+      }
+    },
+    created() {
+      this.onSearch()
+      categoryApi.getAllCategory()
+        .then(response => {
+          this.categoryList = response
+        })
+    },
+    methods: {
+      onSearch() {
+        this.listLoading = true
+        goodsApi.getGoodsListByPage(this.page, this.formData)
+          .then(response => {
+            this.tableData = response.records
+            this.page.total = parseInt(response.total)
+            this.listLoading = false
+          }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      onEdit(row) {
+        this.currentGoods = row
+        this.dialogVisible = true
+      },
+      onDelete(id) {
+        this.$confirm('是否确定删除此商品?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          goodsApi.deleteGoods(id)
+            .then(() => {
+              this.onSearch()
+            })
+        })
+      },
+      onCreateNewGoods() {
+        this.dialogVisible = true
+        this.goodsData = null
+      },
+      handleSizeChange(val) {
+        this.onSearch()
+      },
+      handleCurrentChange(val) {
+        this.onSearch()
+      }
     }
+  }
 </script>
 
 <style lang="scss">

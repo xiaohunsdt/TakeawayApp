@@ -1,6 +1,16 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
+export function getByGoodsId(goodsId) {
+  return request({
+    url: '/goods/getByGoodsId',
+    method: 'get',
+    params: {
+      goodsId
+    }
+  })
+}
+
 export function getAllGoods() {
   return request({
     url: '/goods/getAllGoods',
@@ -64,6 +74,7 @@ export function delteGoods(id) {
 }
 
 export default {
+  getByGoodsId,
   getAllGoods,
   getGoodsListByPage,
   createNewGoods,

@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column
           label="名称">
-          <template scope="scope">
+          <template v-slot="scope">
             <el-input
               @change="onEdit(scope.$index, scope.row)"
               placeholder="请输入内容"
@@ -46,7 +46,7 @@
         <el-table-column
           label="操作"
           width="150">
-          <template scope="scope">
+          <template v-slot="scope">
             <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
           </template>
         </el-table-column>
