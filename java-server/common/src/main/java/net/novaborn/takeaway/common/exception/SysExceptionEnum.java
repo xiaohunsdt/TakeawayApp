@@ -25,6 +25,7 @@ public enum SysExceptionEnum implements ServiceExceptionEnum {
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误"),
     AUTH_HAVE_NO_USER(400, "找不到此用户名!"),
+    UPLOAD_IMAGE_FAILED(400, "上传图片失败!"),
     WRITE_ERROR(500, "渲染界面错误");
 
     SysExceptionEnum(int code, String message) {

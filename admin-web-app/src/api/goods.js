@@ -58,7 +58,23 @@ export function updateGoods(data) {
   })
 }
 
-export function delteGoods(id) {
+export function updateGoodsThumb(id, imageUrl) {
+  return request({
+    url: '/goods/updateGoodsThumb',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: {
+      id,
+      imageUrl
+    },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function deleteGoods(id) {
   return request({
     url: '/goods/delteGoods',
     method: 'post',
@@ -79,5 +95,6 @@ export default {
   getGoodsListByPage,
   createNewGoods,
   updateGoods,
-  delteGoods
+  updateGoodsThumb,
+  deleteGoods
 }

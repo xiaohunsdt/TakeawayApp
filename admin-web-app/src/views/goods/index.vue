@@ -45,7 +45,18 @@
           label="缩略图"
           width="100">
           <template v-slot="scope">
-            <img :src="scope.row.thumb" alt="" style="height: 30px;width: auto;">
+            <el-button
+              @click="onUploadImg(scope.row)"
+              size="mini"
+              type="primary"
+              v-if="scope.row.thumb===''">
+              上传
+            </el-button>
+            <img
+              :src="uploadUrl + scope.row.thumb"
+              @click="onUploadImg(scope.row)"
+              style="height: 30px;width: auto;"
+              v-else/>
           </template>
         </el-table-column>
         <el-table-column
@@ -77,7 +88,7 @@
           label="操作"
           width="150">
           <template v-slot="scope">
-            <el-button @click="onEdit(scope.row)" size="mini" type="danger">编辑</el-button>
+            <el-button @click="onEdit(scope.row)" size="mini" type="primary">编辑</el-button>
             <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
           </template>
         </el-table-column>
@@ -100,86 +111,101 @@
       :goods-data="currentGoods"
       @event-success="onSearch"
     />
+    <goods-image-dialog
+      :dialogVisible.sync="imageUploaderVisible"
+      :goodsData="currentGoods"/>
   </div>
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
-  import goodsApi from '@/api/goods'
-  import categoryApi from '@/api/category'
-  import GoodsDialog from './components/GoodsDialog'
+    import BaseCard from '@/components/BaseCard/BaseCard'
+    import GoodsImageDialog from './components/GoodsImageDialog'
+    import goodsApi from '@/api/goods'
+    import categoryApi from '@/api/category'
+    import GoodsDialog from './components/GoodsDialog'
+    import { getServerUrl } from '@/utils/sys'
 
-  export default {
-    name: 'GoodsManagement',
-    components: {
-      BaseCard,
-      GoodsDialog
-    },
-    data() {
-      return {
-        page: {
-          current: 1,
-          size: 15,
-          total: 0
+    export default {
+        name: 'GoodsManagement',
+        components: {
+            BaseCard,
+            GoodsImageDialog,
+            GoodsDialog
         },
-        formData: {
-          name: null,
-          categoryId: null
+        computed: {
+            uploadUrl() {
+                return getServerUrl()
+            }
         },
-        dialogVisible: false,
-        listLoading: false,
-        tableData: [],
-        categoryList: [],
-        currentGoods: null
-      }
-    },
-    created() {
-      this.onSearch()
-      categoryApi.getAllCategory()
-        .then(response => {
-          this.categoryList = response
-        })
-    },
-    methods: {
-      onSearch() {
-        this.listLoading = true
-        goodsApi.getGoodsListByPage(this.page, this.formData)
-          .then(response => {
-            this.tableData = response.records
-            this.page.total = parseInt(response.total)
-            this.listLoading = false
-          }).catch(() => {
-          this.listLoading = false
-        })
-      },
-      onEdit(row) {
-        this.currentGoods = row
-        this.dialogVisible = true
-      },
-      onDelete(id) {
-        this.$confirm('是否确定删除此商品?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          goodsApi.deleteGoods(id)
-            .then(() => {
-              this.onSearch()
-            })
-        })
-      },
-      onCreateNewGoods() {
-        this.dialogVisible = true
-        this.goodsData = null
-      },
-      handleSizeChange(val) {
-        this.onSearch()
-      },
-      handleCurrentChange(val) {
-        this.onSearch()
-      }
+        data() {
+            return {
+                page: {
+                    current: 1,
+                    size: 15,
+                    total: 0
+                },
+                formData: {
+                    name: null,
+                    categoryId: null
+                },
+                imageUploaderVisible: false,
+                dialogVisible: false,
+                listLoading: false,
+                tableData: [],
+                categoryList: [],
+                currentGoods: null
+            }
+        },
+        created() {
+            this.onSearch()
+            categoryApi.getAllCategory()
+                .then(response => {
+                    this.categoryList = response
+                })
+        },
+        methods: {
+            onSearch() {
+                this.listLoading = true
+                goodsApi.getGoodsListByPage(this.page, this.formData)
+                    .then(response => {
+                        this.tableData = response.records
+                        this.page.total = parseInt(response.total)
+                        this.listLoading = false
+                    }).catch(() => {
+                    this.listLoading = false
+                })
+            },
+            onEdit(row) {
+                this.currentGoods = row
+                this.dialogVisible = true
+            },
+            onDelete(id) {
+                this.$confirm('是否确定删除此商品?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    goodsApi.deleteGoods(id)
+                        .then(() => {
+                            this.onSearch()
+                        })
+                })
+            },
+            onCreateNewGoods() {
+                this.dialogVisible = true
+            },
+            onUploadImg(currentGoods) {
+                this.currentGoods = currentGoods
+                this.imageUploaderVisible = true
+            },
+            handleSizeChange(val) {
+                this.onSearch()
+            },
+            handleCurrentChange(val) {
+                this.onSearch()
+            }
+        }
     }
-  }
 </script>
 
 <style lang="scss">

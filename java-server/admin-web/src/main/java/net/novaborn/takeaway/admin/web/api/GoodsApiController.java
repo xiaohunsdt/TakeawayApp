@@ -82,6 +82,23 @@ public class GoodsApiController {
     }
 
     @ResponseBody
+    @PostMapping("updateGoodsThumb")
+    public Tip updateGoodsThumb(String id, String imageUrl) {
+        Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(id));
+        if (!tempGoods.isPresent()) {
+            return new ErrorTip(-1, "没有此商品名!");
+        }
+
+        tempGoods.get().setThumb(imageUrl);
+
+        if (goodsService.updateById(tempGoods.get())) {
+            return new SuccessTip("上传成功!");
+        } else {
+            return new ErrorTip(-1, "上传失败!");
+        }
+    }
+
+    @ResponseBody
     @PostMapping("delteGoods")
     public Tip delteGoods(String id) {
         if (goodsService.removeById(id)) {
