@@ -73,7 +73,7 @@ export const constantRoutes = [
       name: 'UserManagement',
       props: true,
       component: () => import('@/views/user/index'),
-      meta: { title: '用户管理', icon: 'user' }
+      meta: { title: '用户管理', icon: 'example' }
     }]
   },
   {
@@ -85,7 +85,7 @@ export const constantRoutes = [
       name: 'OrderManagement',
       props: true,
       component: () => import('@/views/order/index'),
-      meta: { title: '订单管理', icon: 'user' }
+      meta: { title: '订单管理', icon: 'order' }
     }]
   },
   {
@@ -97,7 +97,7 @@ export const constantRoutes = [
       name: 'GoodsManagement',
       props: true,
       component: () => import('@/views/goods/index'),
-      meta: { title: '商品管理', icon: 'user' }
+      meta: { title: '商品管理', icon: 'goods' }
     }]
   },
   {
@@ -109,7 +109,19 @@ export const constantRoutes = [
       name: 'CategoryManagement',
       props: true,
       component: () => import('@/views/category/index'),
-      meta: { title: '分类管理', icon: 'user' }
+      meta: { title: '分类管理', icon: 'tree' }
+    }]
+  },
+  {
+    path: '/sys',
+    component: Layout,
+    redirect: '/sys/index',
+    children: [{
+      path: 'index',
+      name: 'SysManagement',
+      props: true,
+      component: () => import('@/views/sys/index'),
+      meta: { title: '系统设置', icon: 'setting' }
     }]
   },
 
