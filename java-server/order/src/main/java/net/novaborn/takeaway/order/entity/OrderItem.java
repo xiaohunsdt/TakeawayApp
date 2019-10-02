@@ -16,36 +16,12 @@ import java.util.Date;
  * @since 2019-09-20
  */
 @Data
-@TableName("`order`")
-public class Order extends Model<Order> {
+@TableName("`order_item`")
+public class OrderItem extends Model<OrderItem> {
     private static final long serialVersionUID = -6354741085522616794L;
 
     @TableId(type = IdType.UUID)
     private String id;
 
-    private String userId;
-
-    private Integer allPrice;
-
-    private Integer goodsCount;
-
-    private PaymentWay paymentWay;
-
-    private PayState payState;
-
-    private OrderState orderState;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Date updateDate;
-
-    @Version
-    private Integer version;
-
-    @JSONField(serialize = false)
-    @TableLogic
-    private Integer deleted;
+    private String goodsId;
 }

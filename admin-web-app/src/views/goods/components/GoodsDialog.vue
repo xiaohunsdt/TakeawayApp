@@ -112,7 +112,7 @@
         if (newVal) {
           if (this.goodsData != null) {
             this.sendLoading = true
-            goodsApi.getByGoodsId(this.goodsData.goodsId)
+            goodsApi.getByGoodsId(this.goodsData.id)
               .then(response => {
                 this.sendLoading = false
                 this.formData = response

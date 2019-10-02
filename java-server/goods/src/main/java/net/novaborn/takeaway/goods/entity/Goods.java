@@ -21,7 +21,7 @@ public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;
 
     @TableId(type = IdType.UUID)
-    private String goodsId;
+    private String id;
 
     // 名称
     private String name;

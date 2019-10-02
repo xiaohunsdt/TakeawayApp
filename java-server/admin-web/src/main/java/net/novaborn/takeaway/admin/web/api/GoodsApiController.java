@@ -1,7 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -25,8 +24,8 @@ public class GoodsApiController {
     GoodsService goodsService;
 
     @GetMapping("getByGoodsId")
-    public ResponseEntity getByGoodsId(String goodsId) {
-        Goods goods = goodsService.getById(goodsId);
+    public ResponseEntity getByGoodsId(String id) {
+        Goods goods = goodsService.getById(id);
         return ResponseEntity.ok(goods);
     }
 
@@ -62,7 +61,7 @@ public class GoodsApiController {
     @ResponseBody
     @PostMapping("updateGoods")
     public Tip updateGoods(Goods goods) {
-        Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(goods.getGoodsId()));
+        Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
         if (!tempGoods.isPresent()) {
             return new ErrorTip(-1, "没有此商品名!");
         }

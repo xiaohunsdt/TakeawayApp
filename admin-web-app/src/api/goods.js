@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
-export function getByGoodsId(goodsId) {
+export function getByGoodsId(id) {
   return request({
     url: '/goods/getByGoodsId',
     method: 'get',
     params: {
-      goodsId
+      id
     }
   })
 }
