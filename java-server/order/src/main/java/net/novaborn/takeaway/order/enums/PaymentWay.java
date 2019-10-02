@@ -17,7 +17,7 @@ public enum PaymentWay {
     ALI_PAY(0),
 
     /**
-     * 已支付
+     * 刷卡支付
      */
     CREDIT_CARD( 1),
 

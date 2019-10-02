@@ -23,17 +23,45 @@ public class Order extends Model<Order> {
     @TableId(type = IdType.UUID)
     private String id;
 
+    /**
+     * 当天的编号
+     */
+    private Integer orderNumber;
+
     private String userId;
 
+    private Integer goodsCount;
+
+    /**
+     * 折扣
+     */
+    private Short discount;
+
+    /**
+     * 优惠的价格
+     */
+    private Integer discountedPrices;
+
+    /**
+     * 原价
+     */
     private Integer allPrice;
 
-    private Integer goodsCount;
+    /**
+     * 真实价格 = 原价 - 优惠的价格
+     */
+    private Integer realPrice;
 
     private PaymentWay paymentWay;
 
     private PayState payState;
 
     private OrderState orderState;
+
+    /**
+     * 备注消息
+     */
+    private String ps;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;

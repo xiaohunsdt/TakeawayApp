@@ -11,7 +11,7 @@ public enum OrderState {
     WAITING_PAY(0),
 
     /**
-     * 生成中
+     * 生产中
      */
     PRODUCING(2),
 

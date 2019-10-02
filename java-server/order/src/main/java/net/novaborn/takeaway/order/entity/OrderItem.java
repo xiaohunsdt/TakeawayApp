@@ -23,5 +23,15 @@ public class OrderItem extends Model<OrderItem> {
     @TableId(type = IdType.UUID)
     private String id;
 
+    private String orderId;
+
     private String goodsId;
+
+    private String goodsName;
+
+    private String goodsThumb;
+
+    private Integer goodsPrice;
+
+    private Integer goodsCount;
 }
