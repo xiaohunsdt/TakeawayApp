@@ -13,34 +13,31 @@ import java.util.Date;
  * @since 2019-09-20
  */
 @Data
-@TableName("`user`")
-public class User extends Model<User> {
-    private static final long serialVersionUID = 24295584861601121L;
+@TableName("`address`")
+public class Address extends Model<Address> {
+    private static final long serialVersionUID = -3379009665983595457L;
 
     @TableId(type = IdType.UUID)
     private String id;
 
-    private String userName;
+    private String userId;
 
-    private String password;
+    /**
+     * 具体地址
+     */
+    private String region;
 
-    private String nickName;
+    /**
+     * 地址详细说明
+     */
+    private String detail;
 
-    private String openId;
+    private String phone;
 
-    private String avatar;
-
-    private String birthday;
-
-    private Short gender;
-
-    private Integer level;
+    private Boolean isDefault;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date lastLoginDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)
