@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-    <mapper namespace="net.novaborn.takeaway.order.dao.IOrderDao" >
+<mapper namespace="net.novaborn.takeaway.order.dao.IOrderDao">
 
+    <select id="selectByUserId" resultType="Order">
+        SELECT * FROM `order`
+        <where>
+            `user_id` = #{userId}
+            <if test="paymentWay != null">
+                and `payment_way` = #{paymentWay}
+            </if>
+            <if test="orderState != null">
+                and `order_state` = #{orderState}
+            </if>
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="getOrderListByPage" resultType="Order">
+        SELECT * FROM `order`
+        <where>
+            1 = 1
+            <if test="args.userId != null and args.userId != ''">
+                and `user_id` = #{args.userId}
+            </if>
+            <if test="args.paymentWay != null and args.paymentWay != ''">
+                and `payment_way` = #{args.paymentWay}
+            </if>
+            <if test="args.orderState != null and args.orderState != ''">
+                and `order_state` = #{args.orderState}
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 </mapper>
