@@ -6,6 +6,7 @@ import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.IAddressService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,5 +19,18 @@ import java.util.Optional;
  */
 @Service
 public class AddressService extends ServiceImpl<IAddressDao, Address> implements IAddressService {
+    @Override
+    public List<Address> selectByUserId(String userId) {
+        return this.baseMapper.selectByUserId(userId);
+    }
 
+    @Override
+    public Optional<Address> selectDefaultAddressByUserId(String userId) {
+        return this.baseMapper.selectDefaultAddressByUserId(userId);
+    }
+
+    @Override
+    public Boolean setDefaultAddress(Address address) {
+        return null;
+    }
 }

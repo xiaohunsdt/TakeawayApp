@@ -18,13 +18,19 @@ import java.util.Optional;
  * @since 2019-09-20
  */
 public interface IUserService extends IService<User> {
+
+    /**
+     * 根据 name 获取一个用户
+     * @param name   用户名称
+     * @return 查询到的用户
+     */
     Optional<User> selectByName(String name);
 
     /**
      * 分页获取用户列表
-     * @param page
-     * @param args   name
-     * @return
+     * @param page   分页实例
+     * @param args   用户名称
+     * @return 用户列表
      */
     IPage<User> getUserListByPage(Page page, Map args);
 }
