@@ -23,28 +23,47 @@ public class Goods extends Model<Goods> {
     @TableId(type = IdType.UUID)
     private String id;
 
-    // 名称
+    /**
+     * 名称
+     */
     private String name;
 
-    // 简介
+    /**
+     * 简介
+     */
     @TableField(value = "`desc`")
     private String desc;
 
-    // 缩略图
+    /**
+     * 缩略图
+     */
     private String thumb;
 
-    // 所属类目
+    /**
+     * 标记 热门 新品
+     */
+    private String flag;
+
+    /**
+     * 所属类目
+     */
     private String categoryId;
 
     private Integer price;
 
-    // 月销
+    /**
+     * 月销
+     */
     private Integer monthSale;
 
-    // 评分
+    /**
+     * 评分
+     */
     private Integer rate;
 
-    //状态
+    /**
+     * 状态
+     */
     private GoodsState state;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

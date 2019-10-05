@@ -26,7 +26,7 @@ public class Order extends Model<Order> {
     /**
      * 当天的编号
      */
-    private Integer orderNumber;
+    private Integer number;
 
     private String userId;
 

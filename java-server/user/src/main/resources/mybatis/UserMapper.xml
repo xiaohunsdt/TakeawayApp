@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.novaborn.takeaway.user.dao.IUserDao" >
+<mapper namespace="net.novaborn.takeaway.user.dao.IUserDao">
 
+    <select id="selectByName" resultType="User">
+        SELECT * FROM `user`
+        <where>
+            `name` = #{name}
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="getUserListByPage" resultType="User">
+        SELECT * FROM `user`
+        <where>
+            1 = 1
+            <if test="args.name != '' and args.name != null">
+                and `name` like '%${args.name}%'
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 </mapper>

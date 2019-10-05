@@ -20,7 +20,7 @@ public class User extends Model<User> {
     @TableId(type = IdType.UUID)
     private String id;
 
-    private String userName;
+    private String name;
 
     private String password;
 
@@ -30,17 +30,17 @@ public class User extends Model<User> {
 
     private String avatar;
 
-    private String birthday;
+    private Date birthday;
 
-    private Short gender;
+    private Integer gender;
 
     private Integer level;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
+    private Date lastLoginDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date lastLoginDate;
+    private Date createDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)

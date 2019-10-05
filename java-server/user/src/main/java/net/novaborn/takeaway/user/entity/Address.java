@@ -1,7 +1,8 @@
 package net.novaborn.takeaway.user.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,7 +26,7 @@ public class Address extends Model<Address> {
     /**
      * 具体地址
      */
-    private String region;
+    private String address;
 
     /**
      * 地址详细说明
@@ -38,15 +39,4 @@ public class Address extends Model<Address> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Date updateDate;
-
-    @Version
-    private Integer version;
-
-    @JSONField(serialize = false)
-    @TableLogic
-    private Integer deleted;
 }
