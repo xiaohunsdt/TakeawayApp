@@ -16,4 +16,15 @@
             AND `is_default` = 1
         </where>
     </select>
+
+    <select id="getAddressListByPage" resultType="Address">
+        SELECT * FROM `address`
+        <where>
+            1=1
+            <if test="args.user_id != '' and args.user_id != null">
+                and `user_id` = #{userId}
+            </if>
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 </mapper>

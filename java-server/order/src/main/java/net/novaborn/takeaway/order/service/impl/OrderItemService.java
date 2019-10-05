@@ -9,6 +9,8 @@ import net.novaborn.takeaway.order.service.IOrderItemService;
 import net.novaborn.takeaway.order.service.IOrderService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -19,5 +21,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> implements IOrderItemService {
-
+    @Override
+    public List<OrderItem> selectByOrderId(String orderId) {
+        return this.baseMapper.selectByOrderId(orderId);
+    }
 }

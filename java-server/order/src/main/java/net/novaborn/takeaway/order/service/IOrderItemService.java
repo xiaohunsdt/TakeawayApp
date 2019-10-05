@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -14,4 +16,10 @@ import net.novaborn.takeaway.order.entity.OrderItem;
  * @since 2019-09-20
  */
 public interface IOrderItemService extends IService<OrderItem> {
+    /**
+     * 通过订单ID获取订单项
+     * @param orderId 订单ID
+     * @return 订单项列表
+     */
+    List<OrderItem> selectByOrderId(String orderId);
 }

@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.user.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.novaborn.takeaway.user.dao.IAddressDao;
 import net.novaborn.takeaway.user.entity.Address;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,6 +34,11 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     @Override
     public Optional<Address> selectDefaultAddressByUserId(String userId) {
         return this.baseMapper.selectDefaultAddressByUserId(userId);
+    }
+
+    @Override
+    public IPage<Address> getAddressListByPage(Page page, Map args) {
+        return this.baseMapper.getAddressListByPage(page, args);
     }
 
     @Override

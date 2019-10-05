@@ -29,7 +29,7 @@ public interface IUserService extends IService<User> {
     /**
      * 分页获取用户列表
      * @param page   分页实例
-     * @param args   用户名称
+     * @param args   name 用户名称
      * @return 用户列表
      */
     IPage<User> getUserListByPage(Page page, Map args);
