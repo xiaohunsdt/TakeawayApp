@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.novaborn.takeaway.user.dao.IAddressDao;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.IAddressService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.Optional;
  */
 @Service
 public class AddressService extends ServiceImpl<IAddressDao, Address> implements IAddressService {
+    @Autowired
+    AddressService addressService;
+
     @Override
     public List<Address> selectByUserId(String userId) {
         return this.baseMapper.selectByUserId(userId);
@@ -31,6 +35,17 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
 
     @Override
     public Boolean setDefaultAddress(Address address) {
-        return null;
+        // 首先取消之前的默认地址
+        this.selectByUserId(address.getUserId()).stream()
+                .filter(Address::getIsDefault)
+                .forEach(e -> {
+                    e.setIsDefault(false);
+                    e.updateById();
+                });
+
+        // 吧参数实例设置成默认地址
+        Address address1 = addressService.getById(address.getId());
+        address1.setIsDefault(true);
+        return address1.updateById();
     }
 }

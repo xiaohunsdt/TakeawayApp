@@ -3,6 +3,7 @@ package net.novaborn.takeaway.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import net.novaborn.takeaway.user.entity.Address;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public interface IAddressDao extends BaseMapper<Address> {
      * @param userId 用户ID
      * @return 查询到的地址列表
      */
-    List<Address> selectByUserId(String userId);
+    List<Address> selectByUserId(@Param("userId") String userId);
 
     /**
      * 获取指定用户的默认地址
@@ -27,5 +28,5 @@ public interface IAddressDao extends BaseMapper<Address> {
      * @param userId 用户ID
      * @return 查询到的默认地址
      */
-    Optional<Address> selectDefaultAddressByUserId(String userId);
+    Optional<Address> selectDefaultAddressByUserId(@Param("userId") String userId);
 }
