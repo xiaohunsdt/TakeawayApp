@@ -18,16 +18,23 @@ public class UserTest {
 
     @Test
     public void createUserTest() {
-
+        User user = new User();
+        user.setName("test");
+        user.setAvatar("http://www.baidu.com");
+        user.setNickName("jeremy");
+        userService.save(user);
     }
 
     @Test
     public void getUserTest() {
-
+        System.out.println(userService.getById("49268c005a631e2d77b7b90a206fe0eb"));
     }
 
     @Test
     public void updateUserTest() {
-
+        User user = new User();
+        user.setId("49268c005a631e2d77b7b90a206fe0eb");
+        user.setName("test1");
+        userService.updateById(user);
     }
 }

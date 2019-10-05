@@ -26,12 +26,17 @@ public class User extends Model<User> {
 
     private String nickName;
 
+    private Integer money;
+
     private String openId;
 
     private String avatar;
 
     private Date birthday;
 
+    /**
+     * 性别    0 未知  1 男  2 女
+     */
     private Integer gender;
 
     private Integer level;

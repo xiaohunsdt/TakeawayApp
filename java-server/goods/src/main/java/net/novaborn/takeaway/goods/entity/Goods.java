@@ -42,7 +42,7 @@ public class Goods extends Model<Goods> {
     /**
      * 标记 热门 新品
      */
-    private String flag;
+    private String flags;
 
     /**
      * 所属类目

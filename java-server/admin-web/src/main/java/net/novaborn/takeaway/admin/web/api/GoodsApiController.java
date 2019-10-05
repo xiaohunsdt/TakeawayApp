@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -72,8 +73,8 @@ public class GoodsApiController {
         }
 
         //修改名称
-        BeanUtil.copyProperties(goods, tempGoods.get());
-        if (goodsService.updateById(tempGoods.get())) {
+//        BeanUtil.copyProperties(goods, tempGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
+        if (goodsService.updateById(goods)) {
             return new SuccessTip("修改成功!");
         } else {
             return new ErrorTip(-1, "修改失败!");
