@@ -2,7 +2,7 @@ package net.novaborn.takeaway.admin.web.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
-import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
+import net.novaborn.takeaway.admin.web.warpper.GoodsWarpper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;

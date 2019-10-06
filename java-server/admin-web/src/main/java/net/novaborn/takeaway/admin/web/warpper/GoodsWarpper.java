@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.web.api.warpper;
+package net.novaborn.takeaway.admin.web.warpper;
 
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
