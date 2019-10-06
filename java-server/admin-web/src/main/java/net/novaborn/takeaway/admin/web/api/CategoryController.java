@@ -1,6 +1,8 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.api.warpper.CategoryWarpper;
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
@@ -19,10 +21,12 @@ import java.util.Optional;
 /**
  * @author xiaohun
  */
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
 @Controller
 @RequestMapping("/api/admin/category")
 public class CategoryController extends BaseController {
-    @Autowired
+
     CategoryService categoryService;
 
     @GetMapping("getAllCategory")

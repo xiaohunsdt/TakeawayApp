@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Setter;
 import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
@@ -20,9 +21,10 @@ import java.util.Optional;
  * @author xiaohun
  */
 @Controller
+@Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/admin/goods")
 public class GoodsController extends BaseController {
-    @Autowired
+
     GoodsService goodsService;
 
     @GetMapping("getByGoodsId")

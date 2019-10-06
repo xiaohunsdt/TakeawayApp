@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.validator.IReqValidator;
 import net.novaborn.takeaway.admin.common.auth.validator.impl.DbValidator;
@@ -22,13 +24,13 @@ import javax.annotation.Resource;
  * @author fengshuonan
  * @Date 2017/8/24 14:22
  */
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
 @Controller
 public class AuthController extends BaseController{
 
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Resource
     private DbValidator dbValidator;
 
     @PostMapping(value = "${jwt.auth-path}")

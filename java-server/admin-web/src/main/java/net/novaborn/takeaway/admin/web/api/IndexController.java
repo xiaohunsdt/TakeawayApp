@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.util.IdUtil;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.entity.Admin;
@@ -26,12 +27,12 @@ import java.util.Optional;
  * @author xiaohun
  */
 @Slf4j
+@Setter(onMethod_ = {@Autowired})
 @Controller
-public class IndexController extends BaseController{
-    @Autowired
-    AdminService adminService;
+public class IndexController extends BaseController {
 
-    @Autowired
+    private AdminService adminService;
+
     private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("index")
@@ -47,8 +48,7 @@ public class IndexController extends BaseController{
         Optional<Admin> admin = adminService.getBaseMapper().selectByName(userName);
         admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        ResponseModel responseModel = new ResponseModel(admin);
-        return responseModel;
+        return new ResponseModel(admin);
     }
 
     @RequestMapping("/uploadImg")
