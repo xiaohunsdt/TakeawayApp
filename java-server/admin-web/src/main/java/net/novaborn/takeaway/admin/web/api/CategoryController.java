@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author xiaohun
+ */
 @Controller
 @RequestMapping("/api/admin/category")
-public class CategoryApiController {
+public class CategoryController extends BaseController {
     @Autowired
     CategoryService categoryService;
 

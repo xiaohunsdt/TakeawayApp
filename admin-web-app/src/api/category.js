@@ -48,7 +48,7 @@ export function updateCategory(data) {
   })
 }
 
-export function delteCategory(id) {
+export function deleteCategory(id) {
   return request({
     url: '/category/delteCategory',
     method: 'post',
@@ -68,5 +68,5 @@ export default {
   getCategoryListByPage,
   createNewCategory,
   updateCategory,
-  delteCategory
+  deleteCategory
 }

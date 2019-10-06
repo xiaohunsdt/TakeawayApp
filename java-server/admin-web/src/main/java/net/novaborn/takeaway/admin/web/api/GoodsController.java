@@ -1,7 +1,5 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.admin.web.api.warpper.GoodsWarpper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -18,9 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * @author xiaohun
+ */
 @Controller
 @RequestMapping("/api/admin/goods")
-public class GoodsApiController {
+public class GoodsController extends BaseController {
     @Autowired
     GoodsService goodsService;
 

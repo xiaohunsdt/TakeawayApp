@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.web.controller;
+package net.novaborn.takeaway.admin.web.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -6,14 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 常规控制器
+ * 测试控制器
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-23 16:02
  */
 @Controller
-@RequestMapping("/api/admin/")
-public class ExampleController {
+public class TestController extends BaseController{
 
     @RequestMapping("hello")
     public ResponseEntity hello(@RequestBody Object simpleObject) {

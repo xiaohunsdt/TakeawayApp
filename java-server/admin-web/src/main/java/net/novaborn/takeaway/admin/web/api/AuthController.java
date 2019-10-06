@@ -23,8 +23,7 @@ import javax.annotation.Resource;
  * @Date 2017/8/24 14:22
  */
 @Controller
-@RequestMapping("/api/admin")
-public class AuthController {
+public class AuthController extends BaseController{
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;

@@ -22,10 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Optional;
 
+/**
+ * @author xiaohun
+ */
 @Slf4j
 @Controller
-@RequestMapping("/api/admin/")
-public class IndexApiController {
+public class IndexController extends BaseController{
     @Autowired
     AdminService adminService;
 
