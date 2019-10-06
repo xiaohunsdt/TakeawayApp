@@ -30,6 +30,8 @@ public class Order extends Model<Order> {
 
     private String userId;
 
+    private String addressId;
+
     private Integer goodsCount;
 
     /**

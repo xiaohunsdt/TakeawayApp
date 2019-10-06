@@ -35,4 +35,10 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @return 用户列表
      */
     IPage<Order> getOrderListByPage(@Param("page") Page page, @Param("args") Map args);
+
+    /**
+     * 获取当天的订单数量
+     * @return 当天的订单数量
+     */
+    int getOrderCountToday();
 }

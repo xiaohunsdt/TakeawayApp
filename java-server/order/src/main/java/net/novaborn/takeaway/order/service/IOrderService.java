@@ -45,4 +45,10 @@ public interface IOrderService extends IService<Order> {
      * @return 用户列表
      */
     IPage<Order> getOrderListByPage(Page page, Map args);
+
+    /**
+     * 获取当天的订单数量
+     * @return 当天的订单数量
+     */
+    int getOrderCountToday();
 }

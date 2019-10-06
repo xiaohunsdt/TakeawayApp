@@ -33,4 +33,11 @@
         </where>
         ORDER BY `create_date` DESC
     </select>
+
+    <select id="getOrderCountToday" resultType="java.lang.Integer">
+        SELECT count(*) FROM `order`
+        <where>
+            TO_DAYS(`create_date`) = TO_DAYS(now())
+        </where>
+    </select>
 </mapper>
