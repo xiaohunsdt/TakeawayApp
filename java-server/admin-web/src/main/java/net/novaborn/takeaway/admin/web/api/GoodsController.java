@@ -1,8 +1,11 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
-import net.novaborn.takeaway.admin.web.warpper.GoodsWarpper;
+import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.web.wrapper.GoodsWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -20,6 +23,7 @@ import java.util.Optional;
 /**
  * @author xiaohun
  */
+@Slf4j
 @Controller
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/admin/goods")
@@ -43,7 +47,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity getGoodsListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page.setOptimizeCountSql(false);
         page = (Page) goodsService.getGoodsListByPage(page, args);
-        page.setRecords((List) new GoodsWarpper(page.getRecords()).warp());
+        page.setRecords((List) new GoodsWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
@@ -65,19 +69,19 @@ public class GoodsController extends BaseController {
     @ResponseBody
     @PostMapping("updateGoods")
     public Tip updateGoods(Goods goods) {
-        Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
-        if (!tempGoods.isPresent()) {
+        Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
+        if (!targetGoods.isPresent()) {
             return new ErrorTip(-1, "没有此商品名!");
         }
 
         Optional<Goods> sameNameGoods = goodsService.selectByName(goods.getName());
-        if (sameNameGoods.isPresent()) {
+        if (sameNameGoods.isPresent() && !sameNameGoods.get().getId().equals(goods.getId())) {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
         //修改名称
-//        BeanUtil.copyProperties(goods, tempGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
-        if (goodsService.updateById(goods)) {
+        BeanUtil.copyProperties(goods, targetGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
+        if (goodsService.updateById(targetGoods.get())) {
             return new SuccessTip("修改成功!");
         } else {
             return new ErrorTip(-1, "修改失败!");

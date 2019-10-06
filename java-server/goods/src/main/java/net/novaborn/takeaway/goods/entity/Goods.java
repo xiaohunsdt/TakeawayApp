@@ -74,6 +74,7 @@ public class Goods extends Model<Goods> {
     private Date updateDate;
 
     @Version
+    @JSONField(serialize = false)
     private Integer version;
 
     @JSONField(serialize = false)

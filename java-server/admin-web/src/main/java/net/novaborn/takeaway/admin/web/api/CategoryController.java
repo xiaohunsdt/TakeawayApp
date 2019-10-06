@@ -3,9 +3,9 @@ package net.novaborn.takeaway.admin.web.api;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.admin.web.warpper.CategoryWarpper;
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
+import net.novaborn.takeaway.admin.web.wrapper.CategoryWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -32,14 +32,14 @@ public class CategoryController extends BaseController {
     @GetMapping("getAllCategory")
     public ResponseEntity getAllCategory() {
         List<Category> categoryList = categoryService.list();
-        return ResponseEntity.ok(new CategoryWarpper(categoryList).warp());
+        return ResponseEntity.ok(new CategoryWrapper(categoryList).warp());
     }
 
     @PostMapping("getCategoryListByPage")
     public ResponseEntity getCategoryListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page.setOptimizeCountSql(false);
         page = (Page) categoryService.getCategoryListByPage(page, args);
-        page.setRecords((List) new CategoryWarpper(page.getRecords()).warp());
+        page.setRecords((List) new CategoryWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 

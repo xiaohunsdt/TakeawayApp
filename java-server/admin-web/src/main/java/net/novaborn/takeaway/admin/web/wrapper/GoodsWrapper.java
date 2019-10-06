@@ -1,15 +1,20 @@
-package net.novaborn.takeaway.admin.web.warpper;
+package net.novaborn.takeaway.admin.web.wrapper;
 
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
-import net.novaborn.takeaway.common.BaseControllerWarpper;
+import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
 
 import java.util.Map;
 
-public class GoodsWarpper extends BaseControllerWarpper {
-    public GoodsWarpper(Object obj) {
-        super(obj);
+/**
+ * 商品包装类
+ * @author xiaohun
+ */
+public class GoodsWrapper extends BaseControllerWrapper {
+
+    public GoodsWrapper(Object element) {
+        super(element);
     }
 
     @Override

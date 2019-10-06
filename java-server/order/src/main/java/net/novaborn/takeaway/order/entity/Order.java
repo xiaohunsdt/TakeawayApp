@@ -73,6 +73,7 @@ public class Order extends Model<Order> {
     private Date updateDate;
 
     @Version
+    @JSONField(serialize = false)
     private Integer version;
 
     @JSONField(serialize = false)

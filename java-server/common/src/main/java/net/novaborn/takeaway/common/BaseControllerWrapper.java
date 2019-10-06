@@ -12,11 +12,11 @@ import java.util.Map;
  * @author fengshuonan
  * @date 2017年2月13日 下午10:49:36
  */
-public abstract class BaseControllerWarpper {
+public abstract class BaseControllerWrapper {
 
-    public Object element;
+    private Object element;
 
-    public BaseControllerWarpper(Object element) {
+    public BaseControllerWrapper(Object element) {
         this.element = element;
     }
 

@@ -52,6 +52,7 @@ public class User extends Model<User> {
     private Date updateDate;
 
     @Version
+    @JSONField(serialize = false)
     private Integer version;
 
     @JSONField(serialize = false)

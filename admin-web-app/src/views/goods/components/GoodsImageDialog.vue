@@ -13,7 +13,7 @@
       ref="uploader">
       <i class="el-icon-plus"></i>
     </el-upload>
-    <el-dialog :visible.sync="imgDetaildialogVisible">
+    <el-dialog :visible.sync="imgDetailDialogVisible">
       <img :src="imgDetailUrl" alt="" width="100%">
     </el-dialog>
     <div class="dialog-footer" slot="footer">
@@ -52,7 +52,7 @@
         data() {
             return {
                 imgDetailUrl: '',
-                imgDetaildialogVisible: false
+                imgDetailDialogVisible: false
             }
         },
         watch: {
@@ -77,7 +77,7 @@
             },
             handlePictureCardPreview(file) {
                 this.imgDetailUrl = file.url
-                this.imgDetaildialogVisible = true
+                this.imgDetailDialogVisible = true
             }
         }
     }
