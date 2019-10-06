@@ -17,70 +17,75 @@
       <img :src="imgDetailUrl" alt="" width="100%">
     </el-dialog>
     <div class="dialog-footer" slot="footer">
-      <el-button @click="$emit('update:dialogVisible', false)">关闭</el-button>
+      <el-button @click="closeWindow">关闭</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-    import { getToken } from '@/utils/auth'
-    import { getServerUrl } from '@/utils/sys'
-    import goodsApi from '@/api/goods'
+  import { getToken } from '@/utils/auth'
+  import { getServerUrl } from '@/utils/sys'
+  import goodsApi from '@/api/goods'
 
-    export default {
-        name: 'GoodsImageDialog',
-        props: {
-            dialogVisible: {
-                type: Boolean,
-                required: true
-            },
-            goodsData: {
-                type: Object,
-                required: false
-            }
-        },
-        computed: {
-            uploadUrl() {
-                return getServerUrl() + '/api/admin/uploadImg'
-            },
-            authHeader() {
-                return {
-                    Authorization: `Bearer ${getToken()}`
-                }
-            }
-        },
-        data() {
-            return {
-                imgDetailUrl: '',
-                imgDetailDialogVisible: false
-            }
-        },
-        watch: {
-            dialogVisible(newVal, oldVal) {
-                if (!newVal) {
-                    this.$refs.uploader.clearFiles()
-                }
-            }
-        },
-        methods: {
-            onSuccess(response, file, fileList) {
-                const thumb = `/upload/images/${response.message}`
-                goodsApi.updateGoodsThumb(this.goodsData.id, thumb).then(response => {
-                    this.$message({
-                        message: '上传成功',
-                        type: 'success'
-                    })
-                })
-            },
-            handleRemove(file, fileList) {
-                console.log(file, fileList)
-            },
-            handlePictureCardPreview(file) {
-                this.imgDetailUrl = file.url
-                this.imgDetailDialogVisible = true
-            }
+  export default {
+    name: 'GoodsImageDialog',
+    props: {
+      dialogVisible: {
+        type: Boolean,
+        required: true
+      },
+      goodsData: {
+        type: Object,
+        default: null,
+        required: false
+      }
+    },
+    data() {
+      return {
+        imgDetailUrl: '',
+        imgDetailDialogVisible: false
+      }
+    },
+    computed: {
+      uploadUrl() {
+        return getServerUrl() + '/api/admin/uploadImg'
+      },
+      authHeader() {
+        return {
+          Authorization: `Bearer ${ getToken() }`
         }
+      }
+    },
+    watch: {
+      dialogVisible(newVal, oldVal) {
+        if (!newVal) {
+          this.$refs.uploader.clearFiles()
+        }
+      }
+    },
+    methods: {
+      onSuccess(response, file, fileList) {
+        const thumb = `/upload/images/${ response.message }`
+        goodsApi.updateGoodsThumb(this.goodsData.id, thumb).then(response => {
+          this.$message({
+            message: '上传成功',
+            type: 'success'
+          })
+        })
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList)
+      },
+      handlePictureCardPreview(file) {
+        this.imgDetailUrl = file.url
+        this.imgDetailDialogVisible = true
+      },
+      closeWindow() {
+        this.$emit('update:dialogVisible', false)
+        this.$emit('update:goodsData', null)
+      }
     }
+  }
 </script>
 <style>
   .el-dialog {

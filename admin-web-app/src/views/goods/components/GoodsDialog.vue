@@ -52,7 +52,7 @@
       </el-form-item>
     </el-form>
     <div class="dialog-footer" slot="footer">
-      <el-button @click="$emit('update:dialogVisible', false)">取 消</el-button>
+      <el-button @click="closeWindow">取 消</el-button>
       <el-button
         @click="handleCreateNewGoods"
         type="primary"
@@ -77,7 +77,9 @@
         required: true
       },
       goodsData: {
-        type: Object
+        type: Object,
+        default: null,
+        required: false
       }
     },
     data() {
@@ -121,8 +123,6 @@
                 this.sendLoading = false
               })
           }
-        } else {
-          this.formData = {}
         }
       }
     },
@@ -146,12 +146,12 @@
         goodsApi.createNewGoods(this.formData)
           .then(response => {
             this.sendLoading = false
-            this.$emit('update:dialogVisible', false)
             this.$message({
               message: response.message,
               type: 'success'
             })
             this.$emit('event-success')
+            this.closeWindow()
           })
           .catch(() => {
             this.sendLoading = false
@@ -162,16 +162,21 @@
         goodsApi.updateGoods(this.formData)
           .then(response => {
             this.sendLoading = false
-            this.$emit('update:dialogVisible', false)
             this.$message({
               message: response.message,
               type: 'success'
             })
             this.$emit('event-success')
+            this.closeWindow()
           })
           .catch(() => {
             this.sendLoading = false
           })
+      },
+      closeWindow() {
+        this.formData = {}
+        this.$emit('update:dialogVisible', false)
+        this.$emit('update:goodsData', null)
       }
     }
   }

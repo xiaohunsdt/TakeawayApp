@@ -24,7 +24,7 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button @click="onCreateNewGoods" size="mini" type="success">创建新分类</el-button>
+          <el-button @click="onCreateNewGoods" size="mini" type="success">添加新商品</el-button>
         </el-col>
       </el-row>
     </base-card>
@@ -108,12 +108,12 @@
     <goods-dialog
       :category-list="categoryList"
       :dialog-visible.sync="dialogVisible"
-      :goods-data="currentGoods"
+      :goods-data.sync="currentGoods"
       @event-success="onSearch"
     />
     <goods-image-dialog
       :dialogVisible.sync="imageUploaderVisible"
-      :goodsData="currentGoods"/>
+      :goodsData.sync="currentGoods"/>
   </div>
 </template>
 
