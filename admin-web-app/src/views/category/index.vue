@@ -67,74 +67,76 @@
 </template>
 
 <script>
-    import BaseCard from '@/components/BaseCard/BaseCard'
-    import categoryApi from '@/api/category'
-    import AddCategoryDialog from './components/AddCategoryDialog'
+  import BaseCard from '@/components/BaseCard/BaseCard'
+  import categoryApi from '@/api/category'
+  import AddCategoryDialog from './components/AddCategoryDialog'
 
-    export default {
-        name: 'CategoryManagement',
-        components: {
-            BaseCard,
-            AddCategoryDialog
+  export default {
+    name: 'CategoryManagement',
+    components: {
+      BaseCard,
+      AddCategoryDialog
+    },
+    data() {
+      return {
+        page: {
+          current: 1,
+          size: 15,
+          total: 0
         },
-        data() {
-            return {
-                page: {
-                    current: 1,
-                    size: 15,
-                    total: 0
-                },
-                formData: {
-                    name: null
-                },
-                listLoading: false,
-                tableData: []
-            }
+        formData: {
+          name: null
         },
-        methods: {
-            onSearch() {
-                this.listLoading = true
-                categoryApi.getCategoryListByPage(this.page, this.formData)
-                    .then(response => {
-                        this.tableData = response.records
-                        this.page.total = parseInt(response.total)
-                        this.listLoading = false
-                    }).catch(() => {
-                    this.listLoading = false
-                })
-            },
-            onEdit(index, row) {
-                categoryApi.updateCategory(row)
-                    .then((response) => {
-                        this.$message({
-                            message: response.message,
-                            type: 'success'
-                        })
-                    })
-            },
-            onDelete(id) {
-                this.$confirm('是否确定删除此分类?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    categoryApi.delteCategory(id)
-                        .then(() => {
-                            this.onSearch()
-                        })
-                })
-            },
-            handleSizeChange(val) {
-                this.onSearch()
-            },
-            handleCurrentChange(val) {
-                this.onSearch()
-            }
-        },
-        created() {
-            this.onSearch()
-        }
+        listLoading: false,
+        tableData: []
+      }
+    },
+    methods: {
+      onSearch() {
+        this.listLoading = true
+        categoryApi.getCategoryListByPage(this.page, this.formData)
+          .then(response => {
+            this.tableData = response.records
+            this.page.total = parseInt(response.total)
+            this.listLoading = false
+          }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      onEdit(index, row) {
+        categoryApi.updateCategory(row)
+          .then((response) => {
+            this.$message({
+              message: response.message,
+              type: 'success'
+            })
+          })
+      },
+      onDelete(id) {
+        this.$confirm('是否确定删除此分类?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          categoryApi.delteCategory(id)
+            .then(() => {
+              this.onSearch()
+            })
+        })
+      },
+      handleSizeChange(val) {
+        this.page.size = val
+        this.onSearch()
+      },
+      handleCurrentChange(val) {
+        this.page.current = val
+        this.onSearch()
+      }
+    },
+    created() {
+      this.onSearch()
     }
+  }
 </script>
 
 <style lang="scss">

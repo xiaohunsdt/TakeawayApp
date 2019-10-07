@@ -50,7 +50,7 @@ export function updateCategory(data) {
 
 export function deleteCategory(id) {
   return request({
-    url: '/category/delteCategory',
+    url: '/category/deleteCategory',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: {

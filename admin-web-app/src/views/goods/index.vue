@@ -39,11 +39,13 @@
         v-loading="listLoading">
         <el-table-column
           label="名称"
-          prop="name">
+          prop="name"
+          align="center">
         </el-table-column>
         <el-table-column
           label="缩略图"
-          width="100">
+          width="100"
+          align="center">
           <template v-slot="scope">
             <el-button
               @click="onUploadImg(scope.row)"
@@ -62,27 +64,33 @@
         <el-table-column
           label="简介"
           prop="desc"
-          width="250">
+          width="250"
+          align="center">
         </el-table-column>
         <el-table-column
           label="分类"
-          prop="category">
+          prop="category"
+          align="center">
         </el-table-column>
         <el-table-column
           label="价格"
-          prop="price">
+          prop="price"
+          align="center">
         </el-table-column>
         <el-table-column
           label="月销"
-          prop="monthSale">
+          prop="monthSale"
+          align="center">
         </el-table-column>
         <el-table-column
           label="评分"
-          prop="rate">
+          prop="rate"
+          align="center">
         </el-table-column>
         <el-table-column
           label="状态"
-          prop="state">
+          prop="state"
+          align="center">
         </el-table-column>
         <el-table-column
           label="操作"
@@ -118,94 +126,96 @@
 </template>
 
 <script>
-    import BaseCard from '@/components/BaseCard/BaseCard'
-    import GoodsImageDialog from './components/GoodsImageDialog'
-    import goodsApi from '@/api/goods'
-    import categoryApi from '@/api/category'
-    import GoodsDialog from './components/GoodsDialog'
-    import { getServerUrl } from '@/utils/sys'
+  import BaseCard from '@/components/BaseCard/BaseCard'
+  import GoodsImageDialog from './components/GoodsImageDialog'
+  import goodsApi from '@/api/goods'
+  import categoryApi from '@/api/category'
+  import GoodsDialog from './components/GoodsDialog'
+  import { getServerUrl } from '@/utils/sys'
 
-    export default {
-        name: 'GoodsManagement',
-        components: {
-            BaseCard,
-            GoodsImageDialog,
-            GoodsDialog
+  export default {
+    name: 'GoodsManagement',
+    components: {
+      BaseCard,
+      GoodsImageDialog,
+      GoodsDialog
+    },
+    computed: {
+      uploadUrl() {
+        return getServerUrl()
+      }
+    },
+    data() {
+      return {
+        page: {
+          current: 1,
+          size: 15,
+          total: 0
         },
-        computed: {
-            uploadUrl() {
-                return getServerUrl()
-            }
+        formData: {
+          name: null,
+          categoryId: null
         },
-        data() {
-            return {
-                page: {
-                    current: 1,
-                    size: 15,
-                    total: 0
-                },
-                formData: {
-                    name: null,
-                    categoryId: null
-                },
-                imageUploaderVisible: false,
-                dialogVisible: false,
-                listLoading: false,
-                tableData: [],
-                categoryList: [],
-                currentGoods: null
-            }
-        },
-        created() {
-            this.onSearch()
-            categoryApi.getAllCategory()
-                .then(response => {
-                    this.categoryList = response
-                })
-        },
-        methods: {
-            onSearch() {
-                this.listLoading = true
-                goodsApi.getGoodsListByPage(this.page, this.formData)
-                    .then(response => {
-                        this.tableData = response.records
-                        this.page.total = parseInt(response.total)
-                        this.listLoading = false
-                    }).catch(() => {
-                    this.listLoading = false
-                })
-            },
-            onEdit(row) {
-                this.currentGoods = row
-                this.dialogVisible = true
-            },
-            onDelete(id) {
-                this.$confirm('是否确定删除此商品?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    goodsApi.deleteGoods(id)
-                        .then(() => {
-                            this.onSearch()
-                        })
-                })
-            },
-            onCreateNewGoods() {
-                this.dialogVisible = true
-            },
-            onUploadImg(currentGoods) {
-                this.currentGoods = currentGoods
-                this.imageUploaderVisible = true
-            },
-            handleSizeChange(val) {
-                this.onSearch()
-            },
-            handleCurrentChange(val) {
-                this.onSearch()
-            }
-        }
+        imageUploaderVisible: false,
+        dialogVisible: false,
+        listLoading: false,
+        tableData: [],
+        categoryList: [],
+        currentGoods: null
+      }
+    },
+    created() {
+      this.onSearch()
+      categoryApi.getAllCategory()
+        .then(response => {
+          this.categoryList = response
+        })
+    },
+    methods: {
+      onSearch() {
+        this.listLoading = true
+        goodsApi.getGoodsListByPage(this.page, this.formData)
+          .then(response => {
+            this.tableData = response.records
+            this.page.total = parseInt(response.total)
+            this.listLoading = false
+          }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      onEdit(row) {
+        this.currentGoods = row
+        this.dialogVisible = true
+      },
+      onDelete(id) {
+        this.$confirm('是否确定删除此商品?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          goodsApi.deleteGoods(id)
+            .then(() => {
+              this.onSearch()
+            })
+        })
+      },
+      onCreateNewGoods() {
+        this.dialogVisible = true
+      },
+      onUploadImg(currentGoods) {
+        this.currentGoods = currentGoods
+        this.imageUploaderVisible = true
+      },
+      handleSizeChange(val) {
+        this.page.size = val
+        this.onSearch()
+      },
+      handleCurrentChange(val) {
+        this.page.current = val
+        this.onSearch()
+      }
     }
+  }
 </script>
 
 <style lang="scss">

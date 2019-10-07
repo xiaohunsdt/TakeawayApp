@@ -1,10 +1,12 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
-export function login(data) {
+export function getUserListByPage(page, args) {
+  const data = Object.assign({}, page, args)
   return request({
-    url: '/auth',
+    url: '/user/getUserListByPage',
     method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data,
     transformRequest: [function(data) {
       data = Qs.stringify(data)
@@ -13,16 +15,36 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function updateUser(data) {
   return request({
-    url: '/getUserInfo',
-    method: 'get'
+    url: '/user/updateUser',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
   })
 }
 
-export function logout() {
+export function deleteUser(id) {
   return request({
-    url: '/logout',
-    method: 'post'
+    url: '/user/deleteUser',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: {
+      id
+    },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
   })
+}
+
+export default {
+  getUserListByPage,
+  updateUser,
+  deleteUser
 }

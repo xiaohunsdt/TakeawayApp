@@ -79,7 +79,6 @@ public class GoodsController extends BaseController {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
-        //修改名称
         BeanUtil.copyProperties(goods, targetGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
         if (goodsService.updateById(targetGoods.get())) {
             return new SuccessTip("修改成功!");

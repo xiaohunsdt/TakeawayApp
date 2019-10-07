@@ -77,8 +77,8 @@ public class CategoryController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("delteCategory")
-    public Tip delteCategory(String id) {
+    @PostMapping("deleteCategory")
+    public Tip deleteCategory(String id) {
         if (categoryService.removeById(id)) {
             return new SuccessTip("删除成功!");
         } else {
