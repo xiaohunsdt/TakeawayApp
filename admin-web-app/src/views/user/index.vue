@@ -28,16 +28,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="头像"
-          align="center">
-          <template v-slot="scope">
-            <img
-              :src="scope.row.avatar"
-              style="height: 30px;width: auto;"
-              v-if="scope.row.avatar !==''"/>
-          </template>
-        </el-table-column>
-        <el-table-column
           label="等级"
           prop="level"
           align="center">
