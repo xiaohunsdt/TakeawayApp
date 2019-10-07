@@ -68,13 +68,23 @@ export const constantRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/user/index',
-    children: [{
-      path: 'index',
-      name: 'UserManagement',
-      props: true,
-      component: () => import('@/views/user/index'),
-      meta: { title: '用户管理', icon: 'example' }
-    }]
+    meta: { title: '用户管理', icon: 'example', affix: true },
+    children: [
+      {
+        path: 'index',
+        name: 'UserManagement',
+        props: true,
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户列表', icon: 'example' }
+      },
+      {
+        path: 'address',
+        name: 'AddressManagement',
+        props: true,
+        component: () => import('@/views/user/address/index'),
+        meta: { title: '地址管理', icon: 'example' }
+      }
+    ]
   },
   {
     path: '/order',
