@@ -19,4 +19,11 @@ public interface IOrderItemDao extends BaseMapper<OrderItem> {
      * @return 订单项列表
      */
     List<OrderItem> selectByOrderId(@Param("orderId") String orderId);
+
+    /**
+     * 根据订单ID删除指定订单项
+     * @param orderId 订单ID
+     * @return 是否成功
+     */
+    boolean removeByOrderId(@Param("orderId") String orderId);
 }

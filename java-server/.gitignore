@@ -38,5 +38,5 @@ common/src/test/
 coupon/src/test/
 goods/src/test/
 order/src/test/
-system/src/test/
+setting/src/test/
 user/src/test/

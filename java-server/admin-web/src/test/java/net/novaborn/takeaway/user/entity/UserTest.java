@@ -21,7 +21,6 @@ public class UserTest {
         User user = new User();
         user.setName("test");
         user.setAvatar("http://www.baidu.com");
-        user.setNickName("jeremy");
         userService.save(user);
     }
 

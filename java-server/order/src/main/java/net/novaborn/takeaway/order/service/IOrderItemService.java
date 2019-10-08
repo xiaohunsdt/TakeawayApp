@@ -22,4 +22,11 @@ public interface IOrderItemService extends IService<OrderItem> {
      * @return 订单项列表
      */
     List<OrderItem> selectByOrderId(String orderId);
+
+    /**
+     * 根据订单ID删除指定订单项
+     * @param orderId 订单ID
+     * @return 是否成功
+     */
+    boolean removeByOrderId(String orderId);
 }

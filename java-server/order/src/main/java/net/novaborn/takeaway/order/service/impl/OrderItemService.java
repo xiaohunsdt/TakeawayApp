@@ -25,4 +25,9 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
     public List<OrderItem> selectByOrderId(String orderId) {
         return this.baseMapper.selectByOrderId(orderId);
     }
+
+    @Override
+    public boolean removeByOrderId(String orderId) {
+        return this.baseMapper.removeByOrderId(orderId);
+    }
 }

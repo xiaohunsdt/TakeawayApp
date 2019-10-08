@@ -11,7 +11,7 @@
         <module>order</module>
         <module>goods</module>
         <module>coupon</module>
-        <module>system</module>
+        <module>setting</module>
         <module>activity</module>
         <module>category</module>
         <module>common</module>

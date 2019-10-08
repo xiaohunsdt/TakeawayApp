@@ -21,8 +21,8 @@
         SELECT * FROM `address`
         <where>
             1=1
-            <if test="args.user_id != '' and args.user_id != null">
-                and `user_id` = #{userId}
+            <if test="args.userId != '' and args.userId != null">
+                and `user_id` = #{args.userId}
             </if>
         </where>
         ORDER BY `create_date` DESC

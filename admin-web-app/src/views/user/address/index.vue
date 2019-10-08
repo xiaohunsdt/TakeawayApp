@@ -20,53 +20,39 @@
         style="width: 100%"
         v-loading="listLoading">
         <el-table-column
-          label="用户名/昵称"
+          label="用户名"
           align="center">
           <template v-slot="scope">
-            <div v-if="scope.row.name !==''">{{ scope.row.name }}</div>
-            <div>{{ scope.row.nickName }}</div>
+            <div v-if="scope.row.user.name !==''">{{ scope.row.user.name }}</div>
+            <div>{{ scope.row.user.nickName }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="头像"
+          label="地址"
           align="center">
           <template v-slot="scope">
-            <img
-              :src="scope.row.avatar"
-              style="height: 30px;width: auto;"
-              v-if="scope.row.avatar !==''"/>
+            <div>{{ scope.row.address }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="等级"
-          prop="level"
+          label="详细"
           align="center">
-        </el-table-column>
-        <el-table-column
-          label="余额"
-          prop="money"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="性别"
-          prop="gender"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="最后登录时间"
-          prop="lastLoginDate"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="加入日期"
-          prop="createDate"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="150">
           <template v-slot="scope">
-            <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
+            <div>{{ scope.row.detail }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="手机"
+          align="center">
+          <template v-slot="scope">
+            <div>{{ scope.row.phone }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="是否默认"
+          align="center">
+          <template v-slot="scope">
+            <div>{{ scope.row.isDefault }}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +73,7 @@
 
 <script>
   import BaseCard from '@/components/BaseCard/BaseCard'
-  import userApi from '@/api/user'
+  import addressApi from '@/api/address'
 
   export default {
     name: 'AddressManagement',
@@ -115,25 +101,13 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        userApi.getUserListByPage(this.page, this.formData)
+        addressApi.getAddressListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
             this.listLoading = false
           }).catch(() => {
           this.listLoading = false
-        })
-      },
-      onDelete(id) {
-        this.$confirm('是否确定删除此用户?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          userApi.deleteUser(id)
-            .then(() => {
-              this.onSearch()
-            })
         })
       },
       handleSizeChange(val) {

@@ -24,8 +24,6 @@ public class User extends Model<User> {
 
     private String password;
 
-    private String nickName;
-
     private Integer money;
 
     private String openId;
