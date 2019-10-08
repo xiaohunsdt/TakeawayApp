@@ -19,6 +19,33 @@
         stripe
         style="width: 100%"
         v-loading="listLoading">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="商品名称">
+                <span>{{ props.row.name }}</span>
+              </el-form-item>
+              <el-form-item label="所属店铺">
+                <span>{{ props.row.shop }}</span>
+              </el-form-item>
+              <el-form-item label="商品 ID">
+                <span>{{ props.row.id }}</span>
+              </el-form-item>
+              <el-form-item label="店铺 ID">
+                <span>{{ props.row.shopId }}</span>
+              </el-form-item>
+              <el-form-item label="商品分类">
+                <span>{{ props.row.category }}</span>
+              </el-form-item>
+              <el-form-item label="店铺地址">
+                <span>{{ props.row.address }}</span>
+              </el-form-item>
+              <el-form-item label="商品描述">
+                <span>{{ props.row.desc }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
           prop="number"
@@ -71,6 +98,13 @@
           align="center"
           prop="createDate"
           label="创建时间">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="操作">
+          <template v-slot="scope">
+            <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination
@@ -126,6 +160,9 @@
           }).catch(() => {
           this.listLoading = false
         })
+      },
+      onEdit(id) {
+        console.log(id)
       },
       handleSizeChange(val) {
         this.page.size = val
