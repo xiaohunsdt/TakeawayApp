@@ -14,7 +14,7 @@ server:
 
 spring:
   profiles:
-    active: dev-pc
+    active: dev-mac
   mvc:
     static-path-pattern: /res/**
     view:
@@ -64,10 +64,10 @@ spring:
     host: 192.168.0.17
     password: wy1996
 
-logging:
-    level:
-        root: info
-        net.novaborn: debug
+#logging:
+#    level:
+#        root: info
+#        net.novaborn: debug
 
 
 ---
@@ -80,10 +80,10 @@ spring:
   redis:
     host: localhost
 
-logging:
-  level:
-    root: info
-    net.novaborn: debug
+#logging:
+#  level:
+#    root: info
+#    net.novaborn: debug
 
 ---
 spring:

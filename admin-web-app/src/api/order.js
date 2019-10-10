@@ -15,6 +15,23 @@ export function getOrderListByPage(page, args) {
   })
 }
 
+export function getOrderDetail(orderId) {
+  const data = {
+    orderId
+  }
+  return request({
+    url: '/order/getOrderDetail',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export default {
-  getOrderListByPage
+  getOrderListByPage,
+  getOrderDetail
 }

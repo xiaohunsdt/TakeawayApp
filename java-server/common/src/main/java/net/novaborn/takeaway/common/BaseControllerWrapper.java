@@ -36,7 +36,9 @@ public abstract class BaseControllerWrapper {
             warpTheMap(map);
             return map;
         } else {
-            return this.element;
+            Map map = BeanUtil.beanToMap(this.element);
+            warpTheMap(map);
+            return map;
         }
     }
 

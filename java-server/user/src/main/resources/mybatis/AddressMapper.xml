@@ -6,6 +6,7 @@
         SELECT * FROM `address`
         <where>
             `user_id` = #{userId}
+            AND deleted = 0
         </where>
     </select>
 
@@ -14,6 +15,7 @@
         <where>
             `user_id` = #{userId}
             AND `is_default` = 1
+            AND deleted = 0
         </where>
     </select>
 
@@ -24,6 +26,7 @@
             <if test="args.userId != '' and args.userId != null">
                 and `user_id` = #{args.userId}
             </if>
+            AND deleted = 0
         </where>
         ORDER BY `create_date` DESC
     </select>

@@ -18,32 +18,69 @@
         highlight-current-row
         stripe
         style="width: 100%"
-        v-loading="listLoading">
+        v-loading="listLoading"
+        @expand-change="getOrderDetail">
         <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="商品名称">
-                <span>{{ props.row.name }}</span>
-              </el-form-item>
-              <el-form-item label="所属店铺">
-                <span>{{ props.row.shop }}</span>
-              </el-form-item>
-              <el-form-item label="商品 ID">
-                <span>{{ props.row.id }}</span>
-              </el-form-item>
-              <el-form-item label="店铺 ID">
-                <span>{{ props.row.shopId }}</span>
-              </el-form-item>
-              <el-form-item label="商品分类">
-                <span>{{ props.row.category }}</span>
-              </el-form-item>
-              <el-form-item label="店铺地址">
-                <span>{{ props.row.address }}</span>
-              </el-form-item>
-              <el-form-item label="商品描述">
-                <span>{{ props.row.desc }}</span>
-              </el-form-item>
-            </el-form>
+          <template v-slot="props">
+            <div
+              class="order-expand"
+              v-loading="detailLoading"
+              element-loading-text="正在加载中...">
+              <base-card>
+                <el-table
+                  :data="props.row.detail.orderItemList"
+                  stripe
+                  :show-header="false"
+                  style="width: 100%">
+                  <el-table-column
+                    prop="goodsName">
+                  </el-table-column>
+                  <el-table-column>
+                    <template v-slot="scope">
+                      <img
+                        :src="uploadUrl + scope.row.thumb"
+                        style="height: 30px;width: auto;"/>
+                    </template>
+                  </el-table-column>
+                  <el-table-column>
+                    <template v-slot="scope">
+                      ₩ {{ scope.row.goodsPrice.toLocaleString() }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column>
+                    <template v-slot="scope">
+                      x {{ scope.row.goodsCount }}
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </base-card>
+              <el-form label-position="left" class="order-expand-form">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="订单 ID">
+                      <span>{{ props.row.id }}</span>
+                    </el-form-item>
+                    <el-form-item label="总金额">
+                      <span>{{ props.row.category }}</span>
+                    </el-form-item>
+                    <el-form-item label="优惠">
+                      <span>{{ props.row.desc }}</span>
+                    </el-form-item>
+                    <el-form-item label="实际金额">
+                      <span>{{ props.row.desc }}</span>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="地址">
+                      <div>{{ props.row.detail.address.address }} ({{ props.row.detail.address.detail }})</div>
+                    </el-form-item>
+                    <el-form-item label="联系方式">
+                      <span>{{ props.row.detail.address.phone }}</span>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -104,6 +141,10 @@
           label="操作">
           <template v-slot="scope">
             <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
+            <!--            <el-button size="mini" type="primary">接单</el-button>-->
+            <!--            <el-button size="mini" type="primary">配送</el-button>-->
+            <!--            <el-button size="mini" type="primary">完成</el-button>-->
+            <!--            <el-button size="mini" type="primary">取消</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -123,58 +164,109 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
-  import orderApi from '@/api/order'
+    import BaseCard from '@/components/BaseCard/BaseCard'
+    import orderApi from '@/api/order'
+    import { getServerUrl } from '@/utils/sys'
 
-  export default {
-    name: 'OrderManagement',
-    components: {
-      BaseCard
-    },
-    data() {
-      return {
-        page: {
-          current: 1,
-          size: 15,
-          total: 0
+    export default {
+        name: 'OrderManagement',
+        components: {
+            BaseCard
         },
-        formData: {
-          name: null,
-          categoryId: null
+        data() {
+            return {
+                page: {
+                    current: 1,
+                    size: 15,
+                    total: 0
+                },
+                formData: {
+                    name: null,
+                    categoryId: null
+                },
+                listLoading: false,
+                detailLoading: false,
+                tableData: []
+            }
         },
-        listLoading: false,
-        tableData: []
+        computed: {
+            uploadUrl() {
+                return getServerUrl()
+            }
+        },
+        created() {
+            this.onSearch()
+        },
+        methods: {
+            onSearch() {
+                this.listLoading = true
+                orderApi.getOrderListByPage(this.page, this.formData)
+                    .then(response => {
+                        const datas = response.records
+                        datas.forEach(item => {
+                            item.detail = {}
+                        })
+                        this.tableData = datas
+                        this.page.total = parseInt(response.total)
+                        this.listLoading = false
+                    }).catch(() => {
+                    this.listLoading = false
+                })
+            },
+            async getOrderDetail(row, expandedRows) {
+                const currentRow = expandedRows.find(item => item.id === row.id)
+                // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
+                if (currentRow !== undefined) {
+                    this.detailLoading = true
+                    await orderApi.getOrderDetail(row.id)
+                        .then(response => {
+                            this.$set(currentRow, 'detail', response)
+                            this.detailLoading = false
+                        }).catch(() => {
+                            this.detailLoading = false
+                        })
+                }
+            },
+            onEdit(id) {
+                console.log(id)
+            },
+            handleSizeChange(val) {
+                this.page.size = val
+                this.onSearch()
+            },
+            handleCurrentChange(val) {
+                this.page.current = val
+                this.onSearch()
+            }
+        }
+    }
+</script>
+
+<style lang="scss">
+  .el-table__expanded-cell {
+    padding: 20px 25px !important;
+  }
+
+  .order-expand {
+    font-size: 0;
+
+    form {
+      label {
+        width: 90px;
+        color: #99a9bf;
       }
-    },
-    created() {
-      this.onSearch()
-    },
-    methods: {
-      onSearch() {
-        this.listLoading = true
-        orderApi.getOrderListByPage(this.page, this.formData)
-          .then(response => {
-            this.tableData = response.records
-            this.page.total = parseInt(response.total)
-            this.listLoading = false
-          }).catch(() => {
-          this.listLoading = false
-        })
-      },
-      onEdit(id) {
-        console.log(id)
-      },
-      handleSizeChange(val) {
-        this.page.size = val
-        this.onSearch()
-      },
-      handleCurrentChange(val) {
-        this.page.current = val
-        this.onSearch()
+
+      .el-form-item {
+        margin-right: 0;
+        margin-bottom: 0;
       }
     }
+
+    &-form {
+      padding: 0px 10px;
+    }
   }
-</script>
+</style>
 
 <style lang="scss" scoped>
   $bg: #F3F3F9;

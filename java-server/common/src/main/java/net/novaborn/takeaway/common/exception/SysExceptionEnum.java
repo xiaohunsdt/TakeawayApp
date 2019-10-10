@@ -1,6 +1,9 @@
 package net.novaborn.takeaway.common.exception;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 所有业务异常的枚举
  *
