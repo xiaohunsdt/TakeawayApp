@@ -38,6 +38,11 @@
         style="width: 100%"
         v-loading="listLoading">
         <el-table-column
+          label="ID"
+          prop="id"
+          align="center">
+        </el-table-column>
+        <el-table-column
           label="名称"
           prop="name"
           align="center">

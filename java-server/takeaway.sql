@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 虚拟机
  Source Server Type    : MySQL
- Source Server Version : 50727
- Source Host           : localhost:3306
+ Source Server Version : 50722
+ Source Host           : 192.168.0.17:3306
  Source Schema         : takeaway
 
  Target Server Type    : MySQL
- Target Server Version : 50727
+ Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 10/10/2019 15:07:43
+ Date: 11/10/2019 03:10:31
 */
 
 SET NAMES utf8mb4;
@@ -21,66 +21,61 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for address
 -- ----------------------------
 DROP TABLE IF EXISTS `address`;
-CREATE TABLE `address` (
-  `id` varchar(32) NOT NULL,
-  `user_id` varchar(32) NOT NULL,
-  `address` varchar(128) DEFAULT NULL,
-  `detail` varchar(254) DEFAULT NULL,
-  `phone` varchar(16) DEFAULT NULL,
-  `is_default` tinyint(1) unsigned DEFAULT '0',
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `deleted` tinyint(1) unsigned DEFAULT '0',
+CREATE TABLE `address`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `address` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `detail` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `phone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `deleted` tinyint(1) UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-BEGIN;
 INSERT INTO `address` VALUES ('49268c005a631e2d77b7b90a206fe0ec', '49268c005a631e2d77b7b90a206fe0eb', 'asdasdas', 'zxcz', '111111', 1, '2019-10-09 00:24:31', 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
-CREATE TABLE `admin` (
-  `id` varchar(32) NOT NULL,
-  `user_name` varchar(32) NOT NULL,
-  `password` varchar(32) NOT NULL,
-  `login_date` timestamp NULL DEFAULT NULL,
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE `admin`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `login_date` timestamp(0) NULL DEFAULT NULL,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-BEGIN;
 INSERT INTO `admin` VALUES ('8b99e2780bf8c3c43d8f95bf9e2492a0', 'admin', 'admin', NULL, '2019-09-20 03:35:16', '2019-09-20 03:48:40');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE `category` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(32) NOT NULL,
-  `parent_id` varchar(32) DEFAULT NULL,
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted` int(1) unsigned DEFAULT '0',
+CREATE TABLE `category`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `parent_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `deleted` int(1) UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `parent_id`(`parent_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
-BEGIN;
 INSERT INTO `category` VALUES ('0c309767046ac9952bda4ea5dee37770', '汤类', NULL, '2019-10-07 02:30:22', '2019-10-07 02:30:22', 0);
 INSERT INTO `category` VALUES ('1447c360419f319bcd38e9ef043f07b8', '饮品类', NULL, '2019-10-07 02:30:40', '2019-10-07 02:30:40', 0);
 INSERT INTO `category` VALUES ('1f1680134fc00750c5f432faa83644d3', '炖菜类', NULL, '2019-10-07 02:30:07', '2019-10-07 02:30:07', 0);
@@ -88,34 +83,32 @@ INSERT INTO `category` VALUES ('8410fe3eac3dd72c7b0aeb4f24cc05a8', '凉菜类', 
 INSERT INTO `category` VALUES ('a8f1b3bae4c02e3208aa108603bdb3eb', '素菜小炒', NULL, '2019-10-07 02:29:46', '2019-10-07 02:29:46', 0);
 INSERT INTO `category` VALUES ('c7ae0008e4c4b0b7f6cf5d270fa36e06', '荤菜小炒', NULL, '2019-10-07 02:30:00', '2019-10-07 02:30:00', 0);
 INSERT INTO `category` VALUES ('e5f6c1eb9aeff5675d69ee33b9a2c946', '主食类', NULL, '2019-10-07 02:30:16', '2019-10-07 02:30:16', 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for goods
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
-CREATE TABLE `goods` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `desc` varchar(32) DEFAULT NULL,
-  `thumb` varchar(255) DEFAULT NULL,
-  `category_id` varchar(32) DEFAULT NULL,
-  `flags` varchar(32) DEFAULT NULL,
-  `price` int(10) unsigned NOT NULL DEFAULT '0',
-  `month_sale` int(10) unsigned NOT NULL DEFAULT '0',
-  `rate` int(1) unsigned NOT NULL DEFAULT '10',
-  `state` int(1) NOT NULL DEFAULT '0',
-  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `version` int(10) unsigned DEFAULT '0',
-  `deleted` tinyint(1) unsigned DEFAULT '0',
+CREATE TABLE `goods`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `desc` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `category_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `flags` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `price` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `month_sale` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `rate` int(1) UNSIGNED NOT NULL DEFAULT 10,
+  `state` int(1) NOT NULL DEFAULT 0,
+  `create_date` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_date` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `version` int(10) UNSIGNED NULL DEFAULT 0,
+  `deleted` tinyint(1) UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-BEGIN;
 INSERT INTO `goods` VALUES ('029d1b56aeb1aaad55440e4b1ac21498', '干煸肉丝', NULL, NULL, 'c7ae0008e4c4b0b7f6cf5d270fa36e06', NULL, 10000, 0, 10, 1, '2019-10-07 16:52:41', '2019-10-07 16:52:41', 0, 0);
 INSERT INTO `goods` VALUES ('05444437734b79d597b8fff2c8fecd21', '麻辣烫（麻辣香锅）加菜+牛肉卷', NULL, NULL, 'e5f6c1eb9aeff5675d69ee33b9a2c946', NULL, 3000, 0, 10, 1, '2019-10-07 17:27:46', '2019-10-07 17:27:46', 0, 0);
 INSERT INTO `goods` VALUES ('05c71e0ca83929eb3577ccc60c55cc33', '素三丝', NULL, NULL, '8410fe3eac3dd72c7b0aeb4f24cc05a8', NULL, 7000, 0, 10, 1, '2019-10-07 16:25:39', '2019-10-07 16:25:39', 0, 0);
@@ -257,96 +250,97 @@ INSERT INTO `goods` VALUES ('f8a262b82cf30521999f75053ef5dc24', '干煸土豆片
 INSERT INTO `goods` VALUES ('f8cf2f6fb3b6af7f9b9417fe8b1f33f2', '素三鲜', NULL, NULL, '1f1680134fc00750c5f432faa83644d3', NULL, 9000, 0, 10, 1, '2019-10-07 17:09:28', '2019-10-07 17:09:28', 0, 0);
 INSERT INTO `goods` VALUES ('f9896e09387a6b91abca11146fe655a6', '沸腾牛五花', NULL, NULL, '1f1680134fc00750c5f432faa83644d3', NULL, 12000, 0, 10, 1, '2019-10-07 17:17:17', '2019-10-07 17:17:17', 0, 0);
 INSERT INTO `goods` VALUES ('facffddf7c0cf642c8498f139b7f3315', '蒜薹炒肉', NULL, NULL, 'c7ae0008e4c4b0b7f6cf5d270fa36e06', NULL, 9000, 0, 10, 1, '2019-10-07 16:46:32', '2019-10-07 16:46:32', 0, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for order
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
-  `id` varchar(32) NOT NULL,
-  `number` int(11) unsigned NOT NULL,
-  `user_id` varchar(32) NOT NULL,
-  `address_id` varchar(32) NOT NULL,
-  `goods_count` int(11) DEFAULT NULL,
-  `discount` int(11) DEFAULT NULL,
-  `discounted_prices` int(11) unsigned NOT NULL DEFAULT '0',
-  `all_price` int(11) unsigned NOT NULL,
-  `real_price` int(11) unsigned NOT NULL,
-  `payment_way` int(4) unsigned NOT NULL,
-  `ps` varchar(254) DEFAULT NULL,
-  `pay_state` int(2) unsigned NOT NULL DEFAULT '0',
-  `order_state` int(2) unsigned DEFAULT '0',
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `version` int(11) unsigned DEFAULT '0',
-  `deleted` tinyint(1) unsigned DEFAULT '0',
+CREATE TABLE `order`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `number` int(11) UNSIGNED NOT NULL,
+  `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `address_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `goods_count` int(11) NULL DEFAULT NULL,
+  `discount` int(11) NULL DEFAULT NULL,
+  `discounted_prices` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  `all_price` int(11) UNSIGNED NOT NULL,
+  `real_price` int(11) UNSIGNED NOT NULL,
+  `payment_way` int(4) UNSIGNED NOT NULL,
+  `ps` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `pay_state` int(2) UNSIGNED NOT NULL DEFAULT 0,
+  `order_state` int(2) UNSIGNED NULL DEFAULT 0,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `version` int(11) UNSIGNED NULL DEFAULT 0,
+  `deleted` tinyint(1) UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order
 -- ----------------------------
-BEGIN;
 INSERT INTO `order` VALUES ('030139ac7dd581c329c8578d9060a43e', 1, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', 2, NULL, 0, 1000, 1000, 2, NULL, 0, 0, '2019-10-07 01:07:54', '2019-10-09 03:29:38', 1, 0);
 INSERT INTO `order` VALUES ('f4b4e5d5dbc88094db45ca98f3e81eec', 2, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', 1, NULL, 0, 1000, 1000, 0, NULL, 0, 0, '2019-10-07 01:14:07', '2019-10-09 03:29:40', 0, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for order_item
 -- ----------------------------
 DROP TABLE IF EXISTS `order_item`;
-CREATE TABLE `order_item` (
-  `id` varchar(32) NOT NULL,
-  `order_id` varchar(32) NOT NULL,
-  `goods_id` varchar(32) NOT NULL,
-  `goods_name` varchar(32) DEFAULT NULL,
-  `goods_thumb` varchar(255) DEFAULT NULL,
-  `goods_price` int(11) DEFAULT NULL,
-  `goods_count` int(11) DEFAULT NULL,
+CREATE TABLE `order_item`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `order_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `goods_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `goods_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `goods_thumb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `goods_price` int(11) NULL DEFAULT NULL,
+  `goods_count` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  KEY `order_id` (`order_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  INDEX `order_id`(`order_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of order_item
+-- ----------------------------
+INSERT INTO `order_item` VALUES ('e1a515007c02c4eb38aa17992b968fb4', 'f4b4e5d5dbc88094db45ca98f3e81eec', '761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', '/upload/images/50408c6a9606435ab4e80d8915b7e6a2.jpg', 6000, 2);
+INSERT INTO `order_item` VALUES ('e863bcc3ff711f42cae71b46390052e2', 'f4b4e5d5dbc88094db45ca98f3e81eec', '2d912f7f177635c9cb0e6a28e5e4439e', '松花蛋豆腐', NULL, 6000, 3);
 
 -- ----------------------------
 -- Table structure for setting
 -- ----------------------------
 DROP TABLE IF EXISTS `setting`;
-CREATE TABLE `setting` (
-  `key` varchar(255) NOT NULL,
-  `value` text,
+CREATE TABLE `setting`  (
+  `key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`key`) USING BTREE,
-  KEY `key` (`key`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+  INDEX `key`(`key`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
-  `money` int(11) unsigned DEFAULT '0',
-  `open_id` varchar(128) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `birthday` timestamp NULL DEFAULT NULL,
-  `gender` tinyint(1) unsigned DEFAULT '0',
-  `level` tinyint(2) unsigned DEFAULT '1',
-  `last_login_date` timestamp NULL DEFAULT NULL,
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `version` int(11) unsigned DEFAULT '0',
-  `deleted` tinyint(1) unsigned DEFAULT '0',
+CREATE TABLE `user`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `money` int(11) UNSIGNED NULL DEFAULT 0,
+  `open_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `birthday` timestamp(0) NULL DEFAULT NULL,
+  `gender` tinyint(1) UNSIGNED NULL DEFAULT 0,
+  `level` tinyint(2) UNSIGNED NULL DEFAULT 1,
+  `last_login_date` timestamp(0) NULL DEFAULT NULL,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `version` int(11) UNSIGNED NULL DEFAULT 0,
+  `deleted` tinyint(1) UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-BEGIN;
 INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-08 01:23:20', 0, 0);
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

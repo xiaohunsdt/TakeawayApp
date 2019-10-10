@@ -13,24 +13,21 @@
     <base-card class="container-main">
       <el-table
         :data="tableData"
+        @expand-change="getOrderDetail"
         class="tb-edit"
         element-loading-text="正在加载中..."
         highlight-current-row
         stripe
         style="width: 100%"
-        v-loading="listLoading"
-        @expand-change="getOrderDetail">
+        v-loading="listLoading">
         <el-table-column type="expand">
           <template v-slot="props">
-            <div
-              class="order-expand"
-              v-loading="detailLoading"
-              element-loading-text="正在加载中...">
+            <div class="order-expand" v-if="props.row.detail.hasOwnProperty('address')">
               <base-card>
                 <el-table
                   :data="props.row.detail.orderItemList"
-                  stripe
                   :show-header="false"
+                  stripe
                   style="width: 100%">
                   <el-table-column
                     prop="goodsName">
@@ -38,7 +35,7 @@
                   <el-table-column>
                     <template v-slot="scope">
                       <img
-                        :src="uploadUrl + scope.row.thumb"
+                        :src="uploadUrl + scope.row.goodsThumb"
                         style="height: 30px;width: auto;"/>
                     </template>
                   </el-table-column>
@@ -54,20 +51,21 @@
                   </el-table-column>
                 </el-table>
               </base-card>
-              <el-form label-position="left" class="order-expand-form">
+              <el-form class="order-expand-form" label-position="left">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="订单 ID">
                       <span>{{ props.row.id }}</span>
                     </el-form-item>
                     <el-form-item label="总金额">
-                      <span>{{ props.row.category }}</span>
+                      <span>{{ props.row.allPrice }}</span>
                     </el-form-item>
                     <el-form-item label="优惠">
-                      <span>{{ props.row.desc }}</span>
+                      <span>{{ props.row.discountedPrices }}</span>
+                      <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
                     </el-form-item>
                     <el-form-item label="实际金额">
-                      <span>{{ props.row.desc }}</span>
+                      <span>{{ props.row.realPrice }}</span>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
@@ -85,23 +83,23 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="number"
-          label="编号">
+          label="编号"
+          prop="number">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="user.name"
-          label="用户">
+          label="用户"
+          prop="user.name">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="goodsCount"
-          label="商品数量">
+          label="商品数量"
+          prop="goodsCount">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="allPrice"
-          label="总金额">
+          label="总金额"
+          prop="allPrice">
         </el-table-column>
         <el-table-column
           align="center"
@@ -113,28 +111,28 @@
         </el-table-column>
         <el-table-column
           align="center"
-          prop="realPrice"
-          label="实际金额">
+          label="实际金额"
+          prop="realPrice">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="paymentWay"
-          label="支付方式">
+          label="支付方式"
+          prop="paymentWay">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="payState"
-          label="支付状态">
+          label="支付状态"
+          prop="payState">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="orderState"
-          label="订单状态">
+          label="订单状态"
+          prop="orderState">
         </el-table-column>
         <el-table-column
           align="center"
-          prop="createDate"
-          label="创建时间">
+          label="创建时间"
+          prop="createDate">
         </el-table-column>
         <el-table-column
           align="center"
@@ -164,82 +162,77 @@
 </template>
 
 <script>
-    import BaseCard from '@/components/BaseCard/BaseCard'
-    import orderApi from '@/api/order'
-    import { getServerUrl } from '@/utils/sys'
+  import BaseCard from '@/components/BaseCard/BaseCard'
+  import orderApi from '@/api/order'
+  import { getServerUrl } from '@/utils/sys'
 
-    export default {
-        name: 'OrderManagement',
-        components: {
-            BaseCard
+  export default {
+    name: 'OrderManagement',
+    components: {
+      BaseCard
+    },
+    data() {
+      return {
+        page: {
+          current: 1,
+          size: 15,
+          total: 0
         },
-        data() {
-            return {
-                page: {
-                    current: 1,
-                    size: 15,
-                    total: 0
-                },
-                formData: {
-                    name: null,
-                    categoryId: null
-                },
-                listLoading: false,
-                detailLoading: false,
-                tableData: []
-            }
+        formData: {
+          name: null,
+          categoryId: null
         },
-        computed: {
-            uploadUrl() {
-                return getServerUrl()
-            }
-        },
-        created() {
-            this.onSearch()
-        },
-        methods: {
-            onSearch() {
-                this.listLoading = true
-                orderApi.getOrderListByPage(this.page, this.formData)
-                    .then(response => {
-                        const datas = response.records
-                        datas.forEach(item => {
-                            item.detail = {}
-                        })
-                        this.tableData = datas
-                        this.page.total = parseInt(response.total)
-                        this.listLoading = false
-                    }).catch(() => {
-                    this.listLoading = false
-                })
-            },
-            async getOrderDetail(row, expandedRows) {
-                const currentRow = expandedRows.find(item => item.id === row.id)
-                // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-                if (currentRow !== undefined) {
-                    this.detailLoading = true
-                    await orderApi.getOrderDetail(row.id)
-                        .then(response => {
-                            this.$set(currentRow, 'detail', response)
-                            this.detailLoading = false
-                        }).catch(() => {
-                            this.detailLoading = false
-                        })
-                }
-            },
-            onEdit(id) {
-                console.log(id)
-            },
-            handleSizeChange(val) {
-                this.page.size = val
-                this.onSearch()
-            },
-            handleCurrentChange(val) {
-                this.page.current = val
-                this.onSearch()
-            }
+        listLoading: false,
+        tableData: []
+      }
+    },
+    computed: {
+      uploadUrl() {
+        return getServerUrl()
+      }
+    },
+    created() {
+      this.onSearch()
+    },
+    methods: {
+      onSearch() {
+        this.listLoading = true
+        orderApi.getOrderListByPage(this.page, this.formData)
+          .then(response => {
+            const datas = response.records
+            datas.forEach(item => {
+              item.detail = {}
+            })
+            this.tableData = datas
+            this.page.total = parseInt(response.total)
+            this.listLoading = false
+          }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      async getOrderDetail(row, expandedRows) {
+        const currentRow = expandedRows.find(item => item.id === row.id)
+        // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
+        if (currentRow !== undefined) {
+          await orderApi.getOrderDetail(row.id)
+            .then(response => {
+              this.$set(currentRow, 'detail', response)
+            })
         }
+      },
+      onEdit(id) {
+        console.log(id)
+      },
+      handleSizeChange(val) {
+        this.page.size = val
+        this.onSearch()
+      },
+      handleCurrentChange(val) {
+        this.page.current = val
+        this.onSearch()
+      }
     }
+  }
 </script>
 
 <style lang="scss">
