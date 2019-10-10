@@ -36,7 +36,8 @@
                     <template v-slot="scope">
                       <img
                         :src="uploadUrl + scope.row.goodsThumb"
-                        style="height: 30px;width: auto;"/>
+                        style="height: 30px;width: auto;"
+                        v-if="scope.row.goodsThumb!==''"/>
                     </template>
                   </el-table-column>
                   <el-table-column>
@@ -70,7 +71,10 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="地址">
-                      <div>{{ props.row.detail.address.address }} ({{ props.row.detail.address.detail }})</div>
+                      <div>
+                        <div>{{ props.row.detail.address.address }}</div>
+                        <div>({{ props.row.detail.address.detail }})</div>
+                      </div>
                     </el-form-item>
                     <el-form-item label="联系方式">
                       <span>{{ props.row.detail.address.phone }}</span>
@@ -252,6 +256,15 @@
       .el-form-item {
         margin-right: 0;
         margin-bottom: 0;
+      }
+
+      .el-form-item__label {
+        line-height: 30px;
+      }
+
+      .el-form-item__content {
+        margin-left: 90px;
+        line-height: 30px;
       }
     }
 
