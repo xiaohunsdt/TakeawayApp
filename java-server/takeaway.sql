@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 07/10/2019 20:48:50
+ Date: 10/10/2019 10:55:16
 */
 
 SET NAMES utf8mb4;
@@ -28,6 +28,7 @@ CREATE TABLE `address`  (
   `detail` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `phone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
@@ -35,7 +36,7 @@ CREATE TABLE `address`  (
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-INSERT INTO `address` VALUES ('49268c005a631e2d77b7b90a206fe0ec', '49268c005a631e2d77b7b90a206fe0eb', 'asdasdas', 'zxcz', '111111', 1);
+INSERT INTO `address` VALUES ('49268c005a631e2d77b7b90a206fe0ec', '49268c005a631e2d77b7b90a206fe0eb', 'asdasdas', 'zxcz', '111111', 1, '2019-10-09 00:24:31');
 
 -- ----------------------------
 -- Table structure for admin
@@ -278,8 +279,8 @@ CREATE TABLE `order`  (
 -- ----------------------------
 -- Records of order
 -- ----------------------------
-INSERT INTO `order` VALUES ('030139ac7dd581c329c8578d9060a43e', 1, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', NULL, NULL, 0, 1000, 1000, 2, NULL, 0, 0, '2019-10-07 01:07:54', '2019-10-07 01:18:25', 1, 0);
-INSERT INTO `order` VALUES ('f4b4e5d5dbc88094db45ca98f3e81eec', 2, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', NULL, NULL, 0, 1000, 1000, 0, NULL, 0, 0, '2019-10-07 01:14:07', '2019-10-07 01:14:07', 0, 0);
+INSERT INTO `order` VALUES ('030139ac7dd581c329c8578d9060a43e', 1, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', 2, NULL, 0, 1000, 1000, 2, NULL, 0, 0, '2019-10-07 01:07:54', '2019-10-09 03:29:38', 1, 0);
+INSERT INTO `order` VALUES ('f4b4e5d5dbc88094db45ca98f3e81eec', 2, '49268c005a631e2d77b7b90a206fe0eb', '49268c005a631e2d77b7b90a206fe0ec', 1, NULL, 0, 1000, 1000, 0, NULL, 0, 0, '2019-10-07 01:14:07', '2019-10-09 03:29:40', 0, 0);
 
 -- ----------------------------
 -- Table structure for order_item
@@ -298,6 +299,17 @@ CREATE TABLE `order_item`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for setting
+-- ----------------------------
+DROP TABLE IF EXISTS `setting`;
+CREATE TABLE `setting`  (
+  `key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `value` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  PRIMARY KEY (`key`) USING BTREE,
+  INDEX `key`(`key`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -305,7 +317,6 @@ CREATE TABLE `user`  (
   `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `nick_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `money` int(11) UNSIGNED NULL DEFAULT 0,
   `open_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -323,6 +334,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 'jeremy', 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-06 03:36:31', 0, 0);
+INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-08 01:23:20', 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
