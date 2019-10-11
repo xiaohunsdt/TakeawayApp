@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.user.web;
+package net.novaborn.takeaway.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;

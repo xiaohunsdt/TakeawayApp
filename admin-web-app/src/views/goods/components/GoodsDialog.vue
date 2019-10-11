@@ -25,6 +25,12 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="商品标记">
+        <el-checkbox-group v-model="flagSelected">
+          <el-checkbox label="新品" name="flag"></el-checkbox>
+          <el-checkbox label="热卖" name="flag"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item label="价格" prop="price">
         <el-input autocomplete="off" type="number" v-model.number="formData.price"></el-input>
       </el-form-item>
@@ -86,6 +92,7 @@
       return {
         sendLoading: false,
         formData: {},
+        flagSelected: [],
         rules: {
           name: [
             { required: true, message: '请输入商品名称', trigger: 'blur' },
@@ -118,6 +125,7 @@
               .then(response => {
                 this.sendLoading = false
                 this.formData = response
+                this.flagSelected = this.formData.flags.split(',')
               })
               .catch(() => {
                 this.sendLoading = false
@@ -142,6 +150,8 @@
         })
       },
       createGoods() {
+        this.formData.flags = this.flagSelected.join()
+
         this.sendLoading = true
         goodsApi.createNewGoods(this.formData)
           .then(response => {
@@ -158,6 +168,8 @@
           })
       },
       updateGoods() {
+        this.formData.flags = this.flagSelected.join()
+
         this.sendLoading = true
         goodsApi.updateGoods(this.formData)
           .then(response => {
@@ -175,6 +187,7 @@
       },
       closeWindow() {
         this.formData = {}
+        this.flagSelected = []
         this.$emit('update:dialogVisible', false)
         this.$emit('update:goodsData', null)
       }
