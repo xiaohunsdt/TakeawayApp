@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
@@ -50,8 +51,14 @@ public class WebConfig implements WebMvcConfigurer {
     private JwtProperties jwtProperties;
 
     @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", "/index.html");
+    }
+
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**").addResourceLocations("classpath:/res/");
+        registry.addResourceHandler("/index.html").addResourceLocations("classpath:/view/index.html");
+        registry.addResourceHandler("/res/**").addResourceLocations("classpath:/res/");
 
         log.info(String.format("upload文件夹为：%s", System.getProperty("user.dir") + File.separator + "upload" + File.separator));
         if (!"/".equals(System.getProperty("user.dir"))) {
