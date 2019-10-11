@@ -15,6 +15,7 @@
         <module>activity</module>
         <module>category</module>
         <module>common</module>
+        <module>user-web</module>
     </modules>
 
     <parent>

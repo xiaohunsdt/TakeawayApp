@@ -1,13 +1,13 @@
-package net.novaborn.takeaway.admin.web.api;
+package net.novaborn.takeaway.user.web.api;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.admin.common.auth.validator.impl.DbValidator;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.admin.web.dto.AuthRequest;
-import net.novaborn.takeaway.admin.web.dto.AuthResponse;
+import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.user.common.auth.validator.impl.DbValidator;
+import net.novaborn.takeaway.user.web.dto.AuthRequest;
+import net.novaborn.takeaway.user.web.dto.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
-public class AuthController extends BaseController{
+public class AuthController extends BaseController {
 
     private JwtTokenUtil jwtTokenUtil;
 
