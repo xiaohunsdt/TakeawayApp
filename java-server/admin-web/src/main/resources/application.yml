@@ -55,7 +55,7 @@ logging:
 
 ---
 spring:
-  profiles: dev-pc
+  profiles: dev-mac
   datasource:
     url: jdbc:mysql://192.168.0.17:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: root

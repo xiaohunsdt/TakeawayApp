@@ -51,7 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/res/");
+//        registry.addResourceHandler("/**").addResourceLocations("classpath:/res/");
 
         log.info(String.format("upload文件夹为：%s", System.getProperty("user.dir") + File.separator + "upload" + File.separator));
         if (!"/".equals(System.getProperty("user.dir"))) {
