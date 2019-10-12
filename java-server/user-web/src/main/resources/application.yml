@@ -9,6 +9,14 @@ jwt:
   auth-path: auth         #认证请求的路径
   md5-key: takeaway-user      #md5加密混淆key
 
+wx:
+  miniapp:
+    appid: wx3c0bde366c72ea19
+    secret: dc7706fbe07d49992bf48f081fce43a6
+    token: takeaway_token_mini_program
+    aesKey: orkh4QFZlWvTBLMG7hjVI9VYrPqVJoUP6vAPpH9JORy
+    msgDataFormat: JSON
+
 server:
   port: 8081
 
