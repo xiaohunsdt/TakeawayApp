@@ -1,7 +1,19 @@
 <script>
   export default {
     created () {
-      console.log(`log at:${Date.now()}`)
+      // 检测权限是否打开
+      mpvue.getSetting({
+        success (res) {
+          if (!res.authSetting['scope.userLocation']) {
+            wx.authorize({
+              scope: 'scope.userLocation',
+              success () {
+                console.log('userLocation 权限已经打开')
+              }
+            })
+          }
+        }
+      })
     }
   }
 </script>

@@ -13,6 +13,11 @@
     "pages/order/comment/main",
     "pages/order/detail/main"
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于确认您是否在我们的配送范围之内"
+    }
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFD200",

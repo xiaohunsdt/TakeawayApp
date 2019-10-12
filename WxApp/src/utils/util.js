@@ -26,7 +26,7 @@ function request (url, data = {}, method = 'GET') {
       method: method,
       header: {
         'Content-Type': 'application/json',
-        'X-Xbyjshop-Token': mpvue.getStorageSync('token')
+        'Authorization': 'Bearer ' + mpvue.getStorageSync('token')
       },
       success: function (res) {
         // console.log('请求成功，url:', url);
@@ -100,7 +100,7 @@ function login () {
       success: function (res) {
         if (res.code) {
           // 登录远程服务器
-          // console.log('微信登陆成功', res)
+          console.log('微信登陆成功', res)
           resolve(res)
         } else {
           reject(res)
@@ -118,7 +118,6 @@ function login () {
  */
 function getUserInfo () {
   return new Promise(function (resolve, reject) {
-    // 查看button是否授权
     mpvue.getSetting({
       success: function (res) {
         if (res.authSetting['scope.userInfo']) {
@@ -134,8 +133,9 @@ function getUserInfo () {
               reject(err)
             }
           })
-        } else { // 没有授权
-          // console.log('但获取用户信息失败，未同意button授权');
+        } else {
+          // 没有授权
+          console.warn('获取用户信息失败，未授权')
         }
       }
     })

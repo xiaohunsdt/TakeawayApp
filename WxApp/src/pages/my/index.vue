@@ -5,13 +5,22 @@
       <div class="my-header">
         <van-row>
           <van-col span="5">
-            <img class="myThumb" mode="aspectFill" src="/static/images/food/food.jpg" alt="">
+            <img alt="" class="myThumb" mode="aspectFill" src="/static/images/food/food.jpg">
           </van-col>
           <van-col span="19">
-            <div class="myName">Jeremy.</div>
+            <div class="myName">
+              <button
+                @getuserinfo="getWxUserInfo"
+                class="login-button"
+                open-type="getUserInfo"
+                v-if="userInfo===''">
+                授权个人信息 >
+              </button>
+              <span v-else>{{userInfo.name}}</span>
+            </div>
             <div class="memberType">
               <van-icon name="diamond-o"/>
-              一般会员
+              <span style="margin-left:0.3rem;position: relative;top:-0.1rem">一般会员</span>
             </div>
           </van-col>
         </van-row>
@@ -26,27 +35,27 @@
                 <van-icon name="arrow"></van-icon>
               </div>
             </div>
-            <van-col span="4" offset="1">
+            <van-col offset="1" span="4">
               <div class="order-type-item">
-                <img class="item-img" mode="widthFix" src="/static/images/order/payment.png" alt="">
+                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/payment.png">
                 <div class="item-title">待付款</div>
               </div>
             </van-col>
-            <van-col span="4" offset="2">
+            <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img class="item-img" mode="widthFix" src="/static/images/order/take_food.png" alt="">
+                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
                 <div class="item-title">待就餐</div>
               </div>
             </van-col>
-            <van-col span="4" offset="2">
+            <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img class="item-img" mode="widthFix" src="/static/images/order/evaluate.png" alt="">
+                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
                 <div class="item-title">待评价</div>
               </div>
             </van-col>
-            <van-col span="4" offset="2">
+            <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img class="item-img" mode="widthFix" src="/static/images/order/refund.png" alt="">
+                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/refund.png">
                 <div class="item-title">退款</div>
               </div>
             </van-col>
@@ -54,41 +63,41 @@
         </base-panel>
       </div>
       <div class="my-profile">
-        <van-cell is-link custom-class="profile-cell">
-          <view slot="title" class="profile-title">
-            <img class="title-img" src="/static/images/profile/edit.png" alt="">
+        <van-cell custom-class="profile-cell" is-link>
+          <view class="profile-title" slot="title">
+            <img alt="" class="title-img" src="/static/images/profile/edit.png">
             <div>
               个人资料
             </div>
           </view>
         </van-cell>
-        <van-cell is-link custom-class="profile-cell">
-          <view slot="title" class="profile-title">
-            <img class="title-img" src="/static/images/address/icon-location.png" alt="">
+        <van-cell custom-class="profile-cell" is-link>
+          <view class="profile-title" slot="title">
+            <img alt="" class="title-img" src="/static/images/address/icon-location.png">
             <div>
               我的地址
             </div>
           </view>
         </van-cell>
-        <van-cell is-link custom-class="profile-cell">
-          <view slot="title" class="profile-title">
-            <img class="title-img" src="/static/images/profile/coupon.png" alt="">
+        <van-cell custom-class="profile-cell" is-link>
+          <view class="profile-title" slot="title">
+            <img alt="" class="title-img" src="/static/images/profile/coupon.png">
             <div>
               优惠卷
             </div>
           </view>
         </van-cell>
-        <van-cell is-link custom-class="profile-cell">
-          <view slot="title" class="profile-title">
-            <img class="title-img" src="/static/images/profile/phone.png" alt="">
+        <van-cell custom-class="profile-cell" is-link>
+          <view class="profile-title" slot="title">
+            <img alt="" class="title-img" src="/static/images/profile/phone.png">
             <div>
               电话客服
             </div>
           </view>
         </van-cell>
-        <van-cell is-link custom-class="profile-cell">
-          <view slot="title" class="profile-title">
-            <img class="title-img" src="/static/images/profile/onlineservice.png" alt="">
+        <van-cell custom-class="profile-cell" is-link>
+          <view class="profile-title" slot="title">
+            <img alt="" class="title-img" src="/static/images/profile/onlineservice.png">
             <div>
               在线客服
             </div>
@@ -101,15 +110,31 @@
 
 <script>
   import BasePanel from '@/components/BasePanel'
+  import userApi from '@/services/user'
 
   export default {
     components: {
       BasePanel
     },
+    computed: {
+      userInfo () {
+        return mpvue.getStorageSync('userInfo')
+      }
+    },
     data () {
       return {}
     },
-    methods: {}
+    created () {
+    },
+    methods: {
+      getWxUserInfo (event) {
+        if (event.mp.detail.userInfo) {
+          userApi.loginByWx()
+        } else {
+          console.error('授权失败!!!')
+        }
+      }
+    }
   }
 </script>
 
@@ -134,17 +159,31 @@
     padding: 0.3rem 0.4rem;
   }
 
+  .login-button {
+    display: unset;
+    background: transparent;
+    border: unset;
+    font-size: 0.28rem;
+    color: white;
+    line-height: unset;
+    padding-left: unset;
+  }
+
+  .login-button:after {
+    content: unset;
+  }
+
   .myName, .memberType {
-    margin-top: 0.15rem;
+    font-weight: bolder;
     color: white;
   }
 
   .myName {
-    font-weight: bolder;
+    margin-top: 0.1rem;
   }
 
   .memberType {
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
     font-size: 0.28rem;
   }
 
