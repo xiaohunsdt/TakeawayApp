@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
-@RequestMapping("/api/admin/category")
+@RequestMapping("/api/user/category")
 public class CategoryController extends BaseController {
 
     CategoryService categoryService;

@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @Setter(onMethod_ = {@Autowired})
-@RequestMapping("/api/admin/goods")
+@RequestMapping("/api/user/goods")
 public class GoodsController extends BaseController {
 
     GoodsService goodsService;

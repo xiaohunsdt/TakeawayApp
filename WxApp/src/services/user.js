@@ -8,30 +8,35 @@ import util from '@/utils/util'
  * 调用微信登录
  */
 function loginByWx () {
-  let code = null
   return new Promise(function (resolve, reject) {
     return util.login().then((res) => {
-      code = res.code
-      return util.getUserInfo()
-    }).then((userInfo) => {
-      // 把用户信息传给后台，存入数据库，并计算一个token给前台存起来
-      api.authLoginByWeixin(code, userInfo).then(res => {
-        if (res.errno === 0) {
-          // 存储用户信息
-          mpvue.setStorageSync('userInfo', res.data.userInfo)
-          mpvue.setStorageSync('token', res.data.token)
-
-          resolve(res)
-        } else {
-          reject(res)
-        }
-      }).catch((err) => {
-        reject(err)
-      })
-    }).catch((err) => {
-      reject(err)
+      const code = res.code
+      api.authLoginByWeixin(code)
+        .then(res => {
+          if (res.errno === 0) {
+            // 存储用户信息
+            mpvue.setStorageSync('token', res.data.token)
+            resolve(res)
+          } else {
+            reject(res)
+          }
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   })
+}
+
+function setUserInfo () {
+  util.getUserInfo()
+    .then(res => {
+      api.setUserInfo(res).then((response) => {
+        if (response.code === 0) {
+          mpvue.setStorageSync('userInfo', res)
+        }
+      })
+    })
 }
 
 /**
@@ -39,7 +44,8 @@ function loginByWx () {
  */
 function checkLogin () {
   return new Promise(function (resolve, reject) {
-    if (mpvue.getStorageSync('userInfo') && mpvue.getStorageSync('token')) {
+    // if (mpvue.getStorageSync('userInfo') && mpvue.getStorageSync('token')) {
+    if (mpvue.getStorageSync('token')) {
       util.checkSession().then(() => {
         resolve(true)
       }).catch(() => {
@@ -55,7 +61,8 @@ function checkLogin () {
 
 const user = {
   loginByWx,
-  checkLogin
+  checkLogin,
+  setUserInfo
 }
 
 export default user

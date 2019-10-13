@@ -28,7 +28,7 @@ import java.util.Optional;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
-@RequestMapping("/api/admin/order")
+@RequestMapping("/api/user/order")
 public class OrderController extends BaseController {
 
     private OrderService orderService;

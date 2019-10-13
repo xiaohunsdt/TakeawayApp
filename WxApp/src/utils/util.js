@@ -129,7 +129,7 @@ function getUserInfo () {
               resolve(res)
             },
             fail: function (err) {
-              // console.log('获取用户信息失败', err);
+              console.warn('获取用户信息失败', err)
               reject(err)
             }
           })

@@ -23,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
-@RequestMapping("/api/admin/user")
+@RequestMapping("/api/user/user")
 public class UserController extends BaseController {
 
     private UserService userService;

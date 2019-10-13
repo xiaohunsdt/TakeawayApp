@@ -24,7 +24,7 @@ import java.util.Optional;
  */
 @Controller
 @Setter(onMethod_ = {@Autowired})
-@RequestMapping("/api/admin/address")
+@RequestMapping("/api/user/address")
 public class AddressController extends BaseController {
     private UserService userService;
 

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author xiaohun
  */
-@RequestMapping("/api/admin")
+@RequestMapping("/api/user")
 public class BaseController {
     @Resource
     protected HttpServletRequest request;

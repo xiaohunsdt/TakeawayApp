@@ -78,8 +78,8 @@ public class WebConfig implements WebMvcConfigurer {
 
         //添加不需要忽略的格式信息.
         List<String> exclusions = new ArrayList<>();
-        exclusions.add("/api/admin/" + jwtProperties.getAuthPath());
-//        exclusions.add("/api/client/" + jwtProperties.getAuthPath());
+        exclusions.add("/api/user/" + jwtProperties.getAuthPath());
+        exclusions.add("/api/user/wx/" + jwtProperties.getAuthPath());
         filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/api/*");

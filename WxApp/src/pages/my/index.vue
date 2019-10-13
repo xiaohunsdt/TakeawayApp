@@ -129,7 +129,7 @@
     methods: {
       getWxUserInfo (event) {
         if (event.mp.detail.userInfo) {
-          userApi.loginByWx()
+          userApi.setUserInfo()
         } else {
           console.error('授权失败!!!')
         }

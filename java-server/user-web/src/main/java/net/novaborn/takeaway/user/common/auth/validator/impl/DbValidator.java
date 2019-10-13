@@ -1,8 +1,8 @@
 package net.novaborn.takeaway.user.common.auth.validator.impl;
 
-import net.novaborn.takeaway.admin.service.impl.AdminService;
 import net.novaborn.takeaway.user.common.auth.validator.IReqValidator;
 import net.novaborn.takeaway.user.common.auth.validator.dto.Credence;
+import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 public class DbValidator implements IReqValidator {
 
     @Autowired
-    AdminService adminService;
+    UserService userService;
 
     @Override
     public boolean validate(Credence credence) {
         String userName = credence.getCredenceName();
         String password = credence.getCredenceCode();
 
-        return adminService.login(userName, password);
+        return true;
     }
 }
