@@ -14,6 +14,7 @@ import net.novaborn.takeaway.user.web.dto.WxAuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -49,6 +50,10 @@ public class WxValidator implements IReqValidator {
                 newUser.insert();
                 return newUser;
             });
+
+            //设置最后登陆时间
+            user.get().setLastLoginDate(new Date());
+            user.get().updateById();
 
             //将 openId 和 sessionkey 保存在redis中
             ((WxAuthRequest) credence).setOpenId(session.getOpenid());

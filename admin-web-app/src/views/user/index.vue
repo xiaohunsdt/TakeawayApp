@@ -12,51 +12,54 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-      :data="tableData"
-      class="tb-edit"
-      element-loading-text="正在加载中..."
-      highlight-current-row
-      stripe
-      style="width: 100%"
-      v-loading="listLoading">
-      <el-table-column
-        label="用户名"
-        prop="name"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="等级"
-        prop="level"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="余额"
-        prop="money"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="性别"
-        prop="gender"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="最后登录时间"
-        prop="lastLoginDate"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="加入日期"
-        prop="createDate"
-        align="center">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="150">
-        <template v-slot="scope">
-          <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        :data="tableData"
+        class="tb-edit"
+        element-loading-text="正在加载中..."
+        highlight-current-row
+        stripe
+        style="width: 100%"
+        v-loading="listLoading">
+        <el-table-column
+          align="center"
+          label="用户名">
+          <template v-slot="scope">
+            <div v-if="scope.row.name!==''">{{ scope.row.name }}</div>
+            <div>{{ scope.row.nickName }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="等级"
+          prop="level">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="余额"
+          prop="money">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="性别"
+          prop="gender">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="最后登录时间"
+          prop="lastLoginDate">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="加入日期"
+          prop="createDate">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="150">
+          <template v-slot="scope">
+            <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-pagination
         :current-page="page.current"
         :page-size="page.size"
