@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 11/10/2019 03:10:31
+ Date: 15/10/2019 02:33:42
 */
 
 SET NAMES utf8mb4;
@@ -171,7 +171,7 @@ INSERT INTO `goods` VALUES ('6e36a9126991fefc401d3799a923ca29', '酸辣土豆丝
 INSERT INTO `goods` VALUES ('6fb3bb8dd013108c39463f4924027bcb', '青椒炒鸡蛋', NULL, NULL, 'a8f1b3bae4c02e3208aa108603bdb3eb', NULL, 8000, 0, 10, 1, '2019-10-07 16:40:16', '2019-10-07 16:40:16', 0, 0);
 INSERT INTO `goods` VALUES ('71928e9de8afc4b91b3dc1c76cba80fb', '椰汁', NULL, NULL, '1447c360419f319bcd38e9ef043f07b8', NULL, 3000, 0, 10, 1, '2019-10-07 17:35:48', '2019-10-07 17:35:48', 0, 0);
 INSERT INTO `goods` VALUES ('72e0fc62ce10c04e4c01afae5f94a217', '番茄鸡蛋', NULL, NULL, 'a8f1b3bae4c02e3208aa108603bdb3eb', NULL, 7000, 0, 10, 1, '2019-10-07 16:34:15', '2019-10-07 16:34:15', 0, 0);
-INSERT INTO `goods` VALUES ('761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', '美味好吃的蒜蓉黄瓜!', '/upload/images/50408c6a9606435ab4e80d8915b7e6a2.jpg', '8410fe3eac3dd72c7b0aeb4f24cc05a8', '', 6000, 0, 10, 1, '2019-09-22 04:06:33', '2019-10-07 16:20:29', 10, 0);
+INSERT INTO `goods` VALUES ('761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', '美味好吃的蒜蓉黄瓜!', '/upload/images/50408c6a9606435ab4e80d8915b7e6a2.jpg', '8410fe3eac3dd72c7b0aeb4f24cc05a8', ',新品,热卖', 6000, 0, 10, 1, '2019-09-22 04:06:33', '2019-10-11 21:28:58', 12, 0);
 INSERT INTO `goods` VALUES ('77769b218df210092e5467134b774646', '猪肉炖粉条', NULL, NULL, 'c7ae0008e4c4b0b7f6cf5d270fa36e06', NULL, 10000, 0, 10, 1, '2019-10-07 17:12:03', '2019-10-07 17:12:03', 0, 0);
 INSERT INTO `goods` VALUES ('7a85eff463de0c1eeb836cccefb76a6b', '黄瓜炒鸡蛋', NULL, NULL, 'a8f1b3bae4c02e3208aa108603bdb3eb', NULL, 7000, 0, 10, 1, '2019-10-07 16:31:33', '2019-10-07 16:31:33', 0, 0);
 INSERT INTO `goods` VALUES ('7c066108cc4c0877750d163c32b3ef22', '青椒土豆丝', NULL, NULL, 'a8f1b3bae4c02e3208aa108603bdb3eb', NULL, 8000, 0, 10, 1, '2019-10-07 16:30:14', '2019-10-07 16:30:14', 0, 0);
@@ -323,7 +323,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `nick_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `money` int(11) UNSIGNED NULL DEFAULT 0,
   `open_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -335,12 +335,14 @@ CREATE TABLE `user`  (
   `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   `version` int(11) UNSIGNED NULL DEFAULT 0,
   `deleted` tinyint(1) UNSIGNED NULL DEFAULT 0,
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-08 01:23:20', 0, 0);
+INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-08 01:23:20', 0, 0, NULL);
+INSERT INTO `user` VALUES ('4a6bb5a539ec498e2bf5117910af08e4', NULL, 'Jeremy.', 0, 'o9UA_5abDk-kn7KSaMAoriIlvg6c', 'https://wx.qlogo.cn/mmopen/vi_32/UL02ia2qHNyA6UvWNf2Yia5KMOxAh4Kp6icf2ibSOWMiaP8iadSoGgEdE5vbDENG2GVCu97ics161tgrl2cAoGBmX4acg/132', NULL, 1, 1, NULL, '2019-10-14 23:39:12', '2019-10-15 02:23:02', 15, 0, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
