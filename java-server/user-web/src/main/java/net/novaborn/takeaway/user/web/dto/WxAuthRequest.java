@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.user.web.dto;
 
 import lombok.Data;
+import lombok.Setter;
 import net.novaborn.takeaway.user.common.auth.validator.dto.Credence;
 
 /**
@@ -9,7 +10,7 @@ import net.novaborn.takeaway.user.common.auth.validator.dto.Credence;
  * @author fengshuonan
  * @Date 2017/8/24 14:00
  */
-@Data
+@Setter
 public class WxAuthRequest implements Credence {
 
     private String code;

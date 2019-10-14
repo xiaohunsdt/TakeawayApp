@@ -25,6 +25,13 @@ public interface IUserDao extends BaseMapper<User> {
     Optional<User> selectByName(@Param("name") String name);
 
     /**
+     * 根据 微信 OpenId 获取一个用户
+     * @param openId   微信 OpenId
+     * @return 查询到的用户
+     */
+    Optional<User> selectByOpenId(@Param("openId") String openId);
+
+    /**
      * 分页获取用户列表
      * @param page   分页实例
      * @param args   name 用户名称

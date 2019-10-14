@@ -5,18 +5,26 @@
       <div class="my-header">
         <van-row>
           <van-col span="5">
-            <img alt="" class="myThumb" mode="aspectFill" src="/static/images/food/food.jpg">
+            <img
+              :src="userInfo.avatarUrl"
+              class="myThumb"
+              mode="aspectFill"
+              v-if="userInfo">
+            <img
+              class="myThumb"
+              mode="aspectFill"
+              src="/static/images/profile/un-avatar.png" v-else>
           </van-col>
           <van-col span="19">
             <div class="myName">
+              <span v-if="userInfo">{{userInfo.nickName}}</span>
               <button
                 @getuserinfo="getWxUserInfo"
                 class="login-button"
                 open-type="getUserInfo"
-                v-if="userInfo===''">
-                授权个人信息 >
+                v-else>
+                点击授权个人信息 >
               </button>
-              <span v-else>{{userInfo.name}}</span>
             </div>
             <div class="memberType">
               <van-icon name="diamond-o"/>
@@ -116,20 +124,25 @@
     components: {
       BasePanel
     },
-    computed: {
-      userInfo () {
-        return mpvue.getStorageSync('userInfo')
+    data () {
+      return {
+        userInfo: null
       }
     },
-    data () {
-      return {}
-    },
     created () {
+      // 获取用户信息
+      if (mpvue.getStorageSync('userInfo')) {
+        this.userInfo = mpvue.getStorageSync('userInfo')
+      }
     },
     methods: {
       getWxUserInfo (event) {
         if (event.mp.detail.userInfo) {
+          // 将用户信息保存到服务器，保存成功后将被存储到本地
           userApi.setUserInfo()
+            .then(() => {
+              this.userInfo = mpvue.getStorageSync('userInfo')
+            })
         } else {
           console.error('授权失败!!!')
         }

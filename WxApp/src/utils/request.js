@@ -17,12 +17,27 @@ request.interceptors.request.use((request) => {
 request.interceptors.response.use(
   (response, promise) => {
     mpvue.hideNavigationBarLoading()
+
+    if (response.data.hasOwnProperty('code') && response.data.code !== 0) {
+      mpvue.showToast({
+        title: response.data.message,
+        image: '/static/images/error.png',
+        duration: 2000
+      })
+      if (response.data.code === 700) {
+        mpvue.navigateTo({
+          url: '/pages/my/auth/main'
+        })
+      }
+      return promise.reject(response.data)
+    }
     return promise.resolve(response.data)
   },
   (err, promise) => {
+    const response = err.response.data
     mpvue.hideNavigationBarLoading()
     mpvue.showToast({
-      title: err.message,
+      title: response.message,
       icon: 'none'
     })
     return promise.resolve()

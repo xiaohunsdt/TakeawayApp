@@ -142,20 +142,6 @@ function getUserInfo () {
   })
 }
 
-function redirect (url) {
-  // 判断页面是否需要登录
-  // if (false) {
-  //   mpvue.redirectTo({
-  //     url: '/pages/auth/login/login'
-  //   });
-  //   return false;
-  // } else {
-  mpvue.redirectTo({
-    url: url
-  })
-  // }
-}
-
 function showErrorToast (msg) {
   mpvue.showToast({
     title: msg,
@@ -166,7 +152,6 @@ function showErrorToast (msg) {
 const util = {
   formatTime,
   request,
-  redirect,
   showErrorToast,
   checkSession,
   login,

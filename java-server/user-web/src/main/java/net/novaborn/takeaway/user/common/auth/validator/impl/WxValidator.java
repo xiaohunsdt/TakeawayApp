@@ -7,9 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import net.novaborn.takeaway.user.common.auth.validator.IReqValidator;
 import net.novaborn.takeaway.user.common.auth.validator.dto.Credence;
+import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
+import net.novaborn.takeaway.user.service.impl.WxService;
+import net.novaborn.takeaway.user.web.dto.WxAuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * 账号密码验证
@@ -24,6 +29,8 @@ public class WxValidator implements IReqValidator {
 
     private UserService userService;
 
+    private WxService wxService;
+
     private WxMaService wxMaService;
 
     @Override
@@ -31,13 +38,23 @@ public class WxValidator implements IReqValidator {
         String code = credence.getCredenceCode();
         try {
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            log.info(session.getSessionKey());
-            log.info(session.getOpenid());
+            log.debug(session.getSessionKey());
+            log.debug(session.getOpenid());
 
-            return JsonUtils.toJson(session);
+            Optional<User> user = userService.selectByOpenId(session.getOpenid());
+            user.orElseGet(() -> {
+                // 创建一个新的用户并保存在数据库中
+                User newUser = new User();
+                newUser.setOpenId(session.getOpenid());
+                newUser.insert();
+                return newUser;
+            });
+
+            //将 openId 和 sessionkey 保存在redis中
+            ((WxAuthRequest) credence).setOpenId(session.getOpenid());
+            wxService.setSessionKey(session.getOpenid(), session.getSessionKey());
         } catch (WxErrorException e) {
-            this.logger.error(e.getMessage(), e);
-            return e.toString();
+            log.error("", e);
         }
         return true;
     }

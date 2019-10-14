@@ -27,6 +27,11 @@ public class UserService extends ServiceImpl<IUserDao, User> implements IUserSer
     }
 
     @Override
+    public Optional<User> selectByOpenId(String openId) {
+        return this.baseMapper.selectByOpenId(openId);
+    }
+
+    @Override
     public IPage<User> getUserListByPage(Page page, Map args) {
         return this.baseMapper.getUserListByPage(page, args);
     }

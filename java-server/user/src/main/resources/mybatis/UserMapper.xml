@@ -10,6 +10,14 @@
         </where>
     </select>
 
+    <select id="selectByOpenId" resultType="User">
+        SELECT * FROM `user`
+        <where>
+            `open_id` = #{openId}
+            AND deleted = 0
+        </where>
+    </select>
+
     <select id="getUserListByPage" resultType="User">
         SELECT * FROM `user`
         <where>

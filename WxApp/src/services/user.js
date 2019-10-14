@@ -13,9 +13,9 @@ function loginByWx () {
       const code = res.code
       api.authLoginByWeixin(code)
         .then(res => {
-          if (res.errno === 0) {
+          if (res.hasOwnProperty('token')) {
             // 存储用户信息
-            mpvue.setStorageSync('token', res.data.token)
+            mpvue.setStorageSync('token', res.token)
             resolve(res)
           } else {
             reject(res)
@@ -29,14 +29,27 @@ function loginByWx () {
 }
 
 function setUserInfo () {
-  util.getUserInfo()
-    .then(res => {
-      api.setUserInfo(res).then((response) => {
-        if (response.code === 0) {
-          mpvue.setStorageSync('userInfo', res)
-        }
+  return new Promise(function (resolve, reject) {
+    util.getUserInfo()
+      .then(res => {
+        const userInfo = res.userInfo
+        api.setUserInfo(userInfo)
+          .then((response) => {
+            if (response.code === 0) {
+              mpvue.setStorageSync('userInfo', userInfo)
+              resolve(response)
+            } else {
+              reject(response)
+            }
+          })
+          .catch((err) => {
+            reject(err)
+          })
       })
-    })
+      .catch((err) => {
+        reject(err)
+      })
+  })
 }
 
 /**

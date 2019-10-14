@@ -23,6 +23,7 @@
                     userService.loginByWx()
                         .then((res) => {
                             console.log(res)
+                            console.log('微信登陆成功')
                         })
                         .catch((res) => {
                             console.log(res)

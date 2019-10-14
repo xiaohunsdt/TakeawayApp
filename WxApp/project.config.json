@@ -44,7 +44,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 9,
 			"list": [
 				{
 					"id": 0,
@@ -106,6 +106,13 @@
 					"id": -1,
 					"name": "pages/my/address/edit/main",
 					"pathName": "pages/my/address/edit/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/auth/main",
+					"pathName": "pages/my/auth/main",
 					"scene": null
 				}
 			]

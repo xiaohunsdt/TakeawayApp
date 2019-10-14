@@ -4,6 +4,7 @@
     "pages/activity/main",
     "pages/my/main",
     "pages/my/address/main",
+    "pages/my/auth/main",
     "pages/my/address/edit/main",
     "pages/goods/main",
     "pages/buy/main",
