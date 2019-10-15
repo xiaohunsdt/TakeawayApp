@@ -24,13 +24,13 @@ import java.util.Map;
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
     @Override
-    public List<Order> selectByUserId(String userId) {
-        return this.selectByUserId(userId, null, null);
+    public List<Order> getOrderListByUserId(String userId) {
+        return this.getOrderListByUserId(userId, null, null);
     }
 
     @Override
-    public List<Order> selectByUserId(String userId, PaymentWay paymentWay, OrderState orderState) {
-        return this.baseMapper.selectByUserId(userId, paymentWay, orderState);
+    public List<Order> getOrderListByUserId(String userId, PaymentWay paymentWay, OrderState orderState) {
+        return this.baseMapper.getOrderListByUserId(userId, paymentWay, orderState);
     }
 
     @Override

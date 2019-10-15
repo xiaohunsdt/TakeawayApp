@@ -8,6 +8,7 @@ import net.novaborn.takeaway.goods.service.IGoodsService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,11 @@ public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGood
     @Override
     public Optional<Goods> selectByName(String name) {
         return this.baseMapper.selectByName(name);
+    }
+
+    @Override
+    public List<Goods> getGoodsListByFlag(String flag) {
+        return this.baseMapper.getGoodsListByFlag(flag);
     }
 
     @Override

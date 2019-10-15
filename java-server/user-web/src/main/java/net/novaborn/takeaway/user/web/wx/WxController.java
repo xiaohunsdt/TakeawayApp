@@ -10,7 +10,7 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.user.common.auth.validator.impl.WxValidator;
+import net.novaborn.takeaway.user.web.wx.validator.WxValidator;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.api.BaseController;

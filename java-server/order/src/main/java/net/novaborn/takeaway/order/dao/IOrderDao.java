@@ -24,7 +24,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param orderState 订单状态
      * @return 筛选后的指定用户订单列表
      */
-    List<Order> selectByUserId(@Param("userId") String userId, @Param("paymentWay") PaymentWay paymentWay, @Param("orderState") OrderState orderState);
+    List<Order> getOrderListByUserId(@Param("userId") String userId, @Param("paymentWay") PaymentWay paymentWay, @Param("orderState") OrderState orderState);
 
     /**
      * 分页获取订单列表

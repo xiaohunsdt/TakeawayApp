@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.goods.entity.Goods;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,13 @@ public interface IGoodsService extends IService<Goods> {
      * @return 查询到的产品
      */
     Optional<Goods> selectByName(String name);
+
+    /**
+     * 根据产品标志名称获取指定产品
+     * @param flag 产品标志 新品\热卖
+     * @return 查询到的产品列表
+     */
+    List<Goods> getGoodsListByFlag(String flag);
 
     /**
      * 分页获取产品列表

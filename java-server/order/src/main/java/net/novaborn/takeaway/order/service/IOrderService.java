@@ -25,7 +25,7 @@ public interface IOrderService extends IService<Order> {
      * @param userId 用户ID
      * @return 用户的订单列表
      */
-    List<Order> selectByUserId(String userId);
+    List<Order> getOrderListByUserId(String userId);
 
     /**
      * 获取指定用户的订单
@@ -34,7 +34,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderState 订单状态
      * @return 筛选后的指定用户订单列表
      */
-    List<Order> selectByUserId(String userId, PaymentWay paymentWay, OrderState orderState);
+    List<Order> getOrderListByUserId(String userId, PaymentWay paymentWay, OrderState orderState);
 
     /**
      * 分页获取订单列表

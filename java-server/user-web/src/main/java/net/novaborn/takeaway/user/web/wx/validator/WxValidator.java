@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.user.common.auth.validator.impl;
+package net.novaborn.takeaway.user.web.wx.validator;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
