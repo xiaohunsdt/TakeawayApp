@@ -26,91 +26,51 @@
              style="width: 100%"
              alt=""/>
       </div>
-      <food-panel title="新品" :foodList="foodPanel.new"/>
-      <food-panel title="热门" :foodList="foodPanel.hot"/>
+      <food-panel title="新品" :foodList="newGoodsList"/>
+      <food-panel title="热门" :foodList="hotGoodshot"/>
     </div>
   </div>
 </template>
 
 <script>
-  // Use Vuex
-  // import store from '@/store/store'
-  import SearchBar from '@/components/SearchBar'
-  import FoodPanel from './components/FoodPanel'
+    // Use Vuex
+    // import store from '@/store/store'
+    import indexService from '@/services/index'
+    import SearchBar from '@/components/SearchBar'
+    import FoodPanel from './components/FoodPanel'
 
-  export default {
-    components: {
-      SearchBar,
-      FoodPanel
-    },
-    data () {
-      return {
-        foodPanel: {
-          new: [
-            {
-              goodsId: 1,
-              name: '鸭血粉丝汤',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 1000,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
-            }, {
-              goodsId: 2,
-              name: '鸭血粉丝汤2',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
-            }, {
-              goodsId: 3,
-              name: '鸭血粉丝汤3',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
+    export default {
+        components: {
+            SearchBar,
+            FoodPanel
+        },
+        data () {
+            return {
+                newGoodsList: [],
+                hotGoodshot: []
             }
-          ],
-          hot: [
-            {
-              goodsId: 4,
-              name: '鸭血粉丝汤',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
-            }, {
-              goodsId: 5,
-              name: '鸭血粉丝汤2',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
-            }, {
-              goodsId: 6,
-              name: '鸭血粉丝汤3',
-              desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-              monthSale: 10,
-              rate: 5,
-              thumb: '/static/images/food/food.jpg'
+        },
+        methods: {},
+        created () {
+            // let app = getApp()
+            // console.log(app)
+            indexService.getNewGoodsList().then(res => {
+                this.newGoodsList = res
+            })
+
+            indexService.getHotGoodsList().then(res => {
+                this.hotGoodshot = res
+            })
+        },
+        // 原生的分享功能
+        onShareAppMessage: function () {
+            return {
+                title: '川湘苑',
+                desc: '川湘苑品牌中餐厅',
+                path: '/pages/index/index'
             }
-          ]
         }
-      }
-    },
-    methods: {},
-    created () {
-      let app = getApp()
-      console.log(app)
-    },
-    // 原生的分享功能
-    onShareAppMessage: function () {
-      return {
-        title: '川湘苑',
-        desc: '川湘苑品牌中餐厅',
-        path: '/pages/index/index'
-      }
     }
-  }
 </script>
 
 <style scoped>

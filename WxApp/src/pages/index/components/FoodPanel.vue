@@ -14,7 +14,7 @@
           <view class="food-item-content">
             <goods-card
               v-for="food in foodList"
-              :key="food.goodsId"
+              :key="food.id"
               :food="food" />
           </view>
         </van-panel>

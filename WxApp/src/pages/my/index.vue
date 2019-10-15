@@ -118,7 +118,7 @@
 
 <script>
   import BasePanel from '@/components/BasePanel'
-  import userApi from '@/services/user'
+  import userService from '@/services/user'
 
   export default {
     components: {
@@ -139,7 +139,7 @@
       getWxUserInfo (event) {
         if (event.mp.detail.userInfo) {
           // 将用户信息保存到服务器，保存成功后将被存储到本地
-          userApi.setUserInfo()
+            userService.setUserInfo()
             .then(() => {
               this.userInfo = mpvue.getStorageSync('userInfo')
             })

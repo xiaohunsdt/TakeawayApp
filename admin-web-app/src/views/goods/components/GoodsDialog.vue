@@ -28,7 +28,8 @@
       <el-form-item label="商品标记">
         <el-checkbox-group v-model="flagSelected">
           <el-checkbox label="新品" name="flag"></el-checkbox>
-          <el-checkbox label="热卖" name="flag"></el-checkbox>
+          <el-checkbox label="热门" name="flag"></el-checkbox>
+          <el-checkbox label="今日推荐" name="flag"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="价格" prop="price">

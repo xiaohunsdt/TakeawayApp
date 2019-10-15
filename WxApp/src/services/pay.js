@@ -1,7 +1,6 @@
 /**
  * 支付相关服务
  */
-import wx from 'wx'
 import api from '@/utils/api'
 import util from '@/utils/util'
 
