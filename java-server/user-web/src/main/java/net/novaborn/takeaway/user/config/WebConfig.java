@@ -14,6 +14,8 @@ import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.common.xss.XssFilter;
 import net.novaborn.takeaway.user.config.properties.JwtProperties;
 import net.novaborn.takeaway.user.config.properties.RestProperties;
+import net.novaborn.takeaway.user.config.properties.SystemProperties;
+import net.novaborn.takeaway.user.web.filter.ImageServerFilter;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
@@ -50,22 +52,25 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtProperties jwtProperties;
 
+    @Autowired
+    private SystemProperties systemProperties;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/", "/index.html");
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/index.html").addResourceLocations("classpath:/view/index.html");
-        registry.addResourceHandler("/res/**").addResourceLocations("classpath:/res/");
-
-        log.info(String.format("upload文件夹为：%s", System.getProperty("user.dir") + File.separator + "upload" + File.separator));
-        if (!"/".equals(System.getProperty("user.dir"))) {
-            registry.addResourceHandler("/upload/**").addResourceLocations("file:" + System.getProperty("user.dir") + File.separator + "upload" + File.separator);
-        } else {
-            registry.addResourceHandler("/upload/**").addResourceLocations("file:" + File.separator + "upload" + File.separator);
-        }
+    /**
+     * 添加 UploadFileFilter
+     */
+    @Bean
+    public FilterRegistrationBean uploadFileFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new ImageServerFilter(systemProperties.getUploadServerUrl()));
+        registration.addUrlPatterns("/upload/*");
+        registration.setName("uploadFileFilter");
+        registration.setOrder(1);
+        return registration;
     }
 
     @Bean
