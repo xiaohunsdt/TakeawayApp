@@ -78,6 +78,7 @@
   }
 
   .food-card-title {
+    margin-top: .1rem;
     font-size: 0.35rem;
     font-weight: 800;
     margin-bottom: 0.2rem;
@@ -105,8 +106,8 @@
     border: none !important;
     display: block;
     position: relative;
-    top: -0.5rem;
-    right: 0rem;
+    top: -.8rem;
+    right: 0;
   }
 
   .order-stepper-root {

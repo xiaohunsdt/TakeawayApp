@@ -34,8 +34,14 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "text": "点餐",
+        "text": "首页",
         "pagePath": "pages/index/main",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home.png"
+      },
+      {
+        "text": "点餐",
+        "pagePath": "pages/goods/main",
         "iconPath": "static/tabs/order.png",
         "selectedIconPath": "static/tabs/order_active.png"
       },
