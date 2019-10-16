@@ -1,24 +1,37 @@
 const state = {
-  visitedViews: [],
-  cachedViews: []
+  cartList: []
 }
 
 const mutations = {
-  ADD_VISITED_VIEW: (state, view) => {
-    if (state.visitedViews.some(v => v.path === view.path)) return
-    state.visitedViews.push(
-      Object.assign({}, view, {
-        title: view.meta.title || 'no-name'
-      })
-    )
-  },
-  DEL_VISITED_VIEW: (state, view) => {
-    for (const [i, v] of state.visitedViews.entries()) {
-      if (v.path === view.path) {
-        state.visitedViews.splice(i, 1)
-        break
-      }
+  ADD_GOODS: (state, goods) => {
+    const existData = state.cartList.find(item => item.goodsId === goods.id)
+    if (existData !== undefined) {
+      existData.count++
     }
+    const cartData = {
+      goodsId: goods.id,
+      goods,
+      count: 1
+    }
+    state.cartList.push(cartData)
+  },
+  REDUCE_GOODS: (state, goods) => {
+    const existData = state.cartList.find(item => item.goodsId === goods.id)
+    if (existData !== undefined && existData.count > 0) {
+      existData.count--
+    }
+  },
+  DELETE_GOODS: (state, goodsId) => {
+    let existDataIndex = -1
+
+    state.cartList.find((item, index) => {
+      if (item.goodsId === goodsId) {
+        existDataIndex = index
+        return true
+      }
+      return false
+    })
+    state.cartList.slice(existDataIndex, 1)
   }
 }
 

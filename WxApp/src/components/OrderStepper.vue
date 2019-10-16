@@ -1,40 +1,43 @@
 <template>
   <van-stepper
-    min="0"
-    :value="initValue"
-    disable-input="true"
+    :value="currentFoodCount"
+    @change="onChange"
     custom-class="order-stepper-root"
+    disable-input="true"
     input-class="order-stepper-input"
-    plus-class="order-stepper-plus"
+    min="0"
     minus-class="order-stepper-minus"
-    @change="onChange"/>
+    plus-class="order-stepper-plus"/>
 </template>
 
 <script>
+  import {mapMutations} from 'vuex'
+
   export default {
     props: {
-      foodId: {
-        type: Number,
+      food: {
+        type: Object,
         required: true
-      },
-      initValue: {
-        type: Number,
-        default: 0
       }
     },
-    data () {
-      return {
-        currentValue: 0
+    computed: {
+      currentFoodCount () {
+        return this.$store.getters.cartCountByGoodsId(this.food.id)
       }
     },
     methods: {
+      ...mapMutations('cart', [
+        'ADD_GOODS',
+        'REDUCE_GOODS'
+      ]),
       onChange (event) {
-        console.log(event.mp.detail)
+        const currentVal = event.mp.detail
+        if (currentVal > this.currentFoodCount) {
+          this.ADD_GOODS(this.food)
+        } else {
+          this.REDUCE_GOODS(this.food)
+        }
       }
-    },
-    created () {
-      console.log(`order step init value is ${this.initValue}`)
-      this.currentValue = this.initValue
     }
   }
 </script>

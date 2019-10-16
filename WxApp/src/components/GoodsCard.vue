@@ -21,47 +21,52 @@
       </div>
     </view>
     <view slot="footer" style="height: 0.4rem">
+      <order-stepper v-if="currentFoodCount > 0" :food="food"/>
       <van-button
-        @click="addCart(food.id)"
+        @click="addCart"
         custom-class="orderBtn"
         icon="goods-collect"
         round
         size="small"
-        type="primary">
+        type="primary"
+        v-else>
         下单
       </van-button>
-      <!--      <order-stepper />-->
     </view>
   </van-card>
 </template>
 
 <script>
-    import store from '@/store/store'
-    import OrderStepper from '@/components/OrderStepper'
+  import OrderStepper from '@/components/OrderStepper'
 
-    export default {
-        name: 'GoodsCard',
-        props: {
-            food: {
-                type: Object,
-                required: true
-            }
-        },
-        components: {
-            OrderStepper
-        },
-        data () {
-            return {
+  import {mapMutations} from 'vuex'
 
-            }
-        },
-        methods: {
-            addCart (id) {
-                console.log(`id is ${id}`)
-                store.cart.mutations.ADD_VISITED_VIEW()
-            }
-        }
+  export default {
+    name: 'GoodsCard',
+    props: {
+      food: {
+        type: Object,
+        required: true
+      }
+    },
+    components: {
+      OrderStepper
+    },
+    computed: {
+      currentFoodCount () {
+        return this.$store.getters.cartCountByGoodsId(this.food.id)
+      }
+    },
+    methods: {
+      ...mapMutations('cart', [
+        'ADD_GOODS'
+      ]),
+      addCart () {
+        console.log(`id is ${this.food.id}`)
+        this.ADD_GOODS(this.food)
+      }
     }
+  }
 </script>
 <style>
   .food-card-root {
