@@ -28,6 +28,11 @@ public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGood
     }
 
     @Override
+    public List<Goods> getGoodsListByCategoryId(String categoryId) {
+        return this.baseMapper.getGoodsListByCategoryId(categoryId);
+    }
+
+    @Override
     public List<Goods> getGoodsListByFlag(String flag) {
         return this.baseMapper.getGoodsListByFlag(flag);
     }

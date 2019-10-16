@@ -6,71 +6,78 @@
         <search-bar background="#FFD200"></search-bar>
         <div id="scrollImg">
           <swiper
-            indicator-dots="true"
             autoplay="true"
-            easing-function="easeInOutCubic"
             circular="true"
+            easing-function="easeInOutCubic"
+            indicator-dots="true"
             style="height: 10rem">
             <swiper-item>
-              <img class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg" alt="">
+              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg">
             </swiper-item>
             <swiper-item>
-              <img class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg" alt="">
+              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg">
             </swiper-item>
           </swiper>
         </div>
       </div>
       <div id="newUserCoupon">
-        <img src="/static/images/newcoupon.png"
+        <img alt=""
              mode="widthFix"
-             style="width: 100%"
-             alt=""/>
+             src="/static/images/newcoupon.png"
+             style="width: 100%"/>
       </div>
-      <food-panel title="新品" :foodList="newGoodsList"/>
-      <food-panel title="热门" :foodList="hotGoodshot"/>
+      <food-panel :foodList="newGoodsList" title="新品"/>
+      <food-panel :foodList="hotGoodshot" title="热门"/>
     </div>
   </div>
 </template>
 
 <script>
-    // Use Vuex
-    // import store from '@/store/store'
-    import indexService from '@/services/index'
-    import SearchBar from '@/components/SearchBar'
-    import FoodPanel from './components/FoodPanel'
+  // Use Vuex
+  // import store from '@/store/store'
+  import indexService from '@/services/index'
+  import SearchBar from '@/components/SearchBar'
+  import FoodPanel from './components/FoodPanel'
 
-    export default {
-        components: {
-            SearchBar,
-            FoodPanel
-        },
-        data () {
-            return {
-                newGoodsList: [],
-                hotGoodshot: []
-            }
-        },
-        methods: {},
-        created () {
-            // let app = getApp()
-            // console.log(app)
-            indexService.getNewGoodsList().then(res => {
-                this.newGoodsList = res
-            })
+  export default {
+    components: {
+      SearchBar,
+      FoodPanel
+    },
+    data () {
+      return {
+        newGoodsList: [],
+        hotGoodshot: []
+      }
+    },
+    methods: {
+      init () {
+        // let app = getApp()
+        // console.log(app)
+        indexService.getNewGoodsList().then(res => {
+          this.newGoodsList = res
+        })
 
-            indexService.getHotGoodsList().then(res => {
-                this.hotGoodshot = res
-            })
-        },
-        // 原生的分享功能
-        onShareAppMessage: function () {
-            return {
-                title: '川湘苑',
-                desc: '川湘苑品牌中餐厅',
-                path: '/pages/index/index'
-            }
-        }
+        indexService.getHotGoodsList().then(res => {
+          this.hotGoodshot = res
+        })
+      }
+    },
+    created () {
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+    },
+    // 原生的分享功能
+    onShareAppMessage: function () {
+      return {
+        title: '川湘苑',
+        desc: '川湘苑品牌中餐厅',
+        path: '/pages/index/index'
+      }
     }
+  }
 </script>
 
 <style scoped>

@@ -17,7 +17,7 @@
       </div>
       <div id="order-content">
         <van-tabs
-          :active="tagActive"
+          :active="0"
           @change="onChange"
           animated
           border
@@ -25,23 +25,20 @@
           nav-class="nav-class"
           sticky
           swipeable>
-          <van-tab title="素菜小炒">
-            内容 1
-          </van-tab>
-          <van-tab title="荤菜小炒">
+          <van-tab
+            :key="category.id"
+            :title="category.name"
+            v-for="(category,categoryIndex) in categories">
             <div class="foodContent">
               <goods-card
                 :food="food"
-                :key="food.goodsId"
-                v-for="food in foodList"/>
+                :key="food.id"
+                v-for="(food,foodIndex) in category.goodsList"/>
             </div>
           </van-tab>
-          <van-tab title="炖菜类">内容 3</van-tab>
-          <van-tab title="主食">内容 4</van-tab>
-          <van-tab title="饮料">内容 5</van-tab>
         </van-tabs>
       </div>
-      <div id="footer">
+      <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
           :loading="submitLoading"
           :price="cartAllPrice"
@@ -65,6 +62,8 @@
 </template>
 
 <script>
+  import categoryService from '@/services/category'
+  import goodsService from '@/services/goods'
   import BasePanel from '@/components/BasePanel'
   import GoodsCard from '@/components/GoodsCard'
 
@@ -75,32 +74,8 @@
     },
     data () {
       return {
-        tagActive: 1,
         submitLoading: false,
-        foodList: [
-          {
-            goodsId: 1,
-            name: '鸭血粉丝汤',
-            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-            monthSale: 1000,
-            rate: 5,
-            thumb: '/static/images/food/food.jpg'
-          }, {
-            goodsId: 2,
-            name: '鸭血粉丝汤2',
-            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-            monthSale: 10,
-            rate: 5,
-            thumb: '/static/images/food/food.jpg'
-          }, {
-            goodsId: 3,
-            name: '鸭血粉丝汤3',
-            desc: '好吃的鸭血粉丝汤好吃的鸭血粉丝',
-            monthSale: 10,
-            rate: 5,
-            thumb: '/static/images/food/food.jpg'
-          }
-        ]
+        categories: []
       }
     },
     computed: {
@@ -111,12 +86,50 @@
         return this.$store.getters.cartAllPrice
       }
     },
+    created () {
+      this.init()
+    },
     methods: {
-      onChange (event) {
-        wx.showToast({
-          title: `切换到标签 ${event.mp.detail.index + 1}`,
-          icon: 'none'
+      init () {
+        // 获取所有分类
+        categoryService.getAllCategory().then((res) => {
+          res.forEach(item => {
+            item.goodsList = []
+            this.categories.push(item)
+          })
+
+          // 初始化数据
+          this.getGoodsListByIndex(0)
+
+          // 提前加载下一页,如果可能的话
+          if (this.categories.length > 1) {
+            this.getGoodsListByIndex(1)
+          }
         })
+      },
+      getGoodsListByIndex (index) {
+        if (this.categories.length > index) {
+          // 如果已经存在数据就直接返回
+          if (this.categories[index].goodsList.length > 0) {
+            return
+          }
+          const categoryId = this.categories[index].id
+          goodsService.getGoodsListByCategoryId(categoryId).then(res => {
+            res.forEach(item => {
+              this.categories[index].goodsList.push(item)
+            })
+          })
+        }
+      },
+      onChange (event) {
+        const index = event.mp.detail.index
+
+        this.getGoodsListByIndex(index)
+
+        // 提前加载下一页,如果可能的话
+        if (this.categories.length > index + 1) {
+          this.getGoodsListByIndex(index + 1)
+        }
       },
       onSubmitOrder () {
         wx.showToast({
@@ -133,7 +146,7 @@
     height: auto !important;
   }
 
-  .van-submit-bar__bar--safe{
+  .van-submit-bar__bar--safe {
     padding-bottom: unset !important;
   }
 

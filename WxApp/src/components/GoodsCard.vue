@@ -1,8 +1,12 @@
 <template>
   <van-card
+    :price="food.price"
     :thumb="food.thumb"
     :title="food.name"
+    currency="₩"
     custom-class="food-card-root"
+    lazy-load
+    price-class="food-card-price"
     thumb-class="food-card-thumb"
     thumb-mode="aspectFill"
     title-class="food-card-title">
@@ -21,10 +25,10 @@
       </div>
     </view>
     <view slot="footer" style="height: 0.4rem">
-      <order-stepper v-if="currentFoodCount > 0" :food="food"/>
+      <order-stepper :food="food" v-if="currentFoodCount > 0"/>
       <van-button
         @click="addCart"
-        custom-class="orderBtn"
+        custom-class="order-btn"
         icon="goods-collect"
         round
         size="small"
@@ -96,6 +100,17 @@
     margin-bottom: 0.2rem;
   }
 
+  .van-card__bottom {
+    position: absolute;
+    top: .1rem;
+    right: .1rem;
+  }
+
+  .food-card-price {
+    font-size: .3rem;
+    color: #FFD200 !important;
+  }
+
   .food-card-desc .desc {
     color: gray;
   }
@@ -113,7 +128,7 @@
     margin: 0 0.1rem;
   }
 
-  .orderBtn {
+  .order-btn {
     background-color: #FFD200 !important;
     border: none !important;
     display: block;
@@ -124,8 +139,8 @@
 
   .order-stepper-root {
     position: relative;
-    top: -0.4rem;
-    right: 0rem;
+    top: -.7rem;
+    right: 0;
   }
 </style>
 <style scoped>

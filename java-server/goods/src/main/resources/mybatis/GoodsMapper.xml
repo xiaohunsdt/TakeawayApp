@@ -10,6 +10,16 @@
         </where>
     </select>
 
+    <select id="getGoodsListByCategoryId" resultType="Goods">
+        SELECT * FROM `goods`
+        <where>
+            1 = 1
+            and `category_id` = #{categoryId}
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` ASC
+    </select>
+
     <select id="getGoodsListByFlag" resultType="Goods">
         SELECT * FROM `goods`
         <where>

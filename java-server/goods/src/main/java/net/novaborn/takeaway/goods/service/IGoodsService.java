@@ -27,6 +27,13 @@ public interface IGoodsService extends IService<Goods> {
     Optional<Goods> selectByName(String name);
 
     /**
+     * 根据分类获取指定产品
+     * @param categoryId 分类Id
+     * @return 查询到的产品列表
+     */
+    List<Goods> getGoodsListByCategoryId(String categoryId);
+
+    /**
      * 根据产品标志名称获取指定产品
      * @param flag 产品标志 新品\热卖
      * @return 查询到的产品列表
