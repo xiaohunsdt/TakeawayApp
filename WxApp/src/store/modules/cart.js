@@ -7,7 +7,9 @@ const mutations = {
     const existData = state.cartList.find(item => item.goodsId === goods.id)
     if (existData !== undefined) {
       existData.count++
+      return
     }
+
     const cartData = {
       goodsId: goods.id,
       goods,

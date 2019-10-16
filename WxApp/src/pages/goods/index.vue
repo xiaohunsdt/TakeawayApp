@@ -44,7 +44,7 @@
       <div id="footer">
         <van-submit-bar
           :loading="submitLoading"
-          :price="3050"
+          :price="cartAllPrice"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submitBtn"
@@ -54,7 +54,7 @@
           <div id="orderBarLeftContent">
             <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
-              {{ orderCount }}
+              {{ cartCount }}
             </div>
           </div>
           <!--          <view slot="tip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>-->
@@ -65,14 +65,14 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
-    import GoodsCard from '@/components/GoodsCard'
+  import BasePanel from '@/components/BasePanel'
+  import GoodsCard from '@/components/GoodsCard'
 
-    export default {
-        components: {
-            BasePanel,
-            GoodsCard
-        },
+  export default {
+    components: {
+      BasePanel,
+      GoodsCard
+    },
     data () {
       return {
         tagActive: 1,
@@ -100,8 +100,15 @@
             rate: 5,
             thumb: '/static/images/food/food.jpg'
           }
-        ],
-        orderCount: 3
+        ]
+      }
+    },
+    computed: {
+      cartCount () {
+        return this.$store.getters.cartAllCount
+      },
+      cartAllPrice () {
+        return this.$store.getters.cartAllPrice
       }
     },
     methods: {
