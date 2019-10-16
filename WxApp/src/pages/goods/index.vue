@@ -8,7 +8,7 @@
             left-icon="volume-o"
             text="家的味道,优惠的价格! 留学的期间, 有我有你! 让我们共同成长!"
           />
-          <div id="activityInfo">
+          <div id="activity-info">
             <van-tag type="success">免费配送</van-tag>
             <van-tag type="success">满1w5送月饼</van-tag>
             <van-tag type="success">满2w送饮料</van-tag>
@@ -22,7 +22,7 @@
           animated
           border
           custom-class="foodTab"
-          nav-class="navClass"
+          nav-class="nav-class"
           sticky
           swipeable>
           <van-tab title="素菜小炒">
@@ -47,10 +47,10 @@
           :price="cartAllPrice"
           :tip="true"
           @submit="onSubmitOrder"
-          button-class="submitBtn"
+          button-class="submit-btn"
           button-text="提交订单"
-          custom-class="orderSubmitBar"
-          price-class="orderPrice">
+          custom-class="order-submit-bar"
+          price-class="order-price">
           <div id="orderBarLeftContent">
             <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
@@ -133,25 +133,30 @@
     height: auto !important;
   }
 
-  .navClass .van-tabs__line {
+  .van-submit-bar__bar--safe{
+    padding-bottom: unset !important;
+  }
+
+  .nav-class .van-tabs__line {
     background-color: #FFD200;
   }
 
-  #activityInfo .van-tag {
+  #activity-info .van-tag {
+    margin-left: 0.1rem;
     display: unset !important;
   }
 
-  .orderSubmitBar {
+  .order-submit-bar {
     box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
   }
 
-  .submitBtn {
+  .submit-btn {
     font-weight: bolder !important;
     background-color: #FFD200 !important;
     border-color: #FFD200 !important;
   }
 
-  .orderPrice {
+  .order-price {
     font-weight: bolder;
   }
 </style>
