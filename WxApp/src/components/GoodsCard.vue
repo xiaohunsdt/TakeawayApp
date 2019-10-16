@@ -106,7 +106,7 @@
     border: none !important;
     display: block;
     position: relative;
-    top: -.8rem;
+    top: -.7rem;
     right: 0;
   }
 
