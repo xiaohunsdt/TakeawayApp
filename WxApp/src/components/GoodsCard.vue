@@ -36,25 +36,32 @@
 </template>
 
 <script>
-  import OrderStepper from '@/components/OrderStepper'
+    import store from '@/store/store'
+    import OrderStepper from '@/components/OrderStepper'
 
-  export default {
-    name: 'GoodsCard',
-    props: {
-      food: {
-        type: Object,
-        required: true
-      }
-    },
-    components: {
-      OrderStepper
-    },
-    methods: {
-      addCart (id) {
-        console.log(`id is ${id}`)
-      }
+    export default {
+        name: 'GoodsCard',
+        props: {
+            food: {
+                type: Object,
+                required: true
+            }
+        },
+        components: {
+            OrderStepper
+        },
+        data () {
+            return {
+
+            }
+        },
+        methods: {
+            addCart (id) {
+                console.log(`id is ${id}`)
+                store.cart.mutations.ADD_VISITED_VIEW()
+            }
+        }
     }
-  }
 </script>
 <style>
   .food-card-root {
