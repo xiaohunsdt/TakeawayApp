@@ -4,7 +4,7 @@
 import api from '@/utils/api'
 
 /**
- * 调用微信登录
+ * 获取所有分类
  */
 export function getAllCategory () {
   return api.getAllCategory()

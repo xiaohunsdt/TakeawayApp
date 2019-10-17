@@ -72,10 +72,8 @@ function checkLogin () {
   })
 }
 
-const user = {
+export default {
   loginByWx,
   checkLogin,
   setUserInfo
 }
-
-export default user

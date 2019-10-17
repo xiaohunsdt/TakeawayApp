@@ -23,8 +23,8 @@
             :key="item.name"
             v-for="item in orderItems"/>
           <div id="order-amount">
-            共<span style="color: #FFD200">{{ orderItems.length }}</span>个商品,
-            小计 <span style="color: #FFD200">₩ {{ allAmount }}</span>
+            共<span style="color: #FFD200">{{ cartCount }}</span>个商品,
+            小计 <span style="color: #FFD200">₩ {{ cartAllPrice }}</span>
           </div>
         </base-panel>
         <base-panel>
@@ -40,16 +40,17 @@
       <div id="footer">
         <van-submit-bar
           :loading="submitLoading"
-          :price="3050"
+          :price="cartAllPrice"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submitBtn"
           button-text="立刻支付"
           custom-class="orderSubmitBar"
           price-class="orderPrice">
-          <div id="orderBarLeftContent">
+          <div id="order-bar-left-content">
+            <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
-              {{ orderCount }}
+              {{ cartCount }}
             </div>
           </div>
           <!--          <view slot="tip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>-->
@@ -60,45 +61,53 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import OrderItem from '@/components/OrderItem'
+    import {mapMutations} from 'vuex'
 
-  export default {
-    components: {
-      BasePanel,
-      OrderItem
-    },
-    computed: {
-      allAmount () {
-        return this.orderItems
-          .map(item => item.count * item.price)
-          .reduce((x, y) => x + y)
-      }
-    },
-    data () {
-      return {
-        orderItems: [
-          {
-            orderId: null,
-            goodsId: 1,
-            name: '鸭血粉丝汤1',
-            thumb: '/static/images/food/food.jpg',
-            count: 2,
-            price: 2000
-          },
-          {
-            orderId: null,
-            goodsId: 1,
-            name: '鸭血粉丝汤2',
-            thumb: '/static/images/food/food.jpg',
-            count: 1,
-            price: 2000
-          }
-        ]
-      }
-    },
-    methods: {}
-  }
+    import orderService from '@/services/order'
+
+    import BasePanel from '@/components/BasePanel'
+    import OrderItem from '@/components/OrderItem'
+
+    export default {
+        components: {
+            BasePanel,
+            OrderItem
+        },
+        computed: {
+            cartCount () {
+                return this.$store.getters.cartAllCount
+            },
+            cartAllPrice () {
+                return this.$store.getters.cartAllPrice
+            }
+        },
+        // onLoad (option) {
+        //     this.orderId = option.orderId
+        //     console.log(this.orderId)
+        // },
+        data () {
+            return {
+                submitLoading: false,
+                orderId: '',
+                order: {}
+            }
+        },
+        methods: {
+            ...mapMutations('cart', [
+                'CLEAR_CART'
+            ]),
+            onSubmitOrder () {
+                this.submitLoading = true
+                const cartGoodsList = this.$store.getters.cartGoodsList
+                orderService.createOrder(cartGoodsList).then(res => {
+                    this.submitLoading = false
+                    this.CLEAR_CART()
+
+                    // 支付逻辑
+                })
+            }
+        }
+    }
 </script>
 
 <style scoped>
@@ -107,5 +116,16 @@
     padding-top: .2rem;
     font-size: .25rem;
     text-align: right;
+  }
+
+  #order-bar-left-content {
+    padding-left: 0.2rem;
+    padding-top: 0.2rem;
+    display: flex;
+  }
+
+  #order-bar-left-content img {
+    width: 0.6rem;
+    height: 0.5rem;
   }
 </style>

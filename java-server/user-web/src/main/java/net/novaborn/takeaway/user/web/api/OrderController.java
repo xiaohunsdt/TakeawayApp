@@ -33,25 +33,22 @@ public class OrderController extends BaseController {
 
     private OrderService orderService;
 
-    private OrderItemService orderItemService;
+    @ResponseBody
+    @PostMapping("createNewOrder")
+    public Tip createNewOrder(@RequestParam Order order) {
+        return null;
+    }
 
-    @PostMapping("getOrderDetail")
-    public ResponseEntity getOrderDetail(@RequestParam String orderId) {
+    @PostMapping("getOrderById")
+    public ResponseEntity getOrderById(@RequestParam String orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
     }
 
     @ResponseBody
-    @PostMapping("createNewOrder")
-    public Tip createNewOrder(Category category) {
-        return null;
-    }
-
-    @ResponseBody
     @PostMapping("updateOrder")
     public Tip updateOrder(Order order) {
-//        Optional<Order> tempCategory = Optional.ofNullable(orderService.getById(order.getId()));
         return null;
     }
 

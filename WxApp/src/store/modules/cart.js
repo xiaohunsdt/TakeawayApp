@@ -34,6 +34,9 @@ const mutations = {
       return false
     })
     state.cartList.slice(existDataIndex, 1)
+  },
+  CLEAR_CART: (state) => {
+    state.cartList.splice(0, state.cartList.length)
   }
 }
 

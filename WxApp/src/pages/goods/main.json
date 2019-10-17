@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "点餐",
-  "enablePullDownRefresh": false,
+  "enablePullDownRefresh": true,
   "backgroundTextStyle": "light",
   "backgroundColor": "#FFD200"
 }
