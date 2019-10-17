@@ -3,13 +3,13 @@
     <view slot="title">
       <img :src="itemDetail.thumb" alt="" class="goods-thumb">
       <div class="goods-name">
-        {{itemDetail.name}}
+        {{itemDetail.goodsName}}
       </div>
       <div class="goods-price">
-        ₩ {{itemDetail.price}}
+        ₩ {{itemDetail.goodsPrice}}
       </div>
       <div class="goods-count">
-        x {{itemDetail.count}}
+        x {{itemDetail.goodsCount}}
       </div>
     </view>
   </van-cell>

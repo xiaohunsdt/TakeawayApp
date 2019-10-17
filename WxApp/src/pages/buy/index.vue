@@ -20,7 +20,7 @@
         <base-panel>
           <order-item
             :itemDetail="item"
-            :key="item.name"
+            :key="item.goodsName"
             v-for="item in orderItems"/>
           <div id="order-amount">
             共<span style="color: #FFD200">{{ cartCount }}</span>个商品,
@@ -74,6 +74,21 @@
             OrderItem
         },
         computed: {
+            orderItems () {
+                const cartGoodsList = this.$store.getters.cartGoodsList
+                let orderItemList = []
+                cartGoodsList.forEach(item => {
+                    let orderItem = {}
+                    orderItem.goodsId = item.goodsId
+                    orderItem.goodsName = item.goods.name
+                    orderItem.goodsThumb = item.goods.thumb
+                    orderItem.goodsPrice = item.goods.price
+                    orderItem.goodsCount = item.count
+                    orderItemList.push(orderItem)
+                })
+
+                return orderItemList
+            },
             cartCount () {
                 return this.$store.getters.cartAllCount
             },
