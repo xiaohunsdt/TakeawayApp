@@ -47,7 +47,7 @@
     data () {
       return {
         newGoodsList: [],
-        hotGoodshot: []
+        hotGoodsList: []
       }
     },
     methods: {
@@ -59,11 +59,11 @@
         })
 
         indexService.getHotGoodsList().then(res => {
-          this.hotGoodshot = res
+          this.hotGoodsList = res
         })
       }
     },
-    created () {
+    onLoad () {
       this.init()
     },
     onPullDownRefresh () {

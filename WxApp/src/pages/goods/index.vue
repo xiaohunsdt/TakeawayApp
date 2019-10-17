@@ -17,19 +17,17 @@
       </div>
       <div id="order-content">
         <van-tabs
-          :active="0"
           @change="onChange"
-          animated
           border
           custom-class="foodTab"
           nav-class="nav-class"
-          sticky
+          animated
           swipeable>
           <van-tab
             :key="category.id"
             :title="category.name"
             v-for="(category,categoryIndex) in categories">
-            <div class="food-content">
+            <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">
               <goods-card
                 :food="food"
                 :key="food.id"
@@ -41,11 +39,11 @@
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
           :price="cartAllPrice"
-          currency="₩"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submit-btn"
           button-text="提交订单"
+          currency="₩"
           custom-class="order-submit-bar"
           price-class="order-price">
           <div id="order-bar-left-content">
@@ -62,95 +60,93 @@
 </template>
 
 <script>
-    import categoryService from '@/services/category'
-    import goodsService from '@/services/goods'
+  import categoryService from '@/services/category'
+  import goodsService from '@/services/goods'
 
-    import BasePanel from '@/components/BasePanel'
-    import GoodsCard from '@/components/GoodsCard'
+  import BasePanel from '@/components/BasePanel'
+  import GoodsCard from '@/components/GoodsCard'
 
-    export default {
-        components: {
-            BasePanel,
-            GoodsCard
-        },
-        data () {
-            return {
-                currentIndex: 0,
-                categories: []
+  export default {
+    components: {
+      BasePanel,
+      GoodsCard
+    },
+    data () {
+      return {
+        currentIndex: 0,
+        categories: []
+      }
+    },
+    computed: {
+      cartCount () {
+        return this.$store.getters.cartAllCount
+      },
+      cartAllPrice () {
+        return this.$store.getters.cartAllPrice
+      }
+    },
+    onLoad () {
+      this.init(this.currentIndex)
+    },
+    onPullDownRefresh () {
+      this.init(this.currentIndex)
+    },
+    methods: {
+      init (index) {
+        // 先清除分类信息
+        this.categories.splice(0, this.categories.length)
+        // 获取所有分类
+        categoryService.getAllCategory().then((res) => {
+          res.forEach(item => {
+            item.goodsList = []
+            this.categories.push(item)
+          })
+
+          // 初始化数据
+          this.getGoodsListByIndex(index)
+
+          // 提前加载下一页,如果可能的话
+          if (this.categories.length > index + 1) {
+            this.getGoodsListByIndex(index + 1)
+          }
+        })
+      },
+      getGoodsListByIndex (index) {
+        return new Promise((resolve, reject) => {
+          if (this.categories.length > index) {
+            // 如果已经存在数据就直接返回
+            if (this.categories[index].goodsList.length > 0) {
+              return
             }
-        },
-        computed: {
-            cartCount () {
-                return this.$store.getters.cartAllCount
-            },
-            cartAllPrice () {
-                return this.$store.getters.cartAllPrice
-            }
-        },
-        created () {
-            this.init(this.currentIndex)
-        },
-        onPullDownRefresh () {
-            this.init(this.currentIndex)
-        },
-        methods: {
-            init (index) {
-                // 先清除分类信息
-                this.categories.splice(0, this.categories.length)
-                // 获取所有分类
-                categoryService.getAllCategory().then((res) => {
-                    res.forEach(item => {
-                        item.goodsList = []
-                        this.categories.push(item)
-                    })
 
-                    // 初始化数据
-                    this.getGoodsListByIndex(index)
+            const categoryId = this.categories[index].id
+            goodsService.getGoodsListByCategoryId(categoryId).then(res => {
+              res.forEach(item => {
+                this.categories[index].goodsList.push(item)
+              })
+              resolve()
+            })
+          }
+        })
+      },
+      onChange (event) {
+        const index = event.mp.detail.index
+        this.currentIndex = index
 
-                    // 提前加载下一页,如果可能的话
-                    if (this.categories.length > index + 1) {
-                        this.getGoodsListByIndex(index + 1)
-                    }
-                })
-            },
-            getGoodsListByIndex (index) {
-                if (this.categories.length > index) {
-                    // 如果已经存在数据就直接返回
-                    if (this.categories[index].goodsList.length > 0) {
-                        return
-                    }
+        this.getGoodsListByIndex(index)
 
-                    wx.showLoading({
-                        title: '加载数据中'
-                    })
-
-                    const categoryId = this.categories[index].id
-                    goodsService.getGoodsListByCategoryId(categoryId).then(res => {
-                        res.forEach(item => {
-                            this.categories[index].goodsList.push(item)
-                        })
-                        wx.hideLoading()
-                    })
-                }
-            },
-            onChange (event) {
-                const index = event.mp.detail.index
-                this.currentIndex = index
-
-                this.getGoodsListByIndex(index)
-
-                // 提前加载下一页,如果可能的话
-                if (this.categories.length > index + 1) {
-                    this.getGoodsListByIndex(index + 1)
-                }
-            },
-            onSubmitOrder () {
-                mpvue.navigateTo({
-                    url: `/pages/buy/main`
-                })
-            }
+        // 提前加载下一页,如果可能的话
+        if (this.categories.length > index + 1) {
+          this.getGoodsListByIndex(index + 1)
         }
+      },
+      onSubmitOrder () {
+        mpvue.navigateTo({
+          url: `/pages/buy/main`
+        })
+      }
     }
+  }
 </script>
 
 <style>
@@ -205,7 +201,10 @@
   .food-content {
     background-color: white;
     padding: 0.2rem;
-    padding-bottom: .9rem;
+  }
+
+  .has-submit-bar {
+    padding-bottom: .7rem;
   }
 
   #order-bar-left-content {
