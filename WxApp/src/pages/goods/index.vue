@@ -42,6 +42,7 @@
         <van-submit-bar
           :loading="submitLoading"
           :price="cartAllPrice"
+          currency="₩"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submit-btn"
