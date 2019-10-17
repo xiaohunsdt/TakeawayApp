@@ -21,6 +21,10 @@ const mutations = {
     const existData = state.cartList.find(item => item.goodsId === goods.id)
     if (existData !== undefined && existData.count > 0) {
       existData.count--
+      if (existData.count === 0) {
+        const index = state.cartList.findIndex(item => item.goodsId === goods.id)
+        state.cartList.splice(index, 1)
+      }
     }
   },
   DELETE_GOODS: (state, goodsId) => {
