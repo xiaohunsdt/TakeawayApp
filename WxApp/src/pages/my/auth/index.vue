@@ -9,6 +9,7 @@
 
 <script>
   import userApi from '@/services/user'
+  import util from '@/utils/util'
 
   export default {
     data () {
@@ -17,7 +18,11 @@
     methods: {
       login () {
         userApi.loginByWx().then(() => {
-          mpvue.navigateBack()
+          const pages = util.getPages()
+          const pre = pages[pages.length - 2]
+          mpvue.reLaunch({
+            url: `/${pre.route}`
+          })
         })
       }
     }

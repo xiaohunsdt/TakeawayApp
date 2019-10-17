@@ -1,36 +1,37 @@
 <script>
-    import userService from '@/services/user'
+  import userService from '@/services/user'
 
-    export default {
-        created () {
-            // 检测权限是否打开
-            mpvue.getSetting({
-                success (res) {
-                    if (!res.authSetting['scope.userLocation']) {
-                        wx.authorize({
-                            scope: 'scope.userLocation',
-                            success () {
-                                console.log('userLocation 权限已经打开')
-                            }
-                        })
-                    }
-                }
+  export default {
+    created () {
+      // 检测权限是否打开
+      mpvue.getSetting({
+        success (res) {
+          if (!res.authSetting['scope.userLocation']) {
+            wx.authorize({
+              scope: 'scope.userLocation',
+              success () {
+                console.log('userLocation 权限已经打开')
+              }
             })
-
-            // 检测登录
-            userService.checkLogin()
-                .catch(() => {
-                    userService.loginByWx()
-                        .then((res) => {
-                            console.log(res)
-                            console.log('微信登陆成功')
-                        })
-                        .catch((res) => {
-                            console.log(res)
-                        })
-                })
+          }
         }
+      })
+
+      // 检测登录
+      userService.checkLogin()
+        .catch(() => {
+          userService.loginByWx()
+            .then((res) => {
+              console.log('微信登陆成功')
+              // 设置用户信息
+              userService.setUserInfo()
+            })
+            .catch((res) => {
+              console.log(res)
+            })
+        })
     }
+  }
 </script>
 
 <style>

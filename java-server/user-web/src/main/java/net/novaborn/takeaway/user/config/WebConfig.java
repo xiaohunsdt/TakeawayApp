@@ -85,6 +85,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<String> exclusions = new ArrayList<>();
         exclusions.add("/api/user/" + jwtProperties.getAuthPath());
         exclusions.add("/api/user/wx/" + jwtProperties.getAuthPath());
+        exclusions.add("/api/user/index/*" );
         filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/api/*");

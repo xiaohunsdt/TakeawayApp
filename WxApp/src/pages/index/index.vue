@@ -27,14 +27,12 @@
              style="width: 100%"/>
       </div>
       <food-panel :foodList="newGoodsList" title="新品"/>
-      <food-panel :foodList="hotGoodshot" title="热门"/>
+      <food-panel :foodList="hotGoodsList" title="热门"/>
     </div>
   </div>
 </template>
 
 <script>
-  // Use Vuex
-  // import store from '@/store/store'
   import indexService from '@/services/index'
   import SearchBar from '@/components/SearchBar'
   import FoodPanel from './components/FoodPanel'
@@ -52,8 +50,6 @@
     },
     methods: {
       init () {
-        // let app = getApp()
-        // console.log(app)
         indexService.getNewGoodsList().then(res => {
           this.newGoodsList = res
         })

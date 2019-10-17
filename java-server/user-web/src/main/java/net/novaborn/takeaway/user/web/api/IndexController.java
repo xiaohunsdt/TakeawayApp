@@ -10,6 +10,7 @@ import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -21,14 +22,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
+@RequestMapping("/api/user/index")
 public class IndexController extends BaseController {
     private GoodsService goodsService;
-
-    @GetMapping("index")
-    @ResponseBody
-    public SuccessTip index() {
-        return new SuccessTip();
-    }
 
     @GetMapping("getSpecificFlagGoodsList")
     @ResponseBody

@@ -100,7 +100,7 @@ function login () {
       success: function (res) {
         if (res.code) {
           // 登录远程服务器
-          console.log('微信登陆成功', res)
+          console.log(res)
           resolve(res)
         } else {
           reject(res)
@@ -142,6 +142,13 @@ function getUserInfo () {
   })
 }
 
+export function getPages () {
+  /* 获取当前路由栈数组 */
+  // eslint-disable-next-line no-undef
+  const pages = getCurrentPages()
+  return pages
+}
+
 function showErrorToast (msg) {
   mpvue.showToast({
     title: msg,
@@ -155,7 +162,8 @@ const util = {
   showErrorToast,
   checkSession,
   login,
-  getUserInfo
+  getUserInfo,
+  getPages
 }
 
 export default util
