@@ -1,5 +1,6 @@
 <template>
   <van-stepper
+    async-change
     :value="currentFoodCount"
     @change="onChange"
     custom-class="order-stepper-root"
