@@ -77,6 +77,8 @@
     "van-tabs": "/static/vant/tabs/index",
     "van-submit-bar": "/static/vant/submit-bar/index",
     "van-field": "/static/vant/field/index",
-    "van-toast": "/static/vant/toast/index"
+    "van-toast": "/static/vant/toast/index",
+    "van-radio": "/static/vant/radio/index",
+    "van-radio-group": "/static/vant/radio-group/index"
   }
 }

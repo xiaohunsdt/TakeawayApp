@@ -39,14 +39,56 @@
           </div>
         </base-panel>
         <base-panel>
-          优惠卷
+          <div>支付方式</div>
+          <div class="pay-way-btns">
+            <van-button
+              :color="payWay==='WEIXIN_PAY'?'#FFD200':null"
+              @click="payWayChange('WEIXIN_PAY')"
+              custom-class="pay-way-btn"
+              icon="wechat"
+              round
+              size="small"
+              type="primary">微信支付
+            </van-button>
+            <van-button
+              :color="payWay==='ALI_PAY'?'#FFD200':null"
+              @click="payWayChange('ALI_PAY')"
+              custom-class="pay-way-btn"
+              icon="alipay"
+              round
+              size="small"
+              type="primary">支付宝
+            </van-button>
+            <van-button
+              :color="payWay==='CREDIT_CARD'?'#FFD200':null"
+              @click="payWayChange('CREDIT_CARD')"
+              custom-class="pay-way-btn"
+              icon="card"
+              round
+              size="small"
+              type="primary">刷卡支付
+            </van-button>
+            <van-button
+              :color="payWay==='CASH'?'#FFD200':null"
+              @click="payWayChange('CASH')"
+              custom-class="pay-way-btn"
+              icon="bill"
+              round
+              size="small"
+              type="primary">现金支付
+            </van-button>
+          </div>
         </base-panel>
         <base-panel>
-          备注
+          <div @click="setCoupon">
+            <div>优惠卷</div>
+          </div>
         </base-panel>
-        <!--        <base-panel>-->
-        <!--          配送服务-->
-        <!--        </base-panel>-->
+        <base-panel @panel-click="setPs">
+          <div @click="setPs">
+            <div>备注</div>
+          </div>
+        </base-panel>
       </div>
       <div id="footer">
         <van-submit-bar
@@ -113,7 +155,6 @@
       console.log(this.address)
       addressService.getDefaultAddress().then(res => {
         if (res.address) {
-          console.log('asdasdsa')
           this.SET_ADDRESS(res)
         }
       })
@@ -122,7 +163,8 @@
       return {
         submitLoading: false,
         orderId: '',
-        order: {}
+        order: {},
+        payWay: 'WEIXIN_PAY'
       }
     },
     methods: {
@@ -132,6 +174,21 @@
       ...mapMutations('address', [
         'SET_ADDRESS'
       ]),
+      setCoupon () {
+        mpvue.showToast({
+          title: '暂时还没有开放1',
+          icon: 'none'
+        })
+      },
+      setPs () {
+        mpvue.showToast({
+          title: '暂时还没有开放2',
+          icon: 'none'
+        })
+      },
+      payWayChange (payWay) {
+        this.payWay = payWay
+      },
       onSubmitOrder () {
         this.submitLoading = true
         const cartGoodsList = this.$store.getters.cartGoodsList
@@ -145,6 +202,19 @@
     }
   }
 </script>
+
+<style>
+  .pay-way-btns {
+    margin-top: .1rem;
+    text-align: center;
+  }
+
+  .pay-way-btns .pay-way-btn {
+    display: inline-block;
+    margin: .08rem;
+    width: 45%;
+  }
+</style>
 
 <style scoped>
   #buy-content {
