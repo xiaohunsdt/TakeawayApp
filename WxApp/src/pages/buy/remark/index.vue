@@ -6,6 +6,7 @@
         <textarea
           :value="inputVal"
           auto-height
+          @input="onInput"
           maxlength="128"
           name="textarea"
           placeholder="请填写备注信息"
@@ -48,6 +49,9 @@
       }
     },
     methods: {
+      onInput (event) {
+        this.inputVal = event.mp.detail.value
+      },
       addPs (data) {
         if (this.inputVal) {
           this.inputVal += `,${data}`
