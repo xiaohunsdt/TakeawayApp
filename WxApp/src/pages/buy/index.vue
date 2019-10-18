@@ -147,6 +147,10 @@
 </script>
 
 <style scoped>
+  #buy-content {
+    padding-bottom: 1rem;
+  }
+
   #order-amount {
     font-weight: bolder;
     padding-top: .2rem;

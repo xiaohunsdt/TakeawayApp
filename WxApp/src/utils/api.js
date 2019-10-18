@@ -20,7 +20,8 @@ const api = {
   // 新建一个地址
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
-  updateAddress: (address) => request.post('address/updateAddress', address)
+  updateAddress: (address) => request.post('address/updateAddress', address),
+  deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId})
 }
 
 export default api

@@ -42,11 +42,16 @@ export function setDefault (addressId) {
   return api.updateAddress({id: addressId, isDefault: true})
 }
 
+export function deteleAddress (addressId) {
+  return api.deteleAddress(addressId)
+}
+
 export default {
   getAddressById,
   getMyAddressList,
   getDefaultAddress,
   createNewAddress,
   updateAddress,
-  setDefault
+  setDefault,
+  deteleAddress
 }

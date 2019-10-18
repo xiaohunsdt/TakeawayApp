@@ -123,4 +123,11 @@ public class AddressController extends BaseController {
         target.updateById();
         return new SuccessTip();
     }
+
+    @ResponseBody
+    @PostMapping("deteleAddress")
+    public Tip deteleAddress(@RequestParam String addressId) {
+        addressService.removeById(addressId);
+        return new SuccessTip();
+    }
 }

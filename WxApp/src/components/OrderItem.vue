@@ -1,7 +1,7 @@
 <template>
   <van-cell>
     <view slot="title">
-      <img :src="itemDetail.goodsThumb" mode="aspectFill" alt="" class="goods-thumb">
+<!--      <img :src="itemDetail.goodsThumb" mode="aspectFill" alt="" class="goods-thumb">-->
       <div class="goods-name">
         {{itemDetail.goodsName}}
       </div>

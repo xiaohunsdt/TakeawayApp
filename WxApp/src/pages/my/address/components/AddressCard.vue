@@ -3,8 +3,9 @@
     <div v-if="address.isDefault">
       <van-icon class="address-default-icon" color="#FFD200" name="checked" size="1.3rem"></van-icon>
     </div>
-    <div @click="setDefault" v-else>
-      <van-icon class="address-default-icon" color="gray" name="checked" size="1.3rem"></van-icon>
+    <div v-else>
+      <van-icon @click="$emit('set-default', address.id)" class="address-default-icon" color="gray" name="checked" size="1.3rem" />
+      <van-icon @click="$emit('delete-address', address.id)" class="address-delete-icon" color="red" name="clear" size="1.3rem" />
     </div>
     <div @click="editAddress">
       <base-panel>
@@ -47,9 +48,6 @@
         mpvue.navigateTo({
           url: `/pages/my/address/edit/main?addressId=${this.address.id}`
         })
-      },
-      setDefault () {
-        this.$emit('set-default', this.address.id)
       }
     }
   }
@@ -65,5 +63,12 @@
     z-index: 1000;
     top: .1rem;
     right: .3rem;
+  }
+
+  .address-delete-icon {
+    position: absolute;
+    z-index: 1000;
+    top: .1rem;
+    left: .3rem;
   }
 </style>
