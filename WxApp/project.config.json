@@ -3,9 +3,9 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
-		"enhance": true,
+		"enhance": false,
 		"postcss": true,
-		"minified": true,
+		"minified": false,
 		"newFeature": true,
 		"coverView": true,
 		"nodeModules": true,
@@ -25,7 +25,7 @@
 	"projectname": "wx-app",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.8.2",
+	"libVersion": "2.8.3",
 	"condition": {
 		"search": {
 			"current": -1,

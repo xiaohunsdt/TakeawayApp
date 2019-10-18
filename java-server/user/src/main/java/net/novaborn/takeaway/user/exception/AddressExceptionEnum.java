@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.order.exception;
+package net.novaborn.takeaway.user.exception;
 
 
 import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
@@ -9,14 +9,14 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
  * @author fengshuonan
  * @date 2016年11月12日 下午5:04:51
  */
-public enum OrderExceptionEnum implements ServiceExceptionEnum {
+public enum AddressExceptionEnum implements ServiceExceptionEnum {
 
     /**
      * order 异常
      */
-    ORDER_NOT_EXIST(500, "订单不存在");
+    PHONE_FORMAT_ERROR(500, "手机号格式错误!!!");
 
-    OrderExceptionEnum(int code, String message) {
+    AddressExceptionEnum(int code, String message) {
         this.code = code;
         this.message = message;
     }

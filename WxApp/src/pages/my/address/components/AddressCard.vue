@@ -1,16 +1,16 @@
 <template>
   <div class="address-card">
-    <div v-if="address.isDefault" @click="cancelDefault">
-      <van-icon class="address-default-icon" name="checked" color="#FFD200" size="1.3rem"></van-icon>
+    <div v-if="address.isDefault">
+      <van-icon class="address-default-icon" color="#FFD200" name="checked" size="1.3rem"></van-icon>
     </div>
-    <div v-else @click="setDefault">
-      <van-icon class="address-default-icon" name="checked" color="gray" size="1.3rem"></van-icon>
+    <div @click="setDefault" v-else>
+      <van-icon class="address-default-icon" color="gray" name="checked" size="1.3rem"></van-icon>
     </div>
     <div @click="editAddress">
       <base-panel>
         <van-cell>
           <view slot="title" style="margin-right: 0.2rem">
-            {{address.region}}
+            {{address.address}}
             <br/>
             {{address.detail}}
           </view>
@@ -29,31 +29,30 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
+  import BasePanel from '@/components/BasePanel'
 
-    export default {
-        name: 'AddressCard',
-        props: {
-            address: {
-                type: Object,
-                required: true
-            }
-        },
-        components: {
-            BasePanel
-        },
-        methods: {
-            editAddress (event) {
-                console.log(event)
-            },
-            setDefault () {
-                console.log('set default')
-            },
-            cancelDefault () {
-                console.log('cancel default')
-            }
-        }
+  export default {
+    name: 'AddressCard',
+    props: {
+      address: {
+        type: Object,
+        required: true
+      }
+    },
+    components: {
+      BasePanel
+    },
+    methods: {
+      editAddress () {
+        mpvue.navigateTo({
+          url: `/pages/my/address/edit/main?addressId=${this.address.id}`
+        })
+      },
+      setDefault () {
+        this.$emit('set-default', this.address.id)
+      }
     }
+  }
 </script>
 
 <style scoped>

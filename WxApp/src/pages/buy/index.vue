@@ -4,16 +4,27 @@
     <div class="container-contain">
       <div id="header">
         <base-panel>
-          <van-cell is-link title="啊萨达萨达萨达萨达萨达撒旦撒大苏打撒旦啊实打实的撒大苏打">
-            <view slot="icon" style="margin-right: 0.2rem">
-              <van-icon color="#FFD200" name="location" size="1.2rem"/>
-            </view>
-          </van-cell>
-          <van-cell is-link title="01056511996">
-            <view slot="icon" style="margin-right: 0.2rem">
-              <van-icon color="#FFD200" name="phone" size="1.2rem"/>
-            </view>
-          </van-cell>
+          <div v-if="address">
+            <van-cell
+              :title="address.address + address.detail"
+              is-link
+              url="/pages/my/address/main">
+              <view slot="icon" style="margin-right: 0.2rem">
+                <van-icon color="#FFD200" name="location" size="1.2rem"/>
+              </view>
+            </van-cell>
+            <van-cell
+              :title="address.phone"
+              is-link
+              url="/pages/my/address/main">
+              <view slot="icon" style="margin-right: 0.2rem">
+                <van-icon color="#FFD200" name="phone" size="1.2rem"/>
+              </view>
+            </van-cell>
+          </div>
+          <div v-else>
+            <van-cell is-link title="选择地址" url="/pages/my/address/main"/>
+          </div>
         </base-panel>
       </div>
       <div id="buy-content">
@@ -61,68 +72,78 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+  import {mapMutations} from 'vuex'
+  import BasePanel from '@/components/BasePanel'
+  import OrderItem from '@/components/OrderItem'
+  import orderService from '@/services/order'
+  import addressService from '@/services/address'
 
-    import orderService from '@/services/order'
+  export default {
+    components: {
+      BasePanel,
+      OrderItem
+    },
+    computed: {
+      orderItems () {
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        let orderItemList = []
+        cartGoodsList.forEach(item => {
+          let orderItem = {}
+          orderItem.goodsId = item.goodsId
+          orderItem.goodsName = item.goods.name
+          orderItem.goodsThumb = item.goods.thumb
+          orderItem.goodsPrice = item.goods.price
+          orderItem.goodsCount = item.count
+          orderItemList.push(orderItem)
+        })
 
-    import BasePanel from '@/components/BasePanel'
-    import OrderItem from '@/components/OrderItem'
-
-    export default {
-        components: {
-            BasePanel,
-            OrderItem
-        },
-        computed: {
-            orderItems () {
-                const cartGoodsList = this.$store.getters.cartGoodsList
-                let orderItemList = []
-                cartGoodsList.forEach(item => {
-                    let orderItem = {}
-                    orderItem.goodsId = item.goodsId
-                    orderItem.goodsName = item.goods.name
-                    orderItem.goodsThumb = item.goods.thumb
-                    orderItem.goodsPrice = item.goods.price
-                    orderItem.goodsCount = item.count
-                    orderItemList.push(orderItem)
-                })
-
-                return orderItemList
-            },
-            cartCount () {
-                return this.$store.getters.cartAllCount
-            },
-            cartAllPrice () {
-                return this.$store.getters.cartAllPrice
-            }
-        },
-        // onLoad (option) {
-        //     this.orderId = option.orderId
-        //     console.log(this.orderId)
-        // },
-        data () {
-            return {
-                submitLoading: false,
-                orderId: '',
-                order: {}
-            }
-        },
-        methods: {
-            ...mapMutations('cart', [
-                'CLEAR_CART'
-            ]),
-            onSubmitOrder () {
-                this.submitLoading = true
-                const cartGoodsList = this.$store.getters.cartGoodsList
-                orderService.createOrder(cartGoodsList).then(res => {
-                    this.submitLoading = false
-                    this.CLEAR_CART()
-
-                    // 支付逻辑
-                })
-            }
+        return orderItemList
+      },
+      cartCount () {
+        return this.$store.getters.cartAllCount
+      },
+      cartAllPrice () {
+        return this.$store.getters.cartAllPrice
+      },
+      address () {
+        return this.$store.getters.currentAddress
+      }
+    },
+    onLoad () {
+      console.log(this.address)
+      addressService.getDefaultAddress().then(res => {
+        if (res.address) {
+          console.log('asdasdsa')
+          this.SET_ADDRESS(res)
         }
+      })
+    },
+    data () {
+      return {
+        submitLoading: false,
+        orderId: '',
+        order: {}
+      }
+    },
+    methods: {
+      ...mapMutations('cart', [
+        'CLEAR_CART'
+      ]),
+      ...mapMutations('address', [
+        'SET_ADDRESS'
+      ]),
+      onSubmitOrder () {
+        this.submitLoading = true
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        orderService.createOrder(cartGoodsList).then(res => {
+          this.submitLoading = false
+          this.CLEAR_CART()
+
+          // 支付逻辑
+        })
+      }
     }
+  }
 </script>
 
 <style scoped>

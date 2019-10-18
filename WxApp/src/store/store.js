@@ -5,6 +5,7 @@ import createLogger from 'vuex/dist/logger'
 
 import getters from './getters'
 import cart from './modules/cart'
+import address from './modules/address'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ if (debug) {
 
 const store = new Vuex.Store({
   modules: {
-    cart
+    cart,
+    address
   },
   getters,
   strict: debug,

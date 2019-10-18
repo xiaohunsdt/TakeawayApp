@@ -40,7 +40,7 @@ request.interceptors.response.use(
       title: response.message,
       icon: 'none'
     })
-    return promise.resolve()
+    return promise.reject()
   }
 )
 

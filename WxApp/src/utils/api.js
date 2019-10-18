@@ -10,7 +10,17 @@ const api = {
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品
-  getGoodsListByCategoryId: (categoryId) => request.get('goods/getGoodsListByCategoryId', {categoryId})
+  getGoodsListByCategoryId: (categoryId) => request.get('goods/getGoodsListByCategoryId', {categoryId}),
+
+  // 获取用户的地址列表
+  getAddressById: (addressId) => request.get('address/getAddressById', {addressId}),
+  getMyAddressList: () => request.get('address/getMyAddressList'),
+  // 获取用户默认的地址
+  getDefaultAddress: () => request.get('address/getDefaultAddress'),
+  // 新建一个地址
+  createNewAddress: (address) => request.post('address/createNewAddress', address),
+  // 更新一个地址
+  updateAddress: (address) => request.post('address/updateAddress', address)
 }
 
 export default api

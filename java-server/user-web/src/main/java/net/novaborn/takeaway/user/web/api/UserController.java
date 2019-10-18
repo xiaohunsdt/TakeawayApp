@@ -30,13 +30,4 @@ public class UserController extends BaseController {
 
     private JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("getUserInfo")
-    @ResponseBody
-    public ResponseModel getUserInfo(HttpServletRequest request) {
-        String userId = jwtTokenUtil.getUsernameFromToken(request);
-        Optional<User> user = Optional.ofNullable(userService.getBaseMapper().selectById(userId));
-        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
-
-        return new ResponseModel(user.get());
-    }
 }

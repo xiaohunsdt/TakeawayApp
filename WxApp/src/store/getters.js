@@ -19,9 +19,7 @@ const getters = {
     })
     return price
   },
-  cartPriceByGoodsId: (state) => (goodsId) => {
-    const existData = state.cart.cartList.find(item => item.goodsId === goodsId)
-    return existData ? existData.goods.price * existData.count : 0
-  }
+  // address
+  currentAddress: state => state.address.currentAddress
 }
 export default getters

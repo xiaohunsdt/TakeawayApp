@@ -3,10 +3,16 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <address-card
+        @set-default="setDefaultEvent"
         :address="address"
         :key="address.id"
         v-for="address in addressList"/>
-      <van-button custom-class="add-address-btn" color="#FFD200" size="large" round>
+      <van-button
+        @click="addNewAddress"
+        color="#FFD200"
+        custom-class="add-address-btn"
+        round
+        size="large">
         添加新地址
       </van-button>
     </div>
@@ -14,43 +20,47 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
-    import AddressCard from './components/AddressCard'
+  import BasePanel from '@/components/BasePanel'
+  import AddressCard from './components/AddressCard'
+  import addressService from '@/services/address'
 
-    export default {
-        components: {
-            BasePanel,
-            AddressCard
-        },
-        data () {
-            return {
-                addressList: [
-                    {
-                        id: 'dfgdfkaxva113',
-                        region: '신촌포스빌 707호',
-                        detail: '楼下密码🗝1234#',
-                        phone: '01056511996',
-                        isDefault: false
-                    },
-                    {
-                        id: 'dfgdfkaxva113',
-                        region: '신촌포스빌 707호',
-                        detail: '楼下密码🗝1234#',
-                        phone: '01056511996',
-                        isDefault: false
-                    },
-                    {
-                        id: 'dfgdfkaxva113',
-                        region: '신촌포스빌 707호',
-                        detail: '楼下密码🗝1234#',
-                        phone: '01056511996',
-                        isDefault: true
-                    }
-                ]
-            }
-        },
-        methods: {}
+  export default {
+    components: {
+      BasePanel,
+      AddressCard
+    },
+    data () {
+      return {
+        addressList: []
+      }
+    },
+    onShow () {
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+    },
+    methods: {
+      init () {
+        this.addressList.splice(0, this.addressList.length)
+        addressService.getMyAddressList().then(res => {
+          res.forEach(item => {
+            this.addressList.push(item)
+          })
+        })
+      },
+      addNewAddress () {
+        mpvue.navigateTo({
+          url: '/pages/my/address/edit/main'
+        })
+      },
+      setDefaultEvent (addressId) {
+        addressService.setDefault(addressId).then(res => {
+          this.init()
+        })
+      }
     }
+  }
 </script>
 <style>
   .add-address-btn {
