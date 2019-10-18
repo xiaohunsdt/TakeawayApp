@@ -3,7 +3,13 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <base-panel>
-        <textarea style="min-height: 6rem" placeholder="请填写备注信息" name="textarea" auto-height maxlength="128"/>
+        <textarea
+          :value="inputVal"
+          auto-height
+          maxlength="128"
+          name="textarea"
+          placeholder="请填写备注信息"
+          style="min-height: 6rem"/>
       </base-panel>
 
       <base-panel>
@@ -11,18 +17,18 @@
           快捷标签
         </div>
         <div class="shortcut-tag">
-          <van-button type="primary" size="small" round>加麻</van-button>
-          <van-button type="primary" size="small" round>加辣</van-button>
-          <van-button type="primary" size="small" round>加酸</van-button>
-          <van-button type="primary" size="small" round>少麻</van-button>
-          <van-button type="primary" size="small" round>少辣</van-button>
-          <van-button type="primary" size="small" round>少酸</van-button>
-          <van-button type="primary" size="small" round>不要葱</van-button>
-          <van-button type="primary" size="small" round>不要香菜</van-button>
+          <van-button @click="addPs('加麻')" round size="small" type="primary">加麻</van-button>
+          <van-button @click="addPs('加辣')" round size="small" type="primary">加辣</van-button>
+          <van-button @click="addPs('加酸')" round size="small" type="primary">加酸</van-button>
+          <van-button @click="addPs('少麻')" round size="small" type="primary">少麻</van-button>
+          <van-button @click="addPs('少辣')" round size="small" type="primary">少辣</van-button>
+          <van-button @click="addPs('少酸')" round size="small" type="primary">少酸</van-button>
+          <van-button @click="addPs('不要葱')" round size="small" type="primary">不要葱</van-button>
+          <van-button @click="addPs('不要香菜')" round size="small" type="primary">不要香菜</van-button>
         </div>
       </base-panel>
 
-      <van-button custom-class="finish-btn" color="#FFD200" size="large" round>
+      <van-button @click="setPs" color="#FFD200" custom-class="finish-btn" round size="large">
         完成
       </van-button>
     </div>
@@ -30,17 +36,32 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
+  import BasePanel from '@/components/BasePanel'
 
-    export default {
-        components: {
-            BasePanel
-        },
-        data () {
-            return {}
-        },
-        methods: {}
+  export default {
+    components: {
+      BasePanel
+    },
+    data () {
+      return {
+        inputVal: ''
+      }
+    },
+    methods: {
+      addPs (data) {
+        if (this.inputVal) {
+          this.inputVal += `,${data}`
+        } else {
+          this.inputVal = data
+        }
+      },
+      setPs () {
+        const eventChannel = this.$mp.page.getOpenerEventChannel()
+        eventChannel.emit('setPsContent', {ps: this.inputVal})
+        mpvue.navigateBack()
+      }
     }
+  }
 </script>
 
 <style>

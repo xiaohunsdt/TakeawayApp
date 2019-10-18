@@ -87,6 +87,9 @@
         <base-panel @panel-click="setPs">
           <div @click="setPs">
             <div>备注</div>
+            <div v-if="psData!==''">
+              <van-cell :title="psData"/>
+            </div>
           </div>
         </base-panel>
       </div>
@@ -164,7 +167,8 @@
         submitLoading: false,
         orderId: '',
         order: {},
-        payWay: 'WEIXIN_PAY'
+        payWay: 'WEIXIN_PAY',
+        psData: ''
       }
     },
     methods: {
@@ -181,9 +185,15 @@
         })
       },
       setPs () {
-        mpvue.showToast({
-          title: '暂时还没有开放2',
-          icon: 'none'
+        const $this = this
+        mpvue.navigateTo({
+          url: '/pages/buy/remark/main',
+          events: {
+            setPsContent (data) {
+              $this.psData = data.ps
+              console.log($this.psData !== '')
+            }
+          }
         })
       },
       payWayChange (payWay) {
