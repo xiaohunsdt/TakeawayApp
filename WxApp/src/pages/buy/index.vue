@@ -228,11 +228,10 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
-        this.submitLoading = true
-        const cartGoodsList = this.$store.getters.cartGoodsList
-        orderService.createOrder(cartGoodsList).then(res => {
+        // this.submitLoading = true
+        orderService.createOrder(this.orderItems, this.address, this.payWay, this.coupon, this.psData).then(res => {
           this.submitLoading = false
-          this.CLEAR_CART()
+          // this.CLEAR_CART()
 
           // 支付逻辑
         })

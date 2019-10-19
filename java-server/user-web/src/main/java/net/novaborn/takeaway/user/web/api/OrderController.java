@@ -2,24 +2,22 @@ package net.novaborn.takeaway.user.web.api;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
-import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.user.web.dto.OrderDto;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,9 +32,11 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @ResponseBody
-    @PostMapping("createNewOrder")
-    public Tip createNewOrder(@RequestParam Order order) {
-        return null;
+
+    @PostMapping("createOrder")
+    public Tip createOrder(@RequestBody OrderDto orderDto) {
+        System.out.println(orderDto);
+        return new SuccessTip();
     }
 
     @PostMapping("getOrderById")

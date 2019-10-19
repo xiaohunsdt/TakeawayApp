@@ -21,7 +21,14 @@ const api = {
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
   updateAddress: (address) => request.post('address/updateAddress', address),
-  deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId})
+  deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId}),
+
+  // 创建一个订单
+  createOrder: (order, orderItems) => request.post('order/createOrder', {order, orderItems}, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 }
 
 export default api

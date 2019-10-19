@@ -8,7 +8,10 @@ request.config.baseURL = 'http://cxy.novaborn.net:8081/api/user'
 request.interceptors.request.use((request) => {
   // 给所有请求添加自定义header，带上token信息让服务器验证用户登陆
   request.headers['Authorization'] = 'Bearer ' + mpvue.getStorageSync('token')
-  request.headers['content-type'] = 'application/x-www-form-urlencoded'
+  console.log(request)
+  if (request.headers['Content-Type'] !== 'application/json') {
+    request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+  }
   // console.log('flyio发请求,request为', request);
   mpvue.showNavigationBarLoading()
   return request

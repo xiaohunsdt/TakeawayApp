@@ -6,32 +6,24 @@ import api from '@/utils/api'
 /**
  * 创建订单
  */
-export function createOrder (cartList, addressId, paymentWay) {
-  let orderItemList = []
+export function createOrder (orderItems, address, paymentWay, coupon, ps) {
   let allCount = 0
   let allPrice = 0
-  cartList.forEach(item => {
-    let orderItem = {}
-    orderItem.goodsId = item.goodsId
-    orderItem.goodsName = item.goods.name
-    orderItem.goodsThumb = item.goods.thumb
-    orderItem.goodsPrice = item.goods.price
-    orderItem.goodsCount = item.count
-    orderItemList.push(orderItem)
-
-    allCount += item.count
-    allPrice += item.count * item.goods.price
+  orderItems.forEach(item => {
+    allCount += item.goodsCount
+    allPrice += item.goodsCount * item.goodsPrice
   })
   let order = {
-    addressId,
+    addressId: address.id,
     goodsCount: allCount,
     discount: 0,
     discountedPrices: 0,
     allPrice,
     realPrice: allPrice,
-    paymentWay
+    paymentWay,
+    ps
   }
-  return api.createOrder(order)
+  return api.createOrder(order, orderItems)
 }
 
 /**
