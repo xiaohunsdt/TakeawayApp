@@ -228,7 +228,7 @@
 
 <style scoped>
   #buy-content {
-    padding-bottom: 1rem;
+    padding-bottom: 1.6rem;
   }
 
   #order-amount {

@@ -107,7 +107,7 @@
           <view class="profile-title contact-cell" slot="title">
             <button open-type="contact" class="contact-btn" plain>
               <img class="title-img" src="/static/images/profile/onlineservice.png">
-              <div style="display: inline;font-weight: normal!important">
+              <div style="display: inline">
                 在线客服
               </div>
             </button>
@@ -180,12 +180,11 @@
 
   .contact-btn {
     width: 100%;
-    font-size: .27rem;
-    font-weight: lighter !important;
+    font-size: unset !important;
+    font-weight: normal !important;
     line-height: unset !important;
     background: transparent;
     border: unset !important;
-    /*height: .3rem !important;*/
     padding: unset !important;
     display: flex !important;
     flex-direction: row;
