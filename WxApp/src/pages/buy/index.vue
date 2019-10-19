@@ -27,7 +27,7 @@
           </div>
         </base-panel>
       </div>
-      <div id="buy-content">
+      <div :class="{'show-order-tip':showOrderTip}" id="buy-content">
         <base-panel>
           <order-item
             :itemDetail="item"
@@ -52,10 +52,10 @@
             </van-button>
             <van-button
               custom-class="pay-way-btn"
+              disabled
               icon="balance-list"
               round
               size="small"
-              disabled
               type="primary">余额支付
             </van-button>
             <van-button
@@ -126,7 +126,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <!--          <view slot="tip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>-->
+          <view slot="tip" v-if="showOrderTip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>
         </van-submit-bar>
       </div>
     </div>
@@ -181,9 +181,11 @@
     data () {
       return {
         submitLoading: false,
+        showOrderTip: true,
         orderId: '',
         order: {},
         payWay: 'WEIXIN_PAY',
+        coupon: null,
         psData: ''
       }
     },
@@ -255,6 +257,10 @@
 <style scoped>
   #buy-content {
     padding-bottom: 1.6rem;
+  }
+
+  #buy-content.show-order-tip {
+    padding-bottom: 2.5rem;
   }
 
   #order-amount {
