@@ -51,6 +51,14 @@
               type="primary">微信支付
             </van-button>
             <van-button
+              custom-class="pay-way-btn"
+              icon="balance-list"
+              round
+              size="small"
+              disabled
+              type="primary">余额支付
+            </van-button>
+            <van-button
               :color="payWay==='ALI_PAY'?'#FFD200':null"
               @click="payWayChange('ALI_PAY')"
               custom-class="pay-way-btn"
@@ -58,6 +66,15 @@
               round
               size="small"
               type="primary">支付宝
+            </van-button>
+            <van-button
+              :color="payWay==='TRANSFER'?'#FFD200':null"
+              @click="payWayChange('TRANSFER')"
+              custom-class="pay-way-btn"
+              icon="bill"
+              round
+              size="small"
+              type="primary">通帐转帐
             </van-button>
             <van-button
               :color="payWay==='CREDIT_CARD'?'#FFD200':null"
@@ -178,10 +195,20 @@
         'SET_ADDRESS'
       ]),
       setCoupon () {
-        mpvue.showToast({
-          title: '暂时还没有开放1',
-          icon: 'none'
+        const $this = this
+        mpvue.navigateTo({
+          url: '/pages/coupon/main',
+          events: {
+            setCoupon (data) {
+              $this.coupon = data.coupon
+              console.log($this.coupon)
+            }
+          }
         })
+        // mpvue.showToast({
+        //   title: '暂时还没有开放1',
+        //   icon: 'none'
+        // })
       },
       setPs () {
         const $this = this

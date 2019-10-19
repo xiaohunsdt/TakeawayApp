@@ -12,24 +12,29 @@ public enum PaymentWay {
     BALANCE(0),
 
     /**
+     * 通帐转帐
+     */
+    TRANSFER(1),
+
+    /**
      * 微信支付
      */
-    WEIXIN_PAY(1),
+    WEIXIN_PAY(2),
 
     /**
      * 支付宝支付
      */
-    ALI_PAY(2),
+    ALI_PAY(3),
 
     /**
      * 刷卡支付
      */
-    CREDIT_CARD( 3),
+    CREDIT_CARD( 4),
 
     /**
      * 现金
      */
-    CASH( 4);
+    CASH( 5);
 
     PaymentWay(int code) {
         this.code = code;
