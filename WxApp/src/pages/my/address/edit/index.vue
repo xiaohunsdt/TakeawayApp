@@ -19,8 +19,7 @@
             :value="address.detail"
             @change="detailInput"
             label="详细"
-            placeholder="楼下密码,送餐提示等详细信息"
-            required/>
+            placeholder="楼下密码,送餐提示等详细信息"/>
           <van-field
             :border="false"
             :value="address.phone"
@@ -113,7 +112,7 @@
       },
       edit () {
         const {address, detail, phone} = this.address
-        if (!address || !detail || !phone) {
+        if (!address || !phone) {
           mpvue.showToast({
             title: '请填写完整信息',
             icon: 'none',

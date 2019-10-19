@@ -155,7 +155,6 @@
       }
     },
     onLoad () {
-      console.log(this.address)
       addressService.getDefaultAddress().then(res => {
         if (res.address) {
           this.SET_ADDRESS(res)

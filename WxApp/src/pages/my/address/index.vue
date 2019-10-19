@@ -40,6 +40,10 @@
     onShow () {
       this.init()
     },
+    onUnload () {
+      const selectedAddress = this.addressList.find(item => item.isDefault)
+      this.SET_ADDRESS(selectedAddress)
+    },
     onPullDownRefresh () {
       this.init()
     },
