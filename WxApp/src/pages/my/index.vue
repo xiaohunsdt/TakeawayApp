@@ -71,7 +71,7 @@
         </base-panel>
       </div>
       <div class="my-profile">
-        <van-cell custom-class="profile-cell" is-link>
+        <van-cell clickable custom-class="profile-cell" is-link>
           <view class="profile-title" slot="title">
             <img class="title-img" src="/static/images/profile/edit.png">
             <div>
@@ -79,7 +79,7 @@
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link url="/pages/my/address/main">
+        <van-cell clickable custom-class="profile-cell" is-link url="/pages/my/address/main">
           <view class="profile-title" slot="title">
             <img class="title-img" src="/static/images/address/icon-location.png">
             <div>
@@ -87,7 +87,7 @@
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link url="/pages/coupon/main">
+        <van-cell clickable custom-class="profile-cell" is-link url="/pages/coupon/main">
           <view class="profile-title" slot="title">
             <img class="title-img" src="/static/images/profile/coupon.png">
             <div>
@@ -95,7 +95,7 @@
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link @click="callCSPhone">
+        <van-cell @click="callCSPhone" clickable custom-class="profile-cell" is-link>
           <view class="profile-title" slot="title">
             <img class="title-img" src="/static/images/profile/phone.png">
             <div>
@@ -103,9 +103,9 @@
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link>
+        <van-cell clickable custom-class="profile-cell" is-link>
           <view class="profile-title contact-cell" slot="title">
-            <button open-type="contact" class="contact-btn" plain>
+            <button class="contact-btn" open-type="contact" plain>
               <img class="title-img" src="/static/images/profile/onlineservice.png">
               <div style="display: inline">
                 在线客服
@@ -119,46 +119,50 @@
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
-    import userService from '@/services/user'
+  import BasePanel from '@/components/BasePanel'
+  import userService from '@/services/user'
 
-    export default {
-        components: {
-            BasePanel
-        },
-        data () {
-            return {
-                userInfo: null
-            }
-        },
-        onLoad () {
-            // 获取用户信息
-            if (mpvue.getStorageSync('userInfo')) {
-                this.userInfo = mpvue.getStorageSync('userInfo')
-            }
-        },
-        methods: {
-            getWxUserInfo (event) {
-                if (event.mp.detail.userInfo) {
-                    // 将用户信息保存到服务器，保存成功后将被存储到本地
-                    userService.setUserInfo()
-                        .then(() => {
-                            this.userInfo = mpvue.getStorageSync('userInfo')
-                        })
-                } else {
-                    console.error('授权失败!!!')
-                }
-            },
-            callCSPhone () {
-                mpvue.makePhoneCall({
-                    phoneNumber: '01056511996'
-                })
-            }
+  export default {
+    components: {
+      BasePanel
+    },
+    data () {
+      return {
+        userInfo: null
+      }
+    },
+    onLoad () {
+      // 获取用户信息
+      if (mpvue.getStorageSync('userInfo')) {
+        this.userInfo = mpvue.getStorageSync('userInfo')
+      }
+    },
+    methods: {
+      getWxUserInfo (event) {
+        if (event.mp.detail.userInfo) {
+          // 将用户信息保存到服务器，保存成功后将被存储到本地
+          userService.setUserInfo()
+            .then(() => {
+              this.userInfo = mpvue.getStorageSync('userInfo')
+            })
+        } else {
+          console.error('授权失败!!!')
         }
+      },
+      callCSPhone () {
+        mpvue.makePhoneCall({
+          phoneNumber: '01056511996'
+        })
+      }
     }
+  }
 </script>
 
 <style>
+  .my-profile {
+    margin-top: .4rem;
+  }
+
   .my-profile .profile-title {
     display: flex;
     flex-direction: row;
@@ -172,6 +176,10 @@
 
   .my-profile .profile-cell {
     background-color: transparent !important;
+  }
+
+  .my-profile .profile-cell:active{
+    background-color: rgba(200,200,200,0.2) !important;
   }
 
   .my-profile .contact-cell van-button {
@@ -262,9 +270,5 @@
     font-size: 0.25rem;
     font-weight: lighter;
     text-align: center;
-  }
-
-  .my-profile {
-    margin-top: 0.2rem;
   }
 </style>
