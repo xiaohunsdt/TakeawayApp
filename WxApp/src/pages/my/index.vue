@@ -73,42 +73,44 @@
       <div class="my-profile">
         <van-cell custom-class="profile-cell" is-link>
           <view class="profile-title" slot="title">
-            <img alt="" class="title-img" src="/static/images/profile/edit.png">
+            <img class="title-img" src="/static/images/profile/edit.png">
             <div>
               个人资料
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link>
+        <van-cell custom-class="profile-cell" is-link url="/pages/my/address/main">
           <view class="profile-title" slot="title">
-            <img alt="" class="title-img" src="/static/images/address/icon-location.png">
+            <img class="title-img" src="/static/images/address/icon-location.png">
             <div>
               我的地址
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link>
+        <van-cell custom-class="profile-cell" is-link url="/pages/coupon/main">
           <view class="profile-title" slot="title">
-            <img alt="" class="title-img" src="/static/images/profile/coupon.png">
+            <img class="title-img" src="/static/images/profile/coupon.png">
             <div>
               优惠卷
             </div>
           </view>
         </van-cell>
-        <van-cell custom-class="profile-cell" is-link>
+        <van-cell custom-class="profile-cell" is-link @click="callCSPhone">
           <view class="profile-title" slot="title">
-            <img alt="" class="title-img" src="/static/images/profile/phone.png">
+            <img class="title-img" src="/static/images/profile/phone.png">
             <div>
               电话客服
             </div>
           </view>
         </van-cell>
         <van-cell custom-class="profile-cell" is-link>
-          <view class="profile-title" slot="title">
-            <img alt="" class="title-img" src="/static/images/profile/onlineservice.png">
-            <div>
-              在线客服
-            </div>
+          <view class="profile-title contact-cell" slot="title">
+            <button open-type="contact" class="contact-btn" plain>
+              <img class="title-img" src="/static/images/profile/onlineservice.png">
+              <div style="display: inline;font-weight: normal!important">
+                在线客服
+              </div>
+            </button>
           </view>
         </van-cell>
       </div>
@@ -117,38 +119,43 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import userService from '@/services/user'
+    import BasePanel from '@/components/BasePanel'
+    import userService from '@/services/user'
 
-  export default {
-    components: {
-      BasePanel
-    },
-    data () {
-      return {
-        userInfo: null
-      }
-    },
-    onLoad () {
-      // 获取用户信息
-      if (mpvue.getStorageSync('userInfo')) {
-        this.userInfo = mpvue.getStorageSync('userInfo')
-      }
-    },
-    methods: {
-      getWxUserInfo (event) {
-        if (event.mp.detail.userInfo) {
-          // 将用户信息保存到服务器，保存成功后将被存储到本地
-            userService.setUserInfo()
-            .then(() => {
-              this.userInfo = mpvue.getStorageSync('userInfo')
-            })
-        } else {
-          console.error('授权失败!!!')
+    export default {
+        components: {
+            BasePanel
+        },
+        data () {
+            return {
+                userInfo: null
+            }
+        },
+        onLoad () {
+            // 获取用户信息
+            if (mpvue.getStorageSync('userInfo')) {
+                this.userInfo = mpvue.getStorageSync('userInfo')
+            }
+        },
+        methods: {
+            getWxUserInfo (event) {
+                if (event.mp.detail.userInfo) {
+                    // 将用户信息保存到服务器，保存成功后将被存储到本地
+                    userService.setUserInfo()
+                        .then(() => {
+                            this.userInfo = mpvue.getStorageSync('userInfo')
+                        })
+                } else {
+                    console.error('授权失败!!!')
+                }
+            },
+            callCSPhone () {
+                mpvue.makePhoneCall({
+                    phoneNumber: '01056511996'
+                })
+            }
         }
-      }
     }
-  }
 </script>
 
 <style>
@@ -165,6 +172,30 @@
 
   .my-profile .profile-cell {
     background-color: transparent !important;
+  }
+
+  .my-profile .contact-cell van-button {
+    width: 100% !important;
+  }
+
+  .contact-btn {
+    width: 100%;
+    font-size: .27rem;
+    font-weight: lighter !important;
+    line-height: unset !important;
+    background: transparent;
+    border: unset !important;
+    /*height: .3rem !important;*/
+    padding: unset !important;
+    display: flex !important;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    color: black !important;
+  }
+
+  .contact-btn:after {
+    content: unset !important;
   }
 </style>
 <style scoped>
