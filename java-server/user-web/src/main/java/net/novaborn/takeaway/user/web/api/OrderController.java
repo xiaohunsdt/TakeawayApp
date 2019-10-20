@@ -52,14 +52,18 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping("getOrderListByPage")
-    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam OrderState state) {
+    public ResponseEntity getOrderListByPage(
+            @ModelAttribute Page page,
+            @RequestParam(required = false) OrderState state) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         Map<String, Object> args = new HashMap<>();
         args.put("userId", user.get().getId());
-        args.put("orderState", state);
+        if (state != null) {
+            args.put("orderState", state);
+        }
 
         page.setOptimizeCountSql(false);
         page = (Page) orderService.getOrderListByPage(page, args);
@@ -96,7 +100,8 @@ public class OrderController extends BaseController {
             });
         }
 
-        return new SuccessTip();
+        //将订单id返回
+        return new SuccessTip(order.getId());
     }
 
     @ResponseBody

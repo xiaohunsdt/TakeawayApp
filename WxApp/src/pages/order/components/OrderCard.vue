@@ -3,17 +3,17 @@
     <div @click.stop="openOrderDetail">
       <div class="order-header">
         <div class="header-left">{{order.createDate}}</div>
-        <div class="header-right">待支付</div>
+        <div class="header-right">{{order.payState}}</div>
       </div>
       <div class="order-items">
         <order-item
-          :itemDetail="itemDetial"
-          :key="itemDetial.name"
-          v-for="itemDetial in order.orderItems"/>
+          :itemDetail="itemDetail"
+          :key="itemDetail.goodsName"
+          v-for="itemDetail in order.orderItemList"/>
       </div>
       <div class="order-amount">
-        共<span style="color: #FFD200">{{ order.orderItems.length }}</span>个商品,
-        小计 <span style="color: #FFD200">₩ {{ order.orderAmount }}</span>
+        共<span style="color: #FFD200">{{ order.orderItemList.length }}</span>个商品,
+        小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
       </div>
     </div>
 

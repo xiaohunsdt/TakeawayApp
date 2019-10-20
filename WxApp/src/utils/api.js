@@ -23,6 +23,7 @@ const api = {
   updateAddress: (address) => request.post('address/updateAddress', address),
   deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId}),
 
+  getOrderListByPage: (args) => request.post('order/getOrderListByPage', args),
   // 创建一个订单
   createOrder: (order, orderItems) => request.post('order/createOrder', {order, orderItems}, {headers: {'Content-Type': 'application/json'}})
 }

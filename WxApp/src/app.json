@@ -8,6 +8,7 @@
     "pages/my/address/edit/main",
     "pages/goods/main",
     "pages/buy/main",
+    "pages/pay/main",
     "pages/buy/remark/main",
     "pages/coupon/main",
     "pages/order/main",

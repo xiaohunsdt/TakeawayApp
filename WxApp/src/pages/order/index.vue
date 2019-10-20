@@ -12,70 +12,40 @@
 
 <script>
   import OrderCard from './components/OrderCard'
+  import orderService from '@/services/order'
 
   export default {
     components: {
       OrderCard
     },
+    onLoad (options) {
+      this.orderState = options.state
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+    },
     data () {
       return {
-        orderList: [
-          {
-            orderId: '20190915gfhfghfbcvsdf',
-            orderNumber: 2,
-            orderItems: [
-              {
-                orderId: null,
-                goodsId: 1,
-                name: '鸭血粉丝汤1',
-                thumb: '/static/images/food/food.jpg',
-                count: 2,
-                price: 2000
-              },
-              {
-                orderId: null,
-                goodsId: 1,
-                name: '鸭血粉丝汤2',
-                thumb: '/static/images/food/food.jpg',
-                count: 1,
-                price: 2000
-              }
-            ],
-            orderAmount: 67,
-            orderPayWay: 1,
-            orderState: 1,
-            createDate: '2019-09-15 12:23'
-          },
-          {
-            orderId: '20190915cvbsdmgsma',
-            orderNumber: 1,
-            orderItems: [
-              {
-                orderId: null,
-                goodsId: 1,
-                name: '鸭血粉丝汤1',
-                thumb: '/static/images/food/food.jpg',
-                count: 2,
-                price: 2000
-              },
-              {
-                orderId: null,
-                goodsId: 1,
-                name: '鸭血粉丝汤2',
-                thumb: '/static/images/food/food.jpg',
-                count: 1,
-                price: 2000
-              }
-            ],
-            orderAmount: 67,
-            orderPayWay: 1,
-            orderState: 1,
-            createDate: '2019-09-15 12:23'
-          }
-        ]
+        page: {
+          current: 1,
+          size: 10,
+          total: 0
+        },
+        orderState: '',
+        orderList: []
       }
     },
-    methods: {}
+    methods: {
+      init () {
+        orderService.getOrderListByPage(this.state).then(res => {
+          res.records.forEach(item => {
+            this.orderList.push(item)
+          })
+          this.page.total = parseInt(res.total)
+        })
+      }
+    }
   }
 </script>
 

@@ -33,7 +33,16 @@ export function selectOrderById (orderId) {
   return api.selectOrderById(orderId)
 }
 
+export function getOrderListByPage (page, state) {
+  if (state === 'ALL') {
+    state = null
+  }
+  const data = Object.assign({}, page, state)
+  return api.getOrderListByPage(data)
+}
+
 export default {
-  createOrder,
-  selectOrderById
+  selectOrderById,
+  getOrderListByPage,
+  createOrder
 }

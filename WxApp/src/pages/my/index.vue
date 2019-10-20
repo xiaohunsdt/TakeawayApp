@@ -38,32 +38,32 @@
           <van-row>
             <div class="my-order-header">
               <div class="title">我的订单</div>
-              <div class="view-all">
+              <div @click="gotoOrderPage('ALL')" class="view-all">
                 查看所有订单
                 <van-icon name="arrow"></van-icon>
               </div>
             </div>
             <van-col offset="1" span="4">
               <div class="order-type-item">
-                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/payment.png">
+                <img class="item-img" mode="widthFix" src="/static/images/order/payment.png">
                 <div class="item-title">待付款</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
+                <img class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
                 <div class="item-title">待就餐</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
+                <img class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
                 <div class="item-title">待评价</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <img alt="" class="item-img" mode="widthFix" src="/static/images/order/refund.png">
+                <img class="item-img" mode="widthFix" src="/static/images/order/refund.png">
                 <div class="item-title">退款</div>
               </div>
             </van-col>
@@ -153,6 +153,11 @@
         mpvue.makePhoneCall({
           phoneNumber: '01056511996'
         })
+      },
+      gotoOrderPage (state) {
+        mpvue.navigateTo({
+          url: `/pages/order/main?state=${state}`
+        })
       }
     }
   }
@@ -178,8 +183,8 @@
     background-color: transparent !important;
   }
 
-  .my-profile .profile-cell:active{
-    background-color: rgba(200,200,200,0.2) !important;
+  .my-profile .profile-cell:active {
+    background-color: rgba(200, 200, 200, 0.2) !important;
   }
 
   .my-profile .contact-cell van-button {

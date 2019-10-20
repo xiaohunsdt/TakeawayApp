@@ -219,7 +219,6 @@
           events: {
             setPsContent (data) {
               $this.psData = data.ps
-              console.log($this.psData !== '')
             }
           }
         })
@@ -228,12 +227,15 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
-        // this.submitLoading = true
+        this.submitLoading = true
         orderService.createOrder(this.orderItems, this.address, this.payWay, this.coupon, this.psData).then(res => {
           this.submitLoading = false
-          // this.CLEAR_CART()
-
+          this.CLEAR_CART()
           // 支付逻辑
+          const {message} = res
+          mpvue.redirectTo({
+            url: `/pages/pay/main?orderId=${message}`
+          })
         })
       }
     }
