@@ -24,11 +24,7 @@ const api = {
   deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId}),
 
   // 创建一个订单
-  createOrder: (order, orderItems) => request.post('order/createOrder', {order, orderItems}, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
+  createOrder: (order, orderItems) => request.post('order/createOrder', {order, orderItems}, {headers: {'Content-Type': 'application/json'}})
 }
 
 export default api

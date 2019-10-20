@@ -15,7 +15,7 @@ function loginByWx () {
         .then(res => {
           if (res.hasOwnProperty('token')) {
             // 存储用户信息
-            mpvue.setStorageSync('token', res.token)
+            mpvue.setStorageSync('token', res)
             resolve(res)
           } else {
             reject(res)

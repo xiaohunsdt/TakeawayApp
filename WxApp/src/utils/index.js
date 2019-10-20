@@ -19,6 +19,8 @@ export function formatTime (date) {
 }
 
 export default {
+  base64Encode,
+  base64Decode,
   formatNumber,
   formatTime
 }
