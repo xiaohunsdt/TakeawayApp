@@ -44,8 +44,8 @@ public class OrderController extends BaseController {
 
     private JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("getOrderById")
-    public ResponseEntity getOrderById(@RequestParam String orderId) {
+    @PostMapping("selectOrderById")
+    public ResponseEntity selectOrderById(@RequestParam String orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());

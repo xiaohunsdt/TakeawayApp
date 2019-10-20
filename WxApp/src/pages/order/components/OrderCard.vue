@@ -19,8 +19,10 @@
 
     <div class="action-btns">
       <van-button @click.stop="payNow" color="#FFD200" custom-class="action-btn" round size="small">立刻付款</van-button>
-      <van-button @click.stop="confirmGetFood" color="#FFD200" custom-class="action-btn" round size="small">确认取餐</van-button>
-      <van-button @click.stop="shareOrder" color="#FFD200" custom-class="action-btn" round size="small">分享领红包</van-button>
+      <van-button @click.stop="confirmGetFood" color="#FFD200" custom-class="action-btn" round size="small">确认取餐
+      </van-button>
+      <van-button @click.stop="shareOrder" color="#FFD200" custom-class="action-btn" round size="small">分享领红包
+      </van-button>
       <van-button @click.stop="comment" color="#FFD200" custom-class="action-btn" round size="small">评价</van-button>
     </div>
   </base-panel>
@@ -43,8 +45,10 @@
       OrderItem
     },
     methods: {
-      openOrderDetail (event) {
-        console.log(event)
+      openOrderDetail () {
+        mpvue.navigateTo({
+          url: `/pages/order/detail/main?orderId=${this.order.id}`
+        })
       },
       payNow (event) {
         console.log(event)

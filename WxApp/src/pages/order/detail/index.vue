@@ -5,7 +5,7 @@
       <base-panel>
         <div class="order-header">
           <div class="order-number">
-            <div class="number"># <span style="font-size: 2rem">{{order.orderNumber}}</span></div>
+            <div class="number"># <span style="font-size: 2rem">{{order.number}}</span></div>
             <div class="text">
               <img class="text-img" src="/static/images/order/yellow_num.png"/>
               订餐号
@@ -28,12 +28,12 @@
         <div class="order-items">
           <order-item
             :itemDetail="itemDetial"
-            :key="itemDetial.name"
-            v-for="itemDetial in order.orderItems"/>
+            :key="itemDetial.goodsName"
+            v-for="itemDetial in order.orderItemList"/>
         </div>
         <div class="order-amount">
-          <span style="font-size: .7rem;margin-right: .2rem">已支付</span>
-          小计 <span style="color: #FFD200">₩ {{ order.orderAmount }}</span>
+          <span style="font-size: .7rem;margin-right: .2rem">{{ order.payState }}</span>
+          小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
         </div>
 
         <div class="action-btns">
@@ -50,7 +50,7 @@
       <base-panel>
         <div class="order-row">
           <div class="title">订单号</div>
-          <div class="content">{{order.orderId}}</div>
+          <div class="content">{{order.id}}</div>
         </div>
         <div class="order-row">
           <div class="title">下单时间</div>
@@ -58,7 +58,7 @@
         </div>
         <div class="order-row">
           <div class="title">支付方式</div>
-          <div class="content">微信转账</div>
+          <div class="content">{{order.paymentWay}}</div>
         </div>
 
       </base-panel>
@@ -69,45 +69,31 @@
 <script>
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
+  import orderService from '@/services/order'
 
   export default {
     components: {
       BasePanel,
       OrderItem
     },
+    onLoad (options) {
+      this.orderId = options.orderId
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+    },
     data () {
       return {
-        order: {
-          orderId: '20190915gfhfghfbcvsdf',
-          orderNumber: 2,
-          orderItems: [
-            {
-              orderId: null,
-              goodsId: 1,
-              name: '鸭血粉丝汤1',
-              thumb: '/static/images/food/food.jpg',
-              count: 2,
-              price: 2000
-            },
-            {
-              orderId: null,
-              goodsId: 1,
-              name: '鸭血粉丝汤2',
-              thumb: '/static/images/food/food.jpg',
-              count: 1,
-              price: 2000
-            }
-          ],
-          orderAmount: 67,
-          orderPayWay: 1,
-          orderState: 1,
-          createDate: '2019-09-15 12:23'
-        }
+        orderId: '',
+        order: null
       }
     },
     methods: {
-      openOrderDetail (event) {
-        console.log(event)
+      init () {
+        orderService.selectOrderById(this.orderId).then(res => {
+          this.order = res
+        })
       },
       payNow (event) {
         console.log(event)
@@ -180,7 +166,7 @@
     justify-content: center;
   }
 
-  .order-number .text .text-img,.estimated-arrival-time .text .text-img {
+  .order-number .text .text-img, .estimated-arrival-time .text .text-img {
     margin-right: .1rem;
     margin-top: .05rem;
     width: .3rem;
