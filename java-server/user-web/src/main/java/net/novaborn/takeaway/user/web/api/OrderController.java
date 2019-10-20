@@ -101,8 +101,9 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("updateOrder")
-    public Tip updateOrder(Order order) {
-        return null;
+    public Tip updateOrder(@ModelAttribute @Validated Order order) {
+        order.updateById();
+        return new SuccessTip("删除成功!");
     }
 
     @ResponseBody
