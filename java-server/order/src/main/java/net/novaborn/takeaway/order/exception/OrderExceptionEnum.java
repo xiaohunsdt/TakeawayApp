@@ -14,7 +14,12 @@ public enum OrderExceptionEnum implements ServiceExceptionEnum {
     /**
      * order 异常
      */
-    ORDER_NOT_EXIST(500, "订单不存在");
+    ORDER_NOT_EXIST(500, "订单不存在!"),
+
+    /**
+     * 没有订单商品
+     */
+    ORDER_NOT_ITEMS(500, "没有订单商品!");
 
     OrderExceptionEnum(int code, String message) {
         this.code = code;

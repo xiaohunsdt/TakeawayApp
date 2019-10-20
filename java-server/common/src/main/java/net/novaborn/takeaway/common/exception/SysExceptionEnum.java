@@ -1,9 +1,6 @@
 package net.novaborn.takeaway.common.exception;
 
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * 所有业务异常的枚举
  *
@@ -27,6 +24,7 @@ public enum SysExceptionEnum implements ServiceExceptionEnum {
      * 其他
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误"),
+    ARGUMENT_VALID_ERROR(400, "参数验证错误!"),
     AUTH_HAVE_NO_USER(400, "找不到此用户名!"),
     UPLOAD_IMAGE_FAILED(400, "上传图片失败!"),
     WRITE_ERROR(500, "渲染界面错误");
@@ -57,4 +55,4 @@ public enum SysExceptionEnum implements ServiceExceptionEnum {
     public void setMessage(String message) {
         this.message = message;
     }
-    }
+}

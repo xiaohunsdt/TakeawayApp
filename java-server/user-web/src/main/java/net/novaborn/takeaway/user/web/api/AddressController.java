@@ -76,9 +76,8 @@ public class AddressController extends BaseController {
     public Tip createNewAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
-        Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(user.get().getId());
 
-        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
+        Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(user.get().getId());
 
         if (!PhoneUtil.validate(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);

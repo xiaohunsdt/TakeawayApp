@@ -3,6 +3,7 @@ package net.novaborn.takeaway.user.web.api;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -10,11 +11,16 @@ import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.user.entity.User;
+import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.dto.OrderDto;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,14 +34,42 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/user/order")
 public class OrderController extends BaseController {
+    private UserService userService;
 
     private OrderService orderService;
 
-    @ResponseBody
+    private JwtTokenUtil jwtTokenUtil;
 
+
+    @ResponseBody
+    @Transactional(rollbackFor = RuntimeException.class)
     @PostMapping("createOrder")
-    public Tip createOrder(@RequestBody OrderDto orderDto) {
-        System.out.println(orderDto);
+    public Tip createOrder(@RequestBody @Validated OrderDto orderDto) {
+
+        Order order = orderDto.getOrder();
+        List<OrderItem> orderItems = orderDto.getOrderItems();
+
+        if (orderItems.size() == 0) {
+            throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
+        }
+
+        String openId = jwtTokenUtil.getUsernameFromToken(request);
+        Optional<User> user = userService.selectByOpenId(openId);
+        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
+
+        int number = orderService.getOrderCountToday() + 1;
+
+        //填写订单信息
+        order.setNumber(number);
+        order.setUserId(user.get().getId());
+
+        //先生成订单，在生成订单产品详情
+//        if (order.insert()) {
+//            orderItems.parallelStream().forEach(item -> {
+//
+//            });
+//        }
+
         return new SuccessTip();
     }
 
