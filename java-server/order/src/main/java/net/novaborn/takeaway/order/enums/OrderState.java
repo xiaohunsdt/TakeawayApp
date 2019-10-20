@@ -13,17 +13,27 @@ public enum OrderState {
     /**
      * 生产中
      */
-    PRODUCING(2),
+    PRODUCING(1),
 
     /**
      * 配送中
      */
-    DELIVERING(3),
+    DELIVERING(2),
+
+    /**
+     * 等待付款
+     */
+    WAIT_COMMENT(3),
 
     /**
      * 已完成
      */
-    FINISHED(4);
+    FINISHED(4),
+
+    /**
+     * 退款
+     */
+    REFUND(5);
 
     OrderState(int code) {
         this.code = code;

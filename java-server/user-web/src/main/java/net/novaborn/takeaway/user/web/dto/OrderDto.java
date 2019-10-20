@@ -12,10 +12,11 @@ import java.util.List;
 @Data
 public class OrderDto {
 
-    @NotNull(message = "没有订单信息")
     @Valid
+    @NotNull(message = "没有订单信息")
     private Order order;
 
+    @Valid
     @Size(min = 1, message = "没有订单产品信息")
     private List<OrderItem> orderItems;
 }
