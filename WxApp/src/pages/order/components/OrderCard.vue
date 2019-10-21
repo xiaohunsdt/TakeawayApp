@@ -5,7 +5,7 @@
         <div class="header-left"></div>
         <div class="header-right">
           {{payStateStr}}
-          <span v-if="order.payState === 'UN_PAY'"> (过期: 4:59)</span>
+          <span v-if="order.payState === 'UN_PAY'"> (过期: <van-count-down style="display: inline-flex" :time="300 * 1000" format="mm:ss"/>)</span>
         </div>
       </div>
       <div class="order-items">

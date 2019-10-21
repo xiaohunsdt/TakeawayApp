@@ -130,7 +130,7 @@
         })
       },
       onChange (event) {
-        const index = event.mp.detail.index
+        const index = event.mp.detail.name
         this.currentIndex = index
 
         this.getGoodsListByIndex(index)

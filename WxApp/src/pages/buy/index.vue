@@ -118,6 +118,7 @@
           @submit="onSubmitOrder"
           button-class="submitBtn"
           button-text="立刻支付"
+          currency="₩"
           custom-class="orderSubmitBar"
           price-class="orderPrice">
           <div id="order-bar-left-content">
