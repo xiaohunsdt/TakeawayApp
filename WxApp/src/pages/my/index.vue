@@ -45,24 +45,28 @@
             </div>
             <van-col offset="1" span="4">
               <div class="order-type-item">
+                <van-info info="17"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/payment.png">
                 <div class="item-title">待付款</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
+                <van-info info="7"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
                 <div class="item-title">待就餐</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
+                <van-info info="7"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
                 <div class="item-title">待评价</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
+                <van-info info="7"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/refund.png">
                 <div class="item-title">退款</div>
               </div>
@@ -208,6 +212,16 @@
 
   .contact-btn:after {
     content: unset !important;
+  }
+
+  .order-type-item {
+    position: relative;
+  }
+
+  .order-type-item .van-info {
+    right: unset;
+    top: unset;
+    left: .6rem;
   }
 </style>
 <style scoped>

@@ -33,7 +33,7 @@
         </div>
         <div class="order-amount">
           <span style="font-size: .7rem;margin-right: .2rem">{{ payStateStr }}</span>
-          小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
+          实付 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
         </div>
 
         <div class="action-btns">

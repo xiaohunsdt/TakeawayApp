@@ -20,7 +20,7 @@
         </div>
         <div class="right">
           共<span style="color: #FFD200">{{ order.orderItemList.length }}</span>个商品,
-          小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
+          实付 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
         </div>
       </div>
     </div>
