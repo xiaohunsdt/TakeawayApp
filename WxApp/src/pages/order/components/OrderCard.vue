@@ -2,8 +2,11 @@
   <base-panel>
     <div @click.stop="openOrderDetail">
       <div class="order-header">
-        <div class="header-left">{{order.createDate}}</div>
-        <div class="header-right">{{order.payState}}</div>
+        <div class="header-left"></div>
+        <div class="header-right">
+          {{order.payState}}
+          <span> (过期: 4:59)</span>
+        </div>
       </div>
       <div class="order-items">
         <order-item
@@ -12,8 +15,13 @@
           v-for="itemDetail in order.orderItemList"/>
       </div>
       <div class="order-amount">
-        共<span style="color: #FFD200">{{ order.orderItemList.length }}</span>个商品,
-        小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
+        <div class="left">
+          {{order.createDate}}
+        </div>
+        <div class="right">
+          共<span style="color: #FFD200">{{ order.orderItemList.length }}</span>个商品,
+          小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
+        </div>
       </div>
     </div>
 
@@ -73,9 +81,18 @@
 </style>
 <style scoped>
   .order-amount {
-    font-weight: bolder;
+    display: flex;
+    justify-content: space-between;
     padding-top: .2rem;
     font-size: .25rem;
+  }
+
+  .order-amount .left {
+    margin-left: .2rem;
+  }
+
+  .order-amount .right {
+    font-weight: bolder;
     text-align: right;
   }
 
@@ -90,7 +107,7 @@
   }
 
   .order-header .header-left {
-    padding: .2rem;
+    font-size: .25rem;
   }
 
   .order-header .header-right {
