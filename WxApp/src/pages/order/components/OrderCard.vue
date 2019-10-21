@@ -4,8 +4,8 @@
       <div class="order-header">
         <div class="header-left"></div>
         <div class="header-right">
-          {{order.payState}}
-          <span> (过期: 4:59)</span>
+          {{payStateStr}}
+          <span v-if="order.payState === 'UN_PAY'"> (过期: 4:59)</span>
         </div>
       </div>
       <div class="order-items">
@@ -39,6 +39,7 @@
 <script>
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
+  import indexUtil from '@/utils/index'
 
   export default {
     name: 'OrderCard',
@@ -51,6 +52,11 @@
     components: {
       BasePanel,
       OrderItem
+    },
+    computed: {
+      payStateStr () {
+        return indexUtil.formatPayState(this.order.payState)
+      }
     },
     methods: {
       openOrderDetail () {

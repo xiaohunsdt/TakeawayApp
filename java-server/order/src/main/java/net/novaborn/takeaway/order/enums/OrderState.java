@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public enum OrderState {
     /**
-     * 等待支付
+     * 等待接单
      */
-    WAITING_PAY(0),
+    WAITING_RECEIVE(0),
 
     /**
      * 生产中
@@ -21,7 +21,7 @@ public enum OrderState {
     DELIVERING(2),
 
     /**
-     * 等待付款
+     * 等待评论
      */
     WAIT_COMMENT(3),
 

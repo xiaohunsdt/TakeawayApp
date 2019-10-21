@@ -1,79 +1,3 @@
-import api from '@/utils/api'
-
-function formatTime (date) {
-  var year = date.getFullYear()
-  var month = date.getMonth() + 1
-  var day = date.getDate()
-  var hour = date.getHours()
-  var minute = date.getMinutes()
-  var second = date.getSeconds()
-  return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
-}
-
-function formatNumber (n) {
-  n = n.toString()
-  return n[1] ? n : '0' + n
-}
-
-/**
- * 封微信的的request
- */
-function request (url, data = {}, method = 'GET') {
-  return new Promise(function (resolve, reject) {
-    mpvue.request({
-      url: url,
-      data: data,
-      method: method,
-      header: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + mpvue.getStorageSync('token')
-      },
-      success: function (res) {
-        // console.log('请求成功，url:', url);
-        // console.log('请求参数，data:', data);
-        if (res.statusCode === 200) {
-          if (res.data.errno === 401) {
-            // 需要登录后才可以操作
-            let code = null
-            return login().then((res) => {
-              code = res.code
-              return getUserInfo()
-            }).then((userInfo) => {
-              // 登录远程服务器
-              request(api.AuthLoginByWeixin, {
-                code: code,
-                userInfo: userInfo
-              }, 'POST').then(res => {
-                if (res.errno === 0) {
-                  // 存储用户信息
-                  mpvue.setStorageSync('userInfo', res.data.userInfo)
-                  mpvue.setStorageSync('token', res.data.token)
-                  resolve(res)
-                } else {
-                  reject(res)
-                }
-              }).catch((err) => {
-                reject(err)
-              })
-            }).catch((err) => {
-              reject(err)
-            })
-          } else {
-            resolve(res.data)
-          }
-        } else {
-          reject(res.errMsg)
-        }
-      },
-      fail: function (err) {
-        reject(err)
-        // console.log('请求失败，url', url);
-        // console.log('请求参数，data:', data);
-      }
-    })
-  })
-}
-
 /**
  * 检查微信会话是否过期
  */
@@ -157,8 +81,6 @@ function showErrorToast (msg) {
 }
 
 const util = {
-  formatTime,
-  request,
   showErrorToast,
   checkSession,
   login,

@@ -32,7 +32,7 @@
             v-for="itemDetial in order.orderItemList"/>
         </div>
         <div class="order-amount">
-          <span style="font-size: .7rem;margin-right: .2rem">{{ order.payState }}</span>
+          <span style="font-size: .7rem;margin-right: .2rem">{{ payStateStr }}</span>
           小计 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
         </div>
 
@@ -58,7 +58,7 @@
         </div>
         <div class="order-row">
           <div class="title">支付方式</div>
-          <div class="content">{{order.paymentWay}}</div>
+          <div class="content">{{paymentWayStr}}</div>
         </div>
 
       </base-panel>
@@ -70,6 +70,7 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import orderService from '@/services/order'
+  import indexUtil from '@/utils/index'
 
   export default {
     components: {
@@ -83,10 +84,18 @@
     onPullDownRefresh () {
       this.init()
     },
+    computed: {
+      payStateStr () {
+        return indexUtil.formatPayState(this.order.payState)
+      },
+      paymentWayStr () {
+        return indexUtil.formatPaymentWay(this.order.paymentWay)
+      }
+    },
     data () {
       return {
         orderId: '',
-        order: null
+        order: {}
       }
     },
     methods: {
