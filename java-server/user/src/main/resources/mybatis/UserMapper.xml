@@ -21,7 +21,6 @@
     <select id="getUserListByPage" resultType="User">
         SELECT * FROM `user`
         <where>
-            1 = 1
             <if test="args.name != '' and args.name != null">
                 and (`name` like '%${args.name}%' or `nick_name` like '%${args.name}%')
             </if>

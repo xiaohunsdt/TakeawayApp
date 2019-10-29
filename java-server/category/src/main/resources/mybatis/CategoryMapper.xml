@@ -13,9 +13,8 @@
     <select id="getCategoryListByPage" resultType="Category">
         SELECT * FROM `category`
         <where>
-            1 = 1
             <if test="args.name != '' and args.name != null">
-                and `name` = #{args.name}
+                AND `name` = #{args.name}
             </if>
             AND deleted = 0
         </where>

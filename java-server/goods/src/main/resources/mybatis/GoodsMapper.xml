@@ -13,8 +13,7 @@
     <select id="getGoodsListByCategoryId" resultType="Goods">
         SELECT * FROM `goods`
         <where>
-            1 = 1
-            and `category_id` = #{categoryId}
+            `category_id` = #{categoryId}
             AND deleted = 0
         </where>
         ORDER BY `create_date` ASC
@@ -23,8 +22,7 @@
     <select id="getGoodsListByFlag" resultType="Goods">
         SELECT * FROM `goods`
         <where>
-            1 = 1
-            and `flags` like '%${flag}%'
+            `flags` like '%${flag}%'
             AND deleted = 0
         </where>
         ORDER BY `create_date` ASC
@@ -33,12 +31,11 @@
     <select id="getGoodsListByPage" resultType="Goods">
         SELECT * FROM `goods`
         <where>
-            1 = 1
             <if test="args.name != '' and args.name != null">
-                and `name` like '%${args.name}%'
+                `name` like '%${args.name}%'
             </if>
             <if test="args.categoryId != '' and args.categoryId != null">
-                and `category_id` = #{args.categoryId}
+                AND `category_id` = #{args.categoryId}
             </if>
             AND deleted = 0
         </where>

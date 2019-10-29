@@ -22,9 +22,8 @@
     <select id="getAddressListByPage" resultType="Address">
         SELECT * FROM `address`
         <where>
-            1=1
             <if test="args.userId != '' and args.userId != null">
-                and `user_id` = #{args.userId}
+                `user_id` = #{args.userId}
             </if>
             AND deleted = 0
         </where>
