@@ -142,13 +142,12 @@
                 }
             }
         },
+
         onLoad () {
             // 获取用户信息
             if (mpvue.getStorageSync('userInfo')) {
                 this.userInfo = mpvue.getStorageSync('userInfo')
             }
-        },
-        onShow () {
             this.init()
         },
         onPullDownRefresh () {
