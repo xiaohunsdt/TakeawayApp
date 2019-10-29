@@ -45,28 +45,28 @@
             </div>
             <van-col offset="1" span="4">
               <div class="order-type-item">
-                <van-info info="17"></van-info>
+                <van-info v-if="orderCount.waitPay > 0" :info="orderCount.waitPay"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/payment.png">
                 <div class="item-title">待付款</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <van-info info="7"></van-info>
+                <van-info v-if="orderCount.waitEat > 0" :info="orderCount.waitEat"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
                 <div class="item-title">待就餐</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <van-info info="7"></van-info>
+                <van-info v-if="orderCount.waitComment > 0" :info="orderCount.waitComment"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
                 <div class="item-title">待评价</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
               <div class="order-type-item">
-                <van-info info="7"></van-info>
+                <van-info v-if="orderCount.refund > 0" :info="orderCount.refund"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/refund.png">
                 <div class="item-title">退款</div>
               </div>
@@ -123,48 +123,75 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import userService from '@/services/user'
+    import BasePanel from '@/components/BasePanel'
+    import userService from '@/services/user'
+    import orderService from '@/services/order'
 
-  export default {
-    components: {
-      BasePanel
-    },
-    data () {
-      return {
-        userInfo: null
-      }
-    },
-    onLoad () {
-      // 获取用户信息
-      if (mpvue.getStorageSync('userInfo')) {
-        this.userInfo = mpvue.getStorageSync('userInfo')
-      }
-    },
-    methods: {
-      getWxUserInfo (event) {
-        if (event.mp.detail.userInfo) {
-          // 将用户信息保存到服务器，保存成功后将被存储到本地
-          userService.setUserInfo()
-            .then(() => {
-              this.userInfo = mpvue.getStorageSync('userInfo')
-            })
-        } else {
-          console.error('授权失败!!!')
+    export default {
+        components: {
+            BasePanel
+        },
+        data () {
+            return {
+                userInfo: null,
+                orderCount: {
+                    waitPay: 0,
+                    waitEat: 0,
+                    waitComment: 3,
+                    refund: 0
+                }
+            }
+        },
+        onLoad () {
+            // 获取用户信息
+            if (mpvue.getStorageSync('userInfo')) {
+                this.userInfo = mpvue.getStorageSync('userInfo')
+            }
+        },
+        onShow () {
+            this.init()
+        },
+        onPullDownRefresh () {
+            this.init()
+        },
+        methods: {
+            init () {
+                orderService.getOrderCountByState('waitPay').then(res => {
+                    this.waitPay = res
+                })
+                orderService.getOrderCountByState('waitEat').then(res => {
+                    this.waitEat = res
+                })
+                orderService.getOrderCountByState('waitComment').then(res => {
+                    this.waitComment = res
+                })
+                orderService.getOrderCountByState('refund').then(res => {
+                    this.refund = res
+                })
+            },
+            getWxUserInfo (event) {
+                if (event.mp.detail.userInfo) {
+                    // 将用户信息保存到服务器，保存成功后将被存储到本地
+                    userService.setUserInfo()
+                        .then(() => {
+                            this.userInfo = mpvue.getStorageSync('userInfo')
+                        })
+                } else {
+                    console.error('授权失败!!!')
+                }
+            },
+            callCSPhone () {
+                mpvue.makePhoneCall({
+                    phoneNumber: '01056511996'
+                })
+            },
+            gotoOrderPage (state) {
+                mpvue.navigateTo({
+                    url: `/pages/order/main?state=${state}`
+                })
+            }
         }
-      },
-      callCSPhone () {
-        mpvue.makePhoneCall({
-          phoneNumber: '01056511996'
-        })
-      },
-      gotoOrderPage (state) {
-        mpvue.navigateTo({
-          url: `/pages/order/main?state=${state}`
-        })
-      }
     }
-  }
 </script>
 
 <style>
