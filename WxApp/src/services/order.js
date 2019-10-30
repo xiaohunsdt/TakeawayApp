@@ -34,10 +34,11 @@ export function selectOrderById (orderId) {
 }
 
 export function getOrderListByPage (page, orderState) {
-  return api.getOrderListByPage(orderState)
+  const args = Object.assign({}, page, orderState)
+  return api.getOrderListByPage(args)
 }
 
-export function getOrderCountByState (page, orderState) {
+export function getOrderCountByState (orderState) {
   return api.getOrderCountByState(orderState)
 }
 

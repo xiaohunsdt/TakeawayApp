@@ -24,8 +24,8 @@ const api = {
   deteleAddress: (addressId) => request.post('address/deteleAddress', {addressId}),
 
   selectOrderById: (orderId) => request.post('order/selectOrderById', {orderId}),
-  getOrderListByPage: (orderState) => request.post('order/getOrderListByPage', orderState),
-  getOrderCountByState: (orderState) => request.post('order/getOrderCountByState', orderState),
+  getOrderListByPage: (arge) => request.post('order/getOrderListByPage', arge),
+  getOrderCountByState: (orderState) => request.post('order/getOrderCountByState', {orderState}),
   // 创建一个订单
   createOrder: (order, orderItems) => request.post('order/createOrder', {
     order,
