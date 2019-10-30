@@ -42,9 +42,34 @@ public interface IOrderService extends IService<Order> {
      * @param args   userId 用户ID <br />
      *               paymentWay 支付方式 <br />
      *               orderState 订单状态
-     * @return 用户列表
+     * @return 订单列表
      */
     IPage<Order> getOrderListByPage(Page page, Map args);
+
+    /**
+     * 用户端分页获取订单列表
+     * @param page   分页实例
+     * @param args   userId 用户ID <br />
+     *               orderState 订单状态
+     *                  - waitPay 等待支付
+     *                  - waitEat 等待就餐
+     *                  - waitComment 等待评价
+     *                  - refund 退款
+     * @return 订单列表
+     */
+    IPage<Order> getOrderListByPageU(Page page, Map args);
+
+    /**
+     * 用户端获取指定订单类型的数量
+     * @param args   userId 用户ID <br />
+     *               orderState 订单状态
+     *                  - waitPay 等待支付
+     *                  - waitEat 等待就餐
+     *                  - waitComment 等待评价
+     *                  - refund 退款
+     * @return 订单数量
+     */
+    int getOrderCountByStateU(Map args);
 
     /**
      * 获取当天的订单数量

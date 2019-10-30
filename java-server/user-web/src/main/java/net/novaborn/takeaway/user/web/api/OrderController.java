@@ -10,7 +10,6 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
@@ -54,21 +53,37 @@ public class OrderController extends BaseController {
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(
             @ModelAttribute Page page,
-            @RequestParam(required = false) OrderState state) {
+            @RequestParam(required = false) String orderState) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         Map<String, Object> args = new HashMap<>();
         args.put("userId", user.get().getId());
-        if (state != null) {
-            args.put("orderState", state);
+        if (orderState != null) {
+            args.put("orderState", orderState);
         }
 
         page.setOptimizeCountSql(false);
-        page = (Page) orderService.getOrderListByPage(page, args);
+        page = (Page) orderService.getOrderListByPageU(page, args);
         page.setRecords((List) new OrderDetailWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
+    }
+
+    @PostMapping("getOrderCountByState")
+    public ResponseEntity getOrderCountByState(String orderState) {
+        String openId = jwtTokenUtil.getUsernameFromToken(request);
+        Optional<User> user = userService.selectByOpenId(openId);
+        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
+
+        Map<String, Object> args = new HashMap<>();
+        args.put("userId", user.get().getId());
+        if (orderState != null) {
+            args.put("orderState", orderState);
+        }
+
+        int count = orderService.getOrderCountByStateU(args);
+        return ResponseEntity.ok(count);
     }
 
     @ResponseBody

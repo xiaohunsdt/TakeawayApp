@@ -35,7 +35,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public IPage<Order> getOrderListByPage(Page page, Map args) {
-        return this.baseMapper.getOrderListByPage(page,args);
+        return this.baseMapper.getOrderListByPage(page, args);
+    }
+
+    @Override
+    public IPage<Order> getOrderListByPageU(Page page, Map args) {
+        return this.baseMapper.getOrderListByPageU(page, args);
+    }
+
+    @Override
+    public int getOrderCountByStateU(Map args) {
+        return this.baseMapper.getOrderCountByStateU(args);
     }
 
     @Override
