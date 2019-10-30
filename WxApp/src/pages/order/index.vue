@@ -39,7 +39,7 @@
     methods: {
       init () {
         this.orderList.splice(0, this.orderList.length)
-        orderService.getOrderListByPage(this.state).then(res => {
+        orderService.getOrderListByPage(this.orderState).then(res => {
           res.records.forEach(item => {
             this.orderList.push(item)
           })

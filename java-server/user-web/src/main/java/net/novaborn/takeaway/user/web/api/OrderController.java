@@ -43,6 +43,7 @@ public class OrderController extends BaseController {
 
     private JwtTokenUtil jwtTokenUtil;
 
+    @ResponseBody
     @PostMapping("selectOrderById")
     public ResponseEntity selectOrderById(@RequestParam String orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
@@ -50,6 +51,7 @@ public class OrderController extends BaseController {
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
     }
 
+    @ResponseBody
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(
             @ModelAttribute Page page,
@@ -70,6 +72,7 @@ public class OrderController extends BaseController {
         return ResponseEntity.ok(page);
     }
 
+    @ResponseBody
     @PostMapping("getOrderCountByState")
     public ResponseEntity getOrderCountByState(String orderState) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);

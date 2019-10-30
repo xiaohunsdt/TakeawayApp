@@ -38,34 +38,34 @@
           <van-row>
             <div class="my-order-header">
               <div class="title">我的订单</div>
-              <div @click="gotoOrderPage('ALL')" class="view-all">
+              <div @click="gotoOrderPage('all')" class="view-all">
                 查看所有订单
                 <van-icon name="arrow"></van-icon>
               </div>
             </div>
             <van-col offset="1" span="4">
-              <div class="order-type-item">
+              <div class="order-type-item" @click="gotoOrderPage('waitPay')">
                 <van-info v-if="orderCount.waitPay > 0" :info="orderCount.waitPay"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/payment.png">
                 <div class="item-title">待付款</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
-              <div class="order-type-item">
+              <div class="order-type-item" @click="gotoOrderPage('waitEat')">
                 <van-info v-if="orderCount.waitEat > 0" :info="orderCount.waitEat"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/take_food.png">
                 <div class="item-title">待就餐</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
-              <div class="order-type-item">
+              <div class="order-type-item" @click="gotoOrderPage('waitComment')">
                 <van-info v-if="orderCount.waitComment > 0" :info="orderCount.waitComment"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/evaluate.png">
                 <div class="item-title">待评价</div>
               </div>
             </van-col>
             <van-col offset="2" span="4">
-              <div class="order-type-item">
+              <div class="order-type-item" @click="gotoOrderPage('refund')">
                 <van-info v-if="orderCount.refund > 0" :info="orderCount.refund"></van-info>
                 <img class="item-img" mode="widthFix" src="/static/images/order/refund.png">
                 <div class="item-title">退款</div>
@@ -156,16 +156,16 @@
         methods: {
             init () {
                 orderService.getOrderCountByState('waitPay').then(res => {
-                    this.waitPay = res
+                    this.orderCount.waitPay = res
                 })
                 orderService.getOrderCountByState('waitEat').then(res => {
-                    this.waitEat = res
+                    this.orderCount.waitEat = res
                 })
                 orderService.getOrderCountByState('waitComment').then(res => {
-                    this.waitComment = res
+                    this.orderCount.waitComment = res
                 })
                 orderService.getOrderCountByState('refund').then(res => {
-                    this.refund = res
+                    this.orderCount.refund = res
                 })
             },
             getWxUserInfo (event) {
