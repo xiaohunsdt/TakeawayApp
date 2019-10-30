@@ -44,6 +44,9 @@
         onPullDownRefresh () {
             this.init()
         },
+        onReachBottom () {
+            console.log('触底了')
+        },
         data () {
             return {
                 page: {
