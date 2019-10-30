@@ -33,7 +33,12 @@ public enum OrderState {
     /**
      * 退款
      */
-    REFUND(5);
+    REFUND(5),
+
+    /**
+     * 退款
+     */
+    EXPIRED(6);
 
     OrderState(int code) {
         this.code = code;

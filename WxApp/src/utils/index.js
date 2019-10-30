@@ -1,3 +1,5 @@
+var moment = require('moment')
+
 function formatNumber (n) {
   const str = n.toString()
   return str[1] ? str : `0${str}`
@@ -50,10 +52,17 @@ export function formatPaymentWay (paymentWay) {
   return paymentWayMap.get(paymentWay)
 }
 
+export function orderRemainingTime (createDate) {
+  let m = moment(createDate)
+  m.add(5, 'm')
+  return m.diff(moment())
+}
+
 export default {
   formatNumber,
   formatTime,
   formatOrderState,
   formatPayState,
-  formatPaymentWay
+  formatPaymentWay,
+  orderRemainingTime
 }

@@ -5,7 +5,14 @@
         <div class="header-left"></div>
         <div class="header-right">
           {{payStateStr}}
-          <span v-if="order.payState === 'UN_PAY'"> (过期: <van-count-down style="display: inline-flex" :time="300 * 1000" format="mm:ss"/>)</span>
+          <div v-if="order.payState === 'UN_PAY' || order.payState === 'EXPIRED'" style="display: inline">
+            <span v-if="order.payState === 'UN_PAY' && remainingTime > 0">
+              (过期: <van-count-down style="display: inline-flex" :time="remainingTime" format="mm:ss"/>)
+            </span>
+            <span v-if="order.payState === 'EXPIRED' || remainingTime <= 0">
+              (已过期)
+            </span>
+          </div>
         </div>
       </div>
       <div class="order-items">
@@ -37,47 +44,54 @@
 </template>
 
 <script>
-  import BasePanel from '@/components/BasePanel'
-  import OrderItem from '@/components/OrderItem'
-  import indexUtil from '@/utils/index'
+    import BasePanel from '@/components/BasePanel'
+    import OrderItem from '@/components/OrderItem'
+    import indexUtil from '@/utils/index'
 
-  export default {
-    name: 'OrderCard',
-    props: {
-      order: {
-        type: Object,
-        required: true
-      }
-    },
-    components: {
-      BasePanel,
-      OrderItem
-    },
-    computed: {
-      payStateStr () {
-        return indexUtil.formatPayState(this.order.payState)
-      }
-    },
-    methods: {
-      openOrderDetail () {
-        mpvue.navigateTo({
-          url: `/pages/order/detail/main?orderId=${this.order.id}`
-        })
-      },
-      payNow (event) {
-        console.log(event)
-      },
-      confirmGetFood (event) {
-        console.log(event)
-      },
-      shareOrder (event) {
-        console.log(event)
-      },
-      comment (event) {
-        console.log(event)
-      }
+    export default {
+        name: 'OrderCard',
+        props: {
+            order: {
+                type: Object,
+                required: true
+            }
+        },
+        components: {
+            BasePanel,
+            OrderItem
+        },
+        computed: {
+            payStateStr () {
+                return indexUtil.formatPayState(this.order.payState)
+            },
+            remainingTime () {
+                if (this.order.payState === 'UN_PAY') {
+                    return indexUtil.orderRemainingTime(this.order.createDate)
+                } else {
+                    return 0
+                }
+            }
+        },
+        methods: {
+            openOrderDetail () {
+                mpvue.navigateTo({
+                    url: `/pages/order/detail/main?orderId=${this.order.id}`
+                })
+            },
+            payNow (event) {
+                console.log(event)
+            },
+            confirmGetFood (event) {
+                console.log(event)
+            },
+            shareOrder (event) {
+                console.log(event)
+            },
+            comment (event) {
+                console.log(event)
+            }
+        }
     }
-  }
 </script>
 <style>
   .action-btn {

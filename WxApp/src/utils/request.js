@@ -11,7 +11,7 @@ request.config.baseURL = 'http://localhost:8081/api/user'
 request.interceptors.request.use((request) => {
   // 给所有请求添加自定义header，带上token信息让服务器验证用户登陆
   request.headers['Authorization'] = 'Bearer ' + mpvue.getStorageSync('token').token
-  console.log(request)
+  // console.log(request)
   if (request.headers['Content-Type'] === 'application/json') {
     // 数据加密
     const randomKey = mpvue.getStorageSync('token').randomKey

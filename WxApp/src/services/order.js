@@ -34,7 +34,7 @@ export function selectOrderById (orderId) {
 }
 
 export function getOrderListByPage (page, orderState) {
-  const args = Object.assign({}, page, orderState)
+  const args = Object.assign({}, page, {orderState})
   return api.getOrderListByPage(args)
 }
 
