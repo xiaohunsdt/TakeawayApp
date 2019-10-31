@@ -21,24 +21,19 @@ public enum OrderState {
     DELIVERING(2),
 
     /**
-     * 等待评论
-     */
-    WAIT_COMMENT(3),
-
-    /**
      * 已完成
      */
-    FINISHED(4),
+    FINISHED(3),
 
     /**
      * 退款
      */
-    REFUND(5),
+    REFUND(4),
 
     /**
      * 过期
      */
-    EXPIRED(6);
+    EXPIRED(5);
 
     OrderState(int code) {
         this.code = code;

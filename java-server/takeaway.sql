@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 31/10/2019 02:10:25
+ Date: 01/11/2019 01:33:46
 */
 
 SET NAMES utf8mb4;
@@ -273,6 +273,7 @@ CREATE TABLE `order`  (
   `ps` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `pay_state` int(2) UNSIGNED NOT NULL DEFAULT 0,
   `order_state` int(2) UNSIGNED NULL DEFAULT 0,
+  `is_commented` tinyint(1) NOT NULL DEFAULT 0,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `update_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
   `version` int(11) UNSIGNED NULL DEFAULT 0,
@@ -284,13 +285,13 @@ CREATE TABLE `order`  (
 -- ----------------------------
 -- Records of order
 -- ----------------------------
-INSERT INTO `order` VALUES ('1a23e173793fcd8d92ebfe1d6961d063', 4, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 0, 6, '2019-10-20 23:18:21', '2019-10-31 00:25:48', 0, 0);
-INSERT INTO `order` VALUES ('5c4038872373fc85f7e4fa4375d9b724', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 5, 0, 0, 33000, 33000, 2, '', 0, 0, '2019-10-31 00:25:27', '2019-10-31 00:25:27', 0, 0);
-INSERT INTO `order` VALUES ('760409e795ceeb2c4d448f4d2d224ef3', 2, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 8, 0, 0, 59000, 59000, 3, '', 1, 1, '2019-10-20 23:13:10', '2019-10-31 00:24:09', 0, 0);
-INSERT INTO `order` VALUES ('87696c5a71687ed7aa75e51655d0fdea', 3, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 2, 0, 0, 12000, 12000, 4, '', 1, 2, '2019-10-20 23:17:50', '2019-10-31 01:33:47', 0, 0);
-INSERT INTO `order` VALUES ('af207e91935db461abb5a2654efaa288', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 1, 3, '2019-10-21 20:28:29', '2019-10-31 01:33:48', 0, 0);
-INSERT INTO `order` VALUES ('cb5378238fbbfff539d6d8bb0c3c37c2', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 9, 0, 0, 56000, 56000, 2, '', 1, 4, '2019-10-27 20:53:06', '2019-10-31 01:33:49', 0, 0);
-INSERT INTO `order` VALUES ('d78dec67ea2c8cba2f45bcb7bfdf91a1', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 8, 0, 0, 59000, 59000, 2, '', 1, 5, '2019-10-20 23:01:39', '2019-10-31 01:33:51', 0, 0);
+INSERT INTO `order` VALUES ('1a23e173793fcd8d92ebfe1d6961d063', 4, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 0, 6, 0, '2019-10-20 23:18:21', '2019-10-31 00:25:48', 0, 0);
+INSERT INTO `order` VALUES ('5c4038872373fc85f7e4fa4375d9b724', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 5, 0, 0, 33000, 33000, 2, '', 0, 0, 0, '2019-10-31 00:25:27', '2019-10-31 00:25:27', 0, 0);
+INSERT INTO `order` VALUES ('760409e795ceeb2c4d448f4d2d224ef3', 2, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 8, 0, 0, 59000, 59000, 3, '', 1, 1, 0, '2019-10-20 23:13:10', '2019-10-31 00:24:09', 0, 0);
+INSERT INTO `order` VALUES ('87696c5a71687ed7aa75e51655d0fdea', 3, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 2, 0, 0, 12000, 12000, 4, '', 1, 2, 0, '2019-10-20 23:17:50', '2019-10-31 01:33:47', 0, 0);
+INSERT INTO `order` VALUES ('af207e91935db461abb5a2654efaa288', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 1, 3, 0, '2019-10-21 20:28:29', '2019-10-31 01:33:48', 0, 0);
+INSERT INTO `order` VALUES ('cb5378238fbbfff539d6d8bb0c3c37c2', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 9, 0, 0, 56000, 56000, 2, '', 1, 4, 0, '2019-10-27 20:53:06', '2019-10-31 01:33:49', 0, 0);
+INSERT INTO `order` VALUES ('d78dec67ea2c8cba2f45bcb7bfdf91a1', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 8, 0, 0, 59000, 59000, 2, '', 1, 5, 0, '2019-10-20 23:01:39', '2019-10-31 01:33:51', 0, 0);
 
 -- ----------------------------
 -- Table structure for order_item

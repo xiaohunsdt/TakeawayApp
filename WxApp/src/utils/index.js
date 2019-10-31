@@ -31,6 +31,7 @@ orderStateMap.set('REFUND', '退款')
 let payStateMap = new Map()
 payStateMap.set('UN_PAY', '未支付')
 payStateMap.set('PAID', '已支付')
+payStateMap.set('PAY_LATER', '后付')
 
 let paymentWayMap = new Map()
 paymentWayMap.set('BALANCE', '账户余额')
