@@ -22,7 +22,7 @@ export function formatTime (date) {
 
 let orderStateMap = new Map()
 orderStateMap.set('WAITING_RECEIVE', '等待接单')
-orderStateMap.set('PRODUCING', '生产中')
+orderStateMap.set('PRODUCING', '制作中')
 orderStateMap.set('DELIVERING', '配送中')
 orderStateMap.set('WAIT_COMMENT', '等待评论')
 orderStateMap.set('FINISHED', '已完成')

@@ -42,9 +42,10 @@
             </if>
                 <if test="args.orderState == 'waitEat'">
                     AND (`order_state` = 0 or `order_state` = 1 or `order_state` = 2)
+                    AND (`pay_state` = 1 or `pay_state` = 2)
                 </if>
                 <if test="args.orderState == 'waitComment'">
-                    AND `is_commented` = 0
+                    AND `is_commented` = 0 AND `order_state` = 3
                 </if>
                 <if test="args.orderState == 'refund'">
                     AND `order_state` = 4

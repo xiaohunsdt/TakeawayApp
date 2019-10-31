@@ -4,13 +4,15 @@
       <div class="order-header">
         <div class="header-left"></div>
         <div class="header-right">
-          {{orderStateStr}}
-          <div style="display: inline" v-if="order.payState === 'UN_PAY' || order.payState === 'EXPIRED'">
+          <div v-if="order.payState === 'PAID' || order.orderState === 'PAY_LATER'">
+            {{orderStateStr}}
+          </div>
+          <div style="display: inline" v-if="order.payState === 'UN_PAY' || order.orderState === 'EXPIRED'">
             <span v-if="order.payState === 'UN_PAY' && remainingTime > 0">
-              (过期: <van-count-down :time="remainingTime" format="mm:ss" style="display: inline-flex"/>)
+              未支付(过期: <van-count-down :time="remainingTime" format="mm:ss" style="display: inline-flex"/>)
             </span>
-            <span v-if="order.payState === 'EXPIRED' || remainingTime <= 0">
-              (已过期)
+            <span v-if="order.orderState === 'EXPIRED' || remainingTime <= 0">
+              已过期
             </span>
           </div>
         </div>
