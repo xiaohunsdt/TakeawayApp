@@ -83,6 +83,7 @@
     },
     onPullDownRefresh () {
       this.init()
+      mpvue.stopPullDownRefresh()
     },
     computed: {
       payStateStr () {

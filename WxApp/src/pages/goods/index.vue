@@ -90,6 +90,7 @@
     },
     onPullDownRefresh () {
       this.init(this.currentIndex)
+      mpvue.stopPullDownRefresh()
     },
     methods: {
       init (index) {

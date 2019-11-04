@@ -64,6 +64,7 @@
     },
     onPullDownRefresh () {
       this.init()
+      mpvue.stopPullDownRefresh()
     },
     // 原生的分享功能
     onShareAppMessage: function () {
