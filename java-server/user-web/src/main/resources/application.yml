@@ -57,7 +57,7 @@ mybatis-plus:
   typeAliasesPackage: net.novaborn.**.entity
   type-enums-package: net.novaborn.**.enums
 log:
-  path: admin-web-logs
+  path: user-web-logs
 
 logging:
   level:

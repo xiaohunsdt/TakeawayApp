@@ -29,9 +29,14 @@ services:
       - ~/betting_data/redisdata:/data
 
   rabbitmq:
-    image: rabbitmq:3.7.8-management
+#    image: rabbitmq:3.7.8-management
+    build:
+      context: .
+      dockerfile: Dockerfile-rabbitemp-deloy
     environment:
       TZ: Asia/Seoul
+      RABBITMQ_DEFAULT_USER: xiaohun
+      RABBITMQ_DEFAULT_PASS: wy1996
     network_mode: "service:mysql"
 
   admin-web:
@@ -43,9 +48,22 @@ services:
     volumes:
       - ~/server_data/log_data/admin-web-logs:/admin-web-logs
       - ~/server_data/upload:/upload
-      - /dev/shm:/dev/shm
     depends_on:
       - redis
       - mysql
       - rabbitmq
-    network_mode: "service:mysql"
+      network_mode: "service:mysql"
+
+  user-web:
+    build:
+      context: .
+      dockerfile: Dockerfile-user
+    environment:
+      PARAMS: --spring.profiles.active=pro
+    volumes:
+      - ~/server_data/log_data/user-web-logs:/user-web-logs
+    depends_on:
+      - redis
+      - mysql
+      - rabbitmq
+      network_mode: "service:mysql"
