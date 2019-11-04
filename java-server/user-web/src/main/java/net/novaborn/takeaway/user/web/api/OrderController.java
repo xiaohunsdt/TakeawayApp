@@ -10,6 +10,8 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.PayState;
+import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
@@ -109,6 +111,12 @@ public class OrderController extends BaseController {
         //填写订单信息
         order.setNumber(number);
         order.setUserId(user.get().getId());
+
+        //设置订单的支付状态
+        //刷卡和现金支付设置为后付状态
+        if(order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH){
+            order.setPayState(PayState.PAY_LATER);
+        }
 
         //先生成订单，在生成订单产品详情
         if (order.insert()) {

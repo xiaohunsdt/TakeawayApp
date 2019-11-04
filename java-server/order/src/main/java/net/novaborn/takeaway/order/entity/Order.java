@@ -75,6 +75,8 @@ public class Order extends Model<Order> {
      */
     private String ps;
 
+    private Boolean isCommented;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 

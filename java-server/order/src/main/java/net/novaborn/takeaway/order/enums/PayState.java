@@ -14,7 +14,12 @@ public enum PayState {
     /**
      * 已支付
      */
-    PAID( 1);
+    PAID( 1),
+
+    /**
+     * 后付
+     */
+    PAY_LATER( 2);
 
     PayState(int code) {
         this.code = code;

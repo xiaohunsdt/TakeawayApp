@@ -178,6 +178,8 @@
           this.SET_ADDRESS(res)
         }
       })
+      this.submitLoading = false
+      this.showOrderTip = false
     },
     data () {
       return {
