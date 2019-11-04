@@ -16,6 +16,7 @@ import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
+import net.novaborn.takeaway.user.mq.OrderPayExpiredSender;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.dto.OrderDto;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
@@ -42,6 +43,8 @@ public class OrderController extends BaseController {
     private UserService userService;
 
     private OrderService orderService;
+
+    private OrderPayExpiredSender orderPayExpiredSender;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -113,9 +116,11 @@ public class OrderController extends BaseController {
         order.setUserId(user.get().getId());
 
         //设置订单的支付状态
-        //刷卡和现金支付设置为后付状态
-        if(order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH){
+        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
+            //刷卡和现金支付设置为后付状态
             order.setPayState(PayState.PAY_LATER);
+        }else {
+            order.setPayState(PayState.UN_PAY);
         }
 
         //先生成订单，在生成订单产品详情
@@ -124,6 +129,11 @@ public class OrderController extends BaseController {
                 item.setOrderId(order.getId());
                 item.insert();
             });
+        }
+
+        //将未支付的订单丢给订单过期队列
+        if (order.getPayState() == PayState.UN_PAY) {
+            orderPayExpiredSender.send(order, 5 * 60);
         }
 
         //将订单id返回

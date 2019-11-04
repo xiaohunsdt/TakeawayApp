@@ -25,7 +25,7 @@ server:
 
 spring:
   profiles:
-    active: dev-pc
+    active: dev-mac
   mvc:
     static-path-pattern: /res/**
     view:
@@ -46,8 +46,17 @@ spring:
     port: 6379
     #连接超时时间
     timeout: 10000
-#    aop:
-#      proxy-target-class: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 10
 
 mybatis-plus:
   global-config:

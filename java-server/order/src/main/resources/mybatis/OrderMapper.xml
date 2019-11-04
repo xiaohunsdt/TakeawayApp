@@ -38,7 +38,7 @@
             `user_id` = #{args.userId}
             <if test="args.orderState != null and args.orderState != ''">
                 <if test="args.orderState == 'waitPay'">
-                    AND `pay_state` = 0
+                    AND `pay_state` = 0 AND `order_state` &lt;&gt; 5
                 </if>
                 <if test="args.orderState == 'waitEat'">
                     AND (`order_state` = 0 or `order_state` = 1 or `order_state` = 2)
