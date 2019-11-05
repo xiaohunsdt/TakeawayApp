@@ -25,7 +25,7 @@ server:
 
 spring:
   profiles:
-    active: dev-mac
+    active: dev-pc
   mvc:
     static-path-pattern: /res/**
     view:
@@ -82,6 +82,10 @@ spring:
     password: wy1996
   redis:
     host: 192.168.0.17
+    password: wy1996
+  rabbitmq:
+    host: 192.168.0.17
+    username: xiaohun
     password: wy1996
 
 #logging:

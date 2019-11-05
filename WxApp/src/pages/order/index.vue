@@ -43,6 +43,7 @@
     },
     onPullDownRefresh () {
       this.init()
+      mpvue.stopPullDownRefresh()
     },
     onReachBottom () {
       if (this.page.current + 1 <= this.page.total) {

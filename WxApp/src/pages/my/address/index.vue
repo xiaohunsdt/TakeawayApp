@@ -46,6 +46,7 @@
     },
     onPullDownRefresh () {
       this.init()
+      mpvue.stopPullDownRefresh()
     },
     methods: {
       ...mapMutations('address', [

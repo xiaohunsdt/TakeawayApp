@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: takeaway
       MYSQL_PASSWORD: takeaway123!
       TZ: Asia/Seoul
+    restart: always
     ports:
       - "3306:3306"
       - "6379:6379"
@@ -24,6 +25,7 @@ services:
   redis:
     image: redis
     command: redis-server --requirepass wy1996 --appendonly yes
+    restart: always
     network_mode: "service:mysql"
     volumes:
       - ~/betting_data/redisdata:/data
@@ -37,6 +39,7 @@ services:
       TZ: Asia/Seoul
       RABBITMQ_DEFAULT_USER: xiaohun
       RABBITMQ_DEFAULT_PASS: wy1996
+    restart: always
     network_mode: "service:mysql"
 
   admin-web:
@@ -45,6 +48,7 @@ services:
       dockerfile: Dockerfile-admin
     environment:
       PARAMS: --spring.profiles.active=pro
+    restart: always
     volumes:
       - ~/server_data/log_data/admin-web-logs:/admin-web-logs
       - ~/server_data/upload:/upload
@@ -60,6 +64,7 @@ services:
       dockerfile: Dockerfile-user
     environment:
       PARAMS: --spring.profiles.active=pro
+    restart: always
     volumes:
       - ~/server_data/log_data/user-web-logs:/user-web-logs
     depends_on:
