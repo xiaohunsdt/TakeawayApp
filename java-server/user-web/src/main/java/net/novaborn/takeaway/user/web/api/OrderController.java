@@ -133,7 +133,7 @@ public class OrderController extends BaseController {
 
         //将未支付的订单丢给订单过期队列
         if (order.getPayState() == PayState.UN_PAY) {
-            orderPayExpiredSender.send(order, 5 * 60);
+            orderPayExpiredSender.send(order, 15 * 60);
         }
 
         //将订单id返回
