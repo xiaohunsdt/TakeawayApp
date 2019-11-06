@@ -19,6 +19,13 @@ wx:
     token: takeaway_token_mini_program
     aesKey: orkh4QFZlWvTBLMG7hjVI9VYrPqVJoUP6vAPpH9JORy
     msgDataFormat: JSON
+  pay:
+    appId: wxdd0eeefb8c1c5ceb
+    mchId: 1553192321
+    mchKey: aazzzzzzzzz123141AAAAAAAAAAAAAAz
+    keyPath: classpath:cart/apiclient_cert.p12
+#    subAppId: #服务商模式下的子商户公众账号ID
+#    subMchId: #服务商模式下的子商户号
 
 server:
   port: 8081
@@ -72,6 +79,9 @@ logging:
   level:
     root: info
     net.novaborn: info
+    org.springframework.web: info
+    com.github.binarywang.demo.wx.pay: debug
+    com.github.binarywang.wxpay: debug
 
 ---
 spring:

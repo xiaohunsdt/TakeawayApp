@@ -3,7 +3,7 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       {{orderId}}
-      <van-button type="default" :loading="false" @click="pay">
+      <van-button :loading="false" @click="pay" type="default">
         支付
       </van-button>
     </div>
@@ -11,21 +11,26 @@
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                orderId: 'asdadasdsad'
-            }
-        },
-        onLoad (options) {
-            this.orderId = options.orderId
-        },
-        methods: {
-            pay () {
+  import payApi from '@/services/pay'
 
-            }
-        }
+  export default {
+    data () {
+      return {
+        orderId: 'asdadasdsad'
+      }
+    },
+    onLoad (options) {
+      this.orderId = options.orderId
+    },
+    methods: {
+      pay () {
+        payApi.payOrder(this.orderId)
+          .then(res => {
+            console.log(res)
+          })
+      }
     }
+  }
 </script>
 
 <style scoped>

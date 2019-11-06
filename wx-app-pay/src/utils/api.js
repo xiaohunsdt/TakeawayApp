@@ -1,9 +1,8 @@
 import request from './request'
 
 const api = {
-  // 微信接口
   authLoginByWeixin: (code) => request.post('wx/auth', {code}),
-  setUserInfo: (userInfo) => request.post('wx/setUserInfo', userInfo),
+  createPayInfo: (orderId) => request.post('wx/pay/createPayInfo', {orderId})
 }
 
 export default api

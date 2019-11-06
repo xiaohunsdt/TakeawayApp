@@ -14,7 +14,9 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <name>user-web</name>
-
+    <properties>
+        <wx-java.version>3.5.0</wx-java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>net.novaborn.takeaway</groupId>
@@ -77,7 +79,13 @@
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
-            <version>3.5.0</version>
+            <version>${wx-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${wx-java.version}</version>
         </dependency>
     </dependencies>
 </project>

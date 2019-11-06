@@ -4,18 +4,12 @@
 import api from '@/utils/api'
 import util from '@/utils/util'
 
-/**
- * 判断用户是否登录
- */
 function payOrder (orderId) {
   return new Promise(function (resolve, reject) {
-    // console.log('api.PayPrepayId', api.PayPrepayId);
-    util.request(api.PayPrepayId, {
-      orderId: orderId
-    }).then((res) => {
-      // console.log('请求接口pay/prepay后的结果', res)
-      if (res.errno === 0) {
-        const payParam = res.data
+    util.request(api.createPayInfo, { orderId })
+      .then((res) => {
+        console.log('请求接口pay/prepay后的结果', res)
+        const payParam = res.message
         // console.log('payParam这些应该是后台
         // 计算好的签名等', payParam.timeStamp)
         const timeStampParam = payParam.timeStamp ? payParam.timeStamp : ''
@@ -39,10 +33,7 @@ function payOrder (orderId) {
             reject(res)
           }
         })
-      } else {
-        reject(res)
-      }
-    })
+      })
   })
 }
 
