@@ -16,7 +16,8 @@ function payOrder (orderId) {
       // console.log('请求接口pay/prepay后的结果', res)
       if (res.errno === 0) {
         const payParam = res.data
-        // console.log('payParam这些应该是后台计算好的签名等', payParam.timeStamp)
+        // console.log('payParam这些应该是后台
+        // 计算好的签名等', payParam.timeStamp)
         const timeStampParam = payParam.timeStamp ? payParam.timeStamp : ''
         const nonceStrParam = payParam.nonceStr ? payParam.nonceStr : ''
         const packageParam = payParam.package ? payParam.package : ''
