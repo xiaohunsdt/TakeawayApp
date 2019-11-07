@@ -1,7 +1,21 @@
 <script>
+  import { mapMutations } from 'vuex'
+
   export default {
+    methods: {
+      ...mapMutations('order', [
+        'SET_ORDER_ID'
+      ])
+    },
     created () {
-        console.log('created')
+      console.log('created')
+    },
+    onLaunch (options) {
+      console.log(options)
+      if (options.referrerInfo.extraData.orderId) {
+        console.log(`当前OrderId: ${options.referrerInfo.extraData.orderId}`)
+        this.SET_ORDER_ID(options.referrerInfo.extraData.orderId)
+      }
     }
   }
 </script>

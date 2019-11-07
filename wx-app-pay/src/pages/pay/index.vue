@@ -11,46 +11,44 @@
 </template>
 
 <script>
-    import userApi from '@/services/user'
-    import payApi from '@/services/pay'
-    import util from '@/utils/util'
+  import userApi from '@/services/user'
+  import payApi from '@/services/pay'
+  import util from '@/utils/util'
 
-    export default {
-        data () {
-            return {
-                orderId: '87696c5a71687ed7aa75e51655d0fdea'
-            }
-        },
-        onLoad (options) {
-            if (options.orderId) {
-                this.orderId = options.orderId
-            }
-        },
-        methods: {
-            pay () {
-                const this_ = this
-                userApi.checkLogin()
-                    .then(() => {
-                        payApi.payOrder(this.orderId)
-                            .then(res => {
-                                console.log(res)
-                            })
-                            .catch(() => {
-                                util.showErrorToast('支付失败')
-                            })
-                    })
-                    .catch(() => {
-                        userApi.loginByWx()
-                            .then(res => {
-                                this_.pay()
-                            })
-                            .catch(() => {
-                                util.showErrorToast('登录失败')
-                            })
-                    })
-            }
-        }
+  export default {
+    data () {
+      return {
+        orderId: this.$store.getters.orderId
+      }
+    },
+    onLoad () {
+      this.pay()
+    },
+    methods: {
+      pay () {
+        const this_ = this
+        userApi.checkLogin()
+          .then(() => {
+            payApi.payOrder(this.orderId)
+              .then(res => {
+                console.log(res)
+              })
+              .catch((res) => {
+                util.showErrorToast(res.message)
+              })
+          })
+          .catch(() => {
+            userApi.loginByWx()
+              .then(res => {
+                this_.pay()
+              })
+              .catch(res => {
+                util.showErrorToast(res.message)
+              })
+          })
+      }
     }
+  }
 </script>
 
 <style scoped>
