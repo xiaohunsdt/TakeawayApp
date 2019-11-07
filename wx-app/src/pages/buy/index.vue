@@ -135,11 +135,12 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import orderService from '@/services/order'
   import addressService from '@/services/address'
+  import payApi from '@/services/pay'
 
   export default {
     components: {
@@ -235,10 +236,11 @@
           this.submitLoading = false
           this.CLEAR_CART()
           // 支付逻辑
-          const {message} = res
-          mpvue.redirectTo({
-            url: `/pages/pay/main?orderId=${message}`
-          })
+          const { message } = res
+          payApi.payOrder(message)
+          // mpvue.redirectTo({
+          //   url: `/pages/pay/main?orderId=${message}`
+          // })
         })
       }
     }

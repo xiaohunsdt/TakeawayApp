@@ -73,6 +73,7 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import indexUtil from '@/utils/index'
+  import payApi from '@/services/pay'
 
   export default {
     name: 'OrderCard',
@@ -108,7 +109,7 @@
         })
       },
       payNow (event) {
-        console.log(event)
+        payApi.payOrder(this.order.id)
       },
       confirmGetFood (event) {
         console.log(event)

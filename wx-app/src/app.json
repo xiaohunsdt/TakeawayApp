@@ -28,6 +28,9 @@
     "navigationBarTextStyle": "white",
     "backgroundColor": "#FFD200"
   },
+  "navigateToMiniProgramAppIdList": [
+    "wxdd0eeefb8c1c5ceb"
+  ],
   "tabBar": {
     "color": "#ccc",
     "selectedColor": "#FFD200",
