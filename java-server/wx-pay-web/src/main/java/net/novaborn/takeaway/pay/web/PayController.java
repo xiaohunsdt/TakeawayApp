@@ -23,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Controller
-@RequestMapping("/api/user/wx/pay")
+@RequestMapping("/api/wx/pay")
 public class PayController extends BaseController {
     private OrderService orderService;
 
