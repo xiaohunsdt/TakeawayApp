@@ -32,7 +32,7 @@ server:
 
 spring:
   profiles:
-    active: dev-pc
+    active: dev-mac
   mvc:
     static-path-pattern: /res/**
     view:

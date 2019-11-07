@@ -51,24 +51,23 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private SystemProperties systemProperties;
 
-//    @Bean
-//    @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
-//    public FilterRegistrationBean jwtAuthenticationTokenFilter() {
-//        AuthFilter authFilter = new AuthFilter();
-//        authFilter.setJwtProperties(this.jwtProperties);
-//        authFilter.setJwtTokenUtil(this.jwtTokenUtil);
-//        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(authFilter);
-//
-//        //添加不需要忽略的格式信息.
-//        List<String> exclusions = new ArrayList<>();
-//        exclusions.add("/api/user/" + jwtProperties.getAuthPath());
-//        exclusions.add("/api/user/wx/" + jwtProperties.getAuthPath());
-//        exclusions.add("/api/user/index/*");
-//        filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
-//        //添加过滤规则.
-//        filterRegistrationBean.addUrlPatterns("/api/*");
-//        return filterRegistrationBean;
-//    }
+    @Bean
+    @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
+    public FilterRegistrationBean jwtAuthenticationTokenFilter() {
+        AuthFilter authFilter = new AuthFilter();
+        authFilter.setJwtProperties(this.jwtProperties);
+        authFilter.setJwtTokenUtil(this.jwtTokenUtil);
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(authFilter);
+
+        //添加不需要忽略的格式信息.
+        List<String> exclusions = new ArrayList<>();
+        exclusions.add("/api/wx/" + jwtProperties.getAuthPath());
+        exclusions.add("/api/wx/pay/notice");
+        filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
+        //添加过滤规则.
+        filterRegistrationBean.addUrlPatterns("/api/*");
+        return filterRegistrationBean;
+    }
 
     @Bean
     public DataSecurityAction dataSecurityAction() {
