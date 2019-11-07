@@ -1,8 +1,7 @@
-package net.novaborn.takeaway.user.web.wx;
+package net.novaborn.takeaway.pay.web;
 
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
-import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
@@ -12,13 +11,9 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.user.web.api.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -57,5 +52,12 @@ public class PayController extends BaseController {
         }
 
         return result;
+    }
+
+    @PostMapping("notice")
+    @ResponseBody
+    public String notice() {
+        System.out.println("收到消息了");
+        return null;
     }
 }

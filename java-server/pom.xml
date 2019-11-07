@@ -16,6 +16,7 @@
         <module>category</module>
         <module>common</module>
         <module>user-web</module>
+        <module>wx-pay-web</module>
     </modules>
 
     <parent>
