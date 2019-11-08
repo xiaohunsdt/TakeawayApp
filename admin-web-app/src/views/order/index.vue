@@ -166,7 +166,7 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
+  import BaseCard from '@/components/BaseCard'
   import orderApi from '@/api/order'
   import { getServerUrl } from '@/utils/sys'
 

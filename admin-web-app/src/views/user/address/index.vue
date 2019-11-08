@@ -72,7 +72,7 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
+  import BaseCard from '@/components/BaseCard'
   import addressApi from '@/api/address'
 
   export default {

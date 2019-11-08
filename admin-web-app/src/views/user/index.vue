@@ -76,7 +76,7 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
+  import BaseCard from '@/components/BaseCard'
   import userApi from '@/api/user'
 
   export default {

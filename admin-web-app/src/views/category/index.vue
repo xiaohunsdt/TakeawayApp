@@ -67,7 +67,7 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
+  import BaseCard from '@/components/BaseCard'
   import categoryApi from '@/api/category'
   import AddCategoryDialog from './components/AddCategoryDialog'
 

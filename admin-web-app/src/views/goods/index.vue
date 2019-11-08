@@ -131,7 +131,7 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard/BaseCard'
+  import BaseCard from '@/components/BaseCard'
   import GoodsImageDialog from './components/GoodsImageDialog'
   import goodsApi from '@/api/goods'
   import categoryApi from '@/api/category'
