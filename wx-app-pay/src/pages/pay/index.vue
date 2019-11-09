@@ -2,10 +2,12 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div class="container-contain">
-      {{orderId}}
-      <van-button :loading="false" @click="pay" type="default">
-        支付
-      </van-button>
+      <base-panel>
+        <div style="text-overflow:ellipsis;word-wrap:break-word">
+          {{orderId}}
+        </div>
+      </base-panel>
+      <van-button @click="pay" type="primary" size="small">支付</van-button>
     </div>
   </div>
 </template>
@@ -14,8 +16,12 @@
   import userApi from '@/services/user'
   import payApi from '@/services/pay'
   import util from '@/utils/util'
+  import BasePanel from '@/components/BasePanel'
 
   export default {
+    components: {
+      BasePanel
+    },
     data () {
       return {
         orderId: this.$store.getters.orderId
@@ -34,7 +40,8 @@
                 console.log(res)
               })
               .catch((res) => {
-                util.showErrorToast(res.message)
+                console.log(res)
+                util.showErrorToast(res.errMsg)
               })
           })
           .catch(() => {
@@ -54,5 +61,6 @@
 <style scoped>
   .container-contain {
     padding: 0.3rem 0.3rem;
+    text-align: center;
   }
 </style>

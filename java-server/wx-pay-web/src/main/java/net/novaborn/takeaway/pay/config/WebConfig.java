@@ -14,7 +14,6 @@ import net.novaborn.takeaway.pay.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.pay.common.xss.XssFilter;
 import net.novaborn.takeaway.pay.config.properties.JwtProperties;
 import net.novaborn.takeaway.pay.config.properties.RestProperties;
-import net.novaborn.takeaway.pay.config.properties.SystemProperties;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
@@ -47,9 +46,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private JwtProperties jwtProperties;
-
-    @Autowired
-    private SystemProperties systemProperties;
 
     @Bean
     @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)

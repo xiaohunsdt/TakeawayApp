@@ -9,9 +9,6 @@ jwt:
   auth-path: auth         #认证请求的路径
   md5-key: takeaway-user      #md5加密混淆key
 
-sys:
-  upload-server-url: http://cxy.novaborn.net:8080
-
 wx:
   miniapp:
     appid: wxdd0eeefb8c1c5ceb

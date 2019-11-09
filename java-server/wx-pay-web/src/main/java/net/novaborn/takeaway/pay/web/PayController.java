@@ -48,7 +48,8 @@ public class PayController extends BaseController {
         request.setOpenid(openId);
         request.setBody("支付-川香苑外卖");
         request.setOutTradeNo(orderId);
-        request.setTotalFee(order.get().getRealPrice() * 6 / 10); // 精确到分
+//        request.setTotalFee(order.get().getRealPrice() * 6 / 10); // 精确到分
+        request.setTotalFee(1); // 精确到分
         request.setSpbillCreateIp(this.request.getLocalAddr());
         request.setNotifyUrl("http://pay.novaborn.net/api/wx/pay/notice");
         request.setTradeType("JSAPI");
