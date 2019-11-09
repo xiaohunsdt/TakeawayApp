@@ -59,6 +59,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<String> exclusions = new ArrayList<>();
         exclusions.add("/api/wx/" + jwtProperties.getAuthPath());
         exclusions.add("/api/wx/pay/notice");
+        exclusions.add("/api/wx/pay/confirmOrder");
         filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/api/*");

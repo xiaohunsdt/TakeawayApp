@@ -63,7 +63,7 @@ public class FastjsonConfig {
      */
     public List<MediaType> getSupportedMediaType() {
         ArrayList<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        mediaTypes.add(MediaType.APPLICATION_JSON);
         return mediaTypes;
     }
 

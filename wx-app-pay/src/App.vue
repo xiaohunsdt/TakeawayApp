@@ -9,13 +9,6 @@
     },
     created () {
       console.log('created')
-    },
-    onLaunch (options) {
-      console.log(options)
-      if (options.referrerInfo.extraData.orderId) {
-        console.log(`当前OrderId: ${options.referrerInfo.extraData.orderId}`)
-        this.SET_ORDER_ID(options.referrerInfo.extraData.orderId)
-      }
     }
   }
 </script>

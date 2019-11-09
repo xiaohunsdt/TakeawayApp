@@ -11,7 +11,10 @@ public enum PayExceptionEnum implements ServiceExceptionEnum {
     /**
      * 没有订单商品
      */
-    PAY_CREATE_ERROR(500, "创建支付信息失败!");
+    PAY_CREATE_ERROR(500, "创建支付信息失败!"),
+    QUERY_PAY_ERROR(500, "查询支付信息失败!"),
+    PAY_PRICE_ERROR(500, "订单支付金额不符合!"),
+    PAY_PAID_ERROR(500, "订单已经是已支付状态!");
 
     PayExceptionEnum(int code, String message) {
         this.code = code;

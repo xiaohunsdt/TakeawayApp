@@ -55,11 +55,11 @@
 					"id": 0,
 					"name": "pages/pay/main",
 					"pathName": "pages/pay/main",
-					"query": "",
+					"query": "orderId=2a30c242c3a729bea911c3fe65d5f813",
 					"scene": 1037,
 					"referrerInfo": {
 						"appId": "wxdd0eeefb8c1c5ceb",
-						"extraData": "{\"orderId\":\"cb5378238fbbfff539d6d8bb0c3c37c2\"}"
+						"extraData": "{}"
 					}
 				}
 			]

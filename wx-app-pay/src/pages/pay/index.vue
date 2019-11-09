@@ -7,7 +7,7 @@
           {{orderId}}
         </div>
       </base-panel>
-      <van-button @click="pay" type="primary" size="small">支付</van-button>
+      <van-button @click="pay" size="small" type="primary">支付</van-button>
     </div>
   </div>
 </template>
@@ -24,11 +24,16 @@
     },
     data () {
       return {
-        orderId: this.$store.getters.orderId
+        orderId: ''
       }
     },
-    onLoad () {
-      this.pay()
+    onLoad (options) {
+      console.log(options)
+      if (options.orderId) {
+        console.log(`当前OrderId: ${options.orderId}`)
+        this.orderId = options.orderId
+        this.pay()
+      }
     },
     methods: {
       pay () {
@@ -37,11 +42,20 @@
           .then(() => {
             payApi.payOrder(this.orderId)
               .then(res => {
-                console.log(res)
+                wx.navigateBackMiniProgram({
+                  extraData: {
+                    orderId: this_.orderId,
+                    res
+                  }
+                })
               })
               .catch((res) => {
-                console.log(res)
-                util.showErrorToast(res.errMsg)
+                wx.navigateBackMiniProgram({
+                  extraData: {
+                    orderId: this_.orderId,
+                    res
+                  }
+                })
               })
           })
           .catch(() => {
