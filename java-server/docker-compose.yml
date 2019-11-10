@@ -20,18 +20,17 @@ services:
       - "8082:8082"
       - "80:80"
     volumes:
-      - ~/betting_data/mysql_data:/var/lib/mysql
-
+      - ~/server_data/mysql_data:/var/lib/mysql
   redis:
     image: redis
     command: redis-server --requirepass wy1996 --appendonly yes
     restart: always
     network_mode: "service:mysql"
     volumes:
-      - ~/betting_data/redisdata:/data
+      - ~/server_data/redisdata:/data
 
   rabbitmq:
-#    image: rabbitmq:3.7.8-management
+    #    image: rabbitmq:3.7.8-management
     build:
       context: .
       dockerfile: Dockerfile-rabbitemp-deloy
@@ -56,7 +55,7 @@ services:
       - redis
       - mysql
       - rabbitmq
-      network_mode: "service:mysql"
+    network_mode: "service:mysql"
 
   user-web:
     build:
@@ -71,7 +70,7 @@ services:
       - redis
       - mysql
       - rabbitmq
-      network_mode: "service:mysql"
+    network_mode: "service:mysql"
 
   wx-pay-web:
     build:
@@ -86,7 +85,7 @@ services:
       - redis
       - mysql
       - rabbitmq
-      network_mode: "service:mysql"
+    network_mode: "service:mysql"
 
   nginx:
     image: nginx:1.15.2
