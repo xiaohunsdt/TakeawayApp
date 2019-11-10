@@ -4,7 +4,7 @@ RUN echo "Asia/Seoul" > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
 VOLUME /tmp
-ADD ./user-web/target/user-web-0.0.1-SNAPSHOT.jar /app.jar
+ADD ./wx-pay-web/target/wx-pay-web-0.0.1-SNAPSHOT.jar /app.jar
 
 ENV TZ=Asia/Seoul
 

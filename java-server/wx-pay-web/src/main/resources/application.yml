@@ -70,7 +70,7 @@ mybatis-plus:
   typeAliasesPackage: net.novaborn.**.entity
   type-enums-package: net.novaborn.**.enums
 log:
-  path: user-web-logs
+  path: wx-pay-web-logs
 
 logging:
   level:
