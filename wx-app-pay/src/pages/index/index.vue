@@ -2,23 +2,31 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div class="container-contain">
-      <h1 id="header">诺本网络 <br /> 欢迎您</h1>
+      <h1 id="header">诺本网络 <br/> 欢迎您</h1>
+
     </div>
   </div>
 </template>
 
 <script>
-    import BasePanel from '@/components/BasePanel'
+  import BasePanel from '@/components/BasePanel'
 
-    export default {
-        components: {
-            BasePanel
-        },
-        data () {
-            return {}
-        },
-        methods: {}
-    }
+  export default {
+    components: {
+      BasePanel
+    },
+    data () {
+      return {
+        dataList: [
+          {
+            title: '测试1',
+            content: ''
+          }
+        ]
+      }
+    },
+    methods: {}
+  }
 </script>
 
 <style scoped>
