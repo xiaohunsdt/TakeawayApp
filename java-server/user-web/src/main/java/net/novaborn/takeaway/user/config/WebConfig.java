@@ -55,11 +55,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private SystemProperties systemProperties;
 
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/", "/index.html");
-    }
-
     /**
      * 添加 UploadFileFilter
      */
