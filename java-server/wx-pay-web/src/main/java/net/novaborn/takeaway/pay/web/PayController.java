@@ -65,6 +65,7 @@ public class PayController extends BaseController {
             throw sysException;
         }
 
+        log.info("订单:{},创建微信支付预信息成功!!",orderId);
         return result;
     }
 
@@ -84,6 +85,8 @@ public class PayController extends BaseController {
         int totalPrice = result.getSettlementTotalFee();
         String state = result.getTradeState();
         this.confirmOrder(orderId, totalPrice, state);
+
+        log.info("订单:{},支付验证成功!!",orderId);
         return new SuccessTip();
     }
 
@@ -102,6 +105,8 @@ public class PayController extends BaseController {
         int totalPrice = notifyResult.getSettlementTotalFee();
         String state = notifyResult.getResultCode();
         this.confirmOrder(orderId, totalPrice, state);
+
+        log.info("订单:{},支付回调验证成功!!",orderId);
         return WxPayNotifyResponse.success("成功");
     }
 

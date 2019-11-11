@@ -36,6 +36,8 @@ public class AuthController extends BaseController {
         if (validate) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
+
+            log.info("OpenId: {} 登陆成功!",authRequest.getUserName());
             return ResponseEntity.ok(new AuthResponse(token, randomKey));
         } else {
             throw new SysException(SysExceptionEnum.AUTH_REQUEST_ERROR);

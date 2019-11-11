@@ -42,6 +42,8 @@ public class WxController extends BaseController {
 
         final String randomKey = jwtTokenUtil.getRandomKey();
         final String token = jwtTokenUtil.generateToken(session.getOpenid(), randomKey);
+
+        log.info("OpenId: {} 登陆成功!",session.getOpenid());
         return ResponseEntity.ok(new AuthResponse(token, randomKey));
     }
 }
