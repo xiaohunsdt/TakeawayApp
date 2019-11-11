@@ -92,4 +92,7 @@ services:
     restart: always
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/live/novaborn.net/fullchain.pem:/cert/fullchain.pem
+      - /etc/letsencrypt/live/novaborn.net/privkey.pem:/cert/privkey.pem
+      - /etc/letsencrypt/live/novaborn.net/chain.pem:/cert/chain.pem
     network_mode: "service:mysql"
