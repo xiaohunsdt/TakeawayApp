@@ -52,7 +52,7 @@ public class PayController extends BaseController {
         request.setOutTradeNo(orderId);
         request.setTotalFee(getOrderPrice(order.get())); // 精确到分
         request.setSpbillCreateIp(this.request.getLocalAddr());
-        request.setNotifyUrl("https://pay.novaborn.net/api/wx/pay/notice");
+        request.setNotifyUrl("https://pay.cxy.novaborn.net/api/wx/pay/notice");
         request.setTradeType("JSAPI");
 
         WxPayMpOrderResult result;
