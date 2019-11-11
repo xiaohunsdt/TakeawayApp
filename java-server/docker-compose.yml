@@ -75,7 +75,7 @@ services:
   wx-pay-web:
     build:
       context: .
-      dockerfile: Dockerfile-user
+      dockerfile: Dockerfile-wx-pay
     environment:
       PARAMS: --spring.profiles.active=pro
     restart: always
