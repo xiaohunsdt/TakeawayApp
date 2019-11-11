@@ -80,7 +80,7 @@ services:
       PARAMS: --spring.profiles.active=pro
     restart: always
     volumes:
-      - ~/server_data/log_data/user-web-logs:/user-web-logs
+      - ~/server_data/log_data/wx-pay-web-logs:/wx-pay-web-logs
     depends_on:
       - redis
       - mysql
