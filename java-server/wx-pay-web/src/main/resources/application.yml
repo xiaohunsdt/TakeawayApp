@@ -29,7 +29,7 @@ server:
 
 spring:
   profiles:
-    active: dev-pc
+    active: test
   mvc:
     static-path-pattern: /res/**
     view:
@@ -120,11 +120,15 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://game.adminpower.club:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
+    url: jdbc:mysql://cxy.novaborn.net:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    username: takeaway
+    password: takeaway123!
   redis:
-    host: game.adminpower.club
+    host: cxy.novaborn.net
+  rabbitmq:
+    host: cxy.novaborn.net
+    username: xiaohun
+    password: wy1996
 
 
 ---
