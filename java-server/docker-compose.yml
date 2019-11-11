@@ -19,6 +19,7 @@ services:
 #      - "8081:8081"
 #      - "8082:8082"
       - "80:80"
+      - "443:443"
     volumes:
       - ~/server_data/mysql_data:/var/lib/mysql
   redis:
@@ -92,7 +93,7 @@ services:
     restart: always
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt/live/novaborn.net/fullchain.pem:/cert/fullchain.pem
-      - /etc/letsencrypt/live/novaborn.net/privkey.pem:/cert/privkey.pem
-      - /etc/letsencrypt/live/novaborn.net/chain.pem:/cert/chain.pem
+      - /etc/letsencrypt/live/cxy.novaborn.net/fullchain.pem:/cert/fullchain.pem
+      - /etc/letsencrypt/live/cxy.novaborn.net/privkey.pem:/cert/privkey.pem
+      - /etc/letsencrypt/live/cxy.novaborn.net/chain.pem:/cert/chain.pem
     network_mode: "service:mysql"
