@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
@@ -65,7 +66,7 @@ public class PayController extends BaseController {
             throw sysException;
         }
 
-        log.info("订单:{},创建微信支付预信息成功!!",orderId);
+        log.info("订单:{},创建微信支付预信息成功!!", orderId);
         return result;
     }
 
@@ -82,11 +83,11 @@ public class PayController extends BaseController {
             throw sysException;
         }
 
-        int totalPrice = result.getSettlementTotalFee();
+        int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
         this.confirmOrder(orderId, totalPrice, state);
 
-        log.info("订单:{},支付验证成功!!",orderId);
+        log.info("订单:{},支付验证成功!!", orderId);
         return new SuccessTip();
     }
 
@@ -102,11 +103,11 @@ public class PayController extends BaseController {
         }
 
         String orderId = notifyResult.getOutTradeNo();
-        int totalPrice = notifyResult.getSettlementTotalFee();
+        int totalPrice = notifyResult.getTotalFee();
         String state = notifyResult.getResultCode();
         this.confirmOrder(orderId, totalPrice, state);
 
-        log.info("订单:{},支付回调验证成功!!",orderId);
+        log.info("订单:{},支付回调验证成功!!", orderId);
         return WxPayNotifyResponse.success("成功");
     }
 
@@ -119,6 +120,7 @@ public class PayController extends BaseController {
             if (totalPrice == getOrderPrice(order.get())) {
                 if (order.get().getPayState() != PayState.PAID) {
                     order.get().setPayState(PayState.PAID);
+                    order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     order.get().updateById();
                 } else {
                     throw new SysException(PayExceptionEnum.PAY_PAID_ERROR);

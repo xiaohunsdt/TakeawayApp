@@ -1,0 +1,44 @@
+2019-11-12 04:27:44.539 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mn.novaborn.takeaway.pay.PayApplication[0;39m [35mLine:55 [0;39m - Starting PayApplication on WIN-BHFQ0230M5B with PID 1380 (I:\Project\TakeawayApp\java-server\wx-pay-web\target\classes started by Administrator in I:\Project\TakeawayApp\java-server)
+2019-11-12 04:27:44.547 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mn.novaborn.takeaway.pay.PayApplication[0;39m [35mLine:655[0;39m - The following profiles are active: pro
+2019-11-12 04:27:44.615 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.b.d.e.DevToolsPropertyDefaultsPostProcessor[0;39m [35mLine:225[0;39m - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-11-12 04:27:44.615 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.b.d.e.DevToolsPropertyDefaultsPostProcessor[0;39m [35mLine:225[0;39m - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-11-12 04:27:45.825 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m [35mLine:244[0;39m - Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-11-12 04:27:45.828 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m [35mLine:126[0;39m - Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-11-12 04:27:45.870 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.d.r.c.RepositoryConfigurationDelegate[0;39m [35mLine:182[0;39m - Finished Spring Data repository scanning in 24ms. Found 0 repository interfaces.
+2019-11-12 04:27:46.250 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'jwtProperties' of type [net.novaborn.takeaway.pay.config.properties.JwtProperties$$EnhancerBySpringCGLIB$$5226b79f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.251 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'jwtTokenUtil' of type [net.novaborn.takeaway.pay.common.auth.util.JwtTokenUtil] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.252 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'webConfig' of type [net.novaborn.takeaway.pay.config.WebConfig$$EnhancerBySpringCGLIB$$68ef634c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.293 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'druidStatPointcut' of type [org.springframework.aop.support.JdkRegexpMethodPointcut] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.315 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'druidStatInterceptor' of type [com.alibaba.druid.support.spring.stat.DruidStatInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.316 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'druidStatAdvisor' of type [org.springframework.aop.support.DefaultPointcutAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.328 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker[0;39m [35mLine:330[0;39m - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-11-12 04:27:46.652 [31mWARN[0;39m [33m[  restartedMain][0;39m [36mio.undertow.websockets.jsr[0;39m [35mLine:68 [0;39m - UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2019-11-12 04:27:46.683 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mio.undertow.servlet[0;39m [35mLine:364[0;39m - Initializing Spring embedded WebApplicationContext
+2019-11-12 04:27:46.683 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.web.context.ContextLoader[0;39m [35mLine:284[0;39m - Root WebApplicationContext: initialization completed in 2068 ms
+2019-11-12 04:27:48.221 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.ehcache.EhCacheManagerFactoryBean[0;39m [35mLine:134[0;39m - Initializing EhCache CacheManager
+2019-11-12 04:27:48.558 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.s.concurrent.ThreadPoolTaskExecutor[0;39m [35mLine:171[0;39m - Initializing ExecutorService 'applicationTaskExecutor'
+2019-11-12 04:27:48.937 [31mWARN[0;39m [33m[  restartedMain][0;39m [36mo.s.b.d.a.OptionalLiveReloadServer[0;39m [35mLine:60 [0;39m - Unable to start LiveReload server
+2019-11-12 04:27:49.066 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mio.undertow[0;39m [35mLine:117[0;39m - starting server: Undertow - 2.0.27.Final
+2019-11-12 04:27:49.074 [34mINFO[0;39m [33m[  restartedMain][0;39m [36morg.xnio[0;39m [35mLine:104[0;39m - XNIO version 3.3.8.Final
+2019-11-12 04:27:49.087 [34mINFO[0;39m [33m[  restartedMain][0;39m [36morg.xnio.nio[0;39m [35mLine:55 [0;39m - XNIO NIO Implementation Version 3.3.8.Final
+2019-11-12 04:27:49.142 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mio.undertow[0;39m [35mLine:252[0;39m - stopping server: Undertow - 2.0.27.Final
+2019-11-12 04:27:49.148 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.b.a.l.ConditionEvaluationReportLoggingListener[0;39m [35mLine:136[0;39m - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2019-11-12 04:27:49.157 [1;31mERROR[0;39m [33m[  restartedMain][0;39m [36mo.s.b.d.LoggingFailureAnalysisReporter[0;39m [35mLine:40 [0;39m - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8082 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8082 or configure this application to listen on another port.
+
+2019-11-12 04:27:49.183 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.s.concurrent.ThreadPoolTaskExecutor[0;39m [35mLine:208[0;39m - Shutting down ExecutorService 'applicationTaskExecutor'
+2019-11-12 04:27:49.183 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mo.s.c.ehcache.EhCacheManagerFactoryBean[0;39m [35mLine:192[0;39m - Shutting down EhCache CacheManager
+2019-11-12 04:27:49.197 [34mINFO[0;39m [33m[  restartedMain][0;39m [36mcom.alibaba.druid.pool.DruidDataSource[0;39m [35mLine:1965[0;39m - {dataSource-0} closing ...
