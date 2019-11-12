@@ -7,14 +7,20 @@
           {{orderId}}
         </div>
       </base-panel>
-      <van-button @click="pay" size="small" type="primary">支付</van-button>
+      <van-button
+        :disabled="loading"
+        :loading="loading"
+        @click="pay"
+        loading-text="数据请求中..."
+        type="primary">支付
+      </van-button>
     </div>
   </div>
 </template>
 
 <script>
-  import userApi from '@/services/user'
-  import payApi from '@/services/pay'
+  import userService from '@/services/user'
+  import payService from '@/services/pay'
   import util from '@/utils/util'
   import BasePanel from '@/components/BasePanel'
 
@@ -24,11 +30,14 @@
     },
     data () {
       return {
-        orderId: ''
+        orderId: '',
+        loading: false
       }
     },
     onLoad (options) {
       console.log(options)
+
+      this.loading = false
       if (options.orderId) {
         console.log(`当前OrderId: ${options.orderId}`)
         this.orderId = options.orderId
@@ -38,28 +47,40 @@
     methods: {
       pay () {
         const this_ = this
-        userApi.checkLogin()
+        this.loading = true
+        userService.checkLogin()
           .then(() => {
-            payApi.payOrder(this.orderId)
+            payService.payOrder(this.orderId)
               .then(res => {
-                wx.navigateBackMiniProgram({
-                  extraData: {
-                    orderId: this_.orderId,
-                    res
-                  }
-                })
+                this.loading = false
+                payService.callWxPayApi(res)
+                  .then(res => {
+                    payService.confirmOrder(this.orderId)
+                    wx.navigateBackMiniProgram({
+                      extraData: {
+                        orderId: this_.orderId,
+                        res
+                      }
+                    })
+                  })
+                  .catch((res) => {
+                    console.log(res)
+                    wx.navigateBackMiniProgram({
+                      extraData: {
+                        orderId: this_.orderId,
+                        res
+                      }
+                    })
+                  })
               })
-              .catch((res) => {
-                wx.navigateBackMiniProgram({
-                  extraData: {
-                    orderId: this_.orderId,
-                    res
-                  }
-                })
+              .catch(res => {
+                this.loading = false
+                util.showErrorToast(res.message)
               })
           })
           .catch(() => {
-            userApi.loginByWx()
+            this.loading = false
+            userService.loginByWx()
               .then(res => {
                 this_.pay()
               })
