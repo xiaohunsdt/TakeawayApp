@@ -1,22 +1,16 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
-import net.novaborn.takeaway.admin.web.wrapper.AddressWrapper;
+import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.service.impl.SettingService;
-import net.novaborn.takeaway.user.entity.User;
-import net.novaborn.takeaway.user.service.impl.AddressService;
-import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author xiaohun
@@ -33,12 +27,13 @@ public class SysSettingController extends BaseController {
     }
 
     @PostMapping("getSettingByName")
-    public List<Setting> getSettingByName(@RequestParam String name) {
-        return settingService.list();
+    public Setting getSettingByName(@RequestParam String name) {
+        return settingService.getById(name);
     }
 
     @PostMapping("updateSetting")
-    public List<Setting> updateSetting(@RequestBody String name) {
-        return settingService.list();
+    public Tip updateSetting(@RequestBody @Valid Setting setting) {
+        setting.insertOrUpdate();
+        return new SuccessTip();
     }
 }
