@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form :model="loginForm" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">Marketer System</h3>
+        <h3 class="title">点餐管理系统</h3>
       </div>
 
       <el-form-item>
