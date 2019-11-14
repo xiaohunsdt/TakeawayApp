@@ -3,7 +3,7 @@ package net.novaborn.takeaway.pay.common.auth.converter;
 /**
  * 基础的传输bean
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-25 15:52
  */
 public class BaseTransferEntity {

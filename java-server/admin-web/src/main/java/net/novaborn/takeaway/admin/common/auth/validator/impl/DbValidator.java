@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
  * 账号密码验证
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-23 12:34
  */
 @Service

@@ -3,16 +3,16 @@ import Qs from 'qs'
 
 export function getAllSetting() {
   return request({
-    url: '/address/getAddressListByPage',
+    url: '/setting/getAllSetting',
     method: 'get'
   })
 }
 
-export function getSettingByName(name) {
+export function getSettingByName(name, scope) {
   return request({
-    url: '/address/getAddressListByPage',
+    url: '/setting/getSettingByName',
     method: 'post',
-    data: { name },
+    data: { name, scope },
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     transformRequest: [function(data) {
       data = Qs.stringify(data)
@@ -21,12 +21,26 @@ export function getSettingByName(name) {
   })
 }
 
-export function updateSetting(settingList) {
+export function getSettingsByName(name, scope) {
   return request({
-    url: '/address/getAddressListByPage',
+    url: '/setting/getSettingByName',
+    method: 'post',
+    data: { name, scope },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function updateSetting(settings, scope) {
+  const data = Object.assign({}, settings, scope)
+  return request({
+    url: '/setting/updateSetting',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: settingList,
+    data,
     transformRequest: [function(data) {
       data = Qs.stringify(data)
       return data

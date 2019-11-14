@@ -24,7 +24,7 @@ import java.util.Map;
  *         7. jti -- jwt唯一标识,防止重复使用
  * </pre>
  *
- * @author fengshuonan
+ * @author xiaohun
  * @Date 2017/8/25 10:59
  */
 @Component

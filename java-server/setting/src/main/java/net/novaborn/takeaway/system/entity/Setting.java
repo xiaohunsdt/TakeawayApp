@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import net.novaborn.takeaway.system.enums.SettingScope;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -17,10 +18,15 @@ import javax.validation.constraints.NotEmpty;
 public class Setting extends Model<Setting> {
     private static final long serialVersionUID = -1365755510215805455L;
 
+    @TableId(type = IdType.UUID)
+    private String id;
+
     @NotEmpty(message = "名称不能为空")
-    @TableId(type = IdType.INPUT)
     private String key;
 
+    @NotEmpty(message = "域不能为空")
+    private SettingScope scope;
+
     @NotEmpty(message = "设置值不能为空")
-    private String value;
+    private Object value;
 }

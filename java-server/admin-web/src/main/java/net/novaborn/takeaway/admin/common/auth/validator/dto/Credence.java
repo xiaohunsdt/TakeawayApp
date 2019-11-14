@@ -3,7 +3,7 @@ package net.novaborn.takeaway.admin.common.auth.validator.dto;
 /**
  * 验证的凭据
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-27 13:27
  */
 public interface Credence {

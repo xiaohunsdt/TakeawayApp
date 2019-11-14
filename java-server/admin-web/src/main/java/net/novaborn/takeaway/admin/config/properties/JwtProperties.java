@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * jwt相关配置
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-23 9:23
  */
 @Data

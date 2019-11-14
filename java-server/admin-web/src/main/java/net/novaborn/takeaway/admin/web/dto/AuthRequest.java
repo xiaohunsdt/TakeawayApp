@@ -5,7 +5,7 @@ import net.novaborn.takeaway.admin.common.auth.validator.dto.Credence;
 /**
  * 认证的请求dto
  *
- * @author fengshuonan
+ * @author xiaohun
  * @Date 2017/8/24 14:00
  */
 public class AuthRequest implements Credence {

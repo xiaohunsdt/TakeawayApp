@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.entity.Admin;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
-import net.novaborn.takeaway.common.ResponseModel;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.SuccessTip;
@@ -43,12 +42,12 @@ public class IndexController extends BaseController {
 
     @GetMapping("getUserInfo")
     @ResponseBody
-    public ResponseModel getUserInfo(HttpServletRequest request) {
+    public Admin getUserInfo(HttpServletRequest request) {
         String userName = jwtTokenUtil.getUsernameFromToken(request);
         Optional<Admin> admin = adminService.getBaseMapper().selectByName(userName);
         admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        return new ResponseModel(admin);
+        return admin.get();
     }
 
     @RequestMapping("/uploadImg")

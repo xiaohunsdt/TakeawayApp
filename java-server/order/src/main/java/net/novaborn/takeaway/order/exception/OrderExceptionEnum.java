@@ -6,7 +6,7 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 /**
  * 所有业务异常的枚举
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2016年11月12日 下午5:04:51
  */
 public enum OrderExceptionEnum implements ServiceExceptionEnum {

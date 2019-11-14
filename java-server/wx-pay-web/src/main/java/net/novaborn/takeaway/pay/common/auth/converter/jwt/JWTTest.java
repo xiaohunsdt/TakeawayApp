@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * jwt测试
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-08-21 16:34
  */
 public class JWTTest {

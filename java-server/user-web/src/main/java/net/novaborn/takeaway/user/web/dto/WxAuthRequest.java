@@ -7,7 +7,7 @@ import net.novaborn.takeaway.user.common.auth.validator.dto.Credence;
 /**
  * 微信认证的请求dto
  *
- * @author fengshuonan
+ * @author xiaohun
  * @Date 2017/8/24 14:00
  */
 @Setter

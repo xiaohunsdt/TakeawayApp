@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * fastjson配置类
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-05-23 22:56
  */
 @Configuration()

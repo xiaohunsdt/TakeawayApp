@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 /**
  * 请求验证的
  *
- * @author fengshuonan
+ * @author xiaohun
  * @Date 2017/8/24 14:22
  */
 @Slf4j

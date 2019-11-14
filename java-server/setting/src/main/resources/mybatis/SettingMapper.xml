@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-    <mapper namespace="net.novaborn.takeaway.system.dao.ISettingDao" >
+<mapper namespace="net.novaborn.takeaway.system.dao.ISettingDao">
 
+    <select id="getSettingByName" resultType="Setting">
+        SELECT * FROM setting
+        <where>
+            `key` = #{key}
+            AND `scope` = #{scope}
+        </where>
+    </select>
+
+    <select id="getSettingsByScope" resultType="Setting">
+        SELECT * FROM setting
+        <where>
+            `scope` = #{scope}
+        </where>
+    </select>
 </mapper>

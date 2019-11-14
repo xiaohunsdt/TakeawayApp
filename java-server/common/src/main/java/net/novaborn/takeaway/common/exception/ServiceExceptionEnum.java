@@ -3,7 +3,7 @@ package net.novaborn.takeaway.common.exception;
 /**
  * 抽象接口
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017-12-28-下午10:27
  */
 public interface ServiceExceptionEnum {

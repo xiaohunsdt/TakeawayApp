@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * 项目相关配置
  *
- * @author fengshuonan
+ * @author xiaohun
  * @date 2017年10月23日16:44:15
  */
 @Data
