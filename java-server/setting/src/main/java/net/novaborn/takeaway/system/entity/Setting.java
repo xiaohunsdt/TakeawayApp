@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -22,9 +23,11 @@ public class Setting extends Model<Setting> {
     private String id;
 
     @NotEmpty(message = "名称不能为空")
+    @TableField(value = "`key`")
     private String key;
 
     @NotEmpty(message = "域不能为空")
+    @TableField(value = "`scope`")
     private SettingScope scope;
 
     @NotEmpty(message = "设置值不能为空")

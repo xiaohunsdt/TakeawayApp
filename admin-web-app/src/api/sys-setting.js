@@ -21,6 +21,19 @@ export function getSettingByName(name, scope) {
   })
 }
 
+export function getSettingsByScope(scope) {
+  return request({
+    url: '/setting/getSettingsByScope',
+    method: 'post',
+    data: { scope },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function getSettingsByName(name, scope) {
   return request({
     url: '/setting/getSettingByName',
@@ -35,7 +48,8 @@ export function getSettingsByName(name, scope) {
 }
 
 export function updateSetting(settings, scope) {
-  const data = Object.assign({}, settings, scope)
+  settings.scope = scope
+  const data = settings
   return request({
     url: '/setting/updateSetting',
     method: 'post',
@@ -51,5 +65,6 @@ export function updateSetting(settings, scope) {
 export default {
   getAllSetting,
   getSettingByName,
+  getSettingsByScope,
   updateSetting
 }
