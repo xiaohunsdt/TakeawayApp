@@ -5,23 +5,21 @@
       <div id="header">
         <base-panel>
           <van-notice-bar
+            :text="systemSettings.goods_page_notice"
             left-icon="volume-o"
-            text="家的味道,优惠的价格! 留学的期间, 有我有你! 让我们共同成长!"
           />
           <div id="activity-info">
-            <van-tag type="success">免费配送</van-tag>
-            <van-tag type="success">满1w5送月饼</van-tag>
-            <van-tag type="success">满2w送饮料</van-tag>
+            <van-tag type="success" v-for="tag in systemSettings.goods_page_tags">{{ tag }}</van-tag>
           </div>
         </base-panel>
       </div>
       <div id="order-content">
         <van-tabs
           @change="onChange"
+          animated
           border
           custom-class="foodTab"
           nav-class="nav-class"
-          animated
           swipeable>
           <van-tab
             :key="category.id"
@@ -38,6 +36,7 @@
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
+          :disabled="!systemSettings.service_running"
           :price="cartAllPrice"
           :tip="true"
           @submit="onSubmitOrder"
@@ -52,7 +51,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <!--          <view slot="tip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>-->
+          <view v-if="!systemSettings.service_running" slot="tip">{{systemSettings.service_close_notice}}</view>
         </van-submit-bar>
       </div>
     </div>
@@ -62,6 +61,7 @@
 <script>
   import categoryService from '@/services/category'
   import goodsService from '@/services/goods'
+  import settingService from '@/services/setting'
 
   import BasePanel from '@/components/BasePanel'
   import GoodsCard from '@/components/GoodsCard'
@@ -74,7 +74,8 @@
     data () {
       return {
         currentIndex: 0,
-        categories: []
+        categories: [],
+        systemSettings: {}
       }
     },
     computed: {
@@ -94,6 +95,11 @@
     },
     methods: {
       init (index) {
+        // 获取相关设置项
+        settingService.getSystemSettings().then(res => {
+            this.systemSettings = Object.assign({}, res)
+          }
+        )
         // 先清除分类信息
         this.categories.splice(0, this.categories.length)
         // 获取所有分类

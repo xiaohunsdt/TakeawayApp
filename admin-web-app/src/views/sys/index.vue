@@ -15,11 +15,11 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item label="商品页公告">
-              <el-input v-model="systemSetting.order_page_notice"></el-input>
+              <el-input v-model="systemSetting.goods_page_notice"></el-input>
             </el-form-item>
             <el-form-item label="商品页标签">
               <el-tooltip content="多个标签用,分隔!例如:免费配送,快速送达,满2w送饮料" placement="right">
-                <el-input v-model="systemSetting.order_page_tags"></el-input>
+                <el-input v-model="systemSetting.goods_page_tags"></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item>
@@ -102,8 +102,8 @@
         systemSetting: {
           service_running: true,
           service_close_notice: '',
-          order_page_notice: '',
-          order_page_tags: ''
+          goods_page_notice: '',
+          goods_page_tags: ''
         },
         storeSetting: {
           store_open_date: [],

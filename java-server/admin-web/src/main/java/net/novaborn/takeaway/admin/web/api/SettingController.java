@@ -21,7 +21,7 @@ import java.util.Map;
 @Controller
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/admin/setting")
-public class SysSettingController extends BaseController {
+public class SettingController extends BaseController {
     private SettingService settingService;
 
     @GetMapping("getAllSetting")
