@@ -8,6 +8,7 @@ import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,6 +31,13 @@ public interface IUserDao extends BaseMapper<User> {
      * @return 查询到的用户
      */
     Optional<User> selectByOpenId(@Param("openId") String openId);
+
+    /**
+     * 根据 昵称 获取用户
+     * @param nickName
+     * @return
+     */
+    List<User> getByNickName(@Param("nickName") String nickName);
 
     /**
      * 分页获取用户列表

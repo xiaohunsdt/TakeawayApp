@@ -18,11 +18,19 @@
         </where>
     </select>
 
+    <select id="getByNickName" resultType="User">
+        SELECT * FROM `user`
+        <where>
+            `nick_name` like '%${nickName}%'
+            AND deleted = 0
+        </where>
+    </select>
+
     <select id="getUserListByPage" resultType="User">
         SELECT * FROM `user`
         <where>
-            <if test="args.name != '' and args.name != null">
-                and (`name` like '%${args.name}%' or `nick_name` like '%${args.name}%')
+            <if test="args.nickName != '' and args.nickName != null">
+                and `nick_name` like '%${args.nickName}%'
             </if>
             AND deleted = 0
         </where>

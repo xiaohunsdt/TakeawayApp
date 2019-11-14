@@ -19,8 +19,14 @@
     <select id="getOrderListByPage" resultType="Order">
         SELECT * FROM `order`
         <where>
-            <if test="args.userId != null and args.userId != ''">
-                `user_id` = #{args.userId}
+            <if test="args.userIds != null">
+                `user_id` IN
+                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="args.number != null and args.number != ''">
+                AND `number` = #{args.number}
             </if>
             <if test="args.paymentWay != null and args.paymentWay != ''">
                 AND `payment_way` = #{args.paymentWay}

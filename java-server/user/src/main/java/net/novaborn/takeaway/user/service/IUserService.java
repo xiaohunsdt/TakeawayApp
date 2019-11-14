@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.user.entity.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,6 +33,13 @@ public interface IUserService extends IService<User> {
      * @return 查询到的用户
      */
     Optional<User> selectByOpenId(String openId);
+
+    /**
+     * 根据 昵称 获取用户
+     * @param nickName
+     * @return
+     */
+    List<User> getByNickName(String nickName);
 
     /**
      * 分页获取用户列表

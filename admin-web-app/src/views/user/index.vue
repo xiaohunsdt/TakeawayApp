@@ -2,8 +2,8 @@
   <div class="container">
     <base-card class="container-header">
       <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
-        <el-form-item label="用户名">
-          <el-input placeholder="用户名" v-model="formData.name"></el-input>
+        <el-form-item label="昵称">
+          <el-input placeholder="昵称" v-model="formData.nickName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
@@ -21,9 +21,9 @@
         v-loading="listLoading">
         <el-table-column
           align="center"
-          label="用户名">
+          label="昵称">
           <template v-slot="scope">
-            <div v-if="scope.row.name!==''">{{ scope.row.name }}</div>
+<!--            <div v-if="scope.row.name!==''">{{ scope.row.name }}</div>-->
             <div>{{ scope.row.nickName }}</div>
           </template>
         </el-table-column>
@@ -92,7 +92,7 @@
           total: 0
         },
         formData: {
-          name: null,
+          nickName: null,
           categoryId: null
         },
         listLoading: false,

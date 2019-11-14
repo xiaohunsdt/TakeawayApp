@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -12,16 +13,19 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
-import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.user.entity.User;
+import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaohun
@@ -32,12 +36,24 @@ import java.util.Optional;
 @RequestMapping("/api/admin/order")
 public class OrderController extends BaseController {
 
-    private OrderService orderService;
+    private UserService userService;
 
-    private OrderItemService orderItemService;
+    private OrderService orderService;
 
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
+        // 根据用户名获取订单
+        if (StrUtil.isNotBlank((String) args.get("nickName"))) {
+            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+                    .map(User::getId)
+                    .collect(Collectors.toList());
+            if (ids.size() > 0) {
+                args.put("userIds", ids);
+            } else {
+                args.put("userIds", Arrays.asList("-1"));
+            }
+        }
+
         page.setOptimizeCountSql(false);
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());

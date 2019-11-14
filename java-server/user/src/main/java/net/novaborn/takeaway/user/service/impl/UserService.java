@@ -8,6 +8,7 @@ import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.IUserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,6 +30,11 @@ public class UserService extends ServiceImpl<IUserDao, User> implements IUserSer
     @Override
     public Optional<User> selectByOpenId(String openId) {
         return this.baseMapper.selectByOpenId(openId);
+    }
+
+    @Override
+    public List<User> getByNickName(String nickName) {
+        return this.baseMapper.getByNickName(nickName);
     }
 
     @Override

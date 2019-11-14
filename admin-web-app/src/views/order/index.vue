@@ -2,8 +2,11 @@
   <div class="container">
     <base-card class="container-header">
       <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
-        <el-form-item label="用户名">
-          <el-input placeholder="用户名" v-model="formData.name"></el-input>
+        <el-form-item label="昵称">
+          <el-input placeholder="请输入昵称" v-model="formData.nickName"></el-input>
+        </el-form-item>
+        <el-form-item label="单号">
+          <el-input placeholder="请输入单号" v-model="formData.number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
@@ -87,13 +90,15 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="编号"
+          label="单号"
           prop="number">
         </el-table-column>
         <el-table-column
           align="center"
-          label="用户"
-          prop="user.name">
+          label="用户">
+          <template v-slot="props">
+            <div>{{ props.row.user.openId?props.row.user.nickName:props.row.user }}</div>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -183,8 +188,8 @@
           total: 0
         },
         formData: {
-          name: null,
-          categoryId: null
+          nickName: null,
+          number: null
         },
         listLoading: false,
         tableData: []
