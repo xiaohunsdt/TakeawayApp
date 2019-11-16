@@ -112,6 +112,7 @@
       </div>
       <div id="footer">
         <van-submit-bar
+          :disabled="disableService"
           :loading="submitLoading"
           :price="cartAllPrice"
           :tip="true"
@@ -127,7 +128,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <view slot="tip" v-if="showOrderTip">当前下单高峰期, 您可能需要等待较长时间才能就餐!</view>
+          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>
         </van-submit-bar>
       </div>
     </div>
@@ -171,6 +172,12 @@
       },
       address () {
         return this.$store.getters.currentAddress
+      },
+      disableService () {
+        if (this.address) {
+          return true
+        }
+        return false
       }
     },
     onLoad () {
@@ -184,7 +191,8 @@
     data () {
       return {
         submitLoading: false,
-        showOrderTip: true,
+        showOrderTip: false,
+        tipNotice: '当前下单高峰期, 您可能需要等待较长时间才能就餐!',
         orderId: '',
         order: {},
         payWay: 'WEIXIN_PAY',
@@ -240,16 +248,20 @@
       },
       onSubmitOrder () {
         this.submitLoading = true
-        orderService.createOrder(this.orderItems, this.address, this.payWay, this.coupon, this.psData).then(res => {
-          this.submitLoading = false
-          this.CLEAR_CART()
-          // 支付逻辑
-          const { message } = res
-          payApi.payOrder(message)
-          // mpvue.redirectTo({
-          //   url: `/pages/pay/main?orderId=${message}`
-          // })
-        })
+        orderService.createOrder(this.orderItems, this.address, this.payWay, this.coupon, this.psData)
+          .then(res => {
+            this.submitLoading = false
+            this.CLEAR_CART()
+            // 支付逻辑
+            const { message } = res
+            payApi.payOrder(message)
+            // mpvue.redirectTo({
+            //   url: `/pages/pay/main?orderId=${message}`
+            // })
+          })
+          .catch(res => {
+            this.submitLoading = false
+          })
       }
     }
   }

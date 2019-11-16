@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 15/11/2019 00:56:11
+ Date: 17/11/2019 02:32:53
 */
 
 SET NAMES utf8mb4;
@@ -26,6 +26,8 @@ CREATE TABLE `address`  (
   `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `address` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `detail` varchar(254) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `x` double NULL DEFAULT NULL,
+  `y` double NULL DEFAULT NULL,
   `phone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `is_default` tinyint(1) UNSIGNED NULL DEFAULT 0,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
@@ -37,10 +39,10 @@ CREATE TABLE `address`  (
 -- ----------------------------
 -- Records of address
 -- ----------------------------
-INSERT INTO `address` VALUES ('92ce8deba7e238df99b2526703b6f966', '4a6bb5a539ec498e2bf5117910af08e4', 'dsfaaaaaa', 'sdfsdf111', '1056511776', 1, '2019-10-18 18:53:56', 0);
-INSERT INTO `address` VALUES ('a40134ee6354768e77a8d2d4d4787fa6', '4a6bb5a539ec498e2bf5117910af08e4', 'asd', 'asdas', 'asdas', 0, '2019-10-18 18:53:26', 0);
-INSERT INTO `address` VALUES ('de40918ca9196fe12c34fd9aa8815ebe', '6157721ea097834ca8502a707e518dcc', '신촌로 150 포스빌 701', '放门口就行', '01056511996', 1, '2019-10-20 01:34:10', 0);
-INSERT INTO `address` VALUES ('ef80e4fae51464af1b997fb449864d8f', '4a6bb5a539ec498e2bf5117910af08e4', '신촌포스빌 707호', '楼下密码🗝1234#', '01056511996', 0, '2019-10-18 19:52:48', 0);
+INSERT INTO `address` VALUES ('92ce8deba7e238df99b2526703b6f966', '4a6bb5a539ec498e2bf5117910af08e4', 'dsfaaaaaa', 'sdfsdf111', NULL, NULL, '1056511776', 0, '2019-10-18 18:53:56', 1);
+INSERT INTO `address` VALUES ('a40134ee6354768e77a8d2d4d4787fa6', '4a6bb5a539ec498e2bf5117910af08e4', 'asd', 'asdas', NULL, NULL, 'asdas', 0, '2019-10-18 18:53:26', 1);
+INSERT INTO `address` VALUES ('de40918ca9196fe12c34fd9aa8815ebe', '6157721ea097834ca8502a707e518dcc', '신촌로 150 포스빌 701', '放门口就行', NULL, NULL, '01056511996', 1, '2019-10-20 01:34:10', 0);
+INSERT INTO `address` VALUES ('ef80e4fae51464af1b997fb449864d8f', '4a6bb5a539ec498e2bf5117910af08e4', '신촌로 150', '707호 楼下密码🗝1234#', 126.9424896, 37.5569659, '01056511996', 1, '2019-10-18 19:52:48', 0);
 
 -- ----------------------------
 -- Table structure for admin
@@ -292,6 +294,7 @@ INSERT INTO `order` VALUES ('0d251be157a86a0c8c25ee6500e98743', 9, '4a6bb5a539ec
 INSERT INTO `order` VALUES ('1732d28aa907147f57a407761825b6a5', 2, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 3, 0, 0, 18000, 18000, 2, '', 1, 0, 0, '2019-11-02 03:25:13', '2019-11-05 00:51:32', 0, 0);
 INSERT INTO `order` VALUES ('1a23e173793fcd8d92ebfe1d6961d063', 4, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 1, 6, 0, '2019-10-20 23:18:21', '2019-11-05 00:51:32', 0, 0);
 INSERT INTO `order` VALUES ('2112e5d7dcdd12972709d30d517bf1c3', 8, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 4, 0, 0, 40000, 40000, 2, '', 1, 0, 0, '2019-11-02 03:27:01', '2019-11-05 00:51:33', 0, 0);
+INSERT INTO `order` VALUES ('2427ac02fe71f0f6d20d91ef78249190', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 2, 0, 0, 12000, 12000, 2, '', 0, 0, 0, '2019-11-17 02:28:58', '2019-11-17 02:28:58', 0, 0);
 INSERT INTO `order` VALUES ('2a30c242c3a729bea911c3fe65d5f813', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 1, 0, 0, 6000, 6000, 2, '', 1, 0, 0, '2019-11-02 03:19:22', '2019-11-05 00:51:33', 0, 0);
 INSERT INTO `order` VALUES ('5c4038872373fc85f7e4fa4375d9b724', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 5, 0, 0, 33000, 33000, 2, '', 1, 0, 0, '2019-10-31 00:25:27', '2019-11-05 00:51:34', 0, 0);
 INSERT INTO `order` VALUES ('5f86a8bc34d4febc9199d9d4da55e3da', 12, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 3, 0, 0, 34000, 34000, 1, '', 1, 0, 0, '2019-11-02 03:29:05', '2019-11-05 00:51:34', 0, 0);
@@ -340,12 +343,14 @@ INSERT INTO `order_item` VALUES ('21d12acdc6f5f99c4d008cff5892f922', '760409e795
 INSERT INTO `order_item` VALUES ('2245f2b5b3d29fcfab2b0727afaafa42', '2112e5d7dcdd12972709d30d517bf1c3', '34d64d55f6ddc14f8cda410d527691cc', '香辣肉丝', 'http://cxy.novaborn.net:8080/upload/images/a78d95aebde241d19741682cf3a0ed45.jpeg', 10000, 1);
 INSERT INTO `order_item` VALUES ('23d90f6badf159c35ce863f987811bfe', 'f435ddc9ea88e9becfcc7865af272561', '761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', 'http://cxy.novaborn.net:8080/upload/images/4db8120bef9c43dd8812af71eaa1266d.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('2525c69489cdb8cd2be8b020e2e9de32', 'a134a60edfe17b9b10248f897d7f2502', 'da70b2f737737e8de82a8a5c108f6e55', '糖拌西红柿', 'http://cxy.novaborn.net:8080', 6000, 1);
+INSERT INTO `order_item` VALUES ('255b0f3f95be1954eb22b431cb7fec01', '2427ac02fe71f0f6d20d91ef78249190', '761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', 'http://cxy.novaborn.net:8080/upload/images/4db8120bef9c43dd8812af71eaa1266d.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('2890dfd445fb701b5492b34e8726b1aa', '5c4038872373fc85f7e4fa4375d9b724', '05444437734b79d597b8fff2c8fecd21', '麻辣烫（麻辣香锅）加菜+牛肉卷', 'http://cxy.novaborn.net:8080null', 3000, 1);
 INSERT INTO `order_item` VALUES ('319d313e01dbc6b1e0944dc5fb9607e9', 'fd226e284f9bdfee6fdb4dc2bb6b938b', 'c506378d3a7faafd6d719d666f409111', '辣炒鸡胗', 'http://cxy.novaborn.net:8080/upload/images/5aade156c230420492fb44611dfff240.jpeg', 9000, 1);
 INSERT INTO `order_item` VALUES ('333b1e8a7f4cea5467f023311547fba1', 'a7f8401def178977b4126b6a178a91a5', '761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', 'http://cxy.novaborn.net:8080/upload/images/4db8120bef9c43dd8812af71eaa1266d.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('347e4e953bb88460be353e02b441db91', '5c4038872373fc85f7e4fa4375d9b724', '470a11753727382cca018843c7a5e49c', '凉拌腐竹', 'http://cxy.novaborn.net:8080/upload/images/48e28286a56b45f1ad6a5f675bc44ebc.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('43a3572a8c2d03c9c6760ffee635dfc2', '7b89e0e17f21a974d4416068748622a1', 'abe3a6acc45ecc03f3c8cafd74251f9f', '麻辣牛肚 ', 'http://cxy.novaborn.net:8080null', 11000, 1);
 INSERT INTO `order_item` VALUES ('4bd3a952251eb7c70a0c6e2654e70497', '760409e795ceeb2c4d448f4d2d224ef3', '11fdaa27de2eea12dde6a20e063e6c5d', '凉拌牛肚', 'http://cxy.novaborn.net:8080/upload/images/cb4c0cc249d943399435acad9e06c91e.jpeg', 12000, 1);
+INSERT INTO `order_item` VALUES ('5362fe64d769b0ee1a715ea9a941ce91', '2427ac02fe71f0f6d20d91ef78249190', '2d912f7f177635c9cb0e6a28e5e4439e', '松花蛋豆腐', 'http://cxy.novaborn.net:8080/upload/images/bc3633b805314596bd0545637be3474b.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('5397ac4c797633d81036efdce76b8e28', 'd78dec67ea2c8cba2f45bcb7bfdf91a1', 'da70b2f737737e8de82a8a5c108f6e55', '糖拌西红柿', 'http://cxy.novaborn.net:8080', 6000, 1);
 INSERT INTO `order_item` VALUES ('54632a94a0184654832d454f6147c60a', '760409e795ceeb2c4d448f4d2d224ef3', '761b1144c87e8be15d8ab3356c71556b', '蒜蓉黄瓜', 'http://cxy.novaborn.net:8080/upload/images/4db8120bef9c43dd8812af71eaa1266d.jpeg', 6000, 1);
 INSERT INTO `order_item` VALUES ('5b16d0e733648db4898ceb47e5992517', 'a134a60edfe17b9b10248f897d7f2502', '05c71e0ca83929eb3577ccc60c55cc33', '素三丝', 'http://cxy.novaborn.net:8080/upload/images/20e8d90654234eaaadcf83afa6aa9963.jpeg', 7000, 1);
@@ -419,13 +424,15 @@ CREATE TABLE `setting`  (
 -- Records of setting
 -- ----------------------------
 INSERT INTO `setting` VALUES ('a3d0207724f77af64775c6e7b63e7b11', 'service_close_notice', 'system', '当前订单过多，暂停服务!!!');
-INSERT INTO `setting` VALUES ('e10a0d661701f4449d89aba5d5f404a8', 'order_page_notice', 'system', '家的味道,优惠的价格! 留学的期间, 有我有你! 让我们共同成长!');
+INSERT INTO `setting` VALUES ('e10a0d661701f4449d89aba5d5f404a8', 'goods_page_notice', 'system', '家的味道,优惠的价格! 留学的期间, 有我有你! 让我们共同成长!');
 INSERT INTO `setting` VALUES ('61d98184310b33daf3e1b22796d68c5f', 'service_running', 'system', 'true');
-INSERT INTO `setting` VALUES ('d45537897868f12f36558fc24f425453', 'order_page_tags', 'system', '免费配送,满2w送饮料');
+INSERT INTO `setting` VALUES ('d45537897868f12f36558fc24f425453', 'goods_page_tags', 'system', '免费配送,满2w送饮料,可以退款');
+INSERT INTO `setting` VALUES ('389e2080d5fb9069c33638e89cbbdad8', 'store_address_x', 'store', '126.9357696');
 INSERT INTO `setting` VALUES ('f4571b0a5786c8bd8e95e48322ccd1c3', 'average_express_time', 'express', '10');
 INSERT INTO `setting` VALUES ('815243cd4f1dd35776b0b6d231519c8f', 'base_express_time', 'express', '25');
 INSERT INTO `setting` VALUES ('1c18f17f34d321d5ecf0b04012674597', 'courier_count', 'express', '1');
 INSERT INTO `setting` VALUES ('a571deb0a24ba2af5ed4686b64a5f792', 'store_open_date', 'store', '2,3,6,7,5,1');
+INSERT INTO `setting` VALUES ('2d5050c2cde8ddc6e93bba51f822bb18', 'store_address_y', 'store', '37.5586305');
 INSERT INTO `setting` VALUES ('697c4cc50394e24ef88c52e6c7cc4778', 'store_address', 'store', '창천동 52-31');
 INSERT INTO `setting` VALUES ('d898a0d388c7ec6fe9567f035631ea7e', 'store_close_time', 'store', '2019-11-15T13:30:00.000Z');
 INSERT INTO `setting` VALUES ('7a47a582b317f77a9c391dcf0c144a8e', 'store_open_time', 'store', '2019-11-15T01:30:00.000Z');
@@ -457,7 +464,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-10-08 01:23:20', 0, 0, NULL);
+INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-11-15 02:03:16', 0, 1, NULL);
 INSERT INTO `user` VALUES ('4a6bb5a539ec498e2bf5117910af08e4', NULL, 'Jeremy.', 0, 'o9UA_5abDk-kn7KSaMAoriIlvg6c', 'https://wx.qlogo.cn/mmopen/vi_32/UL02ia2qHNyA6UvWNf2Yia5KMOxAh4Kp6icf2ibSOWMiaP8iadSoGgEdE5vbDENG2GVCu97ics161tgrl2cAoGBmX4acg/132', NULL, 1, 1, '2019-11-07 21:26:57', '2019-10-14 23:39:12', '2019-11-07 21:26:56', 61, 0, NULL);
 INSERT INTO `user` VALUES ('6157721ea097834ca8502a707e518dcc', NULL, '感觉才才萌萌哒', 0, 'o9UA_5TRxLFe0PnsTbeutriJ569M', 'https://wx.qlogo.cn/mmopen/vi_32/p4rFoMFGBKZTIB9ibbM9Yo3RLTg8rDgfOiaavDHKuNjtNaN3AKzHWrwagmYmoBqF3pSD520TDFFkXVFhRo1cSgbQ/132', NULL, 2, 1, '2019-10-29 16:29:28', '2019-10-18 02:07:04', '2019-10-29 16:29:28', 4, 0, NULL);
 

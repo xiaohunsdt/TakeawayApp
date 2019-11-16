@@ -36,7 +36,7 @@
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
-          :disabled="!systemSettings.service_running"
+          :disabled="disableService"
           :price="cartAllPrice"
           :tip="true"
           @submit="onSubmitOrder"
@@ -51,7 +51,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <view v-if="!systemSettings.service_running" slot="tip">{{systemSettings.service_close_notice}}</view>
+          <view slot="tip" v-if="disableService">{{disableServiceNotice}}</view>
         </van-submit-bar>
       </div>
     </div>
@@ -75,7 +75,8 @@
       return {
         currentIndex: 0,
         categories: [],
-        systemSettings: {}
+        systemSettings: {},
+        disableServiceNotice: ''
       }
     },
     computed: {
@@ -84,6 +85,13 @@
       },
       cartAllPrice () {
         return this.$store.getters.cartAllPrice
+      },
+      disableService () {
+        if (!this.systemSettings.service_running) {
+          this.disableServiceNotice = this.systemSettings.service_close_notice
+          return true
+        }
+        return false
       }
     },
     onLoad () {
