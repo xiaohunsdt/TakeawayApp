@@ -25,6 +25,13 @@ export function getDefaultAddress () {
 }
 
 /**
+ * 获取指定地址和店之间的直线距离
+ */
+export function getDistanceWithStore (addressId) {
+  return api.getDistanceWithStore(addressId)
+}
+
+/**
  * 新建一个地址
  */
 export function createNewAddress (address) {
@@ -42,16 +49,17 @@ export function setDefault (addressId) {
   return api.updateAddress({id: addressId, isDefault: true})
 }
 
-export function deteleAddress (addressId) {
-  return api.deteleAddress(addressId)
+export function deleteAddress (addressId) {
+  return api.deleteAddress(addressId)
 }
 
 export default {
   getAddressById,
   getMyAddressList,
   getDefaultAddress,
+  getDistanceWithStore,
   createNewAddress,
   updateAddress,
   setDefault,
-  deteleAddress
+  deleteAddress
 }

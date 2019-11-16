@@ -11,10 +11,10 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
  */
 public enum AddressExceptionEnum implements ServiceExceptionEnum {
 
-    /**
-     * order 异常
-     */
-    PHONE_FORMAT_ERROR(500, "手机号格式错误!!!");
+    PHONE_FORMAT_ERROR(500, "手机号格式错误!!!"),
+    NO_ADDRESS_ERROR(500, "没有这个地址!!"),
+    ADDRESS_NO_COORDINATE_ERROR(500, "错误: 地址没有坐标!!!"),
+    STORE_ADDRESS_NO_COORDINATE_ERROR(500, "错误: 店地址没有坐标!!!");
 
     AddressExceptionEnum(int code, String message) {
         this.code = code;

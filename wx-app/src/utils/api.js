@@ -17,11 +17,13 @@ const api = {
   getMyAddressList: () => request.get('address/getMyAddressList'),
   // 获取用户默认的地址
   getDefaultAddress: () => request.get('address/getDefaultAddress'),
+  // 获取指定地址和店之间的直线距离
+  getDistanceWithStore: (addressId) => request.get('address/getDistanceWithStore', { addressId }),
   // 新建一个地址
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
   updateAddress: (address) => request.post('address/updateAddress', address),
-  deteleAddress: (addressId) => request.post('address/deteleAddress', { addressId }),
+  deleteAddress: (addressId) => request.post('address/deleteAddress', { addressId }),
 
   selectOrderById: (orderId) => request.post('order/selectOrderById', { orderId }),
   getOrderListByPage: (arge) => request.post('order/getOrderListByPage', arge),

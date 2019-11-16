@@ -7,9 +7,13 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.common.utils.MapDistanceUtil;
 import net.novaborn.takeaway.common.utils.NaverMapUtil;
 import net.novaborn.takeaway.common.utils.PhoneUtil;
 import net.novaborn.takeaway.common.utils.entity.Coordinate;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
@@ -36,6 +40,8 @@ public class AddressController extends BaseController {
     private UserService userService;
 
     private AddressService addressService;
+
+    private SettingService settingService;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -70,6 +76,32 @@ public class AddressController extends BaseController {
         } else {
             return ResponseEntity.ok();
         }
+    }
+
+    @ResponseBody
+    @GetMapping("getDistanceWithStore")
+    public Double getDistanceWithStore(@RequestParam String addressId) {
+        Optional<Address> address = Optional.ofNullable(addressService.getById(addressId));
+
+        address.orElseThrow(() -> new SysException(AddressExceptionEnum.NO_ADDRESS_ERROR));
+
+        if (address.get().getX() == null) {
+            throw new SysException(AddressExceptionEnum.ADDRESS_NO_COORDINATE_ERROR);
+        }
+
+        Setting store_coordinate_x = settingService.getSettingByName("store_address_x", SettingScope.STORE);
+        Setting store_coordinate_y = settingService.getSettingByName("store_address_y", SettingScope.STORE);
+
+        if(store_coordinate_x == null || store_coordinate_y == null){
+            throw new SysException(AddressExceptionEnum.STORE_ADDRESS_NO_COORDINATE_ERROR);
+        }
+
+        return MapDistanceUtil.getDistance(
+                address.get().getX(),
+                address.get().getY(),
+                Double.parseDouble((String) store_coordinate_x.getValue()),
+                Double.parseDouble((String) store_coordinate_y.getValue())
+        );
     }
 
     @ResponseBody
@@ -135,8 +167,8 @@ public class AddressController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("deteleAddress")
-    public Tip deteleAddress(@RequestParam String addressId) {
+    @PostMapping("deleteAddress")
+    public Tip deleteAddress(@RequestParam String addressId) {
         addressService.removeById(addressId);
         return new SuccessTip();
     }

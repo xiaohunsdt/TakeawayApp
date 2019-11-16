@@ -140,13 +140,21 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import orderService from '@/services/order'
+  import payService from '@/services/pay'
   import addressService from '@/services/address'
-  import payApi from '@/services/pay'
 
   export default {
     components: {
       BasePanel,
       OrderItem
+    },
+    watch: {
+      address (newVal) {
+        addressService.getDistanceWithStore(newVal.id)
+          .then(res => {
+            this.addressDistance = res
+          })
+      }
     },
     computed: {
       orderItems () {
@@ -174,7 +182,8 @@
         return this.$store.getters.currentAddress
       },
       disableService () {
-        if (this.address) {
+        if (this.addressDistance > 600) {
+          this.tipNotice = '当前距离超出配送范围'
           return true
         }
         return false
@@ -197,7 +206,8 @@
         order: {},
         payWay: 'WEIXIN_PAY',
         coupon: null,
-        psData: ''
+        psData: '',
+        addressDistance: null
       }
     },
     methods: {
@@ -215,6 +225,7 @@
         this.payWay = 'WEIXIN_PAY'
         this.coupon = null
         this.psData = ''
+        this.addressDistance = null
       },
       setCoupon () {
         const $this = this
@@ -254,7 +265,7 @@
             this.CLEAR_CART()
             // 支付逻辑
             const { message } = res
-            payApi.payOrder(message)
+            payService.payOrder(message)
             // mpvue.redirectTo({
             //   url: `/pages/pay/main?orderId=${message}`
             // })
