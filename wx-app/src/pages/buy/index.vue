@@ -174,13 +174,12 @@
       }
     },
     onLoad () {
+      this.init()
       addressService.getDefaultAddress().then(res => {
         if (res.address) {
           this.SET_ADDRESS(res)
         }
       })
-      this.submitLoading = false
-      this.showOrderTip = false
     },
     data () {
       return {
@@ -200,6 +199,15 @@
       ...mapMutations('address', [
         'SET_ADDRESS'
       ]),
+      init () {
+        this.submitLoading = false
+        this.showOrderTip = false
+        this.orderId = ''
+        this.order = {}
+        this.payWay = 'WEIXIN_PAY'
+        this.coupon = null
+        this.psData = ''
+      },
       setCoupon () {
         const $this = this
         mpvue.navigateTo({

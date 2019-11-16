@@ -124,7 +124,7 @@ public class AddressController extends BaseController {
         }
 
         // 地址发生变化，填入经纬度
-        if (!target.getAddress().equals(address.getAddress()) || target.getX() == null || target.getY() == null) {
+        if (address.getAddress() != null && !target.getAddress().equals(address.getAddress())) {
             Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
             address.setX(coordinate.getX());
             address.setY(coordinate.getY());

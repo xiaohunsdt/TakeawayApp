@@ -4,12 +4,12 @@
     <div class="container-contain">
       <base-panel>
         <textarea
-          v-model="inputVal"
           auto-height
           maxlength="128"
           name="textarea"
           placeholder="请填写备注信息"
-          style="min-height: 6rem"/>
+          style="min-height: 6rem"
+          v-model="inputVal"/>
       </base-panel>
 
       <base-panel>
@@ -47,7 +47,13 @@
         inputVal: ''
       }
     },
+    onLoad () {
+      this.init()
+    },
     methods: {
+      init () {
+        this.inputVal = ''
+      },
       addPs (data) {
         if (this.inputVal) {
           this.inputVal += `,${data}`
@@ -57,7 +63,7 @@
       },
       setPs () {
         const eventChannel = this.$mp.page.getOpenerEventChannel()
-        eventChannel.emit('setPsContent', {ps: this.inputVal})
+        eventChannel.emit('setPsContent', { ps: this.inputVal })
         mpvue.navigateBack()
       }
     }

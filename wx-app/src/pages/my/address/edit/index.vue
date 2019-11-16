@@ -7,11 +7,11 @@
           <van-field
             :value="address.address"
             @change="regionInput"
+            autosize
             clearable
             label="地址"
-            placeholder="请输入地址"
+            placeholder="请输入地址,不要带门牌号"
             required
-            autosize
             type="textarea">
             <van-icon @click="clickRightIcon" name="question-o" size="1rem" slot="right-icon"/>
           </van-field>
@@ -20,7 +20,7 @@
             :value="address.detail"
             @change="detailInput"
             label="详细"
-            placeholder="楼下密码,送餐提示等详细信息"/>
+            placeholder="门牌号,楼下密码,送餐提示等详细信息"/>
           <van-field
             :border="false"
             :value="address.phone"
@@ -31,7 +31,9 @@
         </van-cell-group>
       </base-panel>
       <van-button
+        :disable="editLoading"
         :loading="editLoading"
+        loading-type="spinner"
         @click="editBtnClick"
         color="#FFD200"
         custom-class="add-address-btn"
@@ -67,6 +69,7 @@
       }
     },
     onLoad (options) {
+      this.init()
       if (options.hasOwnProperty('addressId')) {
         this.addressId = options.addressId
         addressService.getAddressById(this.addressId).then(res => {
@@ -76,6 +79,11 @@
       }
     },
     methods: {
+      init () {
+        this.addressId = ''
+        this.address = {}
+        this.editLoading = false
+      },
       clickRightIcon () {
         Toast('请输入街道名,小区名,道路名\r\n例如: 서울 마포구 신촌로 150')
       },
@@ -113,7 +121,7 @@
           })
       },
       edit () {
-        const {address, detail, phone} = this.address
+        const { address, detail, phone } = this.address
         if (!address || !phone) {
           mpvue.showToast({
             title: '请填写完整信息',
@@ -124,7 +132,7 @@
         }
 
         this.editLoading = true
-        addressService.createNewAddress({address, detail, phone})
+        addressService.createNewAddress({ address, detail, phone })
           .then(res => {
             mpvue.showToast({
               title: res.message,
@@ -143,10 +151,11 @@
 </script>
 
 <style>
-  .van-icon,.van-icon:before {
+  .van-icon, .van-icon:before {
     display: block !important;
 
   }
+
   .add-address-btn {
     position: relative;
     left: 50%;
