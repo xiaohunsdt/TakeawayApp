@@ -11,8 +11,9 @@
             label="地址"
             placeholder="请输入地址"
             required
+            autosize
             type="textarea">
-            <van-icon @click="clickRightIcon" name="question-o" size="1.1rem" slot="right-icon"/>
+            <van-icon @click="clickRightIcon" name="question-o" size="1rem" slot="right-icon"/>
           </van-field>
           <van-field
             :border="false"
@@ -76,9 +77,10 @@
     },
     methods: {
       clickRightIcon () {
-        Toast('请输入街道名/小区名/道路名/门牌号\r\n例如: 신촌 포스빌 xxx호/신촌로 150 xxx호')
+        Toast('请输入街道名,小区名,道路名\r\n例如: 서울 마포구 신촌로 150')
       },
       regionInput (value) {
+        console.log(value.mp.detail)
         this.address.address = value.mp.detail
       },
       detailInput (value) {
@@ -141,6 +143,10 @@
 </script>
 
 <style>
+  .van-icon,.van-icon:before {
+    display: block !important;
+
+  }
   .add-address-btn {
     position: relative;
     left: 50%;

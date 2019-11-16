@@ -4,11 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
-import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.common.utils.NaverMapUtil;
 import net.novaborn.takeaway.common.utils.PhoneUtil;
+import net.novaborn.takeaway.common.utils.entity.Coordinate;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
@@ -76,14 +77,18 @@ public class AddressController extends BaseController {
     public Tip createNewAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
-
         Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(user.get().getId());
 
         if (!PhoneUtil.validate(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 
+        // 填入经纬度
+        Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
+        address.setX(coordinate.getX());
+        address.setY(coordinate.getY());
         address.setUserId(user.get().getId());
+
         if (!defaultAddress.isPresent()) {
             address.setIsDefault(true);
         }
@@ -101,6 +106,7 @@ public class AddressController extends BaseController {
     public Tip updateAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
+        Address target = addressService.getById(address.getId());
 
         if (address.getPhone() != null && !PhoneUtil.validate(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
@@ -117,7 +123,12 @@ public class AddressController extends BaseController {
             }
         }
 
-        Address target = addressService.getById(address.getId());
+        // 地址发生变化，填入经纬度
+        if (!target.getAddress().equals(address.getAddress()) || target.getX() == null || target.getY() == null) {
+            Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
+            address.setX(coordinate.getX());
+            address.setY(coordinate.getY());
+        }
         BeanUtil.copyProperties(address, target, CopyOptions.create().setIgnoreNullValue(true));
         target.updateById();
         return new SuccessTip();

@@ -35,6 +35,16 @@ public class Address extends Model<Address> {
      */
     private String detail;
 
+    /**
+     * longitude 经度
+     */
+    private Double x;
+
+    /**
+     * latitude 纬度
+     */
+    private Double y;
+
     private String phone;
 
     private Boolean isDefault;

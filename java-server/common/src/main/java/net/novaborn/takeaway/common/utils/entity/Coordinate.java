@@ -7,10 +7,10 @@ public class Coordinate {
     /**
      * longitude
      */
-    private double x;
+    private Double x;
 
     /**
      * latitude
      */
-    private double y;
+    private Double y;
 }
