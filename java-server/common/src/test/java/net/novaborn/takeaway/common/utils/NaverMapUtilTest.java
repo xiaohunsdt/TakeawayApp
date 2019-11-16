@@ -8,6 +8,6 @@ public class NaverMapUtilTest {
 
     @Test
     public void getGeocode() {
-        NaverMapUtil.getGeocode("서울 마포구 신촌로 150");
+        NaverMapUtil.getGeocode("신촌로 150");
     }
 }

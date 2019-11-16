@@ -4,6 +4,8 @@ import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.common.utils.NaverMapUtil;
+import net.novaborn.takeaway.common.utils.entity.Coordinate;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.exception.SettingExceptionEnum;
@@ -56,11 +58,35 @@ public class SettingController extends BaseController {
             if (setting == null) {
                 setting = new Setting();
             }
+
+            //如果是设置店的地址，那么店地址的坐标也要设置
+            if ("store_address".equals(key)) {
+                // 没有坐标，地址更新的情况，需要设置坐标
+                Setting coordinate_x = settingService.getSettingByName("store_address_x", settingScope);
+                Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
+
+                if (coordinate_x  == null || coordinate_y  == null || !setting.getValue().equals(value)) {
+                    Coordinate coordinate = NaverMapUtil.getGeocode((String) value);
+                    coordinate_x = new Setting();
+                    coordinate_x.setKey("store_address_x");
+                    coordinate_x.setScope(settingScope);
+                    coordinate_x.setValue(coordinate.getX());
+                    coordinate_x.insertOrUpdate();
+
+                    coordinate_y = new Setting();
+                    coordinate_y.setKey("store_address_y");
+                    coordinate_y.setScope(settingScope);
+                    coordinate_y.setValue(coordinate.getY());
+                    coordinate_y.insertOrUpdate();
+                }
+            }
+
             setting.setKey(key);
             setting.setScope(settingScope);
             setting.setValue(value);
             setting.insertOrUpdate();
         });
+
 
         return new SuccessTip();
     }
