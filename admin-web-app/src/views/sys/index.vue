@@ -72,6 +72,11 @@
             <el-form-item label="外卖人员">
               <el-input v-model="expressSetting.courier_count"></el-input>
             </el-form-item>
+            <el-form-item label="最远配送距离">
+              <el-tooltip content="最远配送距离，单位为米" placement="right">
+                <el-input v-model="expressSetting.max_express_distance"></el-input>
+              </el-tooltip>
+            </el-form-item>
             <el-form-item>
               <el-button @click="saveSetting('EXPRESS')" type="primary">保存设置</el-button>
             </el-form-item>
@@ -107,14 +112,15 @@
         },
         storeSetting: {
           store_open_date: [],
-          store_open_time: [],
-          store_close_time: [],
+          store_open_time: null,
+          store_close_time: null,
           store_address: ''
         },
         expressSetting: {
           base_express_time: 0,
           average_express_time: 0,
-          courier_count: 0
+          courier_count: 0,
+          max_express_distance: 0
         }
       }
     },

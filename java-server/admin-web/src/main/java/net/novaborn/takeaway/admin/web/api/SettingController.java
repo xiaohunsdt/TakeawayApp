@@ -61,7 +61,7 @@ public class SettingController extends BaseController {
 
             //如果是设置店的地址，那么店地址的坐标也要设置
             if ("store_address".equals(key)) {
-                // 没有坐标，地址更新的情况，需要设置坐标
+                // 没有坐标/地址更新的情况，需要设置坐标
                 Setting coordinate_x = settingService.getSettingByName("store_address_x", settingScope);
                 Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
 
