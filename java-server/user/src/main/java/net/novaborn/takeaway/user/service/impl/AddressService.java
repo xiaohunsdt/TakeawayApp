@@ -3,8 +3,14 @@ package net.novaborn.takeaway.user.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.utils.MapDistanceUtil;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.dao.IAddressDao;
 import net.novaborn.takeaway.user.entity.Address;
+import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
 import net.novaborn.takeaway.user.service.IAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +32,9 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     @Autowired
     AddressService addressService;
 
+    @Autowired
+    SettingService settingService;
+
     @Override
     public List<Address> selectByUserId(String userId) {
         return this.baseMapper.selectByUserId(userId);
@@ -42,18 +51,44 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     }
 
     @Override
-    public Boolean setDefaultAddress(Address address) {
+    public Boolean setDefaultAddress(String addressId, String userId) {
         // 首先取消之前的默认地址
-        this.selectByUserId(address.getUserId()).stream()
-                .filter(Address::getIsDefault)
-                .forEach(e -> {
-                    e.setIsDefault(false);
-                    e.updateById();
-                });
+        Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(userId);
 
-        // 吧参数实例设置成默认地址
-        Address address1 = addressService.getById(address.getId());
+        //如果数据库中的默认地址不等于当前地址，将数据库中的默认地址设置成一般地址
+        if (!defaultAddress.get().getId().equals(addressId)) {
+            defaultAddress.get().setIsDefault(false);
+            defaultAddress.get().updateById();
+        }
+
+        // 把参数实例设置成默认地址
+        Address address1 = addressService.getById(addressId);
         address1.setIsDefault(true);
         return address1.updateById();
+    }
+
+    @Override
+    public Double getDistanceWithStore(String addressId) {
+        Optional<Address> address = Optional.ofNullable(addressService.getById(addressId));
+
+        address.orElseThrow(() -> new SysException(AddressExceptionEnum.NO_ADDRESS_ERROR));
+
+        if (address.get().getX() == null) {
+            throw new SysException(AddressExceptionEnum.ADDRESS_NO_COORDINATE_ERROR);
+        }
+
+        Setting store_coordinate_x = settingService.getSettingByName("store_address_x", SettingScope.STORE);
+        Setting store_coordinate_y = settingService.getSettingByName("store_address_y", SettingScope.STORE);
+
+        if (store_coordinate_x == null || store_coordinate_y == null) {
+            throw new SysException(AddressExceptionEnum.STORE_ADDRESS_NO_COORDINATE_ERROR);
+        }
+
+        return MapDistanceUtil.getDistance(
+                address.get().getX(),
+                address.get().getY(),
+                Double.parseDouble((String) store_coordinate_x.getValue()),
+                Double.parseDouble((String) store_coordinate_y.getValue())
+        );
     }
 }

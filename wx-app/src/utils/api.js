@@ -7,6 +7,11 @@ const api = {
 
   // 获取指定flag的产品列表
   getSpecificFlagGoodsList: (flag) => request.get('index/getSpecificFlagGoodsList', { flag }),
+  // 获取总服务状态
+  getServiceState: () => request.get('index/getServiceState'),
+  // 获取指定地址是否可以配送
+  getExpressServiceState: (addressId) => request.get('index/getExpressServiceState', { addressId }),
+
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品
@@ -17,8 +22,6 @@ const api = {
   getMyAddressList: () => request.get('address/getMyAddressList'),
   // 获取用户默认的地址
   getDefaultAddress: () => request.get('address/getDefaultAddress'),
-  // 获取指定地址和店之间的直线距离
-  getDistanceWithStore: (addressId) => request.get('address/getDistanceWithStore', { addressId }),
   // 新建一个地址
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
@@ -33,6 +36,7 @@ const api = {
     order,
     orderItems
   }, { headers: { 'Content-Type': 'application/json' } }),
+
   // 获取指定域的设置
   getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope })
 }

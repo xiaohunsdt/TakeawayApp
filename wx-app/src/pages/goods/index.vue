@@ -6,8 +6,7 @@
         <base-panel>
           <van-notice-bar
             :text="systemSettings.goods_page_notice"
-            left-icon="volume-o"
-          />
+            left-icon="volume-o"/>
           <div id="activity-info">
             <van-tag type="success" v-for="tag in systemSettings.goods_page_tags">{{ tag }}</van-tag>
           </div>
@@ -60,6 +59,7 @@
 
 <script>
   import categoryService from '@/services/category'
+  import indexService from '@/services/index'
   import goodsService from '@/services/goods'
   import settingService from '@/services/setting'
 
@@ -76,6 +76,7 @@
         currentIndex: 0,
         categories: [],
         systemSettings: {},
+        disableService: false,
         disableServiceNotice: ''
       }
     },
@@ -85,13 +86,6 @@
       },
       cartAllPrice () {
         return this.$store.getters.cartAllPrice
-      },
-      disableService () {
-        if (!this.systemSettings.service_running) {
-          this.disableServiceNotice = this.systemSettings.service_close_notice
-          return true
-        }
-        return false
       }
     },
     onLoad () {
@@ -103,23 +97,34 @@
     },
     methods: {
       init (index) {
+        // 先初始化数据
+        this.disableService = false
+        this.disableServiceNotice = ''
+
         // 获取相关设置项
-        settingService.getSystemSettings().then(res => {
+        indexService.getServiceState()
+          .then(res => {
+            if (res.state !== 0) {
+              this.disableService = true
+              this.disableServiceNotice = res.message
+            }
+          })
+        settingService.getSystemSettings()
+          .then(res => {
             this.systemSettings = Object.assign({}, res)
-          }
-        )
+          })
+
         // 先清除分类信息
         this.categories.splice(0, this.categories.length)
+
         // 获取所有分类
         categoryService.getAllCategory().then((res) => {
           res.forEach(item => {
             item.goodsList = []
             this.categories.push(item)
           })
-
           // 初始化数据
           this.getGoodsListByIndex(index)
-
           // 提前加载下一页,如果可能的话
           if (this.categories.length > index + 1) {
             this.getGoodsListByIndex(index + 1)

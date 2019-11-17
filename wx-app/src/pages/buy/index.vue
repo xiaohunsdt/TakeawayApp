@@ -139,6 +139,7 @@
   import { mapMutations } from 'vuex'
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
+  import indexService from '@/services/index'
   import orderService from '@/services/order'
   import payService from '@/services/pay'
   import addressService from '@/services/address'
@@ -150,9 +151,12 @@
     },
     watch: {
       address (newVal) {
-        addressService.getDistanceWithStore(newVal.id)
+        indexService.getExpressServiceState(newVal.id)
           .then(res => {
-            this.addressDistance = res
+            if (res.state !== 0) {
+              this.disableService = true
+              this.tipNotice = res.message
+            }
           })
       }
     },
@@ -180,34 +184,29 @@
       },
       address () {
         return this.$store.getters.currentAddress
-      },
-      disableService () {
-        if (this.addressDistance > 600) {
-          this.tipNotice = '当前距离超出配送范围'
-          return true
-        }
-        return false
       }
     },
     onLoad () {
       this.init()
-      addressService.getDefaultAddress().then(res => {
-        if (res.address) {
-          this.SET_ADDRESS(res)
-        }
-      })
+      if (!this.address) {
+        addressService.getDefaultAddress().then(res => {
+          if (res.address) {
+            this.SET_ADDRESS(res)
+          }
+        })
+      }
     },
     data () {
       return {
         submitLoading: false,
         showOrderTip: false,
+        disableService: false,
         tipNotice: '当前下单高峰期, 您可能需要等待较长时间才能就餐!',
         orderId: '',
         order: {},
         payWay: 'WEIXIN_PAY',
         coupon: null,
-        psData: '',
-        addressDistance: null
+        psData: ''
       }
     },
     methods: {
@@ -220,12 +219,12 @@
       init () {
         this.submitLoading = false
         this.showOrderTip = false
+        this.disableService = false
         this.orderId = ''
         this.order = {}
         this.payWay = 'WEIXIN_PAY'
         this.coupon = null
         this.psData = ''
-        this.addressDistance = null
       },
       setCoupon () {
         const $this = this

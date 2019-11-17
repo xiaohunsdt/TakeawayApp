@@ -79,32 +79,6 @@ public class AddressController extends BaseController {
     }
 
     @ResponseBody
-    @GetMapping("getDistanceWithStore")
-    public Double getDistanceWithStore(@RequestParam String addressId) {
-        Optional<Address> address = Optional.ofNullable(addressService.getById(addressId));
-
-        address.orElseThrow(() -> new SysException(AddressExceptionEnum.NO_ADDRESS_ERROR));
-
-        if (address.get().getX() == null) {
-            throw new SysException(AddressExceptionEnum.ADDRESS_NO_COORDINATE_ERROR);
-        }
-
-        Setting store_coordinate_x = settingService.getSettingByName("store_address_x", SettingScope.STORE);
-        Setting store_coordinate_y = settingService.getSettingByName("store_address_y", SettingScope.STORE);
-
-        if(store_coordinate_x == null || store_coordinate_y == null){
-            throw new SysException(AddressExceptionEnum.STORE_ADDRESS_NO_COORDINATE_ERROR);
-        }
-
-        return MapDistanceUtil.getDistance(
-                address.get().getX(),
-                address.get().getY(),
-                Double.parseDouble((String) store_coordinate_x.getValue()),
-                Double.parseDouble((String) store_coordinate_y.getValue())
-        );
-    }
-
-    @ResponseBody
     @PostMapping("createNewAddress")
     public Tip createNewAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
@@ -146,13 +120,7 @@ public class AddressController extends BaseController {
 
         //如果这个地址是默认地址，需要做进一步的默认地址唯一处理
         if (address.getIsDefault() != null && address.getIsDefault()) {
-            Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(user.get().getId());
-
-            //如果数据库中的默认地址不等于当前地址，将数据库中的默认地址设置成一般地址
-            if (!defaultAddress.get().getId().equals(address.getId())) {
-                defaultAddress.get().setIsDefault(false);
-                defaultAddress.get().updateById();
-            }
+            addressService.setDefaultAddress(address.getId(), address.getUserId());
         }
 
         // 地址发生变化，填入经纬度
