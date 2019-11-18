@@ -6,7 +6,7 @@
         <base-panel>
           <div v-if="address">
             <van-cell
-              :title="address.address + address.detail"
+              :title="address.address + ' ' + address.detail"
               is-link
               url="/pages/my/address/main">
               <view slot="icon" style="margin-right: 0.2rem">
@@ -151,13 +151,9 @@
     },
     watch: {
       address (newVal) {
-        indexService.getExpressServiceState(newVal.id)
-          .then(res => {
-            if (res.state !== 0) {
-              this.disableService = true
-              this.tipNotice = res.message
-            }
-          })
+        // 检查当前的价格和位置是否可以下单
+        this.disableService = false
+        this.checkExpressState(newVal.id, this.cartAllPrice)
       }
     },
     computed: {
@@ -271,6 +267,15 @@
           })
           .catch(res => {
             this.submitLoading = false
+          })
+      },
+      checkExpressState (addressId, allPrice) {
+        indexService.getExpressServiceState(addressId, allPrice)
+          .then(res => {
+            if (res.state !== 0) {
+              this.disableService = true
+              this.tipNotice = res.message
+            }
           })
       }
     }

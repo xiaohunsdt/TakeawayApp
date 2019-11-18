@@ -10,7 +10,7 @@ const api = {
   // 获取总服务状态
   getServiceState: () => request.get('index/getServiceState'),
   // 获取指定地址是否可以配送
-  getExpressServiceState: (addressId) => request.get('index/getExpressServiceState', { addressId }),
+  getExpressServiceState: (addressId, allPrice) => request.get('index/getExpressServiceState', { addressId, allPrice }),
 
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),

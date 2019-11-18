@@ -111,7 +111,6 @@ public class AddressController extends BaseController {
     @Transactional(rollbackFor = RuntimeException.class)
     public Tip updateAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
-        Optional<User> user = userService.selectByOpenId(openId);
         Address target = addressService.getById(address.getId());
 
         if (address.getPhone() != null && !PhoneUtil.validate(address.getPhone())) {
@@ -120,7 +119,7 @@ public class AddressController extends BaseController {
 
         //如果这个地址是默认地址，需要做进一步的默认地址唯一处理
         if (address.getIsDefault() != null && address.getIsDefault()) {
-            addressService.setDefaultAddress(address.getId(), address.getUserId());
+            addressService.setDefaultAddress(target.getId(), target.getUserId());
         }
 
         // 地址发生变化，填入经纬度

@@ -2,8 +2,6 @@ package net.novaborn.takeaway.user.web.api;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.tips.ErrorTip;
-import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -64,13 +62,24 @@ public class IndexController extends BaseController {
 
     @GetMapping("getExpressServiceState")
     @ResponseBody
-    public Object getExpressServiceState(@RequestParam String addressId) {
-        Setting max_express_distance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS);
+    public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
+        Setting maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS);
         double distance = addressService.getDistanceWithStore(addressId);
 
-        if (distance > Integer.parseInt((String) max_express_distance.getValue())) {
-            return new ServiceStateDto(-1,"您的距离太远，超出了我们的配送范围!!");
+        if (distance > Integer.parseInt((String) maxExpressDistance.getValue())) {
+            return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
         }
+
+        // 大于3公里，价格小于30000
+        if (distance > 3000 && allPrice < 30000) {
+            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 30000));
+        }
+
+        // 大于2公里，价格小于10000
+        if (distance > 2000 && allPrice < 10000) {
+            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
+        }
+
         return new ServiceStateDto();
     }
 }

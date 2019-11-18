@@ -15,8 +15,8 @@ export function getServiceState () {
   return api.getServiceState()
 }
 
-export function getExpressServiceState (addressId) {
-  return api.getExpressServiceState(addressId)
+export function getExpressServiceState (addressId, allPrice) {
+  return api.getExpressServiceState(addressId, allPrice)
 }
 
 export default {

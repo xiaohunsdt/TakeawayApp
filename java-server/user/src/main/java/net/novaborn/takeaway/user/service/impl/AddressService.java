@@ -62,9 +62,9 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
         }
 
         // 把参数实例设置成默认地址
-        Address address1 = addressService.getById(addressId);
-        address1.setIsDefault(true);
-        return address1.updateById();
+        Address target = addressService.getById(addressId);
+        target.setIsDefault(true);
+        return target.updateById();
     }
 
     @Override
