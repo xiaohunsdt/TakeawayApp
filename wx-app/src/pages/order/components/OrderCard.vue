@@ -124,10 +124,12 @@
       shareOrder (event) {
         console.log(event)
       },
-      comment (event) {
-        console.log(event)
+      comment () {
+        mpvue.navigateTo({
+          url: `/pages/order/comment/main?orderId=${this.order.id}`
+        })
       },
-      deleteOrder (event) {
+      deleteOrder () {
         orderService.deleteOrder(this.order.id).then(res => {
           this.$emit('refresh-list')
           mpvue.showToast({
