@@ -37,13 +37,36 @@
         </div>
 
         <div class="action-btns">
-          <van-button @click.stop="payNow" color="#FFD200" custom-class="action-btn" round size="small">立刻付款
+          <van-button
+            @click.stop="payNow" color="#FFD200" custom-class="action-btn" round
+            size="small"
+            v-if="order.payState === 'UN_PAY'">
+            立刻付款
           </van-button>
-          <van-button @click.stop="confirmGetFood" color="#FFD200" custom-class="action-btn" round size="small">确认取餐
+          <van-button
+            @click.stop="confirmGetFood"
+            color="#FFD200" custom-class="action-btn" round size="small"
+            v-if="order.payState !== 'UN_PAY' && (order.orderState=== 'WAITING_RECEIVE' || order.orderState=== 'PRODUCING' || order.orderState=== 'DELIVERING')">
+            确认取餐
           </van-button>
-          <van-button @click.stop="shareOrder" color="#FFD200" custom-class="action-btn" round size="small">分享领红包
+          <van-button
+            @click.stop="comment" color="#FFD200" custom-class="action-btn"
+            round size="small"
+            v-if="order.payState !== 'UN_PAY' && order.orderState=== 'FINISHED' && !order.isCommented">
+            评价
           </van-button>
-          <van-button @click.stop="comment" color="#FFD200" custom-class="action-btn" round size="small">评价</van-button>
+          <van-button
+            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"
+            round size="small"
+            v-if="order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'">
+            分享领红包
+          </van-button>
+          <van-button
+            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"
+            round size="small"
+            v-if="order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'">
+            删除
+          </van-button>
         </div>
       </base-panel>
 

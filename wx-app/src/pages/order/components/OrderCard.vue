@@ -60,7 +60,7 @@
         分享领红包
       </van-button>
       <van-button
-        @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"
+        @click.stop="deleteOrder" color="#FFD200" custom-class="action-btn"
         round size="small"
         v-if="order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'">
         删除
@@ -73,7 +73,8 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import indexUtil from '@/utils/index'
-  import payApi from '@/services/pay'
+  import orderService from '@/services/order'
+  import payService from '@/services/pay'
 
   export default {
     name: 'OrderCard',
@@ -109,16 +110,31 @@
         })
       },
       payNow (event) {
-        payApi.payOrder(this.order.id)
+        payService.payOrder(this.order.id)
       },
       confirmGetFood (event) {
-        console.log(event)
+        orderService.confirmGetOrder(this.order.id).then(res => {
+          this.$emit('refresh-list')
+          mpvue.showToast({
+            title: res.message,
+            duration: 2000
+          })
+        })
       },
       shareOrder (event) {
         console.log(event)
       },
       comment (event) {
         console.log(event)
+      },
+      deleteOrder (event) {
+        orderService.confirmGetOrder(this.order.id).then(res => {
+          this.$emit('refresh-list')
+          mpvue.showToast({
+            title: res.message,
+            duration: 2000
+          })
+        })
       }
     }
   }

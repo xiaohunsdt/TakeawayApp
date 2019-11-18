@@ -8,7 +8,7 @@
             :text="systemSettings.goods_page_notice"
             left-icon="volume-o"/>
           <div id="activity-info">
-            <van-tag type="success" v-for="tag in systemSettings.goods_page_tags">{{ tag }}</van-tag>
+            <van-tag :key="tag" type="success" v-for="tag in systemSettings.goods_page_tags">{{ tag }}</van-tag>
           </div>
         </base-panel>
       </div>

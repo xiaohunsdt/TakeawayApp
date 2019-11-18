@@ -10,6 +10,7 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -95,6 +96,21 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("confirmGetOrder")
+    public Tip confirmGetOrder(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getOrderState() == OrderState.FINISHED) {
+            throw new SysException(OrderExceptionEnum.ORDER_HAVE_FINISHED);
+        }
+
+        order.get().setOrderState(OrderState.FINISHED);
+        order.get().updateById();
+        return new SuccessTip();
+    }
+
+    @ResponseBody
     @Transactional(rollbackFor = RuntimeException.class)
     @PostMapping("createOrder")
     public Tip createOrder(@RequestBody @Validated OrderDto orderDto) {
@@ -119,7 +135,7 @@ public class OrderController extends BaseController {
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
             //刷卡和现金支付设置为后付状态
             order.setPayState(PayState.PAY_LATER);
-        }else {
+        } else {
             order.setPayState(PayState.UN_PAY);
         }
 

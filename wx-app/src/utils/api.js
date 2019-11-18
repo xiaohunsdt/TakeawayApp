@@ -31,11 +31,14 @@ const api = {
   selectOrderById: (orderId) => request.post('order/selectOrderById', { orderId }),
   getOrderListByPage: (arge) => request.post('order/getOrderListByPage', arge),
   getOrderCountByState: (orderState) => request.post('order/getOrderCountByState', { orderState }),
+  // 确认收到订单
+  confirmGetOrder: (orderId) => request.post('order/confirmGetOrder', { orderId }),
   // 创建一个订单
   createOrder: (order, orderItems) => request.post('order/createOrder', {
     order,
     orderItems
   }, { headers: { 'Content-Type': 'application/json' } }),
+  deleteOrder: (orderId) => request.post('order/deleteOrder', { orderId }),
 
   // 获取指定域的设置
   getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope })

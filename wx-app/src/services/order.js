@@ -42,9 +42,19 @@ export function getOrderCountByState (orderState) {
   return api.getOrderCountByState(orderState)
 }
 
+export function confirmGetOrder (orderId) {
+  return api.confirmGetOrder(orderId)
+}
+
+export function deleteOrder (orderId) {
+  return api.deleteOrder(orderId)
+}
+
 export default {
   selectOrderById,
   getOrderListByPage,
   getOrderCountByState,
-  createOrder
+  confirmGetOrder,
+  createOrder,
+  deleteOrder
 }

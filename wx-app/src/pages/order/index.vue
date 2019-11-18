@@ -5,6 +5,7 @@
       <order-card
         :key="order.orderId"
         :order="order"
+        @refresh-list="init"
         v-for="order in orderList"/>
     </div>
   </div>
@@ -20,8 +21,6 @@
     },
     onLoad (options) {
       this.orderState = options.state
-      this.init()
-
       let title = '全部订单'
       switch (this.orderState) {
         case 'waitPay':
@@ -40,6 +39,9 @@
       wx.setNavigationBarTitle({
         title
       })
+    },
+    onShow () {
+      this.init()
     },
     onPullDownRefresh () {
       this.init()
