@@ -148,4 +148,8 @@
     background-color: $bg;
     overflow: hidden;
   }
+
+  .el-form-item {
+    margin-bottom: unset !important;
+  }
 </style>

@@ -139,9 +139,19 @@
   }
 </script>
 
-<style lang="scss">
-  .el-form-item {
-    margin-bottom: unset !important;
+<style lang="scss" scoped>
+  $bg: #F3F3F9;
+
+  .container {
+    padding: 1rem;
+    min-height: inherit;
+    width: 100%;
+    background-color: $bg;
+    overflow: hidden;
+
+    &-header {
+      margin-bottom: 30px;
+    }
   }
 
   .tb-edit {
@@ -157,19 +167,8 @@
       display: none
     }
   }
-</style>
-<style lang="scss" scoped>
-  $bg: #F3F3F9;
 
-  .container {
-    padding: 1rem;
-    min-height: inherit;
-    width: 100%;
-    background-color: $bg;
-    overflow: hidden;
-
-    &-header {
-      margin-bottom: 30px;
-    }
+  .el-form-item {
+    margin-bottom: unset !important;
   }
 </style>
