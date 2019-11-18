@@ -110,7 +110,7 @@
         })
       },
       payNow (event) {
-        payService.payOrder(this.order.id)
+        payService.payOrder(this.order.id, this.order.paymentWay)
       },
       confirmGetFood (event) {
         orderService.confirmGetOrder(this.order.id).then(res => {
@@ -128,7 +128,7 @@
         console.log(event)
       },
       deleteOrder (event) {
-        orderService.confirmGetOrder(this.order.id).then(res => {
+        orderService.deleteOrder(this.order.id).then(res => {
           this.$emit('refresh-list')
           mpvue.showToast({
             title: res.message,

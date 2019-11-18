@@ -157,16 +157,9 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("updateOrder")
-    public Tip updateOrder(@ModelAttribute @Validated Order order) {
-        order.updateById();
-        return new SuccessTip("删除成功!");
-    }
-
-    @ResponseBody
     @PostMapping("deleteOrder")
-    public Tip deleteOrder(String id) {
-        if (orderService.removeById(id)) {
+    public Tip deleteOrder(@RequestParam String orderId) {
+        if (orderService.removeById(orderId)) {
 //            orderItemService.removeByOrderId(id);
             return new SuccessTip("删除成功!");
         } else {

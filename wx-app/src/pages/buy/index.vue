@@ -258,12 +258,8 @@
           .then(res => {
             this.submitLoading = false
             this.CLEAR_CART()
-            // 支付逻辑
-            const { message } = res
-            payService.payOrder(message)
-            // mpvue.redirectTo({
-            //   url: `/pages/pay/main?orderId=${message}`
-            // })
+            const orderId = res.message
+            payService.payOrder(orderId, this.payWay)
           })
           .catch(res => {
             this.submitLoading = false
