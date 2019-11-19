@@ -32,8 +32,16 @@
           name="textarea"
           placeholder="请输入评价(不超过100字),评价内容我们会密切关注!一经采纳,我们将会通知您,并给予一定的奖励!"
           style="padding: .5rem"
-          v-model="inputVal"/>
-        <van-button round size="small" style="float: right;margin-top: .6rem" type="primary">提交</van-button>
+          v-model="rateData.comment"/>
+        <van-button
+          :disabled="submitLoad"
+          :load="submitLoad"
+          @click="onSubmit"
+          round
+          size="small"
+          style="float: right;margin-top: .6rem" type="primary">
+          提交
+        </van-button>
       </base-panel>
     </div>
   </div>
@@ -57,6 +65,7 @@
     },
     data () {
       return {
+        submitLoad: false,
         order: {},
         rateData: {
           delicious: 0,
@@ -74,6 +83,11 @@
     },
     methods: {
       init () {
+        this.rateData.delicious = 0
+        this.rateData.express = 0
+        this.rateData.service = 0
+        this.rateData.comment = ''
+        this.submitLoad = false
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
         })
@@ -89,6 +103,17 @@
       },
       onCommentChange (event) {
         this.rateData.comment = event.mp.detail
+      },
+      onSubmit () {
+        this.submitLoad = true
+        orderService.createComment(this.orderId, this.rateData)
+          .then(res => {
+            this.submitLoad = false
+            mpvue.navigateBack()
+          })
+          .catch(res => {
+            this.submitLoad = false
+          })
       }
     }
   }

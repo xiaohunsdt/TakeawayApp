@@ -8,6 +8,7 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
@@ -157,13 +158,34 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("createComment")
+    public Tip createComment(@ModelAttribute @Validated Comment comment) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(comment.getOrderId()));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getOrderState() != OrderState.FINISHED) {
+            throw new SysException(OrderExceptionEnum.ORDER_NOT_FINISHED);
+        }
+
+        comment.setUserId(order.get().getUserId());
+
+        if (!comment.insert()) {
+            return new ErrorTip(-1, "评论失败!");
+        }
+
+        order.get().setIsCommented(true);
+        order.get().updateById();
+
+        return new SuccessTip();
+    }
+
+    @ResponseBody
     @PostMapping("deleteOrder")
     public Tip deleteOrder(@RequestParam String orderId) {
-        if (orderService.removeById(orderId)) {
-//            orderItemService.removeByOrderId(id);
-            return new SuccessTip("删除成功!");
-        } else {
+        if (!orderService.removeById(orderId)) {
             return new ErrorTip(-1, "删除失败!");
         }
+
+        return new SuccessTip("删除成功!");
     }
 }

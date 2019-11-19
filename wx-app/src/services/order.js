@@ -34,7 +34,7 @@ export function selectOrderById (orderId) {
 }
 
 export function getOrderListByPage (page, orderState) {
-  const args = Object.assign({}, page, {orderState})
+  const args = Object.assign({}, page, { orderState })
   return api.getOrderListByPage(args)
 }
 
@@ -50,11 +50,17 @@ export function deleteOrder (orderId) {
   return api.deleteOrder(orderId)
 }
 
+export function createComment (orderId, commentData) {
+  commentData.orderId = orderId
+  return api.createComment(commentData)
+}
+
 export default {
   selectOrderById,
   getOrderListByPage,
   getOrderCountByState,
   confirmGetOrder,
   createOrder,
-  deleteOrder
+  deleteOrder,
+  createComment
 }

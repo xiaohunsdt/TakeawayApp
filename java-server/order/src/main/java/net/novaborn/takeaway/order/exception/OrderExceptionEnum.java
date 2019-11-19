@@ -20,7 +20,8 @@ public enum OrderExceptionEnum implements ServiceExceptionEnum {
      * 没有订单商品
      */
     ORDER_NOT_ITEMS(500, "没有订单商品!"),
-    ORDER_HAVE_FINISHED(500, "订单已经完成!");
+    ORDER_HAVE_FINISHED(500, "订单已经完成!"),
+    ORDER_NOT_FINISHED(500, "订单还没有完成!");
 
     OrderExceptionEnum(int code, String message) {
         this.code = code;

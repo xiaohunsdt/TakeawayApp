@@ -39,6 +39,7 @@ const api = {
     orderItems
   }, { headers: { 'Content-Type': 'application/json' } }),
   deleteOrder: (orderId) => request.post('order/deleteOrder', { orderId }),
+  createComment: (commentData) => request.post('order/createComment', commentData),
 
   // 获取指定域的设置
   getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope })

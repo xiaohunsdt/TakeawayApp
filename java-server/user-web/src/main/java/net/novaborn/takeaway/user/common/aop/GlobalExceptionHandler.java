@@ -6,6 +6,7 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,12 +52,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    /**
-     * 请求的 URL 参数检验
-     *
-     * @param e 异常信息
-     * @return 返回提示信息
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -64,6 +59,16 @@ public class GlobalExceptionHandler {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getMessage()
+        );
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip handleBindException3(BindException e) {
+        return new ErrorTip(
+                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
         );
     }
 }
