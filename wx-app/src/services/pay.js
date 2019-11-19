@@ -12,12 +12,12 @@ export function payOrder (orderId, payWay) {
       })
       break
     case 'ALI_PAY':
-      mpvue.redirectTo({
+      mpvue.navigateTo({
         url: `/pages/pay/main?orderId=${orderId}`
       })
       break
     case 'TRANSFER':
-      mpvue.redirectTo({
+      mpvue.navigateTo({
         url: `/pages/pay/main?orderId=${orderId}`
       })
       break

@@ -2,10 +2,10 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div class="container-contain">
-      <coupon-card
-        v-for="coupon in couponList"
-        :key="coupon.id"
-        :coupon="coupon" />
+<!--      <coupon-card-->
+<!--        v-for="coupon in couponList"-->
+<!--        :key="coupon.id"-->
+<!--        :coupon="coupon" />-->
     </div>
   </div>
 </template>

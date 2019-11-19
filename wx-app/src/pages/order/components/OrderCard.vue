@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="action-btns">
+    <div v-if="showOperation" class="action-btns">
       <van-button
         @click.stop="payNow" color="#FFD200" custom-class="action-btn" round
         size="small"
@@ -81,6 +81,11 @@
       order: {
         type: Object,
         required: true
+      },
+      showOperation: {
+        type: Boolean,
+        required: false,
+        default: true
       }
     },
     components: {
