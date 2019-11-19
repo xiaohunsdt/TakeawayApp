@@ -94,12 +94,14 @@
   import OrderItem from '@/components/OrderItem'
   import orderService from '@/services/order'
   import indexUtil from '@/utils/index'
+  import orderOperation from '../mixins/order-operation'
 
   export default {
     components: {
       BasePanel,
       OrderItem
     },
+    mixins: [orderOperation],
     onLoad (options) {
       this.orderId = options.orderId
       this.init()
@@ -127,18 +129,6 @@
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
         })
-      },
-      payNow (event) {
-        console.log(event)
-      },
-      confirmGetFood (event) {
-        console.log(event)
-      },
-      shareOrder (event) {
-        console.log(event)
-      },
-      comment (event) {
-        console.log(event)
       }
     }
   }

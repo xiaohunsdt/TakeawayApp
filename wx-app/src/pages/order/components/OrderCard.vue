@@ -73,8 +73,7 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import indexUtil from '@/utils/index'
-  import orderService from '@/services/order'
-  import payService from '@/services/pay'
+  import orderOperation from '../mixins/order-operation'
 
   export default {
     name: 'OrderCard',
@@ -88,6 +87,7 @@
       BasePanel,
       OrderItem
     },
+    mixins: [orderOperation],
     computed: {
       payStateStr () {
         return indexUtil.formatPayState(this.order.payState)
@@ -107,35 +107,6 @@
       openOrderDetail () {
         mpvue.navigateTo({
           url: `/pages/order/detail/main?orderId=${this.order.id}`
-        })
-      },
-      payNow (event) {
-        payService.payOrder(this.order.id, this.order.paymentWay)
-      },
-      confirmGetFood (event) {
-        orderService.confirmGetOrder(this.order.id).then(res => {
-          this.$emit('refresh-list')
-          mpvue.showToast({
-            title: res.message,
-            duration: 2000
-          })
-        })
-      },
-      shareOrder (event) {
-        console.log(event)
-      },
-      comment () {
-        mpvue.navigateTo({
-          url: `/pages/order/comment/main?orderId=${this.order.id}`
-        })
-      },
-      deleteOrder () {
-        orderService.deleteOrder(this.order.id).then(res => {
-          this.$emit('refresh-list')
-          mpvue.showToast({
-            title: res.message,
-            duration: 2000
-          })
         })
       }
     }
