@@ -42,13 +42,13 @@ public class OrderPayExpiredReceiver {
     public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
         log.debug("订单过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
-        Order temp = orderService.getById(order.getId());
+        Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (temp.getPayState() == PayState.UN_PAY && temp.getOrderState() != OrderState.EXPIRED) {
+        if (target!= null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
             try {
-                temp.setOrderState(OrderState.EXPIRED);
-                temp.updateById();
+                target.setOrderState(OrderState.EXPIRED);
+                target.updateById();
             } catch (Exception e) {
                 log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", order.getId());
                 channel.basicReject(deliveryTag, true);
