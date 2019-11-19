@@ -106,6 +106,9 @@
       this.orderId = options.orderId
       this.init()
     },
+    onShow () {
+      this.init()
+    },
     onPullDownRefresh () {
       this.init()
       mpvue.stopPullDownRefresh()
