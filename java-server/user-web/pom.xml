@@ -88,6 +88,12 @@
             <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
             <version>${wx-java.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.anastaciocintra</groupId>
+            <artifactId>escpos-coffee</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
