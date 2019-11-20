@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +70,12 @@ public class IndexController extends BaseController {
                     dir.mkdirs();
                 }
 
-                file.transferTo(new File(filePath + imgName));
+                File target = new File(filePath + imgName);
+
+                //保存图片到本地
+                file.transferTo(target);
+                //图片压缩
+                ImgUtil.compress(target, target, 0.1f);
             } catch (Exception e) {
                 log.error("", e);
                 throw new SysException(SysExceptionEnum.UPLOAD_IMAGE_FAILED);

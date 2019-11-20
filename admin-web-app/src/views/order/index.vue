@@ -55,43 +55,46 @@
                   </el-table-column>
                 </el-table>
               </base-card>
-              <el-form class="order-expand-form" label-position="left">
-                <el-row>
-                  <el-col :span="12">
-                    <el-form-item label="订单 ID">
-                      <span>{{ props.row.id }}</span>
-                    </el-form-item>
-                    <el-form-item label="总金额">
-                      <span>{{ props.row.allPrice }}</span>
-                    </el-form-item>
-                    <el-form-item label="优惠">
-                      <span>{{ props.row.discountedPrices }}</span>
-                      <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
-                    </el-form-item>
-                    <el-form-item label="实际金额">
-                      <span>{{ props.row.realPrice }}</span>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="地址">
-                      <div>
-                        <div>{{ props.row.detail.address.address }}</div>
-                        <div>({{ props.row.detail.address.detail }})</div>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label="联系方式">
-                      <span>{{ props.row.detail.address.phone }}</span>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-form>
+              <base-card>
+                <el-form class="order-expand-form" label-position="left">
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="订单 ID">
+                        <span>{{ props.row.id }}</span>
+                      </el-form-item>
+                      <el-form-item label="总金额">
+                        <span>{{ props.row.allPrice }}</span>
+                      </el-form-item>
+                      <el-form-item label="优惠">
+                        <span>{{ props.row.discountedPrices }}</span>
+                        <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
+                      </el-form-item>
+                      <el-form-item label="实际金额">
+                        <span>{{ props.row.realPrice }}</span>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="地址">
+                        <div>
+                          <div>{{ props.row.detail.address.address }}</div>
+                          <div>({{ props.row.detail.address.detail }})</div>
+                        </div>
+                      </el-form-item>
+                      <el-form-item label="联系方式">
+                        <span>{{ props.row.detail.address.phone }}</span>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </base-card>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
           label="单号"
-          prop="number">
+          prop="number"
+          width="60">
         </el-table-column>
         <el-table-column
           align="center"
@@ -103,40 +106,60 @@
         <el-table-column
           align="center"
           label="商品数量"
-          prop="goodsCount">
+          prop="goodsCount"
+          width="80">
         </el-table-column>
         <el-table-column
           align="center"
           label="总金额"
           prop="allPrice">
-        </el-table-column>
-        <el-table-column
-          align="center"
-          label="折扣/抵扣金额">
           <template v-slot="scope">
-            <div v-if="scope.row.discount !==''">{{ scope.row.discount }}</div>
-            <div>₩ {{ scope.row.discountedPrices }}</div>
+            <div>₩ {{ scope.row.allPrice.toLocaleString() }}</div>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="实际金额"
-          prop="realPrice">
+          label="折扣/抵扣金额"
+          width="160">
+          <template v-slot="scope">
+            <div v-if="scope.row.discount !==''">{{ scope.row.discount }}</div>
+            <div>₩ {{ scope.row.discountedPrices.toLocaleString() }}</div>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="支付方式"
-          prop="paymentWay">
+          label="实际金额">
+          <template v-slot="scope">
+            <div>₩ {{ scope.row.realPrice.toLocaleString() }}</div>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="支付状态"
-          prop="payState">
+          label="支付方式">
+          <template v-slot="scope">
+            <el-tag>{{ scope.row.paymentWay | paymentWayFormat }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
-          label="订单状态"
-          prop="orderState">
+          label="支付状态">
+          <template v-slot="scope">
+            <el-tag type="success" v-if="scope.row.payState === 'PAID'">{{ scope.row.payState | payStateFormat }}
+            </el-tag>
+            <el-tag type="warning" v-if="scope.row.payState === 'PAY_LATER'">{{ scope.row.payState | payStateFormat }}
+            </el-tag>
+            <el-tag type="danger" v-if="scope.row.payState === 'UN_PAY'">{{ scope.row.payState | payStateFormat }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="订单状态">
+          <template v-slot="scope">
+            <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">{{ scope.row.orderState | orderStateFormat }}</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.orderState === 'REFUND'">{{ scope.row.orderState | orderStateFormat }}</el-tag>
+            <el-tag v-else>{{ scope.row.orderState | orderStateFormat }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -148,10 +171,10 @@
           label="操作">
           <template v-slot="scope">
             <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
-            <!--            <el-button size="mini" type="primary">接单</el-button>-->
-            <!--            <el-button size="mini" type="primary">配送</el-button>-->
-            <!--            <el-button size="mini" type="primary">完成</el-button>-->
-            <!--            <el-button size="mini" type="primary">取消</el-button>-->
+            <el-button size="mini" type="success">接单</el-button>
+            <el-button size="mini" type="success">配送</el-button>
+            <el-button size="mini" type="success">完成</el-button>
+            <el-button size="mini" type="danger">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -174,9 +197,21 @@
   import BaseCard from '@/components/BaseCard'
   import orderApi from '@/api/order'
   import { getServerUrl } from '@/utils/sys'
+  import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
 
   export default {
     name: 'OrderManagement',
+    filters: {
+      orderStateFormat: function(value) {
+        return formatOrderState(value)
+      },
+      payStateFormat: function(value) {
+        return formatPayState(value)
+      },
+      paymentWayFormat: function(value) {
+        return formatPaymentWay(value)
+      }
+    },
     components: {
       BaseCard
     },

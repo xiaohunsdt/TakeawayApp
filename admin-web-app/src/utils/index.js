@@ -37,7 +37,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -347,4 +349,37 @@ export function removeClass(ele, cls) {
     const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
     ele.className = ele.className.replace(reg, ' ')
   }
+}
+
+const orderStateMap = new Map()
+orderStateMap.set('WAITING_RECEIVE', '等待接单')
+orderStateMap.set('PRODUCING', '制作中')
+orderStateMap.set('DELIVERING', '配送中')
+orderStateMap.set('WAIT_COMMENT', '等待评论')
+orderStateMap.set('FINISHED', '已完成')
+orderStateMap.set('REFUND', '退款')
+
+const payStateMap = new Map()
+payStateMap.set('UN_PAY', '未支付')
+payStateMap.set('PAID', '已支付')
+payStateMap.set('PAY_LATER', '后付')
+
+const paymentWayMap = new Map()
+paymentWayMap.set('BALANCE', '账户余额')
+paymentWayMap.set('TRANSFER', '通帐转帐')
+paymentWayMap.set('WEIXIN_PAY', '微信支付')
+paymentWayMap.set('ALI_PAY', '支付宝支付')
+paymentWayMap.set('CREDIT_CARD', '刷卡支付')
+paymentWayMap.set('CASH', '现金')
+
+export function formatOrderState(orderState) {
+  return orderStateMap.get(orderState)
+}
+
+export function formatPayState(payState) {
+  return payStateMap.get(payState)
+}
+
+export function formatPaymentWay(paymentWay) {
+  return paymentWayMap.get(paymentWay)
 }
