@@ -63,14 +63,14 @@
                         <span>{{ props.row.id }}</span>
                       </el-form-item>
                       <el-form-item label="总金额">
-                        <span>{{ props.row.allPrice }}</span>
+                        <span>₩ {{ props.row.allPrice.toLocaleString() }}</span>
                       </el-form-item>
                       <el-form-item label="优惠">
-                        <span>{{ props.row.discountedPrices }}</span>
+                        <span>₩ {{ props.row.discountedPrices.toLocaleString() }}</span>
                         <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
                       </el-form-item>
                       <el-form-item label="实际金额">
-                        <span>{{ props.row.realPrice }}</span>
+                        <span>₩ {{ props.row.realPrice.toLocaleString() }}</span>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -156,8 +156,15 @@
           align="center"
           label="订单状态">
           <template v-slot="scope">
-            <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">{{ scope.row.orderState | orderStateFormat }}</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.orderState === 'REFUND'">{{ scope.row.orderState | orderStateFormat }}</el-tag>
+            <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">{{ scope.row.orderState | orderStateFormat
+              }}
+            </el-tag>
+            <el-tag type="danger" v-else-if="scope.row.orderState === 'REFUND'">{{ scope.row.orderState |
+              orderStateFormat }}
+            </el-tag>
+            <el-tag type="info" v-else-if="scope.row.orderState === 'EXPIRED'">{{ scope.row.orderState |
+              orderStateFormat }}
+            </el-tag>
             <el-tag v-else>{{ scope.row.orderState | orderStateFormat }}</el-tag>
           </template>
         </el-table-column>
@@ -168,13 +175,47 @@
         </el-table-column>
         <el-table-column
           align="center"
+          width="150"
           label="操作">
           <template v-slot="scope">
-            <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
-            <el-button size="mini" type="success">接单</el-button>
-            <el-button size="mini" type="success">配送</el-button>
-            <el-button size="mini" type="success">完成</el-button>
-            <el-button size="mini" type="danger">取消</el-button>
+            <div class="action-btns">
+              <el-button
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'"
+                @click="onEdit(scope.row.id)"
+                size="mini"
+                type="primary">编辑
+              </el-button>
+              <el-button
+                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')"
+                size="mini"
+                type="success">打印
+              </el-button>
+              <el-button
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'"
+                size="mini"
+                type="success">接单
+              </el-button>
+              <el-button
+                v-if="scope.row.orderState==='PRODUCING'"
+                size="mini"
+                type="success">配送
+              </el-button>
+              <el-button
+                v-if="scope.row.orderState==='DELIVERING'"
+                size="mini"
+                type="success">完成
+              </el-button>
+              <el-button
+                v-if="scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED')"
+                size="mini"
+                type="danger">退款
+              </el-button>
+              <el-button
+                v-if="scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND'"
+                size="mini"
+                type="danger">删除
+              </el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -194,89 +235,89 @@
 </template>
 
 <script>
-  import BaseCard from '@/components/BaseCard'
-  import orderApi from '@/api/order'
-  import { getServerUrl } from '@/utils/sys'
-  import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
+    import BaseCard from '@/components/BaseCard'
+    import orderApi from '@/api/order'
+    import { getServerUrl } from '@/utils/sys'
+    import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
 
-  export default {
-    name: 'OrderManagement',
-    filters: {
-      orderStateFormat: function(value) {
-        return formatOrderState(value)
-      },
-      payStateFormat: function(value) {
-        return formatPayState(value)
-      },
-      paymentWayFormat: function(value) {
-        return formatPaymentWay(value)
-      }
-    },
-    components: {
-      BaseCard
-    },
-    data() {
-      return {
-        page: {
-          current: 1,
-          size: 15,
-          total: 0
+    export default {
+        name: 'OrderManagement',
+        filters: {
+            orderStateFormat: function(value) {
+                return formatOrderState(value)
+            },
+            payStateFormat: function(value) {
+                return formatPayState(value)
+            },
+            paymentWayFormat: function(value) {
+                return formatPaymentWay(value)
+            }
         },
-        formData: {
-          nickName: null,
-          number: null
+        components: {
+            BaseCard
         },
-        listLoading: false,
-        tableData: []
-      }
-    },
-    computed: {
-      uploadUrl() {
-        return getServerUrl()
-      }
-    },
-    created() {
-      this.onSearch()
-    },
-    methods: {
-      onSearch() {
-        this.listLoading = true
-        orderApi.getOrderListByPage(this.page, this.formData)
-          .then(response => {
-            const datas = response.records
-            datas.forEach(item => {
-              item.detail = {}
-            })
-            this.tableData = datas
-            this.page.total = parseInt(response.total)
-            this.listLoading = false
-          }).catch(() => {
-          this.listLoading = false
-        })
-      },
-      async getOrderDetail(row, expandedRows) {
-        const currentRow = expandedRows.find(item => item.id === row.id)
-        // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-        if (currentRow !== undefined) {
-          await orderApi.getOrderDetail(row.id)
-            .then(response => {
-              this.$set(currentRow, 'detail', response)
-            })
+        data() {
+            return {
+                page: {
+                    current: 1,
+                    size: 15,
+                    total: 0
+                },
+                formData: {
+                    nickName: null,
+                    number: null
+                },
+                listLoading: false,
+                tableData: []
+            }
+        },
+        computed: {
+            uploadUrl() {
+                return getServerUrl()
+            }
+        },
+        created() {
+            this.onSearch()
+        },
+        methods: {
+            onSearch() {
+                this.listLoading = true
+                orderApi.getOrderListByPage(this.page, this.formData)
+                    .then(response => {
+                        const datas = response.records
+                        datas.forEach(item => {
+                            item.detail = {}
+                        })
+                        this.tableData = datas
+                        this.page.total = parseInt(response.total)
+                        this.listLoading = false
+                    }).catch(() => {
+                    this.listLoading = false
+                })
+            },
+            async getOrderDetail(row, expandedRows) {
+                const currentRow = expandedRows.find(item => item.id === row.id)
+                // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
+                if (currentRow !== undefined) {
+                    await orderApi.getOrderDetail(row.id)
+                        .then(response => {
+                            this.$set(currentRow, 'detail', response)
+                        })
+                }
+            },
+            onEdit(id) {
+                console.log(id)
+            },
+            handleSizeChange(val) {
+                this.page.size = val
+                this.onSearch()
+            },
+            handleCurrentChange(val) {
+                this.page.current = val
+                this.onSearch()
+            }
         }
-      },
-      onEdit(id) {
-        console.log(id)
-      },
-      handleSizeChange(val) {
-        this.page.size = val
-        this.onSearch()
-      },
-      handleCurrentChange(val) {
-        this.page.current = val
-        this.onSearch()
-      }
     }
-  }
 </script>
 
 <style lang="scss">
@@ -327,5 +368,11 @@
 
   .el-form-item {
     margin-bottom: unset !important;
+  }
+
+  .action-btns {
+    button {
+      margin-bottom: 5px;
+    }
   }
 </style>
