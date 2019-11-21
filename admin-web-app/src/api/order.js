@@ -16,14 +16,80 @@ export function getOrderListByPage(page, args) {
 }
 
 export function getOrderDetail(orderId) {
-  const data = {
-    orderId
-  }
   return request({
     url: '/order/getOrderDetail',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data,
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function printOrder(order) {
+
+}
+
+export function receiveOrder(orderId) {
+  return request({
+    url: '/order/receiveOrder',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function deliveryOrder(orderId) {
+  return request({
+    url: '/order/deliveryOrder',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function finishOrder(orderId) {
+  return request({
+    url: '/order/finishOrder',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function refundOrder(orderId) {
+  return request({
+    url: '/order/refundOrder',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function deleteOrder(orderId) {
+  return request({
+    url: '/order/deleteOrder',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
     transformRequest: [function(data) {
       data = Qs.stringify(data)
       return data
@@ -33,5 +99,10 @@ export function getOrderDetail(orderId) {
 
 export default {
   getOrderListByPage,
-  getOrderDetail
+  getOrderDetail,
+  receiveOrder,
+  deliveryOrder,
+  finishOrder,
+  refundOrder,
+  deleteOrder
 }

@@ -181,37 +181,43 @@
             <div class="action-btns">
               <el-button
                 v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'"
-                @click="onEdit(scope.row.id)"
+                @click="onEditOrder(scope.row)"
                 size="mini"
                 type="primary">编辑
               </el-button>
               <el-button
                 v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')"
+                @click="onPrintOrder(scope.row)"
                 size="mini"
                 type="success">打印
               </el-button>
               <el-button
                 v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'"
+                @click="onReceiveOrder(scope.row)"
                 size="mini"
                 type="success">接单
               </el-button>
               <el-button
                 v-if="scope.row.orderState==='PRODUCING'"
+                @click="onDeliveryOrder(scope.row)"
                 size="mini"
                 type="success">配送
               </el-button>
               <el-button
                 v-if="scope.row.orderState==='DELIVERING'"
+                @click="onFinishOrder(scope.row)"
                 size="mini"
                 type="success">完成
               </el-button>
               <el-button
-                v-if="scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED')"
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
+                @click="onRefundOrder(scope.row)"
                 size="mini"
                 type="danger">退款
               </el-button>
               <el-button
                 v-if="scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND'"
+                @click="onDeleteOrder(scope.row)"
                 size="mini"
                 type="danger">删除
               </el-button>
@@ -305,9 +311,6 @@
                         })
                 }
             },
-            onEdit(id) {
-                console.log(id)
-            },
             handleSizeChange(val) {
                 this.page.size = val
                 this.onSearch()
@@ -315,6 +318,74 @@
             handleCurrentChange(val) {
                 this.page.current = val
                 this.onSearch()
+            },
+            onEditOrder(order) {
+                console.log(order)
+            },
+            onPrintOrder(order) {
+                orderApi.printOrder(order)
+            },
+            onReceiveOrder(order) {
+                orderApi.receiveOrder(order.id)
+                    .then(res => {
+                        this.$message({
+                            message: res.message,
+                            type: 'success'
+                        })
+                        order.orderState = 'PRODUCING'
+                    })
+            },
+            onDeliveryOrder(order) {
+                orderApi.deliveryOrder(order.id)
+                    .then(res => {
+                        this.$message({
+                            message: res.message,
+                            type: 'success'
+                        })
+                        order.orderState = 'DELIVERING'
+                    })
+            },
+            onFinishOrder(order) {
+                orderApi.finishOrder(order.id)
+                    .then(res => {
+                        this.$message({
+                            message: res.message,
+                            type: 'success'
+                        })
+                        order.orderState = 'FINISHED'
+                    })
+            },
+            onRefundOrder(order) {
+                this.$confirm('确定要退款吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    orderApi.refundOrder(order.id)
+                        .then(res => {
+                            this.$message({
+                                message: res.message,
+                                type: 'success'
+                            })
+                            order.orderState = 'REFUND'
+                        })
+                })
+            },
+            onDeleteOrder(order) {
+                this.$confirm('确定要删除这个订单吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    orderApi.deleteOrder(order.id)
+                        .then(res => {
+                            this.$message({
+                                message: res.message,
+                                type: 'success'
+                            })
+                            this.onSearch()
+                        })
+                })
             }
         }
     }

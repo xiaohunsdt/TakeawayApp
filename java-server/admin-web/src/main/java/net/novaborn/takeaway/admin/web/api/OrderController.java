@@ -6,12 +6,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
-import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.entity.User;
@@ -68,26 +69,83 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("createNewOrder")
-    public Tip createNewOrder(Category category) {
-        return null;
+    @PostMapping("receiveOrder")
+    public Tip receiveOrder(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getPayState() == PayState.UN_PAY || order.get().getOrderState() != OrderState.WAITING_RECEIVE) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        order.get().setOrderState(OrderState.PRODUCING);
+        if (!order.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
     }
 
     @ResponseBody
-    @PostMapping("updateOrder")
-    public Tip updateOrder(Order order) {
-//        Optional<Order> tempCategory = Optional.ofNullable(orderService.getById(order.getId()));
-        return null;
+    @PostMapping("deliveryOrder")
+    public Tip deliveryOrder(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getOrderState() != OrderState.PRODUCING) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        order.get().setOrderState(OrderState.DELIVERING);
+        if (!order.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
+    }
+
+    @ResponseBody
+    @PostMapping("finishOrder")
+    public Tip finishOrder(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getOrderState() == OrderState.FINISHED
+                || order.get().getOrderState() == OrderState.REFUND
+                || order.get().getOrderState() == OrderState.EXPIRED) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        order.get().setOrderState(OrderState.FINISHED);
+        if (!order.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
+    }
+
+    @ResponseBody
+    @PostMapping("refundOrder")
+    public Tip refundOrder(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getPayState() == PayState.UN_PAY
+                || order.get().getOrderState() == OrderState.REFUND
+                || order.get().getOrderState() == OrderState.EXPIRED) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        order.get().setOrderState(OrderState.REFUND);
+        if (!order.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
     }
 
     @ResponseBody
     @PostMapping("deleteOrder")
-    public Tip deleteOrder(String id) {
-        if (orderService.removeById(id)) {
-//            orderItemService.removeByOrderId(id);
-            return new SuccessTip("删除成功!");
-        } else {
+    public Tip deleteOrder(@RequestParam String orderId) {
+        if (!orderService.removeById(orderId)) {
             return new ErrorTip(-1, "删除失败!");
         }
+        return new SuccessTip();
     }
 }
