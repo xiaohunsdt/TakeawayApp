@@ -5,10 +5,10 @@
       <div id="header">
         <base-panel>
           <van-notice-bar
-            :text="systemSettings.goods_page_notice"
+            :text="pageSettings.goodsPageNotice"
             left-icon="volume-o"/>
           <div id="activity-info">
-            <van-tag :key="tag" type="success" v-for="tag in systemSettings.goods_page_tags">{{ tag }}</van-tag>
+            <van-tag :key="tag" type="success" v-for="tag in pageSettings.goodsPageTags">{{ tag }}</van-tag>
           </div>
         </base-panel>
       </div>
@@ -35,9 +35,9 @@
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
-          :disabled="disableService"
+          :disabled="pageSettings.disableService"
           :price="cartAllPrice"
-          :tip="true"
+          :tip="pageSettings.disableService"
           @submit="onSubmitOrder"
           button-class="submit-btn"
           button-text="提交订单"
@@ -50,7 +50,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <view slot="tip" v-if="disableService">{{disableServiceNotice}}</view>
+          <view slot="tip">{{pageSettings.disableServiceNotice}}</view>
         </van-submit-bar>
       </div>
     </div>
@@ -75,9 +75,7 @@
       return {
         currentIndex: 0,
         categories: [],
-        systemSettings: {},
-        disableService: false,
-        disableServiceNotice: ''
+        pageSettings: {}
       }
     },
     computed: {
@@ -109,9 +107,9 @@
               this.disableServiceNotice = res.message
             }
           })
-        settingService.getSystemSettings()
+        settingService.getGoodsPageSettings()
           .then(res => {
-            this.systemSettings = Object.assign({}, res)
+            this.pageSettings = res
           })
 
         // 先清除分类信息

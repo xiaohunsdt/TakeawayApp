@@ -31,5 +31,5 @@ public class Setting extends Model<Setting> {
     private SettingScope scope;
 
     @NotEmpty(message = "设置值不能为空")
-    private Object value;
+    private String value;
 }

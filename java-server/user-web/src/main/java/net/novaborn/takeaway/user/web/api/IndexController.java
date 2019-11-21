@@ -9,6 +9,7 @@ import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.service.impl.AddressService;
+import net.novaborn.takeaway.user.web.dto.GoodsPageSettingDto;
 import net.novaborn.takeaway.user.web.dto.ServiceStateDto;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

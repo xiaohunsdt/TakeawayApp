@@ -42,7 +42,8 @@ const api = {
   createComment: (commentData) => request.post('order/createComment', commentData),
 
   // 获取指定域的设置
-  getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope })
+  getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope }),
+  getGoodsPageSettings: () => request.get('setting/getGoodsPageSettings')
 }
 
 export default api

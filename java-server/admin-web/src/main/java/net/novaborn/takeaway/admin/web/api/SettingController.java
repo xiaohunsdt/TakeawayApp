@@ -70,20 +70,20 @@ public class SettingController extends BaseController {
                     coordinate_x = new Setting();
                     coordinate_x.setKey("store_address_x");
                     coordinate_x.setScope(settingScope);
-                    coordinate_x.setValue(coordinate.getX());
+                    coordinate_x.setValue(coordinate.getX().toString());
                     coordinate_x.insertOrUpdate();
 
                     coordinate_y = new Setting();
                     coordinate_y.setKey("store_address_y");
                     coordinate_y.setScope(settingScope);
-                    coordinate_y.setValue(coordinate.getY());
+                    coordinate_y.setValue(coordinate.getY().toString());
                     coordinate_y.insertOrUpdate();
                 }
             }
 
             setting.setKey(key);
             setting.setScope(settingScope);
-            setting.setValue(value);
+            setting.setValue(value.toString());
             setting.insertOrUpdate();
         });
 

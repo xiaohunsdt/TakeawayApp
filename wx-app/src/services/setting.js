@@ -33,8 +33,13 @@ export function getExpressSettings () {
   return api.getSettingsByScope('EXPRESS')
 }
 
+export function getGoodsPageSettings () {
+  return api.getGoodsPageSettings()
+}
+
 export default {
   getSystemSettings,
   getStoreSettings,
-  getExpressSettings
+  getExpressSettings,
+  getGoodsPageSettings
 }

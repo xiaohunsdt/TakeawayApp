@@ -31,13 +31,13 @@
           <el-form :model="storeSetting" label-width="80px" ref="form" style="max-width: 660px">
             <el-form-item label="运营周期" size="small">
               <el-checkbox-group v-model="storeSetting.store_open_date">
-                <el-checkbox-button label="1">星期一</el-checkbox-button>
-                <el-checkbox-button label="2">星期二</el-checkbox-button>
-                <el-checkbox-button label="3">星期三</el-checkbox-button>
-                <el-checkbox-button label="4">星期四</el-checkbox-button>
-                <el-checkbox-button label="5">星期五</el-checkbox-button>
-                <el-checkbox-button label="6">星期六</el-checkbox-button>
-                <el-checkbox-button label="7">星期日</el-checkbox-button>
+                <el-checkbox-button label="2">星期一</el-checkbox-button>
+                <el-checkbox-button label="3">星期二</el-checkbox-button>
+                <el-checkbox-button label="4">星期三</el-checkbox-button>
+                <el-checkbox-button label="5">星期四</el-checkbox-button>
+                <el-checkbox-button label="6">星期五</el-checkbox-button>
+                <el-checkbox-button label="7">星期六</el-checkbox-button>
+                <el-checkbox-button label="1">星期日</el-checkbox-button>
               </el-checkbox-group>
             </el-form-item>
             <el-form-item label="运营时间">
