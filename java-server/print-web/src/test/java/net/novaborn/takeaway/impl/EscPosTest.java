@@ -46,7 +46,7 @@ public class EscPosTest {
 
         Bitonal algorithm = new BitonalThreshold(127);
         BitImageWrapper imageWrapper = new BitImageWrapper();
-        BufferedImage githubBufferedImage = textToImage("서울특별시 마포구 노고산동33-42외1필지 제2층 제302호");
+        BufferedImage githubBufferedImage = textToImage("서울특별시 마포구 노고산동33-42외1필지 제2층 제302호 楼下密码111333#");
         EscPosImage escposImage = new EscPosImage(githubBufferedImage, algorithm);
 
         escpos.writeLF(title, "#1")
@@ -80,11 +80,10 @@ public class EscPosTest {
     }
 
     private BufferedImage textToImage(String str) throws IOException {
-        int width = 350;
+        int width = 365;
         int height = 377;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        // Font font = Loadfont.loadFont("C:/华康瘦金体W3.TTF", 38);
-        Font font = new Font("Malgun Gothic", Font.BOLD, 25);
+        Font font = new Font(null, Font.BOLD, 25);
         Graphics2D g = image.createGraphics();
         g.setColor(Color.white);
         g.fillRect(0, 0, width, height);
@@ -129,6 +128,7 @@ public class EscPosTest {
         }
         else {
             g.drawString(str, 0, fontHeight);
+            image = cropImage(image,-1,-1,-1,fontHeight + 10);
         }
         g.dispose();
         ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\1.png"));

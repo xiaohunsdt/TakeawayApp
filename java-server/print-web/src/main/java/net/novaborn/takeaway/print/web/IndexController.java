@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.print.web;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
@@ -15,19 +16,27 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.order.utils.OrderFormatUtil;
+import net.novaborn.takeaway.user.entity.Address;
+import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.print.PrintService;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,6 +47,9 @@ import java.util.Optional;
 @Controller
 public class IndexController extends BaseController {
     private OrderService orderService;
+    private OrderItemService orderItemService;
+
+    private AddressService addressService;
 
     @ResponseBody
     @RequestMapping("print")
@@ -49,7 +61,10 @@ public class IndexController extends BaseController {
     }
 
     @SneakyThrows
-    private void print(Order order){
+    private void print(Order order) {
+        Address address = addressService.getById(order.getAddressId());
+        List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
+
         PrintService printService = PrinterOutputStream.getDefaultPrintService();
         EscPos escpos = new EscPos(new PrinterOutputStream(printService));
         escpos.setCharsetName("gbk");
@@ -71,30 +86,33 @@ public class IndexController extends BaseController {
 
         Bitonal algorithm = new BitonalThreshold(127);
         BitImageWrapper imageWrapper = new BitImageWrapper();
-        BufferedImage githubBufferedImage = textToImage("서울특별시 마포구 노고산동33-42외1필지 제2층 제302호");
+        BufferedImage githubBufferedImage = textToImage(address.getAddress() + " " + address.getDetail());
         EscPosImage escposImage = new EscPosImage(githubBufferedImage, algorithm);
 
-        escpos.writeLF(title, "#1")
+        escpos.writeLF(title, "#" + order.getNumber())
                 .feed(1)
                 .writeLF(subtitle, "川香苑品牌中餐厅")
                 .writeLF(" ")
-                .writeLF(paymentState, "在线支付-已支付")
+                .writeLF(
+                        paymentState,
+                        String.format("%s-%s",
+                                OrderFormatUtil.formatPaymentWay(order.getPaymentWay()),
+                                OrderFormatUtil.formatPayState(order.getPayState())
+                        )
+                )
                 .writeLF("--------------------------------")
-                .writeLF(bold, "下单时间: 2019-11-20 12:45:23")
+                .writeLF(bold, String.format("下单时间: %s", DateUtil.formatDateTime(order.getCreateDate())))
                 .feed(2)
-                .writeLF(bold, "--------------菜品--------------")
-                .writeLF(" ")
-                .writeLF(bold, "红烧肉   x1")
-                .writeLF(" ")
-                .writeLF(bold, "孜然牛肉   x1")
-                .writeLF(" ")
-                .writeLF(bold, "沸腾牛五花   x1")
-                .writeLF(bold, "--------------------------------")
-                .writeLF(bold, "合计: 12000韩元")
+                .writeLF(bold, "--------------菜品--------------");
+        for (OrderItem item : orderItemList) {
+            escpos.writeLF(" ").writeLF(bold, String.format("%s   x%d", item.getGoodsName(), item.getGoodsCount()));
+        }
+        escpos.writeLF(bold, "--------------------------------")
+                .writeLF(bold, String.format("合计: %d韩元", order.getRealPrice()))
                 .writeLF(" ")
                 .write(imageWrapper, escposImage)
-                .writeLF(" ")
-                .writeLF(bold, "联系方式: 01056511996")
+//                .writeLF(address.getDetail())
+                .writeLF(bold, "联系方式: " + address.getPhone())
                 .writeLF(" ")
                 .writeLF(bold, "--------------------------------")
                 .feed(3);
@@ -105,11 +123,10 @@ public class IndexController extends BaseController {
     }
 
     private BufferedImage textToImage(String str) throws IOException {
-        int width = 350;
+        int width = 368;
         int height = 377;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        // Font font = Loadfont.loadFont("C:/华康瘦金体W3.TTF", 38);
-        Font font = new Font("Malgun Gothic", Font.BOLD, 25);
+        Font font = new Font(null, Font.BOLD, 25);
         Graphics2D g = image.createGraphics();
         g.setColor(Color.white);
         g.fillRect(0, 0, width, height);
@@ -155,9 +172,10 @@ public class IndexController extends BaseController {
             image = cropImage(image, -1, -1, -1, (fontHeight + 5) * tempStrs.length + 5);
         } else {
             g.drawString(str, 0, fontHeight);
+            image = cropImage(image, -1, -1, -1, (fontHeight + 10));
         }
         g.dispose();
-//        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\1.png"));
+        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\1.png"));
         return image;
     }
 

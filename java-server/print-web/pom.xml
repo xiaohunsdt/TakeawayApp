@@ -20,6 +20,12 @@
 
         <dependency>
             <groupId>net.novaborn.takeaway</groupId>
+            <artifactId>user</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.novaborn.takeaway</groupId>
             <artifactId>order</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
