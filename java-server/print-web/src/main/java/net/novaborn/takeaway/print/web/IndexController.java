@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.print.web;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
@@ -109,8 +110,14 @@ public class IndexController extends BaseController {
         }
         escpos.writeLF(bold, "--------------------------------")
                 .writeLF(bold, String.format("合计: %d韩元", order.getRealPrice()))
-                .writeLF(" ")
-                .write(imageWrapper, escposImage)
+                .writeLF(" ");
+        if (StrUtil.isNotBlank(order.getPs())) {
+            escpos.writeLF(bold, "--------------------------------")
+                    .writeLF(bold, "备注:")
+                    .writeLF(order.getPs())
+                    .writeLF(" ");
+        }
+        escpos.write(imageWrapper, escposImage)
 //                .writeLF(address.getDetail())
                 .writeLF(bold, "联系方式: " + address.getPhone())
                 .writeLF(" ")
