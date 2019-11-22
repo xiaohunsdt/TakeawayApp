@@ -15,7 +15,6 @@ import net.novaborn.takeaway.user.common.xss.XssFilter;
 import net.novaborn.takeaway.user.config.properties.JwtProperties;
 import net.novaborn.takeaway.user.config.properties.RestProperties;
 import net.novaborn.takeaway.user.config.properties.SystemProperties;
-import net.novaborn.takeaway.user.web.filter.ImageServerFilter;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
@@ -28,11 +27,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,19 +51,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private SystemProperties systemProperties;
 
-    /**
-     * 添加 UploadFileFilter
-     */
-    @Bean
-    public FilterRegistrationBean uploadFileFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new ImageServerFilter(systemProperties.getUploadServerUrl()));
-        registration.addUrlPatterns("/upload/*");
-        registration.setName("uploadFileFilter");
-        registration.setOrder(1);
-        return registration;
-    }
-
     @Bean
     @ConditionalOnProperty(prefix = RestProperties.REST_PREFIX, name = "auth-open", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean jwtAuthenticationTokenFilter() {
@@ -80,7 +63,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<String> exclusions = new ArrayList<>();
         exclusions.add("/api/user/" + jwtProperties.getAuthPath());
         exclusions.add("/api/user/wx/" + jwtProperties.getAuthPath());
-        exclusions.add("/api/user/index/*" );
+        exclusions.add("/api/user/index/*");
         filterRegistrationBean.addInitParameter("exclusions", CollectionUtil.join(exclusions, ","));
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/api/*");

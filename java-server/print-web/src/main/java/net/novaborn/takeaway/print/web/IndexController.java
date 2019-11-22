@@ -182,7 +182,7 @@ public class IndexController extends BaseController {
             image = cropImage(image, -1, -1, -1, (fontHeight + 10));
         }
         g.dispose();
-        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\1.png"));
+//        ImageIO.write(image, "png", new File("C:\\Users\\Administrator\\Desktop\\1.png"));
         return image;
     }
 
