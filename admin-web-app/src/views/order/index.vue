@@ -189,7 +189,7 @@
                 @click="onConfirmPay(scope.row)"
                 size="mini"
                 type="success"
-                v-if="(scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'">
+                v-if="(scope.row.paymentWay==='WEIXIN_PAY'||scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'">
                 确认收款
               </el-button>
               <el-button
