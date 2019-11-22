@@ -29,7 +29,18 @@ export function getOrderDetail(orderId) {
 }
 
 export function printOrder(order) {
-
+  const orderId = order.id
+  return request({
+    baseURL: 'http://localhost:11996',
+    url: '/print',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
 }
 
 export function confirmPay(orderId) {
@@ -113,6 +124,7 @@ export function deleteOrder(orderId) {
 export default {
   getOrderListByPage,
   getOrderDetail,
+  printOrder,
   confirmPay,
   receiveOrder,
   deliveryOrder,

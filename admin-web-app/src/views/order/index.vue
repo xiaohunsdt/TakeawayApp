@@ -189,13 +189,15 @@
                 @click="onConfirmPay(scope.row)"
                 size="mini"
                 type="success"
-                v-if="(scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'">确认收款
+                v-if="(scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'">
+                确认收款
               </el-button>
               <el-button
                 @click="onPrintOrder(scope.row)"
                 size="mini"
                 type="success"
-                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')">打印
+                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')">
+                打印
               </el-button>
               <el-button
                 @click="onReceiveOrder(scope.row)"
@@ -219,7 +221,8 @@
                 @click="onRefundOrder(scope.row)"
                 size="mini"
                 type="danger"
-                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))">退款
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))">
+                退款
               </el-button>
               <el-button
                 @click="onDeleteOrder(scope.row)"
@@ -330,6 +333,13 @@
       },
       onPrintOrder(order) {
         orderApi.printOrder(order)
+          .then(res => {
+            this.$message({
+              message: '打印成功',
+              type: 'success'
+            })
+            order.payState = 'PAID'
+          })
       },
       onConfirmPay(order) {
         this.$confirm('确定此账户已付款?', '提示', {
@@ -355,6 +365,7 @@
               type: 'success'
             })
             order.orderState = 'PRODUCING'
+            this.onPrintOrder(order)
           })
       },
       onDeliveryOrder(order) {
