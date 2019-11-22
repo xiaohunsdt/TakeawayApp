@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "支付",
-  "enablePullDownRefresh": false,
+  "enablePullDownRefresh": true,
   "backgroundTextStyle": "light",
   "backgroundColor": "#FFD200"
 }

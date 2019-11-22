@@ -32,6 +32,19 @@ export function printOrder(order) {
 
 }
 
+export function confirmPay(orderId) {
+  return request({
+    url: '/order/confirmPay',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { orderId },
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function receiveOrder(orderId) {
   return request({
     url: '/order/receiveOrder',
@@ -100,6 +113,7 @@ export function deleteOrder(orderId) {
 export default {
   getOrderListByPage,
   getOrderDetail,
+  confirmPay,
   receiveOrder,
   deliveryOrder,
   finishOrder,

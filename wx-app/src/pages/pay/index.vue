@@ -26,7 +26,7 @@
       <order-card :order="order" :show-operation="false" v-if="order!==undefined"/>
 
       <base-panel>
-        <button style="margin-top: .5rem" type="primary" open-type="contact">联系客服</button>
+        <button open-type="contact" style="margin-top: .5rem" type="primary">联系客服</button>
       </base-panel>
 
       <base-panel v-if="order!== undefined && order.paymentWay==='ALI_PAY'">
@@ -52,10 +52,10 @@
         </div>
         <div class="pay-way-detail">
           账号: 645-910961-66007
-          <br />
+          <br/>
           户名: 왕잔용
-          <br />
-          <br />
+          <br/>
+          <br/>
           转账成功后,请联系客服!将转账截图和订餐号告诉客服
         </div>
       </base-panel>
@@ -90,10 +90,21 @@
         this.init()
       }
     },
+    onShow () {
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+    },
     methods: {
       init () {
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
+          if (this.order.payState === 'PAID') {
+            mpvue.redirectTo({
+              url: '/pages/order/main?state=waitEat'
+            })
+          }
         })
       }
     }

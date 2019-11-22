@@ -69,6 +69,23 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("confirmPay")
+    public Tip confirmPay(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getPayState() != PayState.UN_PAY || order.get().getOrderState() != OrderState.WAITING_RECEIVE) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        order.get().setPayState(PayState.PAID);
+        if (!order.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
+    }
+
+    @ResponseBody
     @PostMapping("receiveOrder")
     public Tip receiveOrder(@RequestParam String orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));

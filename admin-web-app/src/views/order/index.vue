@@ -175,51 +175,57 @@
         </el-table-column>
         <el-table-column
           align="center"
-          width="150"
-          label="操作">
+          label="操作"
+          width="150">
           <template v-slot="scope">
             <div class="action-btns">
               <el-button
-                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'"
                 @click="onEditOrder(scope.row)"
                 size="mini"
-                type="primary">编辑
+                type="primary"
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'">编辑
               </el-button>
               <el-button
-                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')"
+                @click="onConfirmPay(scope.row)"
+                size="mini"
+                type="success"
+                v-if="(scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'">确认收款
+              </el-button>
+              <el-button
                 @click="onPrintOrder(scope.row)"
                 size="mini"
-                type="success">打印
+                type="success"
+                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')">打印
               </el-button>
               <el-button
-                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'"
                 @click="onReceiveOrder(scope.row)"
                 size="mini"
-                type="success">接单
+                type="success"
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'">接单
               </el-button>
               <el-button
-                v-if="scope.row.orderState==='PRODUCING'"
                 @click="onDeliveryOrder(scope.row)"
                 size="mini"
-                type="success">配送
+                type="success"
+                v-if="scope.row.orderState==='PRODUCING'">配送
               </el-button>
               <el-button
-                v-if="scope.row.orderState==='DELIVERING'"
                 @click="onFinishOrder(scope.row)"
                 size="mini"
-                type="success">完成
+                type="success"
+                v-if="scope.row.orderState==='DELIVERING'">完成
               </el-button>
               <el-button
-                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
                 @click="onRefundOrder(scope.row)"
                 size="mini"
-                type="danger">退款
+                type="danger"
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))">退款
               </el-button>
               <el-button
-                v-if="scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND'"
                 @click="onDeleteOrder(scope.row)"
                 size="mini"
-                type="danger">删除
+                type="danger"
+                v-if="scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND'">删除
               </el-button>
             </div>
           </template>
@@ -241,154 +247,170 @@
 </template>
 
 <script>
-    import BaseCard from '@/components/BaseCard'
-    import orderApi from '@/api/order'
-    import { getServerUrl } from '@/utils/sys'
-    import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
+  import BaseCard from '@/components/BaseCard'
+  import orderApi from '@/api/order'
+  import { getServerUrl } from '@/utils/sys'
+  import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
 
-    export default {
-        name: 'OrderManagement',
-        filters: {
-            orderStateFormat: function(value) {
-                return formatOrderState(value)
-            },
-            payStateFormat: function(value) {
-                return formatPayState(value)
-            },
-            paymentWayFormat: function(value) {
-                return formatPaymentWay(value)
-            }
+  export default {
+    name: 'OrderManagement',
+    filters: {
+      orderStateFormat: function(value) {
+        return formatOrderState(value)
+      },
+      payStateFormat: function(value) {
+        return formatPayState(value)
+      },
+      paymentWayFormat: function(value) {
+        return formatPaymentWay(value)
+      }
+    },
+    components: {
+      BaseCard
+    },
+    data() {
+      return {
+        page: {
+          current: 1,
+          size: 15,
+          total: 0
         },
-        components: {
-            BaseCard
+        formData: {
+          nickName: null,
+          number: null
         },
-        data() {
-            return {
-                page: {
-                    current: 1,
-                    size: 15,
-                    total: 0
-                },
-                formData: {
-                    nickName: null,
-                    number: null
-                },
-                listLoading: false,
-                tableData: []
-            }
-        },
-        computed: {
-            uploadUrl() {
-                return getServerUrl()
-            }
-        },
-        created() {
-            this.onSearch()
-        },
-        methods: {
-            onSearch() {
-                this.listLoading = true
-                orderApi.getOrderListByPage(this.page, this.formData)
-                    .then(response => {
-                        const datas = response.records
-                        datas.forEach(item => {
-                            item.detail = {}
-                        })
-                        this.tableData = datas
-                        this.page.total = parseInt(response.total)
-                        this.listLoading = false
-                    }).catch(() => {
-                    this.listLoading = false
-                })
-            },
-            async getOrderDetail(row, expandedRows) {
-                const currentRow = expandedRows.find(item => item.id === row.id)
-                // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-                if (currentRow !== undefined) {
-                    await orderApi.getOrderDetail(row.id)
-                        .then(response => {
-                            this.$set(currentRow, 'detail', response)
-                        })
-                }
-            },
-            handleSizeChange(val) {
-                this.page.size = val
-                this.onSearch()
-            },
-            handleCurrentChange(val) {
-                this.page.current = val
-                this.onSearch()
-            },
-            onEditOrder(order) {
-                console.log(order)
-            },
-            onPrintOrder(order) {
-                orderApi.printOrder(order)
-            },
-            onReceiveOrder(order) {
-                orderApi.receiveOrder(order.id)
-                    .then(res => {
-                        this.$message({
-                            message: res.message,
-                            type: 'success'
-                        })
-                        order.orderState = 'PRODUCING'
-                    })
-            },
-            onDeliveryOrder(order) {
-                orderApi.deliveryOrder(order.id)
-                    .then(res => {
-                        this.$message({
-                            message: res.message,
-                            type: 'success'
-                        })
-                        order.orderState = 'DELIVERING'
-                    })
-            },
-            onFinishOrder(order) {
-                orderApi.finishOrder(order.id)
-                    .then(res => {
-                        this.$message({
-                            message: res.message,
-                            type: 'success'
-                        })
-                        order.orderState = 'FINISHED'
-                    })
-            },
-            onRefundOrder(order) {
-                this.$confirm('确定要退款吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    orderApi.refundOrder(order.id)
-                        .then(res => {
-                            this.$message({
-                                message: res.message,
-                                type: 'success'
-                            })
-                            order.orderState = 'REFUND'
-                        })
-                })
-            },
-            onDeleteOrder(order) {
-                this.$confirm('确定要删除这个订单吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    orderApi.deleteOrder(order.id)
-                        .then(res => {
-                            this.$message({
-                                message: res.message,
-                                type: 'success'
-                            })
-                            this.onSearch()
-                        })
-                })
-            }
+        listLoading: false,
+        tableData: []
+      }
+    },
+    computed: {
+      uploadUrl() {
+        return getServerUrl()
+      }
+    },
+    created() {
+      this.onSearch()
+    },
+    methods: {
+      onSearch() {
+        this.listLoading = true
+        orderApi.getOrderListByPage(this.page, this.formData)
+          .then(response => {
+            const datas = response.records
+            datas.forEach(item => {
+              item.detail = {}
+            })
+            this.tableData = datas
+            this.page.total = parseInt(response.total)
+            this.listLoading = false
+          }).catch(() => {
+          this.listLoading = false
+        })
+      },
+      async getOrderDetail(row, expandedRows) {
+        const currentRow = expandedRows.find(item => item.id === row.id)
+        // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
+        if (currentRow !== undefined) {
+          await orderApi.getOrderDetail(row.id)
+            .then(response => {
+              this.$set(currentRow, 'detail', response)
+            })
         }
+      },
+      handleSizeChange(val) {
+        this.page.size = val
+        this.onSearch()
+      },
+      handleCurrentChange(val) {
+        this.page.current = val
+        this.onSearch()
+      },
+      onEditOrder(order) {
+        console.log(order)
+      },
+      onPrintOrder(order) {
+        orderApi.printOrder(order)
+      },
+      onConfirmPay(order) {
+        this.$confirm('确定此账户已付款?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderApi.confirmPay(order.id)
+            .then(res => {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+              order.payState = 'PAID'
+            })
+        })
+      },
+      onReceiveOrder(order) {
+        orderApi.receiveOrder(order.id)
+          .then(res => {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            order.orderState = 'PRODUCING'
+          })
+      },
+      onDeliveryOrder(order) {
+        orderApi.deliveryOrder(order.id)
+          .then(res => {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            order.orderState = 'DELIVERING'
+          })
+      },
+      onFinishOrder(order) {
+        orderApi.finishOrder(order.id)
+          .then(res => {
+            this.$message({
+              message: res.message,
+              type: 'success'
+            })
+            order.orderState = 'FINISHED'
+          })
+      },
+      onRefundOrder(order) {
+        this.$confirm('确定要退款吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderApi.refundOrder(order.id)
+            .then(res => {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+              order.orderState = 'REFUND'
+            })
+        })
+      },
+      onDeleteOrder(order) {
+        this.$confirm('确定要删除这个订单吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderApi.deleteOrder(order.id)
+            .then(res => {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+              this.onSearch()
+            })
+        })
+      }
     }
+  }
 </script>
 
 <style lang="scss">
