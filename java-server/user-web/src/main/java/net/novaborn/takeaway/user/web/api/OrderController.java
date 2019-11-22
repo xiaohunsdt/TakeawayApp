@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.user.web.api;
 
+import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -144,6 +145,7 @@ public class OrderController extends BaseController {
         if (order.insert()) {
             orderItems.parallelStream().forEach(item -> {
                 item.setOrderId(order.getId());
+                item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
                 item.insert();
             });
         }

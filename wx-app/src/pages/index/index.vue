@@ -20,12 +20,12 @@
           </swiper>
         </div>
       </div>
-      <div id="newUserCoupon">
-        <img alt=""
-             mode="widthFix"
-             src="/static/images/newcoupon.png"
-             style="width: 100%"/>
-      </div>
+<!--      <div id="newUserCoupon">-->
+<!--        <img alt=""-->
+<!--             mode="widthFix"-->
+<!--             src="/static/images/newcoupon.png"-->
+<!--             style="width: 100%"/>-->
+<!--      </div>-->
       <food-panel :foodList="newGoodsList" title="新品"/>
       <food-panel :foodList="hotGoodsList" title="热门"/>
     </div>

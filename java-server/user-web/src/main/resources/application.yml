@@ -10,7 +10,7 @@ jwt:
   md5-key: takeaway-user      #md5加密混淆key
 
 sys:
-  upload-server-url: http://cxy.novaborn.net:8080
+  upload-server-url: https://admin.cxy.novaborn.net
 
 wx:
   miniapp:

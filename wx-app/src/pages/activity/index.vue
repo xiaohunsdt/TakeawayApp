@@ -2,10 +2,10 @@
   <div class="container">
     <div class="gradientDiv"></div>
     <div class="container-contain">
-      <img class="activityImg" src="/static/images/activities/activityggj.png" alt="">
-      <img class="activityImg" src="/static/images/activities/activitypraise.png" alt="">
-      <img class="activityImg" src="/static/images/activities/activityrun.png" alt="">
-      <img class="activityImg" src="/static/images/activities/activityrush.png" alt="">
+<!--      <img class="activityImg" src="/static/images/activities/activityggj.png" alt="">-->
+<!--      <img class="activityImg" src="/static/images/activities/activitypraise.png" alt="">-->
+<!--      <img class="activityImg" src="/static/images/activities/activityrun.png" alt="">-->
+<!--      <img class="activityImg" src="/static/images/activities/activityrush.png" alt="">-->
     </div>
   </div>
 </template>
