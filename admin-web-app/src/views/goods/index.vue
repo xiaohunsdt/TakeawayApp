@@ -99,7 +99,8 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="150">
+          width="170"
+          align="center">
           <template v-slot="scope">
             <el-button @click="onEdit(scope.row)" size="mini" type="primary">编辑</el-button>
             <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>

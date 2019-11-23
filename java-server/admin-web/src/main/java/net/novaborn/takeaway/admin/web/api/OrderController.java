@@ -41,6 +41,7 @@ public class OrderController extends BaseController {
 
     private OrderService orderService;
 
+    @ResponseBody
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         // 根据用户名获取订单
@@ -61,11 +62,18 @@ public class OrderController extends BaseController {
         return ResponseEntity.ok(page);
     }
 
+    @ResponseBody
     @PostMapping("getOrderDetail")
     public ResponseEntity getOrderDetail(@RequestParam String orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
+    }
+
+    @ResponseBody
+    @RequestMapping("getWaitingReceiveOrderCount")
+    public int getWaitingReceiveOrderCount() {
+        return orderService.getWaitingReceiveOrderCount();
     }
 
     @ResponseBody

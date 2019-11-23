@@ -176,7 +176,7 @@
         <el-table-column
           align="center"
           label="操作"
-          width="150">
+          width="170">
           <template v-slot="scope">
             <div class="action-btns">
               <el-button
@@ -332,6 +332,12 @@
         console.log(order)
       },
       onPrintOrder(order) {
+        const loading = this.$loading({
+          lock: true,
+          text: '打印中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         orderApi.printOrder(order)
           .then(res => {
             this.$message({
@@ -339,6 +345,14 @@
               type: 'success'
             })
             order.payState = 'PAID'
+            loading.close()
+          })
+          .catch(err => {
+            this.$message({
+              message: err,
+              type: 'error'
+            })
+            loading.close()
           })
       },
       onConfirmPay(order) {

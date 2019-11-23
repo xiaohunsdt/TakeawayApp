@@ -38,6 +38,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         return this.baseMapper.getOrderListByPage(page, args);
     }
 
+
+    @Override
+    public int getWaitingReceiveOrderCount() {
+        return this.baseMapper.getWaitingReceiveOrderCount();
+    }
+
     @Override
     public IPage<Order> getOrderListByPageU(Page page, Map args) {
         return this.baseMapper.getOrderListByPageU(page, args);

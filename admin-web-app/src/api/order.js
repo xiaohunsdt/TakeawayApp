@@ -28,6 +28,14 @@ export function getOrderDetail(orderId) {
   })
 }
 
+export function getWaitingReceiveOrderCount() {
+  return request({
+    url: '/order/getWaitingReceiveOrderCount',
+    method: 'get',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  })
+}
+
 export function printOrder(order) {
   const orderId = order.id
   return request({
@@ -124,6 +132,7 @@ export function deleteOrder(orderId) {
 export default {
   getOrderListByPage,
   getOrderDetail,
+  getWaitingReceiveOrderCount,
   printOrder,
   confirmPay,
   receiveOrder,

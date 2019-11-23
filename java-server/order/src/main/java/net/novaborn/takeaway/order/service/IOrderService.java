@@ -47,6 +47,12 @@ public interface IOrderService extends IService<Order> {
     IPage<Order> getOrderListByPage(Page page, Map args);
 
     /**
+     * 获取当前待接单的数量
+     * @return
+     */
+    int getWaitingReceiveOrderCount();
+
+    /**
      * 用户端分页获取订单列表
      * @param page   分页实例
      * @param args   userId 用户ID <br />

@@ -39,6 +39,25 @@
         ORDER BY `create_date` DESC
     </select>
 
+    <sql id="common_get_waiting_receive_order">
+        <where>
+            `pay_state` &lt;&gt; 0
+            AND `order_state` = 0
+            AND deleted = 0
+        </where>
+    </sql>
+
+    <select id="getWaitingReceiveOrder" resultType="Order">
+        SELECT * FROM `order`
+        <include refid="common_get_waiting_receive_order"/>
+        ORDER BY `create_date` DESC
+    </select>
+
+    <select id="getWaitingReceiveOrderCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM `order`
+        <include refid="common_get_waiting_receive_order"/>
+    </select>
+
     <sql id="common_order_list_where_u">
         <where>
             `user_id` = #{args.userId}
