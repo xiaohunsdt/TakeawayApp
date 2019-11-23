@@ -140,7 +140,7 @@ public class PayController extends BaseController {
      * @return
      */
     private int getOrderPrice(Order order) {
-//        return order.getRealPrice() * 6 / 10;
-        return 1;
+        return order.getRealPrice() * 6 / 10;
+//        return 1;
     }
 }
