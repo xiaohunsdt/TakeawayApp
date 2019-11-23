@@ -1,9 +1,13 @@
+sys:
+  printer-name: xp-58
+
+
 server:
   port: 11996
 
 spring:
   profiles:
-    active: dev-pc
+    active: pro
   mvc:
     static-path-pattern: /res/**
     view:

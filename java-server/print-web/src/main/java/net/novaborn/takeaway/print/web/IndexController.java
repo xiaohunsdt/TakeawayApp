@@ -25,17 +25,16 @@ import net.novaborn.takeaway.order.utils.OrderFormatUtil;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.imageio.ImageIO;
 import javax.print.PrintService;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +47,14 @@ import java.util.Optional;
 @Controller
 public class IndexController extends BaseController {
     private OrderService orderService;
+
     private OrderItemService orderItemService;
 
     private AddressService addressService;
+
+    @Setter
+    @Value("${sys.printer-name}")
+    String printerName;
 
     @ResponseBody
     @RequestMapping("print")
@@ -66,7 +70,12 @@ public class IndexController extends BaseController {
         Address address = addressService.getById(order.getAddressId());
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
 
-        PrintService printService = PrinterOutputStream.getDefaultPrintService();
+        PrintService printService;
+        if(StrUtil.isNotBlank(printerName)){
+            printService = PrinterOutputStream.getPrintServiceByName(this.printerName);
+        }else {
+            printService = PrinterOutputStream.getDefaultPrintService();
+        }
         EscPos escpos = new EscPos(new PrinterOutputStream(printService));
         escpos.setCharsetName("gbk");
         Style title = new Style()
