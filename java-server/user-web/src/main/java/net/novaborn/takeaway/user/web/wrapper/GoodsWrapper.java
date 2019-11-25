@@ -27,7 +27,9 @@ public class GoodsWrapper extends BaseControllerWrapper {
         Category category = categoryService.getById((String) map.get("categoryId"));
 
         map.put("category", category.getName());
-        map.put("thumb", systemProperties.getUploadServerUrl() + map.get("thumb"));
+        if (map.get("thumb") != null){
+            map.put("thumb", systemProperties.getUploadServerUrl() + map.get("thumb"));
+        }
 
         map.remove("categoryId");
         map.remove("createDate");

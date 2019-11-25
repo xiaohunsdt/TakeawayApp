@@ -1,15 +1,16 @@
 <template>
   <van-card
     :price="food.price"
-    :thumb="food.thumb"
     :title="food.name"
     currency="₩"
     custom-class="food-card-root"
     lazy-load
     price-class="food-card-price"
-    thumb-class="food-card-thumb"
     thumb-mode="aspectFill"
     title-class="food-card-title">
+    <view slot="thumb" class="food-card-thumb">
+      <img style="height: 100%;width: 100%" mode="aspectFill" :src="food.thumb?food.thumb:'/static/images/no_image.gif'" alt="" />
+    </view>
     <view class="food-card-desc" slot="desc">
       <div class="desc">
         <van-icon name="label"/>
@@ -91,6 +92,7 @@
   .food-card-thumb {
     border-radius: 0.2rem;
     overflow: hidden;
+    height: inherit;
   }
 
   .food-card-title {
