@@ -36,7 +36,6 @@
         <van-submit-bar
           :disabled="pageSettings.disableService"
           :price="cartAllPrice"
-          :tip="pageSettings.disableService"
           @submit="onSubmitOrder"
           button-class="submit-btn"
           button-text="提交订单"
@@ -49,7 +48,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <view slot="tip">{{pageSettings.disableServiceNotice}}</view>
+          <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
         </van-submit-bar>
       </div>
     </div>
