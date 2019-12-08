@@ -54,6 +54,7 @@ public class SettingController extends BaseController {
     @ResponseBody
     public GoodsPageSettingDto getGoodsPageSetting() {
         GoodsPageSettingDto dto = new GoodsPageSettingDto();
+        dto.setDisableService(false);
 
         // system
         String goods_page_notice = this.getSettingByName("goods_page_notice", SettingScope.SYSTEM).getValue();
