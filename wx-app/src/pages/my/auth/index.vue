@@ -17,13 +17,22 @@
     },
     methods: {
       login () {
-        userApi.loginByWx().then(() => {
-          const pages = util.getPages()
-          const pre = pages[pages.length - 2]
-          mpvue.reLaunch({
-            url: `/${pre.route}`
-          })
+        mpvue.showLoading({
+          title: '正在登陆中...'
         })
+        userApi.loginByWx()
+          .then(() => {
+            mpvue.hideLoading()
+            const pages = util.getPages()
+            const pre = pages[pages.length - 2]
+            mpvue.reLaunch({
+              url: `/${pre.route}`
+            })
+          })
+          .catch(err => {
+            mpvue.hideLoading()
+            console.error(err)
+          })
       }
     }
   }

@@ -192,6 +192,22 @@
         })
       }
     },
+    onShow () {
+      if (this.orderId !== '') {
+        orderService.selectOrderById(this.orderId).then(res => {
+          this.order = res
+          if (this.order.payState === 'PAID') {
+            mpvue.redirectTo({
+              url: '/pages/order/main?state=waitEat'
+            })
+          } else {
+            mpvue.redirectTo({
+              url: '/pages/order/main?state=waitPay'
+            })
+          }
+        })
+      }
+    },
     data () {
       return {
         submitLoading: false,
@@ -258,8 +274,8 @@
           .then(res => {
             this.submitLoading = false
             this.CLEAR_CART()
-            const orderId = res.message
-            payService.payOrder(orderId, this.payWay)
+            this.orderId = res.message
+            payService.payOrder(this.orderId, this.payWay)
           })
           .catch(res => {
             this.submitLoading = false

@@ -134,6 +134,13 @@
 					"pathName": "pages/pay/main",
 					"query": "orderId=f29ed114208ed87a1d945cfa28f57ce0",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/auth/main",
+					"pathName": "pages/my/auth/main",
+					"query": "",
+					"scene": null
 				}
 			]
 		}
