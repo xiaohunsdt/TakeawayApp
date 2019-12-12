@@ -53,7 +53,7 @@ public class PayController extends BaseController {
         request.setOutTradeNo(orderId);
         request.setTotalFee(getOrderPrice(order.get())); // 精确到分
         request.setSpbillCreateIp(this.request.getLocalAddr());
-        request.setNotifyUrl("https://pay.cxy.novaborn.net/api/wx/pay/notice");
+        request.setNotifyUrl("http://pay.cxy.novaborn.net/api/wx/pay/notice");
         request.setTradeType("JSAPI");
 
         WxPayMpOrderResult result;
@@ -98,7 +98,7 @@ public class PayController extends BaseController {
         try {
             notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
         } catch (WxPayException e) {
-            log.error("", e);
+            log.error("支付回调验证失败!!", e);
             throw e;
         }
 
