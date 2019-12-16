@@ -21,11 +21,11 @@ public class OrderPayStatusSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(Order order, int delaySeconds) {
+    public void send(String orderId, int delaySeconds) {
         CorrelationData cd = new CorrelationData();
-        cd.setId(order.getId());
+        cd.setId(orderId);
 
-        rabbitTemplate.convertAndSend(OrderPayStatusQueueConfig.EXCHANGE_NAME, OrderPayStatusQueueConfig.QUEUE_NAME, order, message -> {
+        rabbitTemplate.convertAndSend(OrderPayStatusQueueConfig.EXCHANGE_NAME, OrderPayStatusQueueConfig.QUEUE_NAME, orderId, message -> {
             message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
             return message;
         }, cd);

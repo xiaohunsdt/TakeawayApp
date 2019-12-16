@@ -29,7 +29,7 @@ server:
 
 spring:
   profiles:
-    active: test
+    active: dev-pc
   mvc:
     static-path-pattern: /res/**
     view:
@@ -76,9 +76,7 @@ logging:
   level:
     root: info
     net.novaborn: info
-#    org.springframework.web: info
-#    com.github.binarywang.demo.wx.pay: debug
-#    com.github.binarywang.wxpay: debug
+#    com.github.binarywang.wxpay: warn
 
 ---
 spring:
@@ -143,3 +141,7 @@ spring:
   rabbitmq:
     username: xiaohun
     password: wy1996
+
+logging:
+  level:
+    com.github.binarywang.wxpay: warn

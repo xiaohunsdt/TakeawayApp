@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.pay.mq;
 
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.config.mq.OrderPayStatusQueueConfig;
+import net.novaborn.takeaway.pay.services.impl.PayService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -37,26 +39,33 @@ public class OrderPayStatusReceiver {
 
     private OrderService orderService;
 
+    private PayService payService;
+
+    private OrderPayStatusSender orderPayStatusSender;
+
     @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
-        log.debug("订单过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+    public void process(@Payload String orderId, Channel channel, @Headers Map<String, Object> headers) {
+        log.debug("订单支付状态队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
-        Order target = orderService.getById(order.getId());
+        Order target = orderService.getById(orderId);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
-
-        if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
-            try {
+        try {
+            if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
+                payService.confirmPay(target.getId());
+            }
+        } catch (Exception e) {
+            // 如果15分钟之内还没有确认支付,视为支付失败!!设置订单状态为过去过期!
+            if (DateUtil.between(target.getCreateDate(), DateUtil.date(), DateUnit.MINUTE) > 15) {
                 target.setOrderState(OrderState.EXPIRED);
                 target.updateById();
-            } catch (Exception e) {
-                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", order.getId());
-                channel.basicReject(deliveryTag, true);
-                return;
+            } else {
+                // 验证失败再次将这个订单丢到延迟队列当中
+                orderPayStatusSender.send(orderId, 30);
+                log.error("订单:{} 验证支付失败!原因: {}, 重新丢回延迟队列中!", orderId, e.getMessage());
             }
-
+        } finally {
+            channel.basicAck(deliveryTag, false);
         }
-
-        channel.basicAck(deliveryTag, false);
     }
 }

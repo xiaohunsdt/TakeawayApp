@@ -1,7 +1,7 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"enhance": true,
 		"postcss": true,
@@ -55,7 +55,7 @@
 					"id": 0,
 					"name": "pages/pay/main",
 					"pathName": "pages/pay/main",
-					"query": "orderId=d78dec67ea2c8cba2f41bcb7bfdf91a1",
+					"query": "orderId=d78dec67ea2c8cba2f41bcb7bfdf91c1",
 					"scene": 1037,
 					"referrerInfo": {
 						"appId": "wxdd0eeefb8c1c5ceb",
