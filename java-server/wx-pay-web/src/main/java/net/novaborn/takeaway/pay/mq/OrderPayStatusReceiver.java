@@ -59,6 +59,7 @@ public class OrderPayStatusReceiver {
             if (DateUtil.between(target.getCreateDate(), DateUtil.date(), DateUnit.MINUTE) > 15) {
                 target.setOrderState(OrderState.EXPIRED);
                 target.updateById();
+                log.warn("订单:{} 支付验证过期!设置订单为过期订单", orderId);
             } else {
                 // 验证失败再次将这个订单丢到延迟队列当中
                 orderPayStatusSender.send(orderId, 30);
