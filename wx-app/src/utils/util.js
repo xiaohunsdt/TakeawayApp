@@ -23,7 +23,6 @@ function login () {
     mpvue.login({
       success: function (res) {
         if (res.code) {
-          // 登录远程服务器
           console.log(res)
           resolve(res)
         } else {

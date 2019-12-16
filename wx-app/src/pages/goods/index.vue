@@ -15,7 +15,6 @@
       <div id="order-content">
         <van-tabs
           @change="onChange"
-          animated
           border
           custom-class="foodTab"
           nav-class="nav-class"
@@ -37,7 +36,6 @@
         <van-submit-bar
           :disabled="pageSettings.disableService"
           :price="cartAllPrice"
-          :tip="pageSettings.disableService"
           @submit="onSubmitOrder"
           button-class="submit-btn"
           button-text="提交订单"
@@ -50,7 +48,7 @@
               {{ cartCount }}
             </div>
           </div>
-          <view slot="tip">{{pageSettings.disableServiceNotice}}</view>
+          <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
         </van-submit-bar>
       </div>
     </div>
@@ -59,7 +57,6 @@
 
 <script>
   import categoryService from '@/services/category'
-  import indexService from '@/services/index'
   import goodsService from '@/services/goods'
   import settingService from '@/services/setting'
 
@@ -96,24 +93,15 @@
     methods: {
       init (index) {
         // 先初始化数据
-        this.disableService = false
-        this.disableServiceNotice = ''
+        this.currentIndex = 0
+        this.categories.splice(0, this.categories.length)
+        this.pageSettings = {}
 
         // 获取相关设置项
-        indexService.getServiceState()
-          .then(res => {
-            if (res.state !== 0) {
-              this.disableService = true
-              this.disableServiceNotice = res.message
-            }
-          })
         settingService.getGoodsPageSettings()
           .then(res => {
             this.pageSettings = res
           })
-
-        // 先清除分类信息
-        this.categories.splice(0, this.categories.length)
 
         // 获取所有分类
         categoryService.getAllCategory().then((res) => {
@@ -121,11 +109,9 @@
             item.goodsList = []
             this.categories.push(item)
           })
-          // 初始化数据
-          this.getGoodsListByIndex(index)
-          // 提前加载下一页,如果可能的话
-          if (this.categories.length > index + 1) {
-            this.getGoodsListByIndex(index + 1)
+          // 获取数据
+          for (let i = 0; i < this.categories.length; i++) {
+            this.getGoodsListByIndex(i)
           }
         })
       },

@@ -4,7 +4,7 @@
       <div class="order-header">
         <div class="header-left"></div>
         <div class="header-right">
-          <div v-if="order.payState === 'PAID' || order.orderState === 'PAY_LATER'">
+          <div v-if="order.payState === 'PAID' || order.payState === 'PAY_LATER'">
             {{orderStateStr}}
           </div>
           <div style="display: inline" v-if="order.payState === 'UN_PAY' || order.orderState === 'EXPIRED'">
