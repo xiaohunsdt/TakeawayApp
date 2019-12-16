@@ -103,7 +103,7 @@ public class PayService implements IPayService {
      * @return
      */
     private int getOrderPrice(Order order) {
-//        return order.getRealPrice() * 6 / 10;
-        return 1;
+        return order.getRealPrice() * 6 / 10;
+//        return 1;
     }
 }
