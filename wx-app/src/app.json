@@ -88,6 +88,8 @@
     "van-count-down": "/static/vant/count-down/index",
     "van-rate": "/static/vant/rate/index",
     "van-image": "/static/vant/image/index",
-    "van-loading": "/static/vant/loading/index"
+    "van-loading": "/static/vant/loading/index",
+    "van-sidebar": "/static/vant/sidebar/index",
+    "van-sidebar-item": "/static/vant/sidebar-item/index"
   }
 }
