@@ -35,7 +35,8 @@
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
           :disabled="pageSettings.disableService"
-          :price="cartAllPrice"
+          :decimal-length="0"
+          :price="cartAllPrice * 100"
           @submit="onSubmitOrder"
           button-class="submit-btn"
           button-text="提交订单"

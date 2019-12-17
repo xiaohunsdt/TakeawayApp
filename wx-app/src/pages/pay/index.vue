@@ -101,8 +101,8 @@
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
           if (this.order.payState === 'PAID') {
-            mpvue.redirectTo({
-              url: '/pages/order/main?state=waitEat'
+            mpvue.reLaunch({
+              url: `/pages/order/detail/main?orderId=${this.order.id}`
             })
           }
         })

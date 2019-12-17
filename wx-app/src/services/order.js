@@ -55,6 +55,10 @@ export function createComment (orderId, commentData) {
   return api.createComment(commentData)
 }
 
+export function getDeliveryArriveTime (orderId) {
+  return api.getDeliveryArriveTime(orderId)
+}
+
 export default {
   selectOrderById,
   getOrderListByPage,
@@ -62,5 +66,6 @@ export default {
   confirmGetOrder,
   createOrder,
   deleteOrder,
-  createComment
+  createComment,
+  getDeliveryArriveTime
 }

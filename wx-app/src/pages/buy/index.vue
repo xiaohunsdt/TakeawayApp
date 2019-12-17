@@ -114,7 +114,8 @@
         <van-submit-bar
           :disabled="disableService"
           :loading="submitLoading"
-          :price="cartAllPrice"
+          :decimal-length="0"
+          :price="cartAllPrice * 100"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submitBtn"
@@ -197,11 +198,14 @@
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
           if (this.order.payState === 'PAID') {
-            mpvue.redirectTo({
-              url: '/pages/order/main?state=waitEat'
+            // mpvue.redirectTo({
+            //   url: '/pages/order/main?state=waitEat'
+            // })
+            mpvue.reLaunch({
+              url: `/pages/order/detail/main?orderId=${this.order.id}`
             })
           } else {
-            mpvue.redirectTo({
+            mpvue.reLaunch({
               url: '/pages/order/main?state=waitPay'
             })
           }

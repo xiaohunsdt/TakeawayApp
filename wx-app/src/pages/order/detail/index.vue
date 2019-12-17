@@ -11,14 +11,19 @@
               订餐号
             </div>
           </div>
-          <div class="estimated-arrival-time">
+          <div class="estimated-arrival-time" v-if="order.orderState !== 'FINISHED'">
             <div class="time">
-              今天
-              <span style="font-size: 2rem">14:40</span>
+              {{deliveryArriveTime.date}}
+              <span style="font-size: 2rem">{{deliveryArriveTime.time}}</span>
             </div>
             <div class="text">
               <img class="text-img" src="/static/images/order/yellow_time.png"/>
               预计到达
+            </div>
+          </div>
+          <div class="estimated-arrival-time" v-if="order.orderState === 'FINISHED'">
+            <div class="time" style="margin-top: .5rem">
+              <span style="font-size: 2rem">已完成</span>
             </div>
           </div>
         </div>
@@ -83,7 +88,6 @@
           <div class="title">支付方式</div>
           <div class="content">{{paymentWayStr}}</div>
         </div>
-
       </base-panel>
     </div>
   </div>
@@ -124,13 +128,23 @@
     data () {
       return {
         orderId: '',
-        order: {}
+        order: {},
+        deliveryArriveTime: {
+          date: '未知',
+          time: '未知'
+        }
       }
     },
     methods: {
       init () {
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
+          if (this.order.orderState !== 'FINISHED') {
+            // 获取预计送达时间
+            orderService.getDeliveryArriveTime(this.order.id).then(res => {
+              this.deliveryArriveTime = res
+            })
+          }
         })
       }
     }

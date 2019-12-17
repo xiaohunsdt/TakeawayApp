@@ -22,6 +22,7 @@ import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.mq.OrderPayExpiredSender;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.dto.OrderDto;
+import net.novaborn.takeaway.user.web.wrapper.DeliveryArriveTimeWrapper;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -189,5 +190,12 @@ public class OrderController extends BaseController {
         }
 
         return new SuccessTip("删除成功!");
+    }
+
+    @ResponseBody
+    @PostMapping("getDeliveryArriveTime")
+    public DeliveryArriveTimeWrapper getDeliveryArriveTime(@RequestParam String orderId) {
+//        orderService.getOrderCountByStateU()
+        return new DeliveryArriveTimeWrapper(null);
     }
 }
