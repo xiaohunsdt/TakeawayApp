@@ -20,13 +20,13 @@
           nav-class="nav-class"
           swipeable>
           <van-tab
-            :key="category.id"
+            :key="categoryIndex"
             :title="category.name"
             v-for="(category,categoryIndex) in categories">
             <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">
               <goods-card
                 :food="food"
-                :key="food.id"
+                :key="foodIndex"
                 v-for="(food,foodIndex) in category.goodsList"/>
             </div>
           </van-tab>

@@ -9,7 +9,10 @@
     thumb-mode="aspectFill"
     title-class="food-card-title">
     <view slot="thumb" class="food-card-thumb">
-      <img style="height: 100%;width: 100%" mode="aspectFill" :src="food.thumb?food.thumb:'/static/images/no_image.gif'" alt="" />
+      <img
+        style="height: 100%;width: 100%"
+        mode="aspectFill"
+        :src="food.thumb?food.thumb:'/static/images/no_image.gif'"/>
     </view>
     <view class="food-card-desc" slot="desc">
       <div class="desc">

@@ -305,7 +305,6 @@
   }
 
   .pay-way-btns .pay-way-btn {
-    display: inline-block;
     margin: .08rem;
     width: 45%;
   }

@@ -86,6 +86,8 @@
     "van-radio-group": "/static/vant/radio-group/index",
     "van-info": "/static/vant/info/index",
     "van-count-down": "/static/vant/count-down/index",
-    "van-rate": "/static/vant/rate/index"
+    "van-rate": "/static/vant/rate/index",
+    "van-image": "/static/vant/image/index",
+    "van-loading": "/static/vant/loading/index"
   }
 }

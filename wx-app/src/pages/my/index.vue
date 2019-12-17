@@ -248,7 +248,7 @@
 
   .order-type-item .van-info {
     right: unset;
-    top: unset;
+    top: .1rem;
     left: .6rem;
   }
 </style>
