@@ -1,12 +1,18 @@
 <template>
-  <div class="container">
-    <div class="gradientDiv"></div>
-    <div class="container-contain">
-      <order-card
-        :key="order.orderId"
-        :order="order"
-        @refresh-list="init"
-        v-for="order in orderList"/>
+  <div>
+    <div class="container" v-if="orderList.length > 0">
+      <div class="gradientDiv"></div>
+      <div class="container-contain">
+        <order-card
+          :key="order.orderId"
+          :order="order"
+          @refresh-list="init"
+          v-for="order in orderList"/>
+      </div>
+    </div>
+    <div class="none-content-div" v-if="orderList.length === 0">
+      <img mode="aspectFit" src="/static/images/none/no_order.png" style="width: 10rem">
+      <div style="margin-top: .5rem">暂无订单信息</div>
     </div>
   </div>
 </template>
@@ -75,9 +81,7 @@
           title: '加载中'
         })
         orderService.getOrderListByPage(this.page, this.orderState).then(res => {
-          res.records.forEach(item => {
-            this.orderList.push(item)
-          })
+          this.orderList.push(...res)
           this.page.total = parseInt(res.total)
           mpvue.hideLoading()
         })
@@ -89,5 +93,12 @@
 <style scoped>
   .container-contain {
     padding: 0.3rem 0.1rem;
+  }
+  .none-content-div {
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    text-align: center;
   }
 </style>

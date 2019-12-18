@@ -3,7 +3,7 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
-		"enhance": true,
+		"enhance": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
@@ -140,6 +140,13 @@
 					"name": "pages/my/auth/main",
 					"pathName": "pages/my/auth/main",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/activity/main",
+					"pathName": "pages/activity/main",
+					"query": "orderId=5c4038872373fc85f7e4fa4375d9b724",
 					"scene": null
 				}
 			]

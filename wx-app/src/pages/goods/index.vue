@@ -17,8 +17,7 @@
           @change="onChange"
           border
           custom-class="foodTab"
-          nav-class="nav-class"
-          swipeable>
+          nav-class="nav-class">
           <van-tab
             :key="categoryIndex"
             :title="category.name"
@@ -34,8 +33,8 @@
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
-          :disabled="pageSettings.disableService"
           :decimal-length="0"
+          :disabled="pageSettings.disableService"
           :price="cartAllPrice * 100"
           @submit="onSubmitOrder"
           button-class="submit-btn"
@@ -108,12 +107,15 @@
         categoryService.getAllCategory().then((res) => {
           res.forEach(item => {
             item.goodsList = []
-            this.categories.push(item)
           })
+          this.categories.push(...res)
           // 获取数据
-          for (let i = 0; i < this.categories.length; i++) {
-            this.getGoodsListByIndex(i)
+          if (this.categories.length > 0) {
+            this.getGoodsListByIndex(0)
           }
+          // for (let i = 0; i < this.categories.length; i++) {
+          //   this.getGoodsListByIndex(i)
+          // }
         })
       },
       getGoodsListByIndex (index) {
@@ -126,9 +128,7 @@
 
             const categoryId = this.categories[index].id
             goodsService.getGoodsListByCategoryId(categoryId).then(res => {
-              res.forEach(item => {
-                this.categories[index].goodsList.push(item)
-              })
+              this.categories[index].goodsList.push(...res)
               resolve()
             })
           }
