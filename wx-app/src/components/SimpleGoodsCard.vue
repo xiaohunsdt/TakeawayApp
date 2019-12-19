@@ -1,9 +1,22 @@
 <template>
-  <div>
-    <div class="goods-name">
+  <div class="simple-goods-card">
+    <div class="name">
       {{food.name}}
     </div>
-    <div class="goods-price">
+    <div class="action">
+      <order-stepper :food="food" v-if="currentFoodCount > 0"/>
+      <van-button
+        @click="addCart"
+        custom-class="order-btn"
+        icon="goods-collect"
+        round
+        size="small"
+        type="primary"
+        v-else>
+        下单
+      </van-button>
+    </div>
+    <div class="price">
       ₩ {{food.price}}
     </div>
   </div>
@@ -46,33 +59,36 @@
     background-color: #FFD200 !important;
     border: none !important;
     display: block;
-    position: relative;
-    top: -.7rem;
-    right: 0;
   }
 
   .order-stepper-root {
-    position: relative;
-    top: -.7rem;
-    right: 0;
   }
 </style>
 <style scoped>
-  .goods-name, .goods-count, .goods-price {
+  .simple-goods-card {
+    height: 1rem;
+  }
+
+  .name, .price, .action {
     font-weight: bolder;
-    padding-left: 0.2rem;
     display: inline-block;
     line-height: .7rem;
   }
 
-  .goods-thumb, .goods-name {
+  .name {
     float: left;
+    padding-left: 0.2rem;
   }
 
-  .goods-count, .goods-price {
-    float: right;
+  .action {
+    width: 1.7rem;
+    text-align: right;
   }
-  .goods-price{
-    margin-left: .3rem;
+  .price{
+    min-width: 1.5rem;
+    margin-right: .2rem;
+  }
+  .price, .action {
+    float: right;
   }
 </style>
