@@ -23,7 +23,7 @@
             :title="category.name"
             v-for="(category,categoryIndex) in categories">
             <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">
-              <goods-card
+              <simple-goods-card
                 :food="food"
                 :key="foodIndex"
                 v-for="(food,foodIndex) in category.goodsList"/>
@@ -61,12 +61,12 @@
   import settingService from '@/services/setting'
 
   import BasePanel from '@/components/BasePanel'
-  import GoodsCard from '@/components/GoodsCard'
+  import SimpleGoodsCard from '@/components/SimpleGoodsCard'
 
   export default {
     components: {
       BasePanel,
-      GoodsCard
+      SimpleGoodsCard
     },
     data () {
       return {
