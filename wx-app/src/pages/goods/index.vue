@@ -13,23 +13,31 @@
         </base-panel>
       </div>
       <div id="order-content">
-        <van-tabs
-          @change="onChange"
-          border
-          custom-class="foodTab"
-          nav-class="nav-class">
-          <van-tab
-            :key="categoryIndex"
-            :title="category.name"
-            v-for="(category,categoryIndex) in categories">
-            <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">
-              <simple-goods-card
-                :food="food"
-                :key="foodIndex"
-                v-for="(food,foodIndex) in category.goodsList"/>
-            </div>
-          </van-tab>
-        </van-tabs>
+        <!--        <van-tabs-->
+        <!--          @change="onChange"-->
+        <!--          border-->
+        <!--          custom-class="foodTab"-->
+        <!--          nav-class="nav-class">-->
+        <!--          <van-tab-->
+        <!--            :key="categoryIndex"-->
+        <!--            :title="category.name"-->
+        <!--            v-for="(category,categoryIndex) in categories">-->
+        <!--            <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">-->
+        <!--              <simple-goods-card-->
+        <!--                :food="food"-->
+        <!--                :key="foodIndex"-->
+        <!--                v-for="(food,foodIndex) in category.goodsList"/>-->
+        <!--            </div>-->
+        <!--          </van-tab>-->
+        <!--        </van-tabs>-->
+        <!--        <van-sidebar :active-key="currentIndex" bind:change="onChange">-->
+        <!--          <van-sidebar-item-->
+        <!--            :key="categoryIndex"-->
+        <!--            :title="category.name"-->
+        <!--            v-for="(category,categoryIndex) in categories">-->
+        <!--          </van-sidebar-item>-->
+        <!--        </van-sidebar>-->
+        <side-bar :categoryGoods="categories" />
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
@@ -62,11 +70,13 @@
 
   import BasePanel from '@/components/BasePanel'
   import SimpleGoodsCard from '@/components/SimpleGoodsCard'
+  import SideBar from '@/components/SideBar/SideBar'
 
   export default {
     components: {
       BasePanel,
-      SimpleGoodsCard
+      SimpleGoodsCard,
+      SideBar
     },
     data () {
       return {
@@ -110,12 +120,12 @@
           })
           this.categories.push(...res)
           // 获取数据
-          if (this.categories.length > 0) {
-            this.getGoodsListByIndex(0)
-          }
-          // for (let i = 0; i < this.categories.length; i++) {
-          //   this.getGoodsListByIndex(i)
+          // if (this.categories.length > 0) {
+          //   this.getGoodsListByIndex(0)
           // }
+          for (let i = 0; i < this.categories.length; i++) {
+            this.getGoodsListByIndex(i)
+          }
         })
       },
       getGoodsListByIndex (index) {
