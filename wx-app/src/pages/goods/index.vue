@@ -12,7 +12,7 @@
           </div>
         </base-panel>
       </div>
-      <div id="order-content">
+      <div id="goods-content">
         <!--        <van-tabs-->
         <!--          @change="onChange"-->
         <!--          border-->
@@ -37,7 +37,7 @@
         <!--            v-for="(category,categoryIndex) in categories">-->
         <!--          </van-sidebar-item>-->
         <!--        </van-sidebar>-->
-        <side-bar :categoryGoods="categories" />
+        <side-bar :categoryGoods="categories"/>
       </div>
       <div id="footer" v-if="cartCount > 0">
         <van-submit-bar
@@ -198,6 +198,10 @@
 </style>
 
 <style scoped>
+  .container, .container-contain, #goods-content {
+    height: 100%;
+  }
+
   #activityInfo {
     padding: 0 0.2rem;
     margin-top: 0.2rem;

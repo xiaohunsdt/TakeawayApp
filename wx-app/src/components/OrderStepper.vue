@@ -55,11 +55,14 @@
   }
 
   .order-stepper-plus, .order-stepper-minus {
-    background-color: #FFD200 !important;
-    font-weight: 800 !important;
-    border-radius: 50% !important;
-    width: 0.5rem !important;
-    height: 0.5rem !important;
+     background-color: #FFD200 !important;
+     font-weight: 800 !important;
+     border-radius: 50% !important;
+     width: 0.5rem !important;
+     height: 0.5rem !important;
+   }
+  .order-stepper-plus:active, .order-stepper-minus:active {
+    background-color: #ffb105 !important;
   }
 
   .order-stepper-plus:before,

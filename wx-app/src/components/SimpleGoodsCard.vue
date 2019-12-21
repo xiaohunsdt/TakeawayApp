@@ -60,9 +60,6 @@
     border: none !important;
     display: block;
   }
-
-  .order-stepper-root {
-  }
 </style>
 <style scoped>
   .simple-goods-card {
@@ -77,7 +74,7 @@
 
   .name {
     float: left;
-    padding-left: 0.2rem;
+    /*padding-left: 0.2rem;*/
   }
 
   .action {

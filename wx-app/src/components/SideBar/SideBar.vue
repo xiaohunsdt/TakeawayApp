@@ -17,7 +17,7 @@
         :scroll-into-view="contentId"
         class="content-scroll"
         scroll-with-animation="true"
-        scroll-y="true"
+        :scroll-y="contentId"
         style="height: 100%;">
         <div
           :id="'xh_'+category.id"
@@ -30,7 +30,7 @@
             <div class="line"></div>
           </div>
           <div class="pesticide-container">
-            <simple-goods-card
+            <goods-card
               :food="food"
               :key="foodIndex"
               v-for="(food,foodIndex) in category.goodsList"/>
@@ -48,6 +48,7 @@
 
 <script>
   import SimpleGoodsCard from '@/components/SimpleGoodsCard'
+  import GoodsCard from '@/components/GoodsCard'
 
   export default {
     name: 'SideBar',
@@ -58,7 +59,8 @@
       }
     },
     components: {
-      SimpleGoodsCard
+      SimpleGoodsCard,
+      GoodsCard
     },
     watch: {
       categoryGoods () {
@@ -120,6 +122,7 @@
   .container-side-bar .nav .active {
     background: #ffffff;
     border-left: solid .06rem #FFD200;
+    font-weight: bold;
   }
 
   .container-side-bar .content {
@@ -149,77 +152,8 @@
     margin: 0 .16rem;
   }
 
-  .pesticide .pesticide-item {
-    height: 1.72rem;
-    padding: .24rem 0;
-    margin-left: .24rem;
-    padding-right: .24rem;
-    display: flex;
-    align-items: center;
-    /*border-bottom: solid 1px #dddddd;*/
-    position: relative;
-    color: #333333;
-  }
-
-  .pesticide .pesticide-item image {
-    width: 1.36rem;
-    height: 1.36rem;
-    margin-right: .24rem;
-  }
-
-  .pesticide .pesticide-item .pesticide-item-content {
-    flex: 1;
-    position: relative;
-  }
-
-  .pesticide .pesticide-item .management-item-content {
-    min-height: 1.36rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .pesticide .pesticide-item .describe {
-    overflow: hidden;
-    text-align: left;
-    word-break: break-all;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    font-size: .28rem;
-  }
-
-  .pesticide .pesticide-item .inventory {
-    font-size: .24rem;
-    color: #999;
-    margin-top: .08rem;
-    display: inline;
-  }
-
-  .pesticide .pesticide-item .price {
-    color: #FF8200;
-    margin-top: .16rem;
-    font-size: .28rem;
-  }
-
-  .pesticide .pesticide-item .price .init {
-    margin-left: .08rem;
-    color: #999;
-    font-size: .24rem;
-  }
-
-  .pesticide .pesticide-item .amount {
-    font-size: .24rem;
-    color: #999;
-  }
-
-  .pesticide .pesticide-item .stepper {
-    position: absolute;
-    width: 1.7rem;
-    height: .5rem;
-    right: .3rem;
-    bottom: 0;
+  .pesticide .pesticide-container {
+    padding: 0 .24rem;
   }
 
   .content .has-no-more {
