@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: unset">
     <div class="container" v-if="orderList.length > 0">
       <div class="gradientDiv"></div>
       <div class="container-contain">
@@ -81,7 +81,7 @@
           title: '加载中'
         })
         orderService.getOrderListByPage(this.page, this.orderState).then(res => {
-          this.orderList.push(...res)
+          this.orderList.push(...res.records)
           this.page.total = parseInt(res.total)
           mpvue.hideLoading()
         })

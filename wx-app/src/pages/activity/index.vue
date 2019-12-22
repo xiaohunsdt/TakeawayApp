@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: unset">
     <!--  <div class="container">-->
     <!--    <div class="gradientDiv"></div>-->
     <!--    <div class="container-contain">-->

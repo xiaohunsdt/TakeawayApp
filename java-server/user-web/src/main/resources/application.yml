@@ -76,6 +76,7 @@ logging:
 ---
 sys:
   upload-server-url: http://localhost:8080
+
 spring:
   profiles: dev-pc
   datasource:
@@ -120,6 +121,7 @@ spring:
     password: takeaway123!
   redis:
     host: cxy.novaborn.net
+    password: wy1996
   rabbitmq:
     host: cxy.novaborn.net
     username: xiaohun

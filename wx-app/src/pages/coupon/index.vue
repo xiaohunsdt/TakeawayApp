@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: unset">
     <div class="container" v-if="couponList.length > 0">
       <div class="gradientDiv"></div>
       <div class="container-contain">

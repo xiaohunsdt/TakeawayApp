@@ -89,6 +89,7 @@ spring:
     password: takeaway123!
   redis:
     host: cxy.novaborn.net
+    password: wy1996
   rabbitmq:
     host: cxy.novaborn.net
     username: xiaohun
