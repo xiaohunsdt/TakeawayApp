@@ -30,7 +30,7 @@
             <div class="line"></div>
           </div>
           <div class="pesticide-container">
-            <goods-card
+            <standard-goods-card
               :food="food"
               :key="foodIndex"
               v-for="(food,foodIndex) in category.goodsList"/>
@@ -47,8 +47,7 @@
 </template>
 
 <script>
-  import SimpleGoodsCard from '@/components/SimpleGoodsCard'
-  import GoodsCard from '@/components/GoodsCard'
+  import StandardGoodsCard from '@/components/GoodsCard/StandardGoodsCard'
 
   export default {
     name: 'SideBar',
@@ -59,8 +58,7 @@
       }
     },
     components: {
-      SimpleGoodsCard,
-      GoodsCard
+      StandardGoodsCard
     },
     watch: {
       categoryGoods () {
@@ -98,10 +96,10 @@
   }
 
   .container-side-bar .nav {
-    width: 1.8rem;
+    width: 1.6rem;
     background: #F2F2F2;
     /*height: 100%;*/
-    border-right: solid .01rem rgba(0, 0, 0, .13);
+    /*border-right: solid .01rem rgba(0, 0, 0, .13);*/
   }
 
   .container-side-bar .nav .nav-scroll {
@@ -121,7 +119,8 @@
 
   .container-side-bar .nav .active {
     background: #ffffff;
-    border-left: solid .06rem #FFD200;
+    width: calc(100% - .06rem);
+    border-right: solid .06rem #FFD200;
     font-weight: bold;
   }
 

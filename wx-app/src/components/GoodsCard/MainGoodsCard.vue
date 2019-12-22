@@ -3,18 +3,18 @@
     :price="food.price"
     :title="food.name"
     currency="₩"
-    custom-class="food-card-root"
+    custom-class="goods-card-root"
     lazy-load
-    price-class="food-card-price"
+    price-class="goods-card-price"
     thumb-mode="aspectFill"
-    title-class="food-card-title">
-    <view slot="thumb" class="food-card-thumb">
+    title-class="goods-card-title">
+    <view slot="thumb" class="goods-card-thumb">
       <img
         style="height: 100%;width: 100%"
         mode="aspectFill"
         :src="food.thumb?food.thumb:'/static/images/no_image.gif'"/>
     </view>
-    <view class="food-card-desc" slot="desc">
+    <view class="goods-card-desc" slot="desc">
       <div class="desc">
         <van-icon name="label"/>
         {{ food.desc }}
@@ -50,7 +50,7 @@
   import {mapMutations} from 'vuex'
 
   export default {
-    name: 'GoodsCard',
+    name: 'MainGoodsCard',
     props: {
       food: {
         type: Object,
@@ -77,28 +77,28 @@
   }
 </script>
 <style>
-  .food-card-root {
+  .goods-card-root {
     padding: unset !important;
     overflow: hidden;
   }
 
-  .food-card-root .van-card__thumb {
+  .goods-card-root .van-card__thumb {
     width: 2.2rem;
     height: 1.7rem;
   }
 
-  .food-card-root {
+  .goods-card-root {
     margin-bottom: 0.35rem;
     background-color: transparent !important;
   }
 
-  .food-card-thumb {
+  .goods-card-thumb {
     border-radius: 0.2rem;
     overflow: hidden;
     height: inherit;
   }
 
-  .food-card-title {
+  .goods-card-title {
     margin-top: .1rem;
     font-size: 0.35rem;
     font-weight: 800;
@@ -111,23 +111,23 @@
     right: .1rem;
   }
 
-  .food-card-price {
+  .goods-card-price {
     font-size: .3rem;
     color: #FFD200 !important;
   }
 
-  .food-card-desc .desc {
+  .goods-card-desc .desc {
     color: gray;
   }
 
-  .food-card-desc .comment {
+  .goods-card-desc .comment {
     color: gray;
     margin-top: 0.2rem;
     display: flex;
     flex-direction: row;
   }
 
-  .food-card-desc .comment .dividLine {
+  .goods-card-desc .comment .dividLine {
     border-right: #F3F3F3 0.01rem solid;
     width: 0.01rem;
     margin: 0 0.1rem;

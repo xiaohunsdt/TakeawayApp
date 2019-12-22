@@ -6,6 +6,8 @@
         <base-panel>
           <van-notice-bar
             :text="pageSettings.goodsPageNotice"
+            wrapable
+            scrollable="false"
             left-icon="volume-o"/>
           <div id="activity-info">
             <van-tag :key="tag" type="success" v-for="tag in pageSettings.goodsPageTags">{{ tag }}</van-tag>
@@ -69,13 +71,11 @@
   import settingService from '@/services/setting'
 
   import BasePanel from '@/components/BasePanel'
-  import SimpleGoodsCard from '@/components/SimpleGoodsCard'
   import SideBar from '@/components/SideBar/SideBar'
 
   export default {
     components: {
       BasePanel,
-      SimpleGoodsCard,
       SideBar
     },
     data () {

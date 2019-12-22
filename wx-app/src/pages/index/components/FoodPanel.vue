@@ -12,7 +12,7 @@
       <view>
         <van-panel custom-class="food-item-panel">
           <view class="food-item-content">
-            <goods-card
+            <main-goods-card
               v-for="food in foodList"
               :key="food.id"
               :food="food" />
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import GoodsCard from '@/components/GoodsCard'
+  import MainGoodsCard from '@/components/GoodsCard/MainGoodsCard'
 
   export default {
     name: 'FoodPanel',
@@ -39,7 +39,7 @@
       }
     },
     components: {
-      GoodsCard
+      MainGoodsCard
     },
     computed: {
       titleStyle () {
