@@ -4,8 +4,6 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.exception.SysException;
-import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
@@ -15,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * @author xiaohun
@@ -65,16 +61,10 @@ public class SettingController extends BaseController {
         String store_open_date = this.getSettingByName("store_open_date", SettingScope.STORE).getValue();
 
         SimpleDateFormat df = new SimpleDateFormat(DatePattern.UTC_MS_PATTERN);
-        df.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date store_open_time;
-        Date store_close_time;
-        try {
-            store_open_time = df.parse(this.getSettingByName("store_open_time", SettingScope.STORE).getValue());
-            store_close_time = df.parse(this.getSettingByName("store_close_time", SettingScope.STORE).getValue());
-        } catch (ParseException e) {
-            log.error("", e);
-            throw new SysException(SysExceptionEnum.ARGUMENT_VALID_ERROR);
-        }
+        String store_open_time;
+        String store_close_time;
+        store_open_time = this.getSettingByName("store_open_time", SettingScope.STORE).getValue();
+        store_close_time = this.getSettingByName("store_close_time", SettingScope.STORE).getValue();
 
         // 服务是否在正常运行!
         if (!service_running) {
@@ -88,7 +78,7 @@ public class SettingController extends BaseController {
             // 今天是否可以下单
             dto.setDisableService(true);
             dto.setDisableServiceNotice("今天是休息日,不营业!!");
-        } else if (!TimeUtil.isBetween(now, store_open_time, store_close_time)) {
+        } else if (!TimeUtil.isBetween(store_open_time, store_close_time)) {
             // 现在是否可以下单
             dto.setDisableService(true);
             dto.setDisableServiceNotice("当前时间不在营业时间段!!!");

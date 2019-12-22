@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.common.utils;
 
-import java.util.Date;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class TimeUtil {
     /**
@@ -8,15 +9,28 @@ public class TimeUtil {
      *
      * @return
      */
-    public static boolean isBetween(Date targetDate, Date startTime, Date endTime) {
-        int target;
-        int start;
-        int end;
+    public static boolean isBetween(String start, String end) {
+        return isBetween(null, start, end);
+    }
 
-        target = (int) (targetDate.getTime() % (24 * 60 * 60 * 1000L));
-        start = (int) (startTime.getTime() % (24 * 60 * 60 * 1000L));
-        end = (int) (endTime.getTime() % (24 * 60 * 60 * 1000L));
+    public static boolean isBetween(String target, String start, String end) {
+        LocalTime targetTime;
+        LocalTime startTime;
+        LocalTime endTime;
 
-        return target > start && target < end;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .withZone(ZoneOffset.UTC);
+
+        if (target == null) {
+            targetTime = LocalTime.now();
+        } else {
+            targetTime = LocalDateTime.parse(target, dateTimeFormatter).toLocalTime();
+        }
+
+        startTime = ZonedDateTime.parse(start, dateTimeFormatter).withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
+        endTime = ZonedDateTime.parse(end, dateTimeFormatter).withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
+
+        return targetTime.isAfter(startTime) && targetTime.isBefore(endTime);
     }
 }
