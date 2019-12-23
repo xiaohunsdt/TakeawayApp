@@ -37,6 +37,9 @@
             <if test="args.orderState != null and args.orderState != ''">
                 AND `order_state` = #{args.orderState}
             </if>
+            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+            </if>
             AND deleted = 0
         </where>
         ORDER BY `create_date` DESC

@@ -11,7 +11,7 @@
                 </foreach>
             </if>
             <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
-                AND bet_date BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
             </if>
             AND deleted = 0
         </where>

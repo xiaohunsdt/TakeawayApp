@@ -11,6 +11,16 @@
         <el-form-item label="单号">
           <el-input placeholder="请输入单号" v-model="formData.number"></el-input>
         </el-form-item>
+        <el-form-item label="日期">
+          <el-date-picker
+            end-placeholder="end date"
+            format="yyyy-MM-dd"
+            start-placeholder="start date"
+            type="daterange"
+            v-model="formData.formDate"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
         </el-form-item>
@@ -284,7 +294,11 @@
         formData: {
           nickName: null,
           number: null,
-          orderId: null
+          orderId: null,
+          formDate: [
+            new Date(),
+            new Date()
+          ]
         },
         listLoading: false,
         tableData: []
@@ -301,7 +315,12 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        orderApi.getOrderListByPage(this.page, this.formData)
+
+        const params = Object.assign({}, this.formData)
+        params.startDate = params.formDate[0]
+        params.endDate = params.formDate[1]
+
+        orderApi.getOrderListByPage(this.page, params)
           .then(response => {
             const datas = response.records
             datas.forEach(item => {
