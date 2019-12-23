@@ -10,6 +10,13 @@ export function getGoodsListByCategoryId (categoryId) {
   return api.getGoodsListByCategoryId(categoryId)
 }
 
+/**
+ * 获取所有商品
+ */
+export function getAllGoodsList () {
+  return api.getAllGoodsList()
+}
+
 export default {
   getGoodsListByCategoryId
 }

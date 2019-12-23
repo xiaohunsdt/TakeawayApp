@@ -15,9 +15,10 @@
     <div class="content content-class">
       <scroll-view
         :scroll-into-view="contentId"
+        :scroll-y="contentId"
+        @scroll="onScroll"
         class="content-scroll"
         scroll-with-animation="true"
-        :scroll-y="contentId"
         style="height: 100%;">
         <div
           :id="'xh_'+category.id"
@@ -61,17 +62,25 @@
       StandardGoodsCard
     },
     watch: {
-      categoryGoods () {
-        if (this.categoryGoods && this.categoryGoods.length > 0) {
-          this.currentId = this.categoryGoods[0].id
-          this.setContentId()
-        }
+      categoryGoods: {
+        handler: function (val) {
+          if (this.categoryGoods && this.categoryGoods.length > 0) {
+            this.currentId = this.categoryGoods[0].id
+            this.setContentId()
+            if (this.categoryGoods[0].goodsList.length > 0) {
+              this.getDivInfo()
+            }
+          }
+        },
+        deep: true
       }
     },
     data () {
       return {
         currentId: '',
-        contentId: ''
+        contentId: '',
+        heightArr: [],
+        containerH: 0
       }
     },
     methods: {
@@ -81,6 +90,32 @@
       },
       setContentId () {
         this.contentId = `xh_${this.currentId}`
+      },
+      onScroll (event) {
+        let scrollTop = event.mp.detail.scrollTop
+        let scrollArr = this.heightArr
+        if (!scrollTop >= scrollArr[scrollArr.length - 1] - this.containerH) {
+          for (let i = 0; i < scrollArr.length; i++) {
+            if (scrollTop >= 0 && scrollTop < scrollArr[0]) {
+              this.currentId = this.categoryGoods[0].id
+            } else if (scrollTop >= scrollArr[i - 1] && scrollTop < scrollArr[i]) {
+              this.currentId = this.categoryGoods[i].id
+            }
+          }
+        }
+      },
+      getDivInfo () {
+        let query = mpvue.createSelectorQuery()
+        query.select('.content').boundingClientRect((res) => {
+          this.containerH = res.height
+        }).exec()
+        let s = 0
+        query.selectAll('.pesticide').boundingClientRect((react) => {
+          react.forEach((res) => {
+            s += res.height
+            this.heightArr.push(s)
+          })
+        }).exec()
       }
     }
   }

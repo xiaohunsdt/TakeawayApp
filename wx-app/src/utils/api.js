@@ -15,6 +15,7 @@ const api = {
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品
+  getAllGoodsList: () => request.get('goods/getAllGoodsList'),
   getGoodsListByCategoryId: (categoryId) => request.get('goods/getGoodsListByCategoryId', { categoryId }),
 
   // 获取用户的地址列表

@@ -45,9 +45,11 @@ public class GoodsController extends BaseController {
         return ResponseEntity.ok(new GoodsWrapper(goodsList).warp());
     }
 
-    @GetMapping("getAllGoods")
-    public ResponseEntity getAllGoods() {
-        List<Goods> goodsList = goodsService.list();
+    @GetMapping("getAllGoodsList")
+    public ResponseEntity getAllGoodsList() {
+        List<Goods> goodsList = goodsService.list().stream()
+                .filter(item -> !item.getState().equals(GoodsState.OFF))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(new GoodsWrapper(goodsList).warp());
     }
 }
