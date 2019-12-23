@@ -18,5 +18,6 @@ export function getAllGoodsList () {
 }
 
 export default {
-  getGoodsListByCategoryId
+  getGoodsListByCategoryId,
+  getAllGoodsList
 }

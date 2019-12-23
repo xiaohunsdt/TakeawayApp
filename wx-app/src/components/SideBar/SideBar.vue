@@ -12,7 +12,7 @@
         </div>
       </scroll-view>
     </div>
-    <div class="content content-class">
+    <div class="content">
       <scroll-view
         :scroll-into-view="contentId"
         :scroll-y="contentId"
@@ -20,21 +20,23 @@
         class="content-scroll"
         scroll-with-animation="true"
         style="height: 100%;">
-        <div
-          :id="'xh_'+category.id"
-          :key="category.id"
-          class="pesticide"
-          v-for="category in categoryGoods">
-          <div class="type-name">
-            <div class="line"></div>
-            <div class="name">{{category.name}}</div>
-            <div class="line"></div>
-          </div>
-          <div class="pesticide-container">
-            <standard-goods-card
-              :food="food"
-              :key="foodIndex"
-              v-for="(food,foodIndex) in category.goodsList"/>
+        <div class="content-container">
+          <div
+            :id="'xh_'+category.id"
+            :key="category.id"
+            class="pesticide"
+            v-for="category in categoryGoods">
+            <div class="type-name">
+              <div class="line"></div>
+              <div class="name">{{category.name}}</div>
+              <div class="line"></div>
+            </div>
+            <div class="pesticide-container">
+              <standard-goods-card
+                :food="food"
+                :key="foodIndex"
+                v-for="(food,foodIndex) in category.goodsList"/>
+            </div>
           </div>
         </div>
         <view class="has-no-more">
@@ -62,15 +64,19 @@
       StandardGoodsCard
     },
     watch: {
+      currentId (newVal) {
+        this.contentId = `xh_${newVal}`
+      },
       categoryGoods: {
         handler: function (val) {
           if (this.categoryGoods && this.categoryGoods.length > 0) {
             this.currentId = this.categoryGoods[0].id
-            this.setContentId()
-            if (this.categoryGoods[0].goodsList.length > 0) {
-              this.getDivInfo()
-            }
           }
+          this.heightArr.splice(0, this.heightArr.length)
+          let this_ = this
+          setTimeout(function () {
+            this_.getDivInfo()
+          }, 3000)
         },
         deep: true
       }
@@ -86,10 +92,6 @@
     methods: {
       chooseType (event) {
         this.currentId = event
-        this.setContentId()
-      },
-      setContentId () {
-        this.contentId = `xh_${this.currentId}`
       },
       onScroll (event) {
         let scrollTop = event.mp.detail.scrollTop
@@ -106,14 +108,16 @@
       },
       getDivInfo () {
         let query = mpvue.createSelectorQuery()
-        query.select('.content').boundingClientRect((res) => {
+        query.select('.content-container').boundingClientRect((res) => {
           this.containerH = res.height
         }).exec()
         let s = 0
         query.selectAll('.pesticide').boundingClientRect((react) => {
           react.forEach((res) => {
             s += res.height
-            this.heightArr.push(s)
+            if (this.heightArr.findIndex(item => s === item) < 0) {
+              this.heightArr.push(s)
+            }
           })
         }).exec()
       }
@@ -163,6 +167,10 @@
     flex: 1;
     background: #fff;
     height: 100%;
+  }
+
+  .container-side-bar .content .content-container {
+    display: unset;
   }
 
   .container-side-bar .content .content-scroll {

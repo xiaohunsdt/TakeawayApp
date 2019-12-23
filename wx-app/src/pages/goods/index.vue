@@ -53,9 +53,9 @@
           title="购物车">
           <view class="cart-content">
             <simple-goods-card
-              :key="item.id"
               :food="item"
-              v-for="item in orderItems" />
+              :key="item.id"
+              v-for="item in orderItems"/>
           </view>
         </van-action-sheet>
         <van-submit-bar
@@ -150,8 +150,24 @@
           // if (this.categories.length > 0) {
           //   this.getGoodsListByIndex(0)
           // }
-          for (let i = 0; i < this.categories.length; i++) {
-            this.getGoodsListByIndex(i)
+          if (this.categories.length > 0) {
+            mpvue.showLoading({
+              title: '加载数据中...'
+            })
+            goodsService.getAllGoodsList()
+              .then(res => {
+                this.categories.forEach(category => {
+                  res.forEach(goods => {
+                    if (goods.category === category.name) {
+                      category.goodsList.push(goods)
+                    }
+                  })
+                })
+                mpvue.hideLoading()
+              })
+              .catch(() => {
+                mpvue.hideLoading()
+              })
           }
         })
       },
