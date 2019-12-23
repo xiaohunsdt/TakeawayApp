@@ -25,6 +25,7 @@
             :id="'xh_'+category.id"
             :key="category.id"
             class="pesticide"
+            v-if="category.goodsList.length > 0"
             v-for="category in categoryGoods">
             <div class="type-name">
               <div class="line"></div>
@@ -64,15 +65,12 @@
       StandardGoodsCard
     },
     watch: {
-      currentId (newVal) {
-        this.contentId = `xh_${newVal}`
-      },
       categoryGoods: {
         handler: function (val) {
           if (this.categoryGoods && this.categoryGoods.length > 0) {
             this.currentId = this.categoryGoods[0].id
+            this.contentId = `xh_${this.currentId}`
           }
-          this.heightArr.splice(0, this.heightArr.length)
           let this_ = this
           setTimeout(function () {
             this_.getDivInfo()
@@ -92,6 +90,7 @@
     methods: {
       chooseType (event) {
         this.currentId = event
+        this.contentId = `xh_${this.currentId}`
       },
       onScroll (event) {
         let scrollTop = event.mp.detail.scrollTop
@@ -107,6 +106,8 @@
         }
       },
       getDivInfo () {
+        this.heightArr.splice(0, this.heightArr.length)
+
         let query = mpvue.createSelectorQuery()
         query.select('.content-container').boundingClientRect((res) => {
           this.containerH = res.height
