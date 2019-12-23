@@ -18,26 +18,24 @@ const mutations = {
     state.cartList.push(cartData)
   },
   REDUCE_GOODS: (state, goods) => {
-    const existData = state.cartList.find(item => item.goodsId === goods.id)
+    const index = state.cartList.findIndex(item => item.goodsId === goods.id)
+    if (index < 0) {
+      return
+    }
+    const existData = state.cartList[index]
     if (existData !== undefined && existData.count > 0) {
       existData.count--
       if (existData.count === 0) {
-        const index = state.cartList.findIndex(item => item.goodsId === goods.id)
         state.cartList.splice(index, 1)
       }
     }
   },
   DELETE_GOODS: (state, goodsId) => {
-    let existDataIndex = -1
-
-    state.cartList.find((item, index) => {
-      if (item.goodsId === goodsId) {
-        existDataIndex = index
-        return true
-      }
-      return false
-    })
-    state.cartList.slice(existDataIndex, 1)
+    const index = state.cartList.findIndex(item => item.goodsId === goodsId)
+    if (index < 0) {
+      return
+    }
+    state.cartList.slice(index, 1)
   },
   CLEAR_CART: (state) => {
     state.cartList.splice(0, state.cartList.length)

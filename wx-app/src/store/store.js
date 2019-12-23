@@ -9,7 +9,8 @@ import address from './modules/address'
 
 Vue.use(Vuex)
 
-const debug = process.env.NODE_ENV !== 'production'
+// const debug = process.env.NODE_ENV !== 'production'
+const debug = false
 
 const plugins = [
   createPersistedState({
