@@ -133,6 +133,28 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/activity',
+    component: Layout,
+    redirect: '/activity/index',
+    meta: { title: '活动管理', icon: 'example' },
+    children: [
+      {
+        path: 'create',
+        name: 'CreateActivity',
+        props: true,
+        component: () => import('@/views/activity/create'),
+        meta: { title: '活动创建', icon: 'example' }
+      },
+      {
+        path: 'index',
+        name: 'ActivityManagement',
+        props: true,
+        component: () => import('@/views/activity/index'),
+        meta: { title: '活动列表', icon: 'example' }
+      }
+    ]
+  },
+  {
     path: '/sys',
     component: Layout,
     redirect: '/sys/index',
