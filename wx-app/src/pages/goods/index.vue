@@ -6,9 +6,9 @@
         <base-panel>
           <van-notice-bar
             :text="pageSettings.goodsPageNotice"
-            wrapable
+            left-icon="volume-o"
             scrollable="false"
-            left-icon="volume-o"/>
+            wrapable/>
           <div id="activity-info">
             <van-tag :key="tag" type="success" v-for="tag in pageSettings.goodsPageTags">{{ tag }}</van-tag>
           </div>
@@ -42,6 +42,22 @@
         <side-bar :categoryGoods="categories"/>
       </div>
       <div id="footer" v-if="cartCount > 0">
+        <van-action-sheet
+          :show="showCart"
+          :z-index="99999"
+          @cancel="showCart =false"
+          @click-overlay="showCart =false"
+          @close="showCart =false"
+          close-on-click-overlay
+          overlay
+          title="购物车">
+          <view class="cart-content">
+            <simple-goods-card
+              :key="item.id"
+              :food="item"
+              v-for="item in orderItems" />
+          </view>
+        </van-action-sheet>
         <van-submit-bar
           :decimal-length="0"
           :disabled="pageSettings.disableService"
@@ -52,7 +68,7 @@
           currency="₩"
           custom-class="order-submit-bar"
           price-class="order-price">
-          <div id="order-bar-left-content">
+          <div @click="onOpenCart" id="order-bar-left-content">
             <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
               {{ cartCount }}
@@ -72,20 +88,31 @@
 
   import BasePanel from '@/components/BasePanel'
   import SideBar from '@/components/SideBar/SideBar'
+  import SimpleGoodsCard from '@/components/GoodsCard/SimpleGoodsCard'
 
   export default {
     components: {
       BasePanel,
-      SideBar
+      SideBar,
+      SimpleGoodsCard
     },
     data () {
       return {
         currentIndex: 0,
         categories: [],
-        pageSettings: {}
+        pageSettings: {},
+        showCart: false
       }
     },
     computed: {
+      orderItems () {
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        let orderItemList = []
+        cartGoodsList.forEach(item => {
+          orderItemList.push(item.goods)
+        })
+        return orderItemList
+      },
       cartCount () {
         return this.$store.getters.cartAllCount
       },
@@ -106,7 +133,7 @@
         this.currentIndex = 0
         this.categories.splice(0, this.categories.length)
         this.pageSettings = {}
-
+        this.showCart = false
         // 获取相关设置项
         settingService.getGoodsPageSettings()
           .then(res => {
@@ -159,6 +186,9 @@
         mpvue.navigateTo({
           url: `/pages/buy/main`
         })
+      },
+      onOpenCart () {
+        this.showCart = true
       }
     }
   }
@@ -235,5 +265,9 @@
   #order-bar-left-content img {
     width: 0.6rem;
     height: 0.5rem;
+  }
+
+  .cart-content {
+    padding: .2rem;
   }
 </style>

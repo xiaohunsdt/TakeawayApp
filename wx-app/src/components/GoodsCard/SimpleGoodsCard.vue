@@ -3,6 +3,9 @@
     <div class="name">
       {{food.name}}
     </div>
+    <div class="price">
+      ₩ {{food.price}}
+    </div>
     <div class="action">
       <order-stepper :food="food" v-if="currentFoodCount > 0"/>
       <van-button
@@ -15,9 +18,6 @@
         v-else>
         下单
       </van-button>
-    </div>
-    <div class="price">
-      ₩ {{food.price}}
     </div>
   </div>
 </template>
@@ -60,32 +60,34 @@
     border: none !important;
     display: block;
   }
+  .action .order-stepper-root {
+    bottom: unset !important;
+    right: unset !important;
+  }
+
 </style>
 <style scoped>
   .simple-goods-card {
     height: 1rem;
+    display: flex;
+    justify-content: space-between;
   }
-
+  .name{
+    width: 40%;
+    overflow: hidden;
+  }
   .name, .price, .action {
     font-weight: bolder;
-    display: inline-block;
     line-height: .7rem;
-  }
-
-  .name {
-    float: left;
-    /*padding-left: 0.2rem;*/
+    display: table-column;
   }
 
   .action {
-    width: 1.7rem;
+    width: 1.8rem;
     text-align: right;
   }
   .price{
     min-width: 1.5rem;
     margin-right: .2rem;
-  }
-  .price, .action {
-    float: right;
   }
 </style>

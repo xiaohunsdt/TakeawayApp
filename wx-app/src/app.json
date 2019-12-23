@@ -89,7 +89,7 @@
     "van-rate": "/static/vant/rate/index",
     "van-image": "/static/vant/image/index",
     "van-loading": "/static/vant/loading/index",
-    "van-sidebar": "/static/vant/sidebar/index",
-    "van-sidebar-item": "/static/vant/sidebar-item/index"
+    "van-action-sheet": "/static/vant/action-sheet/index",
+    "van-swipe-cell": "/static/vant/swipe-cell/index"
   }
 }
