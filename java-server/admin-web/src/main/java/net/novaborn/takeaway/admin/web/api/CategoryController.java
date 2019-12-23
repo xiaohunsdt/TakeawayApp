@@ -37,7 +37,7 @@ public class CategoryController extends BaseController {
 
     @PostMapping("getCategoryListByPage")
     public ResponseEntity getCategoryListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        page.setOptimizeCountSql(false);
+//        page.setOptimizeCountSql(false);
         page = (Page) categoryService.getCategoryListByPage(page, args);
         page.setRecords((List) new CategoryWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);

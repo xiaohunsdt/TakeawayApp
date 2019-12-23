@@ -9,17 +9,17 @@
 </template>
 
 <script>
-    export default {
-        name: 'AppMain',
-        computed: {
-            cachedViews() {
-                return this.$store.getters.cachedViews
-            },
-            key() {
-                return this.$route.path
-            }
-        }
+  export default {
+    name: 'AppMain',
+    computed: {
+      cachedViews() {
+        return this.$store.getters.cachedViews
+      },
+      key() {
+        return this.$route.path
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>

@@ -45,7 +45,7 @@ public class GoodsController extends BaseController {
 
     @PostMapping("getGoodsListByPage")
     public ResponseEntity getGoodsListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        page.setOptimizeCountSql(false);
+//        page.setOptimizeCountSql(false);
         page = (Page) goodsService.getGoodsListByPage(page, args);
         page.setRecords((List) new GoodsWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);

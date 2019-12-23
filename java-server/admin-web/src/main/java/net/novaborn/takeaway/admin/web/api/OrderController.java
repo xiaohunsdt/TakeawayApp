@@ -56,7 +56,7 @@ public class OrderController extends BaseController {
             }
         }
 
-        page.setOptimizeCountSql(false);
+//        page.setOptimizeCountSql(false);
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);

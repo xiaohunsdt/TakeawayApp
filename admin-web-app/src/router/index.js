@@ -90,13 +90,23 @@ export const constantRoutes = [
     path: '/order',
     component: Layout,
     redirect: '/order/index',
-    children: [{
-      path: 'index',
-      name: 'OrderManagement',
-      props: true,
-      component: () => import('@/views/order/index'),
-      meta: { title: '订单管理', icon: 'order' }
-    }]
+    meta: { title: '订单管理', icon: 'order' },
+    children: [
+      {
+        path: 'index',
+        name: 'OrderManagement',
+        props: true,
+        component: () => import('@/views/order/index'),
+        meta: { title: '订单管理', icon: 'order' }
+      },
+      {
+        path: 'comment',
+        name: 'CommentManagement',
+        props: true,
+        component: () => import('@/views/order/comment/index'),
+        meta: { title: '评价管理', icon: 'goods' }
+      }
+    ]
   },
   {
     path: '/goods',

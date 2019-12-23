@@ -1,15 +1,14 @@
 package net.novaborn.takeaway.order.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.novaborn.takeaway.order.dao.ICommentDao;
-import net.novaborn.takeaway.order.dao.IOrderItemDao;
 import net.novaborn.takeaway.order.entity.Comment;
-import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.ICommentService;
-import net.novaborn.takeaway.order.service.IOrderItemService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,4 +19,9 @@ import java.util.List;
  * @since 2019-09-20
  */
 @Service
-public class CommentService extends ServiceImpl<ICommentDao, Comment> implements ICommentService { }
+public class CommentService extends ServiceImpl<ICommentDao, Comment> implements ICommentService {
+    @Override
+    public IPage<Comment> getCommentListByPage(Page page, Map args) {
+        return this.baseMapper.getCommentListByPage(page, args);
+    }
+}

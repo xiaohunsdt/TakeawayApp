@@ -3,17 +3,17 @@ package net.novaborn.takeaway.admin.web.api;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
+import net.novaborn.takeaway.activity.entity.Activity;
+import net.novaborn.takeaway.activity.service.impl.ActivityService;
 import net.novaborn.takeaway.admin.web.wrapper.AddressWrapper;
+import net.novaborn.takeaway.admin.web.wrapper.CommentWrapper;
+import net.novaborn.takeaway.order.service.impl.CommentService;
 import net.novaborn.takeaway.user.entity.User;
-import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,14 +24,14 @@ import java.util.Optional;
  */
 @Controller
 @Setter(onMethod_ = {@Autowired})
-@RequestMapping("/api/admin/address")
-public class AddressController extends BaseController {
+@RequestMapping("/api/admin/comment")
+public class CommentController extends BaseController {
     private UserService userService;
 
-    private AddressService addressService;
+    private CommentService commentService;
 
-    @PostMapping("getAddressListByPage")
-    public ResponseEntity<Page> getAddressListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
+    @PostMapping("getCommentListByPage")
+    public ResponseEntity<Page> getCommentListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         if (StrUtil.isNotBlank((String) args.get("name"))) {
             Optional<User> user = userService.selectByName((String) args.get("name"));
             if (user.isPresent()) {
@@ -41,8 +41,8 @@ public class AddressController extends BaseController {
             }
         }
 //        page.setOptimizeCountSql(false);
-        page = (Page) addressService.getAddressListByPage(page, args);
-        page.setRecords((List) new AddressWrapper(page.getRecords()).warp());
+        page = (Page) commentService.getCommentListByPage(page, args);
+        page.setRecords((List) new CommentWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 }

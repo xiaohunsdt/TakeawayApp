@@ -25,6 +25,9 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="args.orderId != null and args.orderId != ''">
+                AND `id` = #{args.orderId}
+            </if>
             <if test="args.number != null and args.number != ''">
                 AND `number` = #{args.number}
             </if>

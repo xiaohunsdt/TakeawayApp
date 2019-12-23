@@ -112,9 +112,9 @@
       </div>
       <div id="footer">
         <van-submit-bar
+          :decimal-length="0"
           :disabled="disableService"
           :loading="submitLoading"
-          :decimal-length="0"
           :price="cartAllPrice * 100"
           :tip="true"
           @submit="onSubmitOrder"
@@ -195,21 +195,29 @@
     },
     onShow () {
       if (this.orderId !== '') {
-        orderService.selectOrderById(this.orderId).then(res => {
-          this.order = res
-          if (this.order.payState === 'PAID') {
-            // mpvue.redirectTo({
-            //   url: '/pages/order/main?state=waitEat'
-            // })
-            mpvue.reLaunch({
-              url: `/pages/order/detail/main?orderId=${this.order.id}`
-            })
-          } else {
-            mpvue.reLaunch({
-              url: '/pages/order/main?state=waitPay'
-            })
-          }
+        mpvue.showLoading({
+          title: '正在核对信息,请稍等...'
         })
+        orderService.selectOrderById(this.orderId)
+          .then(res => {
+            mpvue.hideLoading()
+            this.order = res
+            if (this.order.payState === 'PAID') {
+              // mpvue.redirectTo({
+              //   url: '/pages/order/main?state=waitEat'
+              // })
+              mpvue.reLaunch({
+                url: `/pages/order/detail/main?orderId=${this.order.id}`
+              })
+            } else {
+              mpvue.reLaunch({
+                url: '/pages/order/main?state=waitPay'
+              })
+            }
+          })
+          .catch(() => {
+            mpvue.hideLoading()
+          })
       }
     },
     data () {

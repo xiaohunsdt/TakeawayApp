@@ -5,6 +5,9 @@
         <el-form-item label="昵称">
           <el-input placeholder="请输入昵称" v-model="formData.nickName"></el-input>
         </el-form-item>
+        <el-form-item label="订单ID">
+          <el-input placeholder="请输入订单ID" v-model="formData.orderId"></el-input>
+        </el-form-item>
         <el-form-item label="单号">
           <el-input placeholder="请输入单号" v-model="formData.number"></el-input>
         </el-form-item>
@@ -100,7 +103,7 @@
           align="center"
           label="用户">
           <template v-slot="props">
-            <div>{{ props.row.user.openId?props.row.user.nickName:props.row.user }}</div>
+            <div>{{ props.row.userName }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -280,7 +283,8 @@
         },
         formData: {
           nickName: null,
-          number: null
+          number: null,
+          orderId: null
         },
         listLoading: false,
         tableData: []

@@ -1,12 +1,10 @@
 package net.novaborn.takeaway.admin.web.wrapper;
 
-import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -14,9 +12,9 @@ import java.util.Map;
  *
  * @author xiaohun
  */
-public class OrderWrapper extends BaseControllerWrapper {
+public class CommentWrapper extends BaseControllerWrapper {
 
-    public OrderWrapper(Object element) {
+    public CommentWrapper(Object element) {
         super(element);
     }
 
@@ -31,7 +29,6 @@ public class OrderWrapper extends BaseControllerWrapper {
             map.put("userName", user.getName());
         }
 
-        Date createDate = (Date) map.get("createDate");
-        map.put("createDate", DateUtil.format(createDate, "MM-dd HH:mm"));
+        map.put("userName", userService.getById((String) map.get("userId")).getNickName());
     }
 }
