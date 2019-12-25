@@ -32,6 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+Vue.prototype.$VUE_APP_BASE_API = process.env.VUE_APP_BASE_API
 
 new Vue({
   el: '#app',

@@ -60,7 +60,7 @@
               上传
             </el-button>
             <img
-              :src="uploadUrl + scope.row.thumb"
+              :src="$VUE_APP_BASE_API + scope.row.thumb"
               @click="onUploadImg(scope.row)"
               style="height: 30px;width: auto;"
               v-else/>
@@ -137,7 +137,6 @@
   import goodsApi from '@/api/goods'
   import categoryApi from '@/api/category'
   import GoodsDialog from './components/GoodsDialog'
-  import { getServerUrl } from '@/utils/sys'
 
   export default {
     name: 'GoodsManagement',
@@ -145,11 +144,6 @@
       BaseCard,
       GoodsImageDialog,
       GoodsDialog
-    },
-    computed: {
-      uploadUrl() {
-        return getServerUrl()
-      }
     },
     data() {
       return {

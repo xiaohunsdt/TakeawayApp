@@ -4,7 +4,7 @@
     :show-close="false"
     :visible.sync="dialogVisible">
     <el-upload
-      :action="uploadUrl"
+      :action="$VUE_APP_BASE_API + '/api/admin/uploadImg'"
       :headers="authHeader"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
@@ -24,7 +24,6 @@
 
 <script>
   import { getToken } from '@/utils/auth'
-  import { getServerUrl } from '@/utils/sys'
   import goodsApi from '@/api/goods'
 
   export default {
@@ -47,9 +46,6 @@
       }
     },
     computed: {
-      uploadUrl() {
-        return getServerUrl() + '/api/admin/uploadImg'
-      },
       authHeader() {
         return {
           Authorization: `Bearer ${ getToken() }`

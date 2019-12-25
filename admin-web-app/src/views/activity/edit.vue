@@ -6,14 +6,22 @@
           <el-form-item label="活动名称">
             <el-input v-model="formData.name"></el-input>
           </el-form-item>
-
+          <el-form-item label="活动主图">
+            <el-upload
+              :action="$VUE_APP_BASE_API + '/api/activity/uploadImg'"
+              :on-success="onSuccess"
+              v-if="formData.mainImg===''">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+            <img :src="formData.mainImg" v-if="formData.mainImg!==''"/>
+          </el-form-item>
           <el-form-item label="活动时间">
             <el-col :span="11">
-              <el-date-picker placeholder="选择日期" style="width: 100%;" type="date" v-model="formData.startDate" />
+              <el-date-picker placeholder="选择日期" style="width: 100%;" type="date" v-model="formData.startDate"/>
             </el-col>
             <el-col :span="2" class="line">-</el-col>
             <el-col :span="11">
-              <el-time-picker placeholder="选择时间" style="width: 100%;" v-model="formData.endDate" />
+              <el-time-picker placeholder="选择时间" style="width: 100%;" v-model="formData.endDate"/>
             </el-col>
           </el-form-item>
         </el-form>
@@ -35,6 +43,9 @@
       BaseCard,
       Tinymce
     },
+    created() {
+      console.log(this.$VUE_APP_BASE_API)
+    },
     data() {
       return {
         formData: {
@@ -46,7 +57,11 @@
         }
       }
     },
-    methods: {}
+    methods: {
+      onSuccess(response, file, fileList) {
+        this.formData.mainImg = `/upload/images/activity/${ response.message }`
+      }
+    }
   }
 </script>
 

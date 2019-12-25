@@ -51,7 +51,7 @@
                   <el-table-column>
                     <template v-slot="scope">
                       <img
-                        :src="uploadUrl + scope.row.goodsThumb"
+                        :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
                         style="height: 30px;width: auto;"
                         v-if="scope.row.goodsThumb!==''"/>
                     </template>
@@ -265,7 +265,6 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import orderApi from '@/api/order'
-  import { getServerUrl } from '@/utils/sys'
   import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
 
   export default {
@@ -302,11 +301,6 @@
         },
         listLoading: false,
         tableData: []
-      }
-    },
-    computed: {
-      uploadUrl() {
-        return getServerUrl()
       }
     },
     created() {
