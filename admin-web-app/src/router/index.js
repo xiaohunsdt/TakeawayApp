@@ -139,11 +139,11 @@ export const constantRoutes = [
     meta: { title: '活动管理', icon: 'example' },
     children: [
       {
-        path: 'create',
-        name: 'CreateActivity',
+        path: 'edit',
+        name: 'EditActivity',
         props: true,
-        component: () => import('@/views/activity/create'),
-        meta: { title: '活动创建', icon: 'example' }
+        component: () => import('@/views/activity/edit'),
+        meta: { title: '创建/编辑', icon: 'example' }
       },
       {
         path: 'index',

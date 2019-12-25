@@ -1,15 +1,19 @@
 <template>
   <div class="container">
-<!--    <base-card class="container-header">-->
-<!--      <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">-->
-<!--        <el-form-item label="用户名">-->
-<!--          <el-input placeholder="用户名" v-model="formData.name"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item>-->
-<!--          <el-button @click="onSearch" type="primary">查询</el-button>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-<!--    </base-card>-->
+    <base-card class="container-header">
+      <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
+        <el-form-item label="显示">
+          <el-select placeholder="选择显示模式" v-model="formData.isShow">
+            <el-option :value="null" label="所有"/>
+            <el-option :value="1" label="可见"/>
+            <el-option :value="0" label="不可见"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="onSearch" type="primary">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </base-card>
     <base-card class="container-main">
       <el-table
         :data="tableData"
@@ -38,7 +42,7 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import addressApi from '@/api/address'
+  import activityApi from '@/api/activity'
 
   export default {
     name: 'ActivityManagement',
@@ -52,7 +56,9 @@
           size: 15,
           total: 0
         },
-        formData: {},
+        formData: {
+          isShow: null
+        },
         listLoading: false,
         tableData: []
       }
@@ -63,7 +69,7 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        addressApi.getAddressListByPage(this.page, this.formData)
+        activityApi.getActivityListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
