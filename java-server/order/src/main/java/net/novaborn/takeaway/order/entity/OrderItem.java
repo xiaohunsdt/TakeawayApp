@@ -22,9 +22,9 @@ public class OrderItem extends Model<OrderItem> {
     @TableId(type = IdType.UUID)
     private String id;
 
+    @NotBlank
     private String orderId;
 
-    @NotBlank
     private String goodsId;
 
     @NotBlank

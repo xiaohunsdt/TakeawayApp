@@ -5,7 +5,10 @@
     <select id="getActivityListByPage" resultType="Activity">
         SELECT * FROM `activity`
         <where>
-            deleted = 0
+            <if test="args.isShow != null and args.isShow != ''">
+                `is_show` = #{args.isShow}
+            </if>
+            AND deleted = 0
         </where>
         ORDER BY `create_date` DESC
     </select>

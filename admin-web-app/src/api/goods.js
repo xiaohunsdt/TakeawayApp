@@ -4,10 +4,7 @@ import Qs from 'qs'
 export function getByGoodsId(id) {
   return request({
     url: '/goods/getByGoodsId',
-    method: 'get',
-    params: {
-      id
-    }
+    params: { id }
   })
 }
 

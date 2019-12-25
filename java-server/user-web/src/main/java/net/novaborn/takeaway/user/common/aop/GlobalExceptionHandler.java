@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     public ErrorTip handleBindException3(BindException e) {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
-                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+                e.getFieldError().getDefaultMessage()
         );
     }
 }

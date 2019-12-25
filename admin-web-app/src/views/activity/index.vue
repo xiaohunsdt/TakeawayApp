@@ -23,7 +23,55 @@
         stripe
         style="width: 100%"
         v-loading="listLoading">
-
+        <el-table-column
+          align="center"
+          label="标题"
+          prop="title"
+          width="200"/>
+        <el-table-column
+          align="center"
+          label="主图">
+          <template v-slot="props">
+            <img
+              :src="$VUE_APP_BASE_API + props.row.mainImg"
+              style="height: 40px;width: auto;"
+              v-if="props.row.mainImg!==''"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="内容"
+          prop="content"
+          width="200"/>
+        <el-table-column
+          align="center"
+          label="开始日期"
+          prop="startDate"
+          width="200"/>
+        <el-table-column
+          align="center"
+          label="结束日期"
+          prop="endDate"
+          width="200"/>
+        <el-table-column
+          align="center"
+          label="显示">
+          <template v-slot="props">
+            <el-switch
+              @change="onIsShowChange(props.row)"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              v-model="props.row.isShow"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="操作">
+          <template v-slot="props">
+            <el-button @click="onEdit(props.row.id)" size="mini" type="primary">编辑</el-button>
+            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         :current-page="page.current"
@@ -85,6 +133,32 @@
       handleCurrentChange(val) {
         this.page.current = val
         this.onSearch()
+      },
+      onIsShowChange(activity) {
+        activityApi.changeIsShow(activity.id, activity.isShow)
+          .then(response => {
+            this.$message({
+              message: response.message,
+              type: 'success'
+            })
+          })
+      },
+      onEdit(id) {
+        this.$router.push({
+          path: '/activity/edit', query: { activityId: id }
+        })
+      },
+      onDelete(id) {
+        this.$confirm('是否确定删除此活动?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          activityApi.deleteActivity(id)
+            .then(() => {
+              this.onSearch()
+            })
+        })
       }
     }
   }

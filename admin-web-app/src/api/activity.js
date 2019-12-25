@@ -1,5 +1,13 @@
 import request from '@/utils/request'
+import { parseTime } from '@/utils/index'
 import Qs from 'qs'
+
+export function getActivityById(id) {
+  return request({
+    url: '/activity/getActivityById',
+    params: { id }
+  })
+}
 
 export function getActivityListByPage(page, args) {
   const data = Object.assign({}, page, args)
@@ -24,6 +32,9 @@ export function getAllActivityList() {
 }
 
 export function createNewActivity(data) {
+  data.startDate = parseTime(data.startDate, '{y}-{m}-{d}')
+  data.endDate = parseTime(data.endDate, '{y}-{m}-{d}')
+
   return request({
     url: '/activity/createNewActivity',
     method: 'post',
@@ -49,6 +60,20 @@ export function updateActivity(data) {
   })
 }
 
+export function changeIsShow(id, isShow) {
+  const args = { id, isShow }
+  return request({
+    url: '/activity/changeIsShow',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: args,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function deleteActivity(id) {
   return request({
     url: '/activity/deleteActivity',
@@ -65,9 +90,11 @@ export function deleteActivity(id) {
 }
 
 export default {
+  getActivityById,
   getActivityListByPage,
   getAllActivityList,
   createNewActivity,
   updateActivity,
+  changeIsShow,
   deleteActivity
 }

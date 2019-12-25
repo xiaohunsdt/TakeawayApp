@@ -2,38 +2,45 @@
   <div class="container">
     <base-card class="container-main">
       <div>
-        <el-form :model="formData" label-width="80px" ref="form" style="width: 460px">
-          <el-form-item label="活动名称">
-            <el-input v-model="formData.name"></el-input>
+        <el-form :model="formData" :rules="rules" label-width="80px" ref="form" style="width: 460px">
+          <el-form-item label="活动名称" prop="title">
+            <el-input v-model="formData.title"></el-input>
           </el-form-item>
           <el-form-item label="活动主图">
             <el-upload
-              :action="$VUE_APP_BASE_API + '/api/activity/uploadImg'"
-              :on-success="onSuccess"
-              v-if="formData.mainImg===''">
+              :action="$VUE_APP_BASE_API + '/api/admin/activity/uploadImg'"
+              :headers="authHeader"
+              :on-success="onUploadImgSuccess">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
-            <img :src="formData.mainImg" v-if="formData.mainImg!==''"/>
+            <img :src="$VUE_APP_BASE_API + formData.mainImg" style="height: 120px" v-if="formData.mainImg!==''"/>
           </el-form-item>
           <el-form-item label="活动时间">
-            <el-col :span="11">
-              <el-date-picker placeholder="选择日期" style="width: 100%;" type="date" v-model="formData.startDate"/>
-            </el-col>
-            <el-col :span="2" class="line">-</el-col>
-            <el-col :span="11">
-              <el-time-picker placeholder="选择时间" style="width: 100%;" v-model="formData.endDate"/>
-            </el-col>
+            <el-date-picker
+              end-placeholder="结束日期"
+              format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              type="daterange"
+              v-model="formData.formDate"
+              value-format="yyyy-MM-dd"/>
           </el-form-item>
         </el-form>
       </div>
       <div>
         <tinymce :height="300" v-model="formData.content"/>
       </div>
+      <div style="text-align: center;margin-top: 15px">
+        <el-button @click="saveActivity" round size="medium" type="success">保存</el-button>
+      </div>
     </base-card>
   </div>
 </template>
 
 <script>
+  import { getToken } from '@/utils/auth'
+  import { getQueryObject } from '@/utils/index'
+  import activityApi from '@/api/activity'
+
   import BaseCard from '@/components/BaseCard'
   import Tinymce from '@/components/Tinymce'
 
@@ -43,8 +50,25 @@
       BaseCard,
       Tinymce
     },
-    created() {
-      console.log(this.$VUE_APP_BASE_API)
+    computed: {
+      authHeader() {
+        return {
+          Authorization: `Bearer ${ getToken() }`
+        }
+      }
+    },
+    activated() {
+      const query = getQueryObject()
+      if (query.activityId) {
+        activityApi.getActivityById(query.activityId)
+          .then(res => {
+            this.formData = res
+            this.formData.formDate = [
+              new Date(this.formData.startDate),
+              new Date(this.formData.endDate)
+            ]
+          })
+      }
     },
     data() {
       return {
@@ -52,14 +76,37 @@
           title: '',
           content: '',
           mainImg: '',
-          startDate: new Date(),
-          endDate: new Date()
+          formDate: [
+            new Date(),
+            new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+          ]
+        },
+        rules: {
+          title: [
+            { required: true, message: '请输入标题', trigger: 'blur' }
+          ]
         }
       }
     },
     methods: {
-      onSuccess(response, file, fileList) {
+      onUploadImgSuccess(response, file, fileList) {
         this.formData.mainImg = `/upload/images/activity/${ response.message }`
+      },
+      saveActivity() {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            const params = Object.assign({}, this.formData)
+            params.startDate = params.formDate[0]
+            params.endDate = params.formDate[1]
+            activityApi.createNewActivity(params)
+              .then(response => {
+                this.$message({
+                  message: response.message,
+                  type: 'success'
+                })
+              })
+          }
+        })
       }
     }
   }

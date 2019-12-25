@@ -18,8 +18,7 @@
             start-placeholder="start date"
             type="daterange"
             v-model="formData.formDate"
-            value-format="yyyy-MM-dd">
-          </el-date-picker>
+            value-format="yyyy-MM-dd" />
         </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>

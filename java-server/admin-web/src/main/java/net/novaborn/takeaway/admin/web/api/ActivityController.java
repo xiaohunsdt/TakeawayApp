@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,12 @@ import java.util.Optional;
 public class ActivityController extends BaseController {
     private ActivityService activityService;
 
+    @GetMapping("getActivityById")
+    public ResponseEntity getActivityById(String id) {
+        Activity activity = activityService.getById(id);
+        return ResponseEntity.ok(activity);
+    }
+
     @PostMapping("getActivityListByPage")
     public ResponseEntity<Page> getActivityListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page = (Page) activityService.getActivityListByPage(page, args);
@@ -49,11 +57,19 @@ public class ActivityController extends BaseController {
 
     @ResponseBody
     @PostMapping("createNewActivity")
-    public Tip createNewActivity(Activity activity) {
-        if (activityService.save(activity)) {
-            return new SuccessTip("创建成功!");
+    public Tip createNewActivity(@Valid Activity activity) {
+        boolean result;
+
+        if (StrUtil.isBlank(activity.getId())) {
+            result = activityService.save(activity);
         } else {
-            return new ErrorTip(-1, "创建失败!");
+            result = activityService.updateById(activity);
+        }
+
+        if (result) {
+            return new SuccessTip("成功!");
+        } else {
+            return new ErrorTip(-1, "失败!");
         }
     }
 
@@ -66,6 +82,23 @@ public class ActivityController extends BaseController {
         }
 
         BeanUtil.copyProperties(activity, targetActivity.get(), CopyOptions.create().setIgnoreNullValue(true));
+
+        if (activityService.updateById(targetActivity.get())) {
+            return new SuccessTip("修改成功!");
+        } else {
+            return new ErrorTip(-1, "修改失败!");
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("changeIsShow")
+    public Tip changeIsShow(@RequestParam String id, @RequestParam Boolean isShow) {
+        Optional<Activity> targetActivity = Optional.ofNullable(activityService.getById(id));
+        if (!targetActivity.isPresent()) {
+            return new ErrorTip(-1, "没有此活动!");
+        }
+
+        targetActivity.get().setIsShow(isShow);
 
         if (activityService.updateById(targetActivity.get())) {
             return new SuccessTip("修改成功!");

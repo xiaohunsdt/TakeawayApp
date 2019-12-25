@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -23,6 +24,7 @@ public class Activity extends Model<Activity> {
     @TableId(type = IdType.UUID)
     private String id;
 
+    @NotBlank(message = "标题不能为空")
     private String title;
 
     private String mainImg;
