@@ -72,7 +72,7 @@
     },
     methods: {
       init () {
-        this.orderList.splice(0, this.orderList.length)
+        this.orderList = []
         this.page.current = 1
         this.getOrderList()
       },

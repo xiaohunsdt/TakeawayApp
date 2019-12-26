@@ -56,6 +56,12 @@
 
         <dependency>
             <groupId>net.novaborn.takeaway</groupId>
+            <artifactId>activity</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.novaborn.takeaway</groupId>
             <artifactId>setting</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

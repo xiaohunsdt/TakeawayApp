@@ -1,6 +1,3 @@
-/**
- * 商品相关服务
- */
 import api from '@/utils/api'
 
 /**

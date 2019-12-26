@@ -131,7 +131,6 @@
       init (index) {
         // 先初始化数据
         this.currentIndex = 0
-        this.categories.splice(0, this.categories.length)
         this.pageSettings = {}
         this.showCart = false
         // 获取相关设置项
@@ -145,6 +144,8 @@
           res.forEach(item => {
             item.goodsList = []
           })
+
+          this.categories = []
           this.categories.push(...res)
           // 获取数据
           // if (this.categories.length > 0) {

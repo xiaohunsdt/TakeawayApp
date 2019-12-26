@@ -29,6 +29,7 @@
     "js-md5": "^0.7.3",
     "moment": "^2.24.0",
     "mpvue": "^2.0.0",
+    "mpvue-wxparse": "^0.6.5",
     "vant-weapp": "^0.5.19",
     "vuex": "^3.0.1",
     "vuex-persistedstate": "^2.5.4"

@@ -53,7 +53,7 @@
     computed: {
       authHeader() {
         return {
-          Authorization: `Bearer ${ getToken() }`
+          Authorization: `Bearer ${getToken()}`
         }
       }
     },

@@ -1,15 +1,16 @@
 <template>
   <div style="display: unset">
-    <!--  <div class="container">-->
-    <!--    <div class="gradientDiv"></div>-->
-    <!--    <div class="container-contain">-->
-    <!--      <img alt="" class="activityImg" src="/static/images/activities/activityggj.png">-->
-    <!--      <img alt="" class="activityImg" src="/static/images/activities/activitypraise.png">-->
-    <!--      <img alt="" class="activityImg" src="/static/images/activities/activityrun.png">-->
-    <!--      <img alt="" class="activityImg" src="/static/images/activities/activityrush.png">-->
-    <!--    </div>-->
-    <!--  </div>-->
-    <div class="none-content-div">
+    <div class="container" v-if="activityList.length > 0">
+      <div class="gradientDiv"></div>
+      <div class="container-contain">
+        <img
+          v-for="activity in activityList"
+          :key="activity.id" class="activityImg"
+          :src="activity.mainImg"
+          @click="onActivityClick(activity.id)">
+      </div>
+    </div>
+    <div class="none-content-div" v-if="activityList.length === 0">
       <img mode="aspectFit" src="/static/images/none/no_news.png" style="width: 10rem">
       <div style="margin-top: .5rem">暂无活动</div>
     </div>
@@ -17,11 +18,34 @@
 </template>
 
 <script>
+  import activityService from '@/services/activity'
+
   export default {
-    data () {
-      return {}
+    onLoad () {
+      this.init()
     },
-    methods: {}
+    onPullDownRefresh () {
+      this.init()
+      mpvue.stopPullDownRefresh()
+    },
+    data () {
+      return {
+        activityList: []
+      }
+    },
+    methods: {
+      init () {
+        activityService.getAllActivityList().then(res => {
+          this.activityList = []
+          this.activityList.push(...res)
+        })
+      },
+      onActivityClick (id) {
+        mpvue.navigateTo({
+          url: `/pages/activity/detail/main?activityId=${id}`
+        })
+      }
+    }
   }
 </script>
 
