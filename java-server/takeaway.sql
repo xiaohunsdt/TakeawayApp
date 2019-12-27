@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 26/12/2019 05:12:57
+ Date: 28/12/2019 02:56:44
 */
 
 SET NAMES utf8mb4;
@@ -37,6 +37,7 @@ CREATE TABLE `activity`  (
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
+INSERT INTO `activity` VALUES ('087e8acef7292b8738a53b75acad3852', '脱单不排队！！！', '/upload/images/activity/d2441cb219f3425398dd970caadda3d3.png', '<p><code><img class=\"wscnph\" style=\"display: block; margin-left: auto; margin-right: auto;\" src=\"http://localhost:8080/upload/images/activity/6e8d74a48e1b4497b941b86c01c2a013.png\" width=\"100px\" /></code></p>\n<p style=\"text-align: center;\">&nbsp;</p>\n<p style=\"text-align: center;\">&nbsp;</p>\n<p style=\"text-align: center;\"><strong><span style=\"color: #ff0000;\">测试测试</span>！！</strong></p>', '2019-12-27 00:00:00', '2019-12-28 00:00:00', 1, '2019-12-27 01:03:16', 0);
 INSERT INTO `activity` VALUES ('19e78012ffb587463d412f2945563f02', '测试1', '', '', '2019-12-26 00:00:00', '2019-12-27 00:00:00', 0, '2019-12-26 04:07:16', 1);
 INSERT INTO `activity` VALUES ('a9df6fae08658200bd2132f49e367b7d', '点赞排名', '/upload/images/activity/fd39087ac9ff45e7868ecce3e804cd66.png', '<p>点赞排名~~~！@！！！！！！zxczxczxcxz</p>', '2019-12-26 00:00:00', '2019-12-27 00:00:00', 0, '2019-12-26 04:07:51', 0);
 
@@ -161,6 +162,62 @@ INSERT INTO `comment` VALUES ('b399df64d6053f243600f483d3845abb', '5c4f0b3d17372
 INSERT INTO `comment` VALUES ('d98f9a68a6fa56821c06cf02feb86943', 'e187c6afd9ae890c0d81583848159748', 'f0cee1c99ead5eff33bc818a3505adff', 5, 5, 5, '', '2019-12-13 11:11:34', 0);
 INSERT INTO `comment` VALUES ('e7897f5c97a343ad596fa7072a3cdc17', 'e187c6afd9ae890c0d81583848159748', 'ecb9c9845f919ea2895c4f0232554c77', 5, 5, 5, '', '2019-12-07 16:49:27', 0);
 INSERT INTO `comment` VALUES ('ea00f4f81ff47cd64b66f21334bdd3f6', '4a6bb5a539ec498e2bf5117910af08e4', 'e74d39d4b5c6793a2ce7654e2f3c2ae9', 1, 1, 2, '', '2019-11-19 18:48:02', 0);
+
+-- ----------------------------
+-- Table structure for coupon
+-- ----------------------------
+DROP TABLE IF EXISTS `coupon`;
+CREATE TABLE `coupon`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `coupon_type` int(2) NOT NULL DEFAULT 1,
+  `coupon_money` int(11) NULL DEFAULT NULL,
+  `coupon_discount` int(2) NULL DEFAULT NULL,
+  `minimum_money` int(11) NULL DEFAULT NULL,
+  `expire_date` timestamp(0) NULL DEFAULT NULL,
+  `limit_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `state` int(1) NULL DEFAULT 0,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for coupon_log
+-- ----------------------------
+DROP TABLE IF EXISTS `coupon_log`;
+CREATE TABLE `coupon_log`  (
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `order_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_amount` int(11) NULL DEFAULT NULL,
+  `order_original_amount` int(11) NULL DEFAULT NULL,
+  `order_final_amount` int(11) NULL DEFAULT NULL,
+  `use_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `coupon_id`(`coupon_id`) USING BTREE,
+  INDEX `order_id`(`order_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for coupon_template
+-- ----------------------------
+DROP TABLE IF EXISTS `coupon_template`;
+CREATE TABLE `coupon_template`  (
+  `id` int(11) NOT NULL,
+  `coupon_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `coupon_type` int(11) NOT NULL,
+  `coupon_money` int(11) NULL DEFAULT NULL,
+  `coupon_discount` int(11) NULL DEFAULT NULL,
+  `minimum_money` int(11) NULL DEFAULT NULL,
+  `expire_days` int(11) NULL DEFAULT NULL,
+  `limit_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for goods

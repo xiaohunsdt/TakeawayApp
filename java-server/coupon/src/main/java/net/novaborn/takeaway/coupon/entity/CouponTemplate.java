@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
-import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.enums.CouponType;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -16,15 +16,14 @@ import java.util.Date;
  * @since 2019-09-20
  */
 @Data
-@TableName("coupon")
-public class Coupon extends Model<Coupon> {
-    private static final long serialVersionUID = 7938677365637245592L;
+@TableName("coupon_template")
+public class CouponTemplate extends Model<CouponTemplate> {
+    private static final long serialVersionUID = 7938277365634145592L;
 
     @TableId(type = IdType.UUID)
     private String id;
 
-    private String userId;
-
+    @NotBlank(message = "名称不能为空")
     private String couponName;
 
     private CouponType couponType;
@@ -41,7 +40,7 @@ public class Coupon extends Model<Coupon> {
     /**
      * 可使用时间
      */
-    private Date expireDate;
+    private Date expireDays;
 
     /**
      * 限制的分类
@@ -52,8 +51,6 @@ public class Coupon extends Model<Coupon> {
      * 限制的商品
      */
     private String limitGoods;
-
-    private CouponState state;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
