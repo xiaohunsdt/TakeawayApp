@@ -90,7 +90,7 @@
     },
     methods: {
       onUploadImgSuccess(response, file, fileList) {
-        this.formData.mainImg = `/upload/images/activity/${ response.message }`
+        this.formData.mainImg = `/upload/images/activity/${response.message}`
       },
       saveActivity() {
         this.$refs.form.validate((valid) => {
