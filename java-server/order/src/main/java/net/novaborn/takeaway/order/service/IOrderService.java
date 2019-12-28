@@ -39,9 +39,12 @@ public interface IOrderService extends IService<Order> {
     /**
      * 分页获取订单列表
      * @param page   分页实例
-     * @param args   userId 用户ID <br />
+     * @param args   userIds 用户IDs <br />
+     *               orderId 订单ID <br />
+     *               number 编号 <br />
+     *               orderState 订单状态 <br />
      *               paymentWay 支付方式 <br />
-     *               orderState 订单状态
+     *               startDate endDate 范围时间
      * @return 订单列表
      */
     IPage<Order> getOrderListByPage(Page page, Map args);
