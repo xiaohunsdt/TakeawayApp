@@ -1,7 +1,9 @@
 package net.novaborn.takeaway.coupon.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -54,4 +56,8 @@ public class CouponTemplate extends Model<CouponTemplate> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
+
+    @JSONField(serialize = false)
+    @TableLogic
+    private Integer deleted;
 }

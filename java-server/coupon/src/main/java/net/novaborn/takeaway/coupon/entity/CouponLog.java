@@ -21,6 +21,8 @@ public class CouponLog extends Model<CouponLog> {
     @TableId(type = IdType.UUID)
     private String id;
 
+    private String userId;
+
     private String couponId;
 
     private String orderId;
