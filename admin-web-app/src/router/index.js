@@ -136,7 +136,7 @@ export const constantRoutes = [
     path: '/coupon',
     component: Layout,
     redirect: '/coupon/index',
-    meta: { title: '优惠券管理', icon: 'coupon' },
+    meta: { title: '优惠券管理', icon: 'tree-table' },
     children: [
       {
         path: 'index',
@@ -144,6 +144,20 @@ export const constantRoutes = [
         props: true,
         component: () => import('@/views/coupon/index'),
         meta: { title: '优惠券列表', icon: 'example' }
+      },
+      {
+        path: 'template',
+        name: 'CouponTemplateManagement',
+        props: true,
+        component: () => import('@/views/coupon/template/index'),
+        meta: { title: '优惠券模板管理', icon: 'example' }
+      },
+      {
+        path: 'log',
+        name: 'CouponLogManagement',
+        props: true,
+        component: () => import('@/views/coupon/use-log/index'),
+        meta: { title: '优惠券使用记录', icon: 'example' }
       }
     ]
   },
