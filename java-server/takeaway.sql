@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 28/12/2019 02:56:44
+ Date: 31/12/2019 16:00:31
 */
 
 SET NAMES utf8mb4;
@@ -180,6 +180,7 @@ CREATE TABLE `coupon`  (
   `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `state` int(1) NULL DEFAULT 0,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id`(`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
@@ -216,6 +217,7 @@ CREATE TABLE `coupon_template`  (
   `limit_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
@@ -704,7 +706,7 @@ INSERT INTO `user` VALUES ('1d14c476a0aad1047ce9506aacadf5bb', NULL, 'S-36ae', 0
 INSERT INTO `user` VALUES ('1ec05cf9d97a71c84b472472ed3e602b', NULL, NULL, 0, 'o9UA_5UxzruKl29wMfLTdsz2A1Is', NULL, NULL, 0, 1, '2019-12-22 02:06:48', '2019-11-25 11:15:31', '2019-12-22 02:06:48', 4, 0, NULL);
 INSERT INTO `user` VALUES ('2394589754f574865cde521525d99ca9', NULL, 'zengzeng', 0, 'o9UA_5TDTkQWf_FL-Qk3xKk8FS5A', 'https://wx.qlogo.cn/mmopen/vi_32/PiajxSqBRaELquHETEnaZ4paO7jh7XKia7pLqm6fL1bhVdIzxqeu1kK3axPqYSaVXmQyTI9kqXLE8ibDYwwOn8tOg/132', NULL, 0, 1, '2019-12-17 15:23:26', '2019-11-25 16:55:06', '2019-12-17 15:23:26', 8, 0, NULL);
 INSERT INTO `user` VALUES ('2f33af0d978c616a9ad0fbaffe5e7d5e', NULL, 'ྀི', 0, 'o9UA_5XESIn3x3Qz-kYz_fvrOI4w', 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJZicRP0FZ78kV8u6fKBmHUjHQRugYwviaCno5mz64XvGvOYwqeeV5KLHbYw8UcHTLIxS5ZLEwPTzxQ/132', NULL, 2, 1, '2019-12-10 17:36:17', '2019-11-25 11:14:07', '2019-12-10 17:36:18', 6, 0, NULL);
-INSERT INTO `user` VALUES ('442faaa72bf702b2f1e108c830ec558b', NULL, 'A-川香苑(新村店)', 0, 'o9UA_5dmfJvck2wZPswk0FuaY4E4', 'https://wx.qlogo.cn/mmopen/vi_32/IQhia6bnF9m3VcqIxJRIr1wp8RsMpgibtbibLNwW8tNtmqGbgbql7fibrmpiaj6wk2B0Via7icr62UASR7ib7dXB2oEOGA/132', NULL, 1, 1, '2019-12-23 15:27:23', '2019-11-24 19:30:44', '2019-12-23 15:27:23', 42, 0, NULL);
+INSERT INTO `user` VALUES ('442faaa72bf702b2f1e108c830ec558b', NULL, 'A-川香苑(新村店)', 0, 'o9UA_5dmfJvck2wZPswk0FuaY4E4', 'https://wx.qlogo.cn/mmopen/vi_32/IQhia6bnF9m3VcqIxJRIr1wp8RsMpgibtbibLNwW8tNtmqGbgbql7fibrmpiaj6wk2B0Via7icr62UASR7ib7dXB2oEOGA/132', NULL, 1, 1, '2019-12-23 15:27:23', '2019-11-24 19:30:44', '2019-12-31 07:27:03', 43, 0, NULL);
 INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-11-15 02:03:16', 0, 1, NULL);
 INSERT INTO `user` VALUES ('4a6bb5a539ec498e2bf5117910af08e4', NULL, 'Jeremy.', 0, 'o9UA_5abDk-kn7KSaMAoriIlvg6c', 'https://wx.qlogo.cn/mmopen/vi_32/UL02ia2qHNyA6UvWNf2Yia5KMOxAh4Kp6icf2ibSOWMiaP8iadSoGgEdE5vbDENG2GVCu97ics161tgrl2cAoGBmX4acg/132', NULL, 1, 1, '2019-12-14 12:31:59', '2019-10-14 23:39:12', '2019-12-14 12:32:00', 95, 0, NULL);
 INSERT INTO `user` VALUES ('50808dec1eb8efb2f98e147d9fadb85d', NULL, NULL, 0, 'o9UA_5XYFSr3ZLrlho1PrK0NOeKQ', NULL, NULL, 0, 1, '2019-11-25 15:39:36', '2019-11-25 15:39:28', '2019-11-25 15:39:35', 1, 0, NULL);
