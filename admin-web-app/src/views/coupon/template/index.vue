@@ -9,6 +9,9 @@
           <el-button @click="onSearch" type="primary">查询</el-button>
         </el-form-item>
       </el-form>
+      <div class="action-bar">
+        <el-button @click="onCreateNewTemplate" size="small" type="primary">添加新模板</el-button>
+      </div>
     </base-card>
     <base-card class="container-main">
       <el-table
@@ -73,6 +76,11 @@
           this.listLoading = false
         })
       },
+      onCreateNewTemplate() {
+        this.$router.push({
+          path: './template/edit'
+        })
+      },
       handleSizeChange(val) {
         this.page.size = val
         this.onSearch()
@@ -110,5 +118,10 @@
 
   .el-form-item {
     margin-bottom: unset !important;
+  }
+
+  .action-bar {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

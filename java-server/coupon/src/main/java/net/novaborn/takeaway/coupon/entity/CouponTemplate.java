@@ -35,19 +35,29 @@ public class CouponTemplate extends Model<CouponTemplate> {
     private Integer couponDiscount;
 
     /**
-     * 最小金额
+     * 最小消费金额
      */
     private Integer minimumMoney;
 
     /**
      * 可使用时间
      */
-    private Date expireDays;
+    private Integer expireDays;
+
+    /**
+     * 允许的分类
+     */
+    private String allowCategory;
 
     /**
      * 限制的分类
      */
     private String limitCategory;
+
+    /**
+     * 限制的商品
+     */
+    private String allowGoods;
 
     /**
      * 限制的商品

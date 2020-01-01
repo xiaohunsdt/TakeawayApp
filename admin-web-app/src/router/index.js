@@ -18,6 +18,7 @@ Vue.use(Router)
  * meta : {
     roles: ['admin','editor']    control the page roles (you can set multiple roles)
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+    hidden: false
     icon: 'svg-name'             the icon show in the sidebar
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
@@ -73,14 +74,14 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'UserManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/user/index'),
         meta: { title: '用户列表', icon: 'example' }
       },
       {
         path: 'address',
         name: 'AddressManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/user/address/index'),
         meta: { title: '地址管理', icon: 'example' }
       }
@@ -95,14 +96,14 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'OrderManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/order/index'),
         meta: { title: '订单管理', icon: 'order' }
       },
       {
         path: 'comment',
         name: 'CommentManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/order/comment/index'),
         meta: { title: '评价管理', icon: 'goods' }
       }
@@ -115,7 +116,7 @@ export const constantRoutes = [
     children: [{
       path: 'index',
       name: 'GoodsManagement',
-      props: true,
+      // props: true,
       component: () => import('@/views/goods/index'),
       meta: { title: '商品管理', icon: 'goods' }
     }]
@@ -127,7 +128,7 @@ export const constantRoutes = [
     children: [{
       path: 'index',
       name: 'CategoryManagement',
-      props: true,
+      // props: true,
       component: () => import('@/views/category/index'),
       meta: { title: '分类管理', icon: 'tree' }
     }]
@@ -141,21 +142,29 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'CouponManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/coupon/index'),
         meta: { title: '优惠券列表', icon: 'example' }
       },
       {
         path: 'template',
         name: 'CouponTemplateManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/coupon/template/index'),
-        meta: { title: '优惠券模板管理', icon: 'example' }
+        meta: { title: '模板管理', icon: 'example' }
+      },
+      {
+        path: 'template/edit',
+        name: 'CouponTemplateEditManagement',
+        hidden: true,
+        // props: true,
+        component: () => import('@/views/coupon/template/edit'),
+        meta: { title: '编辑模板', icon: 'example' }
       },
       {
         path: 'log',
         name: 'CouponLogManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/coupon/use-log/index'),
         meta: { title: '优惠券使用记录', icon: 'example' }
       }
@@ -170,14 +179,14 @@ export const constantRoutes = [
       {
         path: 'edit',
         name: 'EditActivity',
-        props: true,
+        // props: true,
         component: () => import('@/views/activity/edit'),
         meta: { title: '创建/编辑', icon: 'example' }
       },
       {
         path: 'index',
         name: 'ActivityManagement',
-        props: true,
+        // props: true,
         component: () => import('@/views/activity/index'),
         meta: { title: '活动列表', icon: 'example' }
       }
@@ -190,7 +199,7 @@ export const constantRoutes = [
     children: [{
       path: 'index',
       name: 'SysManagement',
-      props: true,
+      // props: true,
       component: () => import('@/views/sys/index'),
       meta: { title: '系统设置', icon: 'setting' }
     }]

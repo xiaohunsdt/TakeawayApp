@@ -46,9 +46,19 @@ public class Coupon extends Model<Coupon> {
     private Date expireDate;
 
     /**
+     * 允许的分类
+     */
+    private String allowCategory;
+
+    /**
      * 限制的分类
      */
     private String limitCategory;
+
+    /**
+     * 限制的商品
+     */
+    private String allowGoods;
 
     /**
      * 限制的商品
