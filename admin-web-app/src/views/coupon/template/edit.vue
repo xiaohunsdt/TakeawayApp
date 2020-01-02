@@ -27,39 +27,10 @@
         </el-form>
         <el-divider direction="vertical"></el-divider>
         <el-form :model="formData" label-width="120px" ref="form-rule" style="width: 460px">
-          <el-form-item label="允许的分类" v-if="formData.allowCategory.length===0">
-            <el-button @click.prevent="addAllowCategory" circle icon="el-icon-plus" size="mini" type="success"/>
-          </el-form-item>
-          <el-form-item
-            :key="index"
-            :label="`允许的分类(${index})`"
-            :prop="`category.${index}`.value"
-            :rules="{required: true, message: '分类名称不能为空', trigger: 'blur'}"
-            v-for="(category, index) in formData.allowCategory">
-            <el-input v-model="category.value">
-              <template slot="append">
-                <i @click.prevent="removeAllowCategory(category)" class="el-icon-delete"></i>
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-button @click.prevent="addAllowCategory" circle icon="el-icon-plus" size="mini" type="success" v-if="formData.allowCategory.length>0"/>
-
-          <el-form-item label="禁止的分类" v-if="formData.limitCategory.length===0">
-            <el-button @click.prevent="addLimitCategory" circle icon="el-icon-plus" size="mini" type="success"/>
-          </el-form-item>
-          <el-form-item
-            :key="index"
-            :label="`禁止的分类(${index})`"
-            :prop="`category.${index}`.value"
-            :rules="{required: true, message: '分类名称不能为空', trigger: 'blur'}"
-            v-for="(category, index) in formData.limitCategory">
-            <el-input v-model="category.value">
-              <template slot="append">
-                <i @click.prevent="removeLimitCategory(category)" class="el-icon-delete"></i>
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-button @click.prevent="addLimitCategory" circle icon="el-icon-plus" size="mini" type="success" v-if="formData.limitCategory.length>0"/>
+          <dynamic-input label="允许的分类" :model-array.sync="formData.allowCategory" />
+          <dynamic-input label="禁止的分类" :model-array.sync="formData.limitCategory" />
+          <dynamic-input label="禁止的商品" :model-array.sync="formData.allowGoods" />
+          <dynamic-input label="允许的商品" :model-array.sync="formData.limitGoods" />
         </el-form>
       </div>
       <div style="text-align: center;margin-top: 15px">
@@ -72,13 +43,15 @@
 <script>
   // import { getQueryObject } from '@/utils/index'
   // import activityApi from '@/api/activity'
+  import DynamicInput from './components/DynamicInput'
 
   import BaseCard from '@/components/BaseCard'
 
   export default {
     name: 'CouponTemplateEditManagement',
     components: {
-      BaseCard
+      BaseCard,
+      DynamicInput
     },
     activated() {
       // const query = getQueryObject()
@@ -114,28 +87,6 @@
             })
           }
         })
-      },
-      addAllowCategory() {
-        this.formData.allowCategory.push({
-          value: ''
-        })
-      },
-      removeAllowCategory(category) {
-        var index = this.formData.allowCategory.indexOf(category)
-        if (index !== -1) {
-          this.formData.allowCategory.splice(index, 1)
-        }
-      },
-      addLimitCategory() {
-        this.formData.limitCategory.push({
-          value: ''
-        })
-      },
-      removeLimitCategory(category) {
-        var index = this.formData.limitCategory.indexOf(category)
-        if (index !== -1) {
-          this.formData.limitCategory.splice(index, 1)
-        }
       }
     }
   }
