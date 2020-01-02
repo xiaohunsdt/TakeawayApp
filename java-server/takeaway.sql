@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 31/12/2019 16:00:31
+ Date: 02/01/2020 13:26:47
 */
 
 SET NAMES utf8mb4;
@@ -176,7 +176,9 @@ CREATE TABLE `coupon`  (
   `coupon_discount` int(2) NULL DEFAULT NULL,
   `minimum_money` int(11) NULL DEFAULT NULL,
   `expire_date` timestamp(0) NULL DEFAULT NULL,
+  `allow_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `limit_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `allow_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `state` int(1) NULL DEFAULT 0,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
@@ -214,7 +216,9 @@ CREATE TABLE `coupon_template`  (
   `coupon_discount` int(11) NULL DEFAULT NULL,
   `minimum_money` int(11) NULL DEFAULT NULL,
   `expire_days` int(11) NULL DEFAULT NULL,
+  `allow_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `limit_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `allow_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `limit_goods` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `create_date` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   `deleted` tinyint(4) NOT NULL DEFAULT 0,
