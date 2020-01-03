@@ -372,6 +372,10 @@ paymentWayMap.set('ALI_PAY', '支付宝支付')
 paymentWayMap.set('CREDIT_CARD', '刷卡支付')
 paymentWayMap.set('CASH', '现金')
 
+const couponTypeMap = new Map()
+couponTypeMap.set('MONEY', '现金卷')
+couponTypeMap.set('DISCOUNT', '折扣卷')
+
 export function formatOrderState(orderState) {
   return orderStateMap.get(orderState)
 }
@@ -383,3 +387,8 @@ export function formatPayState(payState) {
 export function formatPaymentWay(paymentWay) {
   return paymentWayMap.get(paymentWay)
 }
+
+export function formatCouponType(couponType) {
+  return couponTypeMap.get(couponType)
+}
+

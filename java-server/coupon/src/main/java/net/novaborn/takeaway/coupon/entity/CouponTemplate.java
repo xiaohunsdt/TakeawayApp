@@ -55,7 +55,7 @@ public class CouponTemplate extends Model<CouponTemplate> {
     private String limitCategory;
 
     /**
-     * 限制的商品
+     * 允许的商品
      */
     private String allowGoods;
 

@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
+import net.novaborn.takeaway.admin.web.wrapper.CouponTemplateWrapper;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
@@ -40,6 +41,7 @@ public class CouponTemplateController extends BaseController {
     @PostMapping("getTemplateListByPage")
     public ResponseEntity<Page> getTemplateListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page = (Page) couponTemplateService.getCouponTemplateListByPage(page, args);
+        page.setRecords((List)new CouponTemplateWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 

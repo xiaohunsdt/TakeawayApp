@@ -26,6 +26,113 @@
         stripe
         style="width: 100%"
         v-loading="listLoading">
+        <el-table-column type="expand">
+          <template v-slot="props">
+            <div class="template-expand">
+              <el-form class="template-expand-form" label-position="left">
+                <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="允许的分类:">
+                      <el-tag
+                        :key="item"
+                        class="rule-tag"
+                        effect="dark"
+                        type="success"
+                        v-for="item in props.row.allowCategory">
+                        {{ item }}
+                      </el-tag>
+                    </el-form-item>
+                    <el-form-item label="限制的分类:">
+                      <el-tag
+                        :key="item"
+                        class="rule-tag"
+                        effect="dark"
+                        type="danger"
+                        v-for="item in props.row.limitCategory">
+                        {{ item }}
+                      </el-tag>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="允许的商品:">
+                      <el-tag
+                        :key="item"
+                        class="rule-tag"
+                        effect="dark"
+                        type="success"
+                        v-for="item in props.row.allowGoods">
+                        {{ item }}
+                      </el-tag>
+                    </el-form-item>
+                    <el-form-item label="限制的商品:">
+                      <el-tag
+                        :key="item"
+                        class="rule-tag"
+                        effect="dark"
+                        type="danger"
+                        v-for="item in props.row.limitGoods">
+                        {{ item }}
+                      </el-tag>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="Id"
+          prop="id"
+          width="160"/>
+        <el-table-column
+          align="center"
+          label="优惠卷名称"
+          prop="couponName"/>
+        <el-table-column
+          align="center"
+          label="优惠卷类型">
+          <template v-slot="scope">
+            {{ scope.row.couponType | couponTypeFormat }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="优惠卷面值"
+          prop="couponMoney"/>
+        <el-table-column
+          align="center"
+          label="优惠卷折扣"
+          prop="couponDiscount">
+          <template v-slot="scope">
+            {{ scope.row.couponDiscount }}折
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="最低消费"
+          prop="minimumMoney"/>
+        <el-table-column
+          align="center"
+          label="过期天数"
+          prop="expireDays"/>
+        <el-table-column
+          align="center"
+          label="创建时间"
+          prop="createDate"/>
+        <el-table-column
+          align="center"
+          label="操作"
+          width="170">
+          <template v-slot="scope">
+            <el-button
+              @click="onDelete(scope.row.id)"
+              size="mini"
+              type="danger">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         :current-page="page.current"
@@ -45,11 +152,17 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import couponTemplateApi from '@/api/coupon-template'
+  import { formatCouponType } from '@/utils/index'
 
   export default {
     name: 'CouponTemplateManagement',
     components: {
       BaseCard
+    },
+    filters: {
+      couponTypeFormat: function(value) {
+        return formatCouponType(value)
+      }
     },
     data() {
       return {
@@ -99,7 +212,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          couponTemplateApi.deleteActivity(id)
+          couponTemplateApi.deleteTemplate(id)
             .then(() => {
               this.onSearch()
             })
@@ -127,5 +240,9 @@
   .action-bar {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .rule-tag {
+    margin-right: 10px;
   }
 </style>
