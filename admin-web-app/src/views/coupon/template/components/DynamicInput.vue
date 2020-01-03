@@ -6,16 +6,21 @@
     <el-form-item
       :key="model.key"
       :label="`${label}(${index})`"
-      :prop="`model.${index}`.value"
+      :prop="`${ruleModelName}.${index}.value`"
       :rules="{required: true, message: '不能为空', trigger: 'blur'}"
       v-for="(model, index) in modelArray">
-      <el-input v-model="model.value" @change="onValueChanged">
-        <el-button slot="append" icon="el-icon-delete" @click.prevent="removeModel(model)"></el-button>
+      <el-input @change="onValueChanged" v-model="model.value">
+        <el-button @click.prevent="removeModel(model)" icon="el-icon-delete" slot="append"></el-button>
       </el-input>
     </el-form-item>
     <div style="text-align: center">
-      <el-button @click.prevent="addModel" circle icon="el-icon-plus" size="mini" type="success"
-                 v-if="modelArray.length>0"/>
+      <el-button
+        @click.prevent="addModel"
+        circle
+        icon="el-icon-plus"
+        size="mini"
+        type="success"
+        v-if="modelArray.length>0"/>
     </div>
   </div>
 </template>
@@ -29,6 +34,10 @@
         required: true
       },
       label: {
+        type: String,
+        required: true
+      },
+      ruleModelName: {
         type: String,
         required: true
       }
@@ -57,14 +66,10 @@
   .dynamic-input .el-input-group__append {
     cursor: pointer;
   }
-
-  .dynamic-input .el-form-item {
-    margin-bottom: 12px;
-  }
 </style>
 
 <style lang="scss" scoped>
-  .dynamic-input{
+  .dynamic-input {
     margin-bottom: 10px;
   }
 </style>

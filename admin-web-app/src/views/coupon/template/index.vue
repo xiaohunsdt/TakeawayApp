@@ -2,8 +2,12 @@
   <div class="container">
     <base-card class="container-header">
       <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
-        <el-form-item label="昵称">
-          <el-input placeholder="请输入昵称" v-model="formData.nickName"></el-input>
+        <el-form-item label="类型">
+          <el-select placeholder="请选择优惠卷类型" v-model="formData.couponType">
+            <el-option label="所有" value=""/>
+            <el-option label="现金卷" value="MONEY"/>
+            <el-option label="折扣卷" value="DISCOUNT"/>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
@@ -40,7 +44,7 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import activityApi from '@/api/activity'
+  import couponTemplateApi from '@/api/coupon-template'
 
   export default {
     name: 'CouponTemplateManagement',
@@ -55,7 +59,7 @@
           total: 0
         },
         formData: {
-          nickName: ''
+          couponType: ''
         },
         listLoading: false,
         tableData: []
@@ -67,7 +71,7 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        activityApi.getActivityListByPage(this.page, this.formData)
+        couponTemplateApi.getTemplateListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
@@ -95,7 +99,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          activityApi.deleteActivity(id)
+          couponTemplateApi.deleteActivity(id)
             .then(() => {
               this.onSearch()
             })

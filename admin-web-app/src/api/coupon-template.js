@@ -1,18 +1,17 @@
 import request from '@/utils/request'
-import { parseTime } from '@/utils/index'
 import Qs from 'qs'
 
-export function getActivityById(id) {
+export function getTemplateById(id) {
   return request({
-    url: '/activity/getActivityById',
+    url: '/coupon/template/getTemplateById',
     params: { id }
   })
 }
 
-export function getActivityListByPage(page, args) {
+export function getTemplateListByPage(page, args) {
   const data = Object.assign({}, page, args)
   return request({
-    url: '/activity/getActivityListByPage',
+    url: '/coupon/template/getTemplateListByPage',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data,
@@ -23,20 +22,35 @@ export function getActivityListByPage(page, args) {
   })
 }
 
-export function getAllActivityList() {
+export function getAllTemplateList() {
   return request({
-    url: '/activity/getAllActivityList',
+    url: '/coupon/template/getAllTemplateList',
     method: 'get',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   })
 }
 
-export function createNewActivity(data) {
-  data.startDate = parseTime(data.startDate, '{y}-{m}-{d}')
-  data.endDate = parseTime(data.endDate, '{y}-{m}-{d}')
-
+export function createNewTemplate(data) {
+  const tempData = Object.assign({}, data)
+  tempData.allowCategory = tempData.allowCategory.map(item => item.value).join()
+  tempData.limitCategory = tempData.limitCategory.map(item => item.value).join()
+  tempData.allowGoods = tempData.allowGoods.map(item => item.value).join()
+  tempData.limitGoods = tempData.limitGoods.map(item => item.value).join()
   return request({
-    url: '/activity/createNewActivity',
+    url: '/coupon/template/createNewTemplate',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: tempData,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function updateTemplate(data) {
+  return request({
+    url: '/coupon/template/updateTemplate',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data,
@@ -47,36 +61,9 @@ export function createNewActivity(data) {
   })
 }
 
-export function updateActivity(data) {
+export function deleteTemplate(id) {
   return request({
-    url: '/activity/updateActivity',
-    method: 'post',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data,
-    transformRequest: [function(data) {
-      data = Qs.stringify(data)
-      return data
-    }]
-  })
-}
-
-export function changeIsShow(id, isShow) {
-  const args = { id, isShow }
-  return request({
-    url: '/activity/changeIsShow',
-    method: 'post',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: args,
-    transformRequest: [function(data) {
-      data = Qs.stringify(data)
-      return data
-    }]
-  })
-}
-
-export function deleteActivity(id) {
-  return request({
-    url: '/activity/deleteActivity',
+    url: '/coupon/template/deleteTemplate',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: {
@@ -90,11 +77,10 @@ export function deleteActivity(id) {
 }
 
 export default {
-  getActivityById,
-  getActivityListByPage,
-  getAllActivityList,
-  createNewActivity,
-  updateActivity,
-  changeIsShow,
-  deleteActivity
+  getTemplateById,
+  getTemplateListByPage,
+  getAllTemplateList,
+  createNewTemplate,
+  updateTemplate,
+  deleteTemplate
 }

@@ -2,35 +2,39 @@
   <div class="container">
     <base-card class="container-main">
       <div style="display: flex;justify-content: center;">
-        <el-form :model="formData" :rules="rules" label-width="120px" ref="form" style="width: 460px">
-          <el-form-item label="优惠卷名称" prop="couponName">
-            <el-input v-model="formData.couponName"></el-input>
-          </el-form-item>
-          <el-form-item label="优惠卷类型">
-            <el-select placeholder="请选择优惠卷类型" v-model="formData.couponType">
-              <el-option :value="1" label="现金卷"></el-option>
-              <el-option :value="2" label="折扣卷"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="优惠卷面值">
-            <el-input v-model="formData.couponMoney"></el-input>
-          </el-form-item>
-          <el-form-item label="优惠卷折扣">
-            <el-input v-model="formData.couponDiscount"></el-input>
-          </el-form-item>
-          <el-form-item label="最低消费">
-            <el-input v-model="formData.minimumMoney"></el-input>
-          </el-form-item>
-          <el-form-item label="到期时间">
-            <el-input v-model="formData.expireDays"></el-input>
-          </el-form-item>
-        </el-form>
-        <el-divider direction="vertical"></el-divider>
-        <el-form :model="formData" label-width="120px" ref="form-rule" style="width: 460px">
-          <dynamic-input label="允许的分类" :model-array.sync="formData.allowCategory" />
-          <dynamic-input label="禁止的分类" :model-array.sync="formData.limitCategory" />
-          <dynamic-input label="禁止的商品" :model-array.sync="formData.allowGoods" />
-          <dynamic-input label="允许的商品" :model-array.sync="formData.limitGoods" />
+        <el-form :model="formData" label-width="120px" ref="form"
+                 style="display: flex;justify-content: center;width: 920px">
+          <div style="width:460px">
+            <el-form-item :rules=" { required: true, message: '请输入标题', trigger: 'blur' }" label="优惠卷名称"
+                          prop="couponName">
+              <el-input v-model="formData.couponName"/>
+            </el-form-item>
+            <el-form-item label="优惠卷类型">
+              <el-select placeholder="请选择优惠卷类型" v-model="formData.couponType">
+                <el-option label="现金卷" value="MONEY"/>
+                <el-option label="折扣卷" value="DISCOUNT"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="优惠卷面值" v-if="formData.couponType==='MONEY'">
+              <el-input v-model.number="formData.couponMoney"/>
+            </el-form-item>
+            <el-form-item label="优惠卷折扣" v-if="formData.couponType==='DISCOUNT'">
+              <el-input v-model.number="formData.couponDiscount"/>
+            </el-form-item>
+            <el-form-item label="最低消费">
+              <el-input v-model.number="formData.minimumMoney"/>
+            </el-form-item>
+            <el-form-item label="过期天数">
+              <el-input v-model.number="formData.expireDays"/>
+            </el-form-item>
+          </div>
+          <el-divider direction="vertical"/>
+          <div style="width:460px">
+            <dynamic-input :model-array.sync="formData.allowCategory" label="允许的分类" rule-model-name="allowCategory"/>
+            <dynamic-input :model-array.sync="formData.limitCategory" label="禁止的分类" rule-model-name="limitCategory"/>
+            <dynamic-input :model-array.sync="formData.allowGoods" label="禁止的商品" rule-model-name="allowGoods"/>
+            <dynamic-input :model-array.sync="formData.limitGoods" label="允许的商品" rule-model-name="limitGoods"/>
+          </div>
         </el-form>
       </div>
       <div style="text-align: center;margin-top: 15px">
@@ -41,8 +45,7 @@
 </template>
 
 <script>
-  // import { getQueryObject } from '@/utils/index'
-  // import activityApi from '@/api/activity'
+  import couponTemplateApi from '@/api/coupon-template'
   import DynamicInput from './components/DynamicInput'
 
   import BaseCard from '@/components/BaseCard'
@@ -60,7 +63,7 @@
       return {
         formData: {
           couponName: '',
-          couponType: 1,
+          couponType: 'MONEY',
           couponMoney: 0,
           couponDiscount: 0,
           minimumMoney: 0,
@@ -69,22 +72,33 @@
           limitCategory: [],
           allowGoods: [],
           limitGoods: []
-        },
-        rules: {
-          couponName: [
-            { required: true, message: '请输入标题', trigger: 'blur' }
-          ]
         }
       }
     },
     methods: {
+      init() {
+        this.formData.couponName = ''
+        this.formData.couponType = 'MONEY'
+        this.formData.couponMoney = 0
+        this.formData.couponDiscount = 0
+        this.formData.minimumMoney = 0
+        this.formData.expireDays = 0
+        this.formData.allowCategory = []
+        this.formData.limitCategory = []
+        this.formData.allowGoods = []
+        this.formData.limitGoods = []
+      },
       saveTemplate() {
         this.$refs.form.validate((valid) => {
           if (valid) {
-            this.$message({
-              // message: response.message,
-              type: 'success'
-            })
+            couponTemplateApi.createNewTemplate(this.formData)
+              .then(res => {
+                this.init()
+                this.$message({
+                  message: res.message,
+                  type: 'success'
+                })
+              })
           }
         })
       }

@@ -14,7 +14,7 @@ server:
 
 spring:
   profiles:
-    active: dev-mac
+    active: dev-pc
   mvc:
     static-path-pattern: /res/**
     view:
