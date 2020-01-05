@@ -376,6 +376,11 @@ const couponTypeMap = new Map()
 couponTypeMap.set('MONEY', '现金卷')
 couponTypeMap.set('DISCOUNT', '折扣卷')
 
+const couponStateMap = new Map()
+couponStateMap.set('UN_USE', '未使用')
+couponStateMap.set('USED', '已使用')
+couponStateMap.set('EXPIRED', '已过期')
+
 export function formatOrderState(orderState) {
   return orderStateMap.get(orderState)
 }
@@ -390,5 +395,9 @@ export function formatPaymentWay(paymentWay) {
 
 export function formatCouponType(couponType) {
   return couponTypeMap.get(couponType)
+}
+
+export function formatCouponState(couponType) {
+  return couponStateMap.get(couponType)
 }
 

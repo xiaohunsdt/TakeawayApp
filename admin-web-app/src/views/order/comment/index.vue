@@ -3,7 +3,7 @@
     <base-card class="container-header">
       <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
         <el-form-item label="用户名">
-          <el-input placeholder="用户名" v-model="formData.name"></el-input>
+          <el-input placeholder="昵称" v-model="formData.nickName"></el-input>
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
@@ -123,7 +123,7 @@
           total: 0
         },
         formData: {
-          name: null,
+          nickName: null,
           formDate: [
             new Date(),
             new Date()

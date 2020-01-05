@@ -5,6 +5,21 @@
         <el-form-item label="昵称">
           <el-input placeholder="请输入昵称" v-model="formData.nickName"></el-input>
         </el-form-item>
+        <el-form-item label="类型">
+          <el-select placeholder="请选择优惠卷类型" v-model="formData.couponType">
+            <el-option label="所有" value=""/>
+            <el-option label="现金卷" value="1"/>
+            <el-option label="折扣卷" value="2"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select placeholder="请选择优惠卷状态" v-model="formData.couponState">
+            <el-option label="所有" value=""/>
+            <el-option label="未使用" value="0"/>
+            <el-option label="已使用" value="1"/>
+            <el-option label="已过期" value="2"/>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
         </el-form-item>
@@ -37,12 +52,21 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import activityApi from '@/api/activity'
+  import couponApi from '@/api/coupon'
+  import { formatCouponState, formatCouponType } from '@/utils/index'
 
   export default {
     name: 'CouponManagement',
     components: {
       BaseCard
+    },
+    filters: {
+      couponTypeFormat: function(value) {
+        return formatCouponType(value)
+      },
+      couponStateFormat: function(value) {
+        return formatCouponState(value)
+      }
     },
     data() {
       return {
@@ -52,7 +76,9 @@
           total: 0
         },
         formData: {
-          nickName: ''
+          nickName: '',
+          couponType: '',
+          couponState: ''
         },
         listLoading: false,
         tableData: []
@@ -64,7 +90,7 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        activityApi.getActivityListByPage(this.page, this.formData)
+        couponApi.getCouponListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
@@ -87,7 +113,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          activityApi.deleteActivity(id)
+          getCouponListByPage.deleteActivity(id)
             .then(() => {
               this.onSearch()
             })

@@ -5,8 +5,8 @@
         <el-form-item label="类型">
           <el-select placeholder="请选择优惠卷类型" v-model="formData.couponType">
             <el-option label="所有" value=""/>
-            <el-option label="现金卷" value="MONEY"/>
-            <el-option label="折扣卷" value="DISCOUNT"/>
+            <el-option label="现金卷" value="1"/>
+            <el-option label="折扣卷" value="2"/>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -125,6 +125,7 @@
           label="操作"
           width="170">
           <template v-slot="scope">
+            <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
             <el-button
               @click="onDelete(scope.row.id)"
               size="mini"
@@ -205,6 +206,11 @@
       handleCurrentChange(val) {
         this.page.current = val
         this.onSearch()
+      },
+      onEdit(id) {
+        this.$router.push({
+          path: './template/edit', query: { templateId: id }
+        })
       },
       onDelete(id) {
         this.$confirm('是否确定删除此活动?', '提示', {

@@ -15,9 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaohun
@@ -32,15 +34,16 @@ public class CommentController extends BaseController {
 
     @PostMapping("getCommentListByPage")
     public ResponseEntity<Page> getCommentListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        if (StrUtil.isNotBlank((String) args.get("name"))) {
-            Optional<User> user = userService.selectByName((String) args.get("name"));
-            if (user.isPresent()) {
-                args.put("userId", user.get().getId());
+        if (StrUtil.isNotBlank((String) args.get("nickName"))) {
+            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+                    .map(User::getId)
+                    .collect(Collectors.toList());
+            if (ids.size() > 0) {
+                args.put("userIds", ids);
             } else {
-                args.put("userId", "-1");
+                args.put("userIds", Arrays.asList("-1"));
             }
         }
-//        page.setOptimizeCountSql(false);
         page = (Page) commentService.getCommentListByPage(page, args);
         page.setRecords((List) new CommentWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);

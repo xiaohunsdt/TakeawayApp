@@ -35,7 +35,7 @@ public class CouponTemplateController extends BaseController {
     @GetMapping("getTemplateById")
     public ResponseEntity getTemplateById(String id) {
         CouponTemplate couponTemplate = couponTemplateService.getById(id);
-        return ResponseEntity.ok(couponTemplate);
+        return ResponseEntity.ok(new CouponTemplateWrapper(couponTemplate).warp());
     }
 
     @PostMapping("getTemplateListByPage")

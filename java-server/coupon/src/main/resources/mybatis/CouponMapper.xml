@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.coupon.dao.ICouponDao">
+    <select id="getCouponListByUserId" resultType="Coupon">
+        SELECT * FROM `coupon`
+        <where>
+            `user_id` = #{userId}
+            <if test="onlyShowUseAble">
+                AND `state` = 0
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 
+    <select id="getCouponListByPage" resultType="Coupon">
+        SELECT * FROM `coupon`
+        <where>
+            <if test="args.couponType != null and args.couponType != ''">
+                `coupon_type` = #{args.couponType}
+            </if>
+            <if test="args.couponState != null and args.couponState != ''">
+                `coupon_state` = #{args.couponState}
+            </if>
+            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 </mapper>

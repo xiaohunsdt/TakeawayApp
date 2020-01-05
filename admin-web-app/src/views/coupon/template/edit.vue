@@ -2,11 +2,16 @@
   <div class="container">
     <base-card class="container-main">
       <div style="display: flex;justify-content: center;">
-        <el-form :model="formData" label-width="120px" ref="form"
-                 style="display: flex;justify-content: center;width: 920px">
+        <el-form
+          :model="formData"
+          label-width="120px"
+          ref="form"
+          style="display: flex;justify-content: center;width: 920px">
           <div style="width:460px">
-            <el-form-item :rules=" { required: true, message: '请输入标题', trigger: 'blur' }" label="优惠卷名称"
-                          prop="couponName">
+            <el-form-item
+              :rules=" { required: true, message: '请输入标题', trigger: 'blur' }"
+              label="优惠卷名称"
+              prop="couponName">
               <el-input v-model="formData.couponName"/>
             </el-form-item>
             <el-form-item label="优惠卷类型">
@@ -45,6 +50,8 @@
 </template>
 
 <script>
+  import { getQueryObject } from '@/utils/index'
+
   import couponTemplateApi from '@/api/coupon-template'
   import DynamicInput from './components/DynamicInput'
 
@@ -57,11 +64,61 @@
       DynamicInput
     },
     activated() {
-      // const query = getQueryObject()
+      const query = getQueryObject()
+      this.init()
+      if (query.templateId) {
+        couponTemplateApi.getTemplateById(query.templateId)
+          .then(res => {
+            const temp = Object.assign({}, res)
+            temp.allowCategory = []
+            temp.limitCategory = []
+            temp.allowGoods = []
+            temp.limitGoods = []
+
+            if (res.allowCategory instanceof Array) {
+              res.allowCategory.forEach(item => {
+                temp.allowCategory.push({
+                  key: new Date().getTime() + Math.round(Math.random() * 10000),
+                  value: item
+                })
+              })
+            }
+
+            if (res.limitCategory instanceof Array) {
+              res.limitCategory.forEach(item => {
+                temp.limitCategory.push({
+                  key: new Date().getTime() + Math.round(Math.random() * 10000),
+                  value: item
+                })
+              })
+            }
+
+            if (res.allowGoods instanceof Array) {
+              res.allowGoods.forEach(item => {
+                temp.allowGoods.push({
+                  key: new Date().getTime() + Math.round(Math.random() * 10000),
+                  value: item
+                })
+              })
+            }
+
+            if (res.limitGoods instanceof Array) {
+              res.limitGoods.forEach(item => {
+                temp.limitGoods.push({
+                  key: new Date().getTime() + Math.round(Math.random() * 10000),
+                  value: item
+                })
+              })
+            }
+
+            this.formData = temp
+          })
+      }
     },
     data() {
       return {
         formData: {
+          id: null,
           couponName: '',
           couponType: 'MONEY',
           couponMoney: 0,
@@ -93,7 +150,9 @@
           if (valid) {
             couponTemplateApi.createNewTemplate(this.formData)
               .then(res => {
-                this.init()
+                if (!this.formData.id) {
+                  this.init()
+                }
                 this.$message({
                   message: res.message,
                   type: 'success'

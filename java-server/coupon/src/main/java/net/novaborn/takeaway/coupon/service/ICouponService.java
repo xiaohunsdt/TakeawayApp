@@ -33,6 +33,7 @@ public interface ICouponService extends IService<Coupon> {
      *
      * @param page 分页实例
      * @param args userId 用户ID
+     *             state 优惠卷状态
      *             startDate endDate 范围时间
      * @return 优惠卷列表
      */
@@ -40,15 +41,21 @@ public interface ICouponService extends IService<Coupon> {
 
     /**
      * 生成优惠卷
+     *
      * @param template 优惠卷模板
-     * @param userIds 用户ID列表
+     * @param userIds  用户ID列表
      */
     void makeCoupon(CouponTemplate template, List<String> userIds);
 
+    void makeCoupon(CouponTemplate template, List<String> userIds, Integer count);
+
     /**
      * 生成优惠卷
+     *
      * @param template 优惠卷模板
-     * @param userId 用户ID
+     * @param userId   用户ID
      */
     void makeCoupon(CouponTemplate template, String userId);
+
+    void makeCoupon(CouponTemplate template, String userId, Integer count);
 }

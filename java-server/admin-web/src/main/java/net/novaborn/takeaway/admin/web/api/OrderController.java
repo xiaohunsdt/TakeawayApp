@@ -44,7 +44,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        // 根据用户名获取订单
+        // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
                     .map(User::getId)
@@ -56,7 +56,6 @@ public class OrderController extends BaseController {
             }
         }
 
-//        page.setOptimizeCountSql(false);
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);

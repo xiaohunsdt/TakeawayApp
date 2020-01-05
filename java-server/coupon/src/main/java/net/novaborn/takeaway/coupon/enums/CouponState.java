@@ -14,7 +14,12 @@ public enum CouponState {
     /**
      * 已使用
      */
-    USED( 1);
+    USED( 1),
+
+    /**
+     * 已过期
+     */
+    EXPIRED( 2);
 
     CouponState(int code) {
         this.code = code;
