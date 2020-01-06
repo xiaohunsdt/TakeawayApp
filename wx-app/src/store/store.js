@@ -6,6 +6,7 @@ import createLogger from 'vuex/dist/logger'
 import getters from './getters'
 import cart from './modules/cart'
 import address from './modules/address'
+import coupon from './modules/coupon'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ if (debug) {
 const store = new Vuex.Store({
   modules: {
     cart,
-    address
+    address,
+    coupon
   },
   getters,
   strict: debug,

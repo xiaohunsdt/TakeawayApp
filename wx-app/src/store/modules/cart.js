@@ -38,7 +38,8 @@ const mutations = {
     state.cartList.slice(index, 1)
   },
   CLEAR_CART: (state) => {
-    state.cartList.splice(0, state.cartList.length)
+    // state.cartList.splice(0, state.cartList.length)
+    state.cartList = []
   }
 }
 

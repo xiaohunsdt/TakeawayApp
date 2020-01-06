@@ -15,6 +15,7 @@ export function createOrder (orderItems, address, paymentWay, coupon, ps) {
   })
   let order = {
     addressId: address.id,
+    couponId: coupon.id,
     goodsCount: allCount,
     discount: 0,
     discountedPrices: 0,

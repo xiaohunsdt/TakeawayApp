@@ -22,7 +22,6 @@ public class OrderItem extends Model<OrderItem> {
     @TableId(type = IdType.UUID)
     private String id;
 
-    @NotBlank
     private String orderId;
 
     private String goodsId;

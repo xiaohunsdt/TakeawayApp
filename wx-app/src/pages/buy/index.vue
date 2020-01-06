@@ -97,8 +97,9 @@
           </div>
         </base-panel>
         <base-panel>
-          <div @click="setCoupon">
+          <div @click="setCoupon" class="coupon-panel">
             <div>优惠卷</div>
+            <div v-if="coupon">{{coupon.couponName}}</div>
           </div>
         </base-panel>
         <base-panel @panel-click="setPs">
@@ -181,6 +182,9 @@
       },
       address () {
         return this.$store.getters.currentAddress
+      },
+      coupon () {
+        return this.$store.getters.currentCoupon
       }
     },
     onLoad () {
@@ -229,7 +233,6 @@
         orderId: '',
         order: {},
         payWay: 'WEIXIN_PAY',
-        coupon: null,
         psData: ''
       }
     },
@@ -251,20 +254,9 @@
         this.psData = ''
       },
       setCoupon () {
-        const $this = this
         mpvue.navigateTo({
-          url: '/pages/coupon/main',
-          events: {
-            setCoupon (data) {
-              $this.coupon = data.coupon
-              console.log($this.coupon)
-            }
-          }
+          url: '/pages/coupon/main'
         })
-        // mpvue.showToast({
-        //   title: '暂时还没有开放1',
-        //   icon: 'none'
-        // })
       },
       setPs () {
         const $this = this
@@ -343,5 +335,10 @@
   #order-bar-left-content img {
     width: 0.6rem;
     height: 0.5rem;
+  }
+
+  .coupon-panel {
+    display: flex;
+    justify-content: space-between;
   }
 </style>

@@ -1,10 +1,10 @@
 const state = {
-  currentAddress: null
+  currentCoupon: null
 }
 
 const mutations = {
-  SET_ADDRESS: (state, address) => {
-    state.currentAddress = Object.assign({}, address)
+  SET_COUPON: (state, coupon) => {
+    state.currentCoupon = Object.assign({}, coupon)
   }
 }
 
