@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 02/01/2020 13:26:47
+ Date: 07/01/2020 03:37:11
 */
 
 SET NAMES utf8mb4;
@@ -188,6 +188,14 @@ CREATE TABLE `coupon`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Records of coupon
+-- ----------------------------
+INSERT INTO `coupon` VALUES ('5979805506be45aa3de8208cfc011ad3', '4a6bb5a539ec498e2bf5117910af08e4', '9折优惠卷', 2, 0, 90, 0, '2020-02-05 22:28:59', '', '鸭货', '', '', 0, '2020-01-04 06:13:03', 0);
+INSERT INTO `coupon` VALUES ('b464dbfe36774d58f8370b42ed449959', '4a6bb5a539ec498e2bf5117910af08e4', '满20000减3000', 1, 3000, 0, 20000, '2020-02-05 22:29:10', '', '鸭货', '', '', 0, '2020-01-04 06:13:59', 0);
+INSERT INTO `coupon` VALUES ('d73dd8578adad5eba0a82a9626ee7024', '4a6bb5a539ec498e2bf5117910af08e4', '9折优惠卷', 2, 0, 90, 0, '2020-02-05 22:28:59', '', '鸭货', '', '', 0, '2020-01-04 06:13:03', 0);
+INSERT INTO `coupon` VALUES ('ea871e29aa7fd8a7a6e91694ae2d6928', '4a6bb5a539ec498e2bf5117910af08e4', '满20000减3000', 1, 3000, 0, 20000, '2020-02-05 22:29:10', '', '鸭货', '', '', 0, '2020-01-04 06:13:59', 0);
+
+-- ----------------------------
 -- Table structure for coupon_log
 -- ----------------------------
 DROP TABLE IF EXISTS `coupon_log`;
@@ -209,7 +217,7 @@ CREATE TABLE `coupon_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `coupon_template`;
 CREATE TABLE `coupon_template`  (
-  `id` int(11) NOT NULL,
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `coupon_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `coupon_type` int(11) NOT NULL,
   `coupon_money` int(11) NULL DEFAULT NULL,
@@ -224,6 +232,22 @@ CREATE TABLE `coupon_template`  (
   `deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of coupon_template
+-- ----------------------------
+INSERT INTO `coupon_template` VALUES ('27b699d66478d636168d484a1a5c36bd', '满20000减3000', 1, 3000, 0, 20000, 30, '', '鸭货', '', '', '2020-01-04 06:13:59', 0);
+INSERT INTO `coupon_template` VALUES ('35a4cdbc26623e587ba17279163f6d83', 'zczx', 1, 11, 11, 0, 0, '', '', '', '', '2020-01-04 05:44:12', 1);
+INSERT INTO `coupon_template` VALUES ('3a980008bd808f5174810d867f6c49f6', 'xzasdas', 1, 111, 0, 0, 0, '', '', '', '', '2020-01-04 06:17:49', 1);
+INSERT INTO `coupon_template` VALUES ('48d337e8d318304083f971cc556b8074', 'zxczxcxz', 1, 1231, 0, 0, 0, '', '', '', '', '2020-01-04 05:50:53', 1);
+INSERT INTO `coupon_template` VALUES ('4faa6efcf119b4282aed1c771e6b9059', '满20000抵5000', 1, 5000, 0, 20000, 0, '', '鸭货,主食', '', '', '2020-01-04 06:45:18', 0);
+INSERT INTO `coupon_template` VALUES ('78a55612c40080c4e19897b7f070e492', '满30000打9折', 2, 0, 90, 30000, 0, '', '', '', '', '2020-01-04 06:16:31', 1);
+INSERT INTO `coupon_template` VALUES ('795aeb4d8da9a41bf0cb0ffaf6028791', '满30000打9折', 2, 0, 90, 30000, 30, '', '', '', '', '2020-01-04 06:16:41', 0);
+INSERT INTO `coupon_template` VALUES ('8a1a36e97b107ea0ad5970a67ae5dd21', '9折优惠卷', 2, 0, 90, 0, 30, '', '鸭货', '', '', '2020-01-04 06:13:03', 0);
+INSERT INTO `coupon_template` VALUES ('9a35c5681acc26b91ef7a90ce79fbe32', 'zxczxzc', 1, 5000, 0, 0, 0, '', '', '', '', '2020-01-04 06:18:34', 1);
+INSERT INTO `coupon_template` VALUES ('a504978c1517de8a8da543c3547e7ee3', 'zcz', 2, 0, 901231, 30000, 0, '', '', '', '', '2020-01-04 06:17:28', 1);
+INSERT INTO `coupon_template` VALUES ('d66c7fd9bed9266d207e97775e637812', '满30000打9折', 2, 0, 90, 30000, 0, '', '', '', '', '2020-01-04 06:16:57', 1);
+INSERT INTO `coupon_template` VALUES ('f1e3310f811304ec3666496cbc12d31a', 'zxczxc', 1, 33, 0, 0, 0, '', '', '', '', '2020-01-04 06:17:54', 1);
 
 -- ----------------------------
 -- Table structure for goods
@@ -444,6 +468,7 @@ INSERT INTO `order` VALUES ('1333c72c0ba69d238455459091896fa9', 3, '4a6bb5a539ec
 INSERT INTO `order` VALUES ('14df4d1cd9db27707e8cc3464c1654f7', 6, 'bc469f79a6e9800ccdc15880f07f3291', 'e316f5803f9eaaeefcc33c31595cbb39', 2, 0, 0, 17000, 17000, 4, '加辣', 2, 2, 0, '2019-11-26 20:28:24', '2019-11-26 21:22:22', 2, 0);
 INSERT INTO `order` VALUES ('1b0072224c719948b6ef52242ff0cbe8', 1, 'de4d141b74de1acf2ba111aa3618dd83', '15a1d6c99ba5ff587dac68b47d47b21a', 1, 0, 0, 8000, 8000, 2, '', 1, 3, 0, '2019-12-08 12:03:23', '2019-12-08 12:32:37', 4, 0);
 INSERT INTO `order` VALUES ('1b9cad67000520e9dc7ee4915b398a23', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 5, 0, 0, 33000, 33000, 3, '', 0, 0, 0, '2019-12-17 16:47:11', '2019-12-17 16:47:25', 0, 1);
+INSERT INTO `order` VALUES ('1f3add9441808dbb6dfdf762ce9ff8f4', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 2, 0, 0, 50000, 50000, 2, '', 0, 0, 0, '2020-01-07 03:34:38', '2020-01-07 03:34:38', 0, 0);
 INSERT INTO `order` VALUES ('272601d8eb2f7938a74f4ccd11de61e1', 7, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 2, 0, 0, 12000, 12000, 2, '', 0, 0, 0, '2019-12-22 17:22:46', '2019-12-22 17:37:09', 0, 1);
 INSERT INTO `order` VALUES ('2b7f61baf3ee502749a477f467d9f732', 1, '4a6bb5a539ec498e2bf5117910af08e4', 'ef80e4fae51464af1b997fb449864d8f', 16, 0, 0, 96000, 96000, 2, '', 0, 0, 0, '2019-12-22 16:48:54', '2019-12-22 16:49:55', 0, 1);
 INSERT INTO `order` VALUES ('2d098f3c1c9a4ccbbbfc55a192aff487', 4, '06f9142749ab69be266e081e536f985e', 'c95ffd410cf167b66b1b4c5b87d2dffc', 1, 0, 0, 6000, 6000, 3, '', 0, 0, 0, '2019-12-01 15:16:20', '2019-12-01 15:16:42', 0, 1);
@@ -564,6 +589,7 @@ INSERT INTO `order_item` VALUES ('4bfa48444e85ddcf9fe00f8e11597fee', '14df4d1cd9
 INSERT INTO `order_item` VALUES ('51bc826dbfdee2653d94384fb8080165', 'cdfa4cf9a3f111fee8eeaa436e9c0fd2', 'bb08daaca3ff7e0cade0919a0cf7c544', '三鲜丸子', '/upload/images/37d064dcf3fe49b190637415121395f9.jpg', 10000, 1);
 INSERT INTO `order_item` VALUES ('51fb9bd06717d27e5eed4d7891c8d7b0', '8cb36471dac4ba4ba90856a384760db0', 'cd69a09bd278dc062392d62407c525b0', '肉末茄子', '', 7000, 1);
 INSERT INTO `order_item` VALUES ('52b1bb9bf0ef33c42eedd7c7b758e4b7', 'f92f8ad1e05d5303ebfcc856008262f7', 'cd69a09bd278dc062392d62407c525b0', '肉末茄子', '', 7000, 1);
+INSERT INTO `order_item` VALUES ('531e1707d95f234c45efea0589c76d05', '1f3add9441808dbb6dfdf762ce9ff8f4', '33c0fa961f3598d9791a53089c21cdb5', '川香烤鱼(大份)', '/upload/images/b7b94af6d9a54108a777237b02f1ff55.jpg', 32000, 1);
 INSERT INTO `order_item` VALUES ('5321b29bb07421546f3dfdad1704fd0c', 'cc68f27ab724e3383b868cb3048f7eb5', '8f3883855e6321762c324a8825312c59', '牛肉蛋炒饭', '', 8000, 1);
 INSERT INTO `order_item` VALUES ('59aabe404f313d4839e8f886d446aceb', 'b79200d15703e7c46776c009c2af9340', 'a6f5b086db3c55c4e4e0ad483249c23b', '牛肉面', '/upload/images/6fc1f856876344b9812827687ff74d6f.jpg', 9000, 1);
 INSERT INTO `order_item` VALUES ('5a502c3ee5c23048a69484acaf2d19b9', '1333c72c0ba69d238455459091896fa9', '33c0fa961f3598d9791a53089c21cdb5', '川香烤鱼(大份)', '/upload/images/b7b94af6d9a54108a777237b02f1ff55.jpg', 32000, 1);
@@ -590,6 +616,7 @@ INSERT INTO `order_item` VALUES ('851740399ad1ec824ec283be8c4e6ab2', 'dac1c7867f
 INSERT INTO `order_item` VALUES ('864c2a5c57fd5adef14a87f00de739e2', '6c72b62f86b6089d5495d981c59fd652', '05444437734b79d597b8fff2c8fecd21', '麻辣烫（麻辣香锅）加菜+牛肉卷', '/upload/images/638d1959b8bf4bd5a5486e2c2a898c14.jpg', 3000, 1);
 INSERT INTO `order_item` VALUES ('895942e770c35367dc89c14506620cc8', '2b7f61baf3ee502749a477f467d9f732', 'a5aab1591e53f67d13cf9a683114842a', '豆芽粉丝', '', 6000, 3);
 INSERT INTO `order_item` VALUES ('8d101791193d6b8f3864d697c0327fe4', 'f88c633aa67289dbef8a2c2ff1fa0b97', '67e6c3d6f4142e4df205e0d5b917acaa', '水煮鱼', '/upload/images/22da6d92c1c34ce8ad5b441714aa0b7a.jpg', 15000, 1);
+INSERT INTO `order_item` VALUES ('8d9d82c66e0fe1844a18cb0428308c52', '1f3add9441808dbb6dfdf762ce9ff8f4', '652a6464943a81c0f5fdfd06e4affd0e', '川香烤鱼', '/upload/images/1a013c1bc8ed4de8a326c84b1b4a7bc6.jpg', 18000, 1);
 INSERT INTO `order_item` VALUES ('8de098969938e565aef9556c1c7f5b7f', '818b42f76d28e4d40eb06a977822a351', '650632fb49a091669f41fbfaaf2d53fb', '糖醋里脊', '/upload/images/665992d4c4814ee2bffb43b39e57b0f4.jpeg', 10000, 1);
 INSERT INTO `order_item` VALUES ('93024194d5a6e6dd5729a72f33d95f71', 'f88c633aa67289dbef8a2c2ff1fa0b97', '2d912f7f177635c9cb0e6a28e5e4439e', '松花蛋豆腐', '/upload/images/29667a1b3744476fbb647c07165c8e6b.jpg', 6000, 1);
 INSERT INTO `order_item` VALUES ('934d39d0056a8fe5ce85984f92747077', 'b2fac7565124ebcb1f294ea7334313e3', '33c0fa961f3598d9791a53089c21cdb5', '川香烤鱼(大份)', '/upload/images/b7b94af6d9a54108a777237b02f1ff55.jpg', 32000, 1);
@@ -712,7 +739,7 @@ INSERT INTO `user` VALUES ('2394589754f574865cde521525d99ca9', NULL, 'zengzeng',
 INSERT INTO `user` VALUES ('2f33af0d978c616a9ad0fbaffe5e7d5e', NULL, 'ྀི', 0, 'o9UA_5XESIn3x3Qz-kYz_fvrOI4w', 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJZicRP0FZ78kV8u6fKBmHUjHQRugYwviaCno5mz64XvGvOYwqeeV5KLHbYw8UcHTLIxS5ZLEwPTzxQ/132', NULL, 2, 1, '2019-12-10 17:36:17', '2019-11-25 11:14:07', '2019-12-10 17:36:18', 6, 0, NULL);
 INSERT INTO `user` VALUES ('442faaa72bf702b2f1e108c830ec558b', NULL, 'A-川香苑(新村店)', 0, 'o9UA_5dmfJvck2wZPswk0FuaY4E4', 'https://wx.qlogo.cn/mmopen/vi_32/IQhia6bnF9m3VcqIxJRIr1wp8RsMpgibtbibLNwW8tNtmqGbgbql7fibrmpiaj6wk2B0Via7icr62UASR7ib7dXB2oEOGA/132', NULL, 1, 1, '2019-12-23 15:27:23', '2019-11-24 19:30:44', '2019-12-31 07:27:03', 43, 0, NULL);
 INSERT INTO `user` VALUES ('49268c005a631e2d77b7b90a206fe0eb', 'test', NULL, 0, NULL, 'http://www.baidu.com', NULL, 0, 1, NULL, '2019-10-06 03:34:32', '2019-11-15 02:03:16', 0, 1, NULL);
-INSERT INTO `user` VALUES ('4a6bb5a539ec498e2bf5117910af08e4', NULL, 'Jeremy.', 0, 'o9UA_5abDk-kn7KSaMAoriIlvg6c', 'https://wx.qlogo.cn/mmopen/vi_32/UL02ia2qHNyA6UvWNf2Yia5KMOxAh4Kp6icf2ibSOWMiaP8iadSoGgEdE5vbDENG2GVCu97ics161tgrl2cAoGBmX4acg/132', NULL, 1, 1, '2019-12-14 12:31:59', '2019-10-14 23:39:12', '2019-12-14 12:32:00', 95, 0, NULL);
+INSERT INTO `user` VALUES ('4a6bb5a539ec498e2bf5117910af08e4', NULL, 'Jeremy.', 0, 'o9UA_5abDk-kn7KSaMAoriIlvg6c', 'https://wx.qlogo.cn/mmopen/vi_32/UL02ia2qHNyA6UvWNf2Yia5KMOxAh4Kp6icf2ibSOWMiaP8iadSoGgEdE5vbDENG2GVCu97ics161tgrl2cAoGBmX4acg/132', NULL, 1, 1, '2020-01-07 03:21:05', '2019-10-14 23:39:12', '2020-01-07 03:21:04', 97, 0, NULL);
 INSERT INTO `user` VALUES ('50808dec1eb8efb2f98e147d9fadb85d', NULL, NULL, 0, 'o9UA_5XYFSr3ZLrlho1PrK0NOeKQ', NULL, NULL, 0, 1, '2019-11-25 15:39:36', '2019-11-25 15:39:28', '2019-11-25 15:39:35', 1, 0, NULL);
 INSERT INTO `user` VALUES ('51078b98cd5e1d3619e7bf2057fddfd1', NULL, NULL, 0, 'o9UA_5SQADmgF9mO-0h7Gzl_clAI', NULL, NULL, 0, 1, '2019-12-04 16:26:57', '2019-11-25 15:44:26', '2019-12-04 16:26:57', 2, 0, NULL);
 INSERT INTO `user` VALUES ('5c4f0b3d173724428b224b0d874f2a74', NULL, '钟종维유翰한', 0, 'o9UA_5UFRtpiqnLprLecAzknYCnA', 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIQNmXcDC2icepOCVWbricJacVK0x7jVIZoZwhGhhO6tJA5H9GUic0vEOvN27icuQ48aZJ6EIm0fJOAmQ/132', NULL, 1, 1, '2019-12-22 12:32:15', '2019-11-25 13:16:38', '2019-12-22 12:32:15', 8, 0, NULL);
