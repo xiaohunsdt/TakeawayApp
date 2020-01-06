@@ -11,6 +11,7 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
  */
 public enum CouponTemplateExceptionEnum implements ServiceExceptionEnum {
 
+    HAVE_NO_THIS_TEMPLATE(500, "没有这个模板!!!"),
     HAVE_NO_MONEY_OR_DISCOUNT(500, "面值或折扣必填!!!");
 
     CouponTemplateExceptionEnum(int code, String message) {

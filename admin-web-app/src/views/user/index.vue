@@ -9,10 +9,14 @@
           <el-button @click="onSearch" type="primary">查询</el-button>
         </el-form-item>
       </el-form>
+      <div class="action-bar">
+        <el-button @click="onSendCoupon" size="small" type="primary">发放优惠卷</el-button>
+      </div>
     </base-card>
     <base-card class="container-main">
       <el-table
         :data="tableData"
+        @selection-change="handleSelectionChange"
         class="tb-edit"
         element-loading-text="正在加载中..."
         highlight-current-row
@@ -20,10 +24,20 @@
         style="width: 100%"
         v-loading="listLoading">
         <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="ID"
+          prop="id"
+          width="160">
+        </el-table-column>
+        <el-table-column
           align="center"
           label="昵称">
           <template v-slot="scope">
-<!--            <div v-if="scope.row.name!==''">{{ scope.row.name }}</div>-->
+            <!--            <div v-if="scope.row.name!==''">{{ scope.row.name }}</div>-->
             <div>{{ scope.row.nickName }}</div>
           </template>
         </el-table-column>
@@ -53,8 +67,7 @@
           prop="createDate">
         </el-table-column>
         <el-table-column
-          label="操作"
-          width="150">
+          label="操作">
           <template v-slot="scope">
             <el-button @click="onDelete(scope.row.id)" size="mini" type="danger">删除</el-button>
           </template>
@@ -72,17 +85,25 @@
         style="margin-top: 15px">
       </el-pagination>
     </base-card>
+    <generate-coupon-dialog :user-ids="selectedUserIds" ref="generate-coupon-dialog"/>
   </div>
 </template>
 
 <script>
   import BaseCard from '@/components/BaseCard'
+  import GenerateCouponDialog from '@/components/coupon/generate-dialog'
   import userApi from '@/api/user'
 
   export default {
     name: 'UserManagement',
     components: {
-      BaseCard
+      BaseCard,
+      GenerateCouponDialog
+    },
+    computed: {
+      selectedUserIds() {
+        return this.multipleSelection.map(user => user.id)
+      }
     },
     data() {
       return {
@@ -96,7 +117,8 @@
           categoryId: null
         },
         listLoading: false,
-        tableData: []
+        tableData: [],
+        multipleSelection: []
       }
     },
     created() {
@@ -133,6 +155,12 @@
       handleCurrentChange(val) {
         this.page.current = val
         this.onSearch()
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
+      onSendCoupon() {
+        this.$refs['generate-coupon-dialog'].openDialog()
       }
     }
   }
@@ -151,5 +179,10 @@
 
   .el-form-item {
     margin-bottom: unset !important;
+  }
+
+  .action-bar {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

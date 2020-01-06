@@ -3,16 +3,16 @@ package net.novaborn.takeaway.admin.web.api;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
-import net.novaborn.takeaway.admin.web.wrapper.CommentWrapper;
-import net.novaborn.takeaway.admin.web.wrapper.CouponTemplateWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.CouponWrapper;
+import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
+import net.novaborn.takeaway.coupon.exception.CouponTemplateExceptionEnum;
 import net.novaborn.takeaway.coupon.service.impl.CouponService;
-import net.novaborn.takeaway.order.service.impl.CommentService;
+import net.novaborn.takeaway.coupon.service.impl.CouponTemplateService;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/admin/coupon")
 public class CouponController extends BaseController {
     private UserService userService;
+
     private CouponService couponService;
+
+    private CouponTemplateService couponTemplateService;
 
     @GetMapping("getCouponById")
     public ResponseEntity getCouponById(String id) {
@@ -57,14 +60,19 @@ public class CouponController extends BaseController {
         }
 
         page = (Page) couponService.getCouponListByPage(page, args);
-        page.setRecords((List)new CouponWrapper(page.getRecords()).warp());
+        page.setRecords((List) new CouponWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
     @ResponseBody
-    @PostMapping("createCoupon")
-    public Tip createCoupon(String templateId, String userId, Integer count) {
-        return null;
+    @PostMapping("generateCoupon")
+    public Tip generateCoupon(String templateId, String userIds, Integer count) {
+        Optional<CouponTemplate> couponTemplate = Optional.ofNullable(couponTemplateService.getById(templateId));
+        couponTemplate.orElseThrow(() -> new SysException(CouponTemplateExceptionEnum.HAVE_NO_THIS_TEMPLATE));
+
+        List<String> userIdArray = Arrays.asList(userIds.split("\r\n"));
+        couponService.generateCoupon(couponTemplate.get(), userIdArray, count);
+        return new SuccessTip();
     }
 
     @ResponseBody

@@ -38,28 +38,31 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public void makeCoupon(CouponTemplate template, List<String> userIds) {
-        this.makeCoupon(template, userIds, 1);
+    public void generateCoupon(CouponTemplate template, List<String> userIds) {
+        this.generateCoupon(template, userIds, 1);
     }
 
     @Override
-    public void makeCoupon(CouponTemplate template, List<String> userIds, Integer count) {
-        userIds.parallelStream().forEach(userId -> this.makeCoupon(template, userId, count));
+    public void generateCoupon(CouponTemplate template, List<String> userIds, Integer count) {
+        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, count));
     }
 
     @Override
-    public void makeCoupon(CouponTemplate template, String userId) {
-        this.makeCoupon(template, userId, 1);
+    public void generateCoupon(CouponTemplate template, String userId) {
+        this.generateCoupon(template, userId, 1);
     }
 
     @Override
-    public void makeCoupon(CouponTemplate template, String userId, Integer count) {
+    public void generateCoupon(CouponTemplate template, String userId, Integer count) {
         for (int i = 0; i < count; i++) {
             Coupon target = new Coupon();
             BeanUtil.copyProperties(template, target, CopyOptions.create().setIgnoreNullValue(true));
+
             target.setId(null);
             target.setUserId(userId);
-            target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, template.getExpireDays()));
+            if (template.getExpireDays() > 0) {
+                target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, template.getExpireDays()));
+            }
             target.insert();
         }
     }

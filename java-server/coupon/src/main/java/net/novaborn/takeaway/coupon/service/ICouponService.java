@@ -45,9 +45,9 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userIds  用户ID列表
      */
-    void makeCoupon(CouponTemplate template, List<String> userIds);
+    void generateCoupon(CouponTemplate template, List<String> userIds);
 
-    void makeCoupon(CouponTemplate template, List<String> userIds, Integer count);
+    void generateCoupon(CouponTemplate template, List<String> userIds, Integer count);
 
     /**
      * 生成优惠卷
@@ -55,7 +55,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userId   用户ID
      */
-    void makeCoupon(CouponTemplate template, String userId);
+    void generateCoupon(CouponTemplate template, String userId);
 
-    void makeCoupon(CouponTemplate template, String userId, Integer count);
+    void generateCoupon(CouponTemplate template, String userId, Integer count);
 }

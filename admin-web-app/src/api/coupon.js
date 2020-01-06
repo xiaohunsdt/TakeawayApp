@@ -22,9 +22,9 @@ export function getCouponListByPage(page, args) {
   })
 }
 
-export function createCoupon(data) {
+export function generateCoupon(data) {
   return request({
-    url: '/coupon/createCoupon',
+    url: '/coupon/generateCoupon',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data,
@@ -53,6 +53,6 @@ export function deleteCoupon(id) {
 export default {
   getCouponById,
   getCouponListByPage,
-  createCoupon,
+  generateCoupon,
   deleteCoupon
 }

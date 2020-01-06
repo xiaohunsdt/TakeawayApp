@@ -16,6 +16,12 @@
     <select id="getCouponListByPage" resultType="Coupon">
         SELECT * FROM `coupon`
         <where>
+            <if test="args.userIds != null">
+                `user_id` IN
+                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
             <if test="args.couponType != null and args.couponType != ''">
                 `coupon_type` = #{args.couponType}
             </if>
