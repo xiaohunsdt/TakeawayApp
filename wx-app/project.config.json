@@ -162,6 +162,12 @@
 					"pathName": "pages/activity/main",
 					"query": "orderId=5c4038872373fc85f7e4fa4375d9b724",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/coupon/main",
+					"pathName": "pages/coupon/main",
+					"scene": null
 				}
 			]
 		}

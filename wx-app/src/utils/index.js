@@ -5,7 +5,7 @@ function formatNumber (n) {
   return str[1] ? str : `0${str}`
 }
 
-export function formatTime (date) {
+export function formatDateTime (date) {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
@@ -18,6 +18,15 @@ export function formatTime (date) {
   const t2 = [hour, minute, second].map(formatNumber).join(':')
 
   return `${t1} ${t2}`
+}
+
+export function formatDate (date) {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  const t1 = [year, month, day].map(formatNumber).join('-')
+  return t1
 }
 
 let orderStateMap = new Map()
@@ -41,6 +50,15 @@ paymentWayMap.set('ALI_PAY', '支付宝支付')
 paymentWayMap.set('CREDIT_CARD', '刷卡支付')
 paymentWayMap.set('CASH', '现金')
 
+const couponTypeMap = new Map()
+couponTypeMap.set('MONEY', '现金卷')
+couponTypeMap.set('DISCOUNT', '折扣卷')
+
+const couponStateMap = new Map()
+couponStateMap.set('UN_USE', '未使用')
+couponStateMap.set('USED', '已使用')
+couponStateMap.set('EXPIRED', '已过期')
+
 export function formatOrderState (orderState) {
   return orderStateMap.get(orderState)
 }
@@ -59,11 +77,22 @@ export function orderRemainingTime (createDate) {
   return m.diff(moment())
 }
 
+export function formatCouponType (couponType) {
+  return couponTypeMap.get(couponType)
+}
+
+export function formatCouponState (couponType) {
+  return couponStateMap.get(couponType)
+}
+
 export default {
   formatNumber,
-  formatTime,
+  formatDate,
+  formatDateTime,
   formatOrderState,
   formatPayState,
   formatPaymentWay,
-  orderRemainingTime
+  orderRemainingTime,
+  formatCouponType,
+  formatCouponState
 }

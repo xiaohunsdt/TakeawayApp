@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
 
   import BasePanel from '@/components/BasePanel'
   import AddressCard from './components/AddressCard'
@@ -42,7 +42,9 @@
     },
     onUnload () {
       const selectedAddress = this.addressList.find(item => item.isDefault)
-      this.SET_ADDRESS(selectedAddress)
+      if (selectedAddress) {
+        this.SET_ADDRESS(selectedAddress)
+      }
     },
     onPullDownRefresh () {
       this.init()

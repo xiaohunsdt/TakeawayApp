@@ -18,6 +18,7 @@
 
 <script>
   import CouponCard from './components/CouponCard'
+  import couponService from '@/services/coupon'
 
   export default {
     components: {
@@ -25,28 +26,24 @@
     },
     data () {
       return {
-        couponList: [
-          // {
-          //   id: 1,
-          //   type: 1,
-          //   factor: 15000,
-          //   price: 1000,
-          //   discount: 8,
-          //   endDate: new Date().toString(),
-          //   state: 1
-          // },
-          // {
-          //   id: 2,
-          //   type: 1,
-          //   price: 1000,
-          //   discount: 8,
-          //   endDate: new Date().toString(),
-          //   state: 1
-          // }
-        ]
+        couponList: []
       }
     },
-    methods: {}
+    onLoad () {
+      this.init()
+    },
+    onPullDownRefresh () {
+      this.init()
+      mpvue.stopPullDownRefresh()
+    },
+    methods: {
+      init () {
+        couponService.getCouponListU()
+          .then(res => {
+            this.couponList = res
+          })
+      }
+    }
   }
 </script>
 

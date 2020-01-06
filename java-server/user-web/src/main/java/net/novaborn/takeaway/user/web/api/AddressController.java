@@ -41,8 +41,6 @@ public class AddressController extends BaseController {
 
     private AddressService addressService;
 
-    private SettingService settingService;
-
     private JwtTokenUtil jwtTokenUtil;
 
     @ResponseBody

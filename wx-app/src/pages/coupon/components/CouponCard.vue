@@ -2,15 +2,23 @@
   <base-panel>
     <div class="coupon-item">
       <div class="info">
-        <div class="description">满8减2</div>
-        <van-tag color="#FFD200">满减</van-tag>
-        <div class="endDate">有限期至 2019-10-24</div>
+        <div class="description">{{coupon.couponName}}</div>
+        <van-tag color="#FFD200">{{couponType}}</van-tag>
+        <div class="endDate">有限期至 <span v-if="coupon.expireDate">{{expireDate}}</span></div>
       </div>
       <div class="priceInfo">
-        <div class="price">₩
-          <div class="price-number">{{coupon.price}}</div>
+        <div class="price">
+          <div v-if="coupon.couponMoney > 0">
+            ₩
+            <div class="price-number">{{coupon.couponMoney}}</div>
+          </div>
+          <div v-if="coupon.couponDiscount > 0">
+            <div class="price-number">{{coupon.couponDiscount}}</div>
+            折
+          </div>
         </div>
         <van-button
+          @click="onClick"
           custom-class="use-btn"
           round
           size="small">
@@ -26,20 +34,39 @@
 
 <script>
   import BasePanel from '@/components/BasePanel'
+  import { formatCouponState, formatCouponType, formatDate } from '@/utils/index'
 
   export default {
     name: 'CouponCard',
+    components: {
+      BasePanel
+    },
     props: {
       coupon: {
         type: Object,
         required: true
       }
     },
+    computed: {
+      expireDate () {
+        return formatDate(new Date(this.coupon.expireDate))
+      },
+      couponType () {
+        return formatCouponType(this.coupon.couponType)
+      },
+      CouponStateFormat: function (value) {
+        return formatCouponState(value)
+      }
+    },
     data () {
       return {}
     },
-    components: {
-      BasePanel
+    methods: {
+      onClick () {
+        mpvue.switchTab({
+          url: '/pages/goods/main'
+        })
+      }
     }
   }
 </script>

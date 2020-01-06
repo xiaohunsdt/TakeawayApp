@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogFormVisible" size="mini" title="生成优惠卷" width="600px">
+  <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible" size="mini" title="生成优惠卷" width="600px">
     <el-form :model="formData">
       <el-form-item label="优惠卷模板" label-width="120">
         <el-select placeholder="请选择优惠卷模板" v-model="formData.templateId">

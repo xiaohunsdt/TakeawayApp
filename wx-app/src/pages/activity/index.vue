@@ -21,17 +21,17 @@
   import activityService from '@/services/activity'
 
   export default {
+    data () {
+      return {
+        activityList: []
+      }
+    },
     onLoad () {
       this.init()
     },
     onPullDownRefresh () {
       this.init()
       mpvue.stopPullDownRefresh()
-    },
-    data () {
-      return {
-        activityList: []
-      }
     },
     methods: {
       init () {
