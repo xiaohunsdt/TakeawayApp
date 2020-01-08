@@ -15,7 +15,7 @@
 
     <name>user-web</name>
     <properties>
-        <wx-java.version>3.5.0</wx-java.version>
+        <wx-java.version>3.6.0</wx-java.version>
     </properties>
     <dependencies>
         <dependency>
