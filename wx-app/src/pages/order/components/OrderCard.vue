@@ -38,7 +38,7 @@
       <van-button
         @click.stop="payNow" color="#FFD200" custom-class="action-btn" round
         size="small"
-        v-if="order.payState === 'UN_PAY'">
+        v-if="order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'">
         立刻付款
       </van-button>
       <van-button

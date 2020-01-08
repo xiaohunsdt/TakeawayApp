@@ -66,4 +66,9 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             target.insert();
         }
     }
+
+    @Override
+    public int getDiscountMoney(Coupon coupon, int price) {
+        return 0;
+    }
 }

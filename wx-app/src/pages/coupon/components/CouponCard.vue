@@ -33,10 +33,10 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import {mapMutations} from 'vuex'
   import BasePanel from '@/components/BasePanel'
-  import { formatCouponState, formatCouponType, formatDate } from '@/utils/index'
-  import { getPages } from '@/utils/util'
+  import {formatCouponState, formatCouponType, formatDate} from '@/utils/index'
+  import {getPages} from '@/utils/util'
 
   export default {
     name: 'CouponCard',
@@ -69,8 +69,9 @@
       ]),
       onClick () {
         this.SET_COUPON(this.coupon)
+
         const pages = getPages()
-        if (pages.length > 1) {
+        if (pages.length > 1 && pages[pages.length - 1].route === 'pages/buy/main') {
           mpvue.navigateBack()
         } else {
           mpvue.switchTab({

@@ -58,4 +58,12 @@ public interface ICouponService extends IService<Coupon> {
     void generateCoupon(CouponTemplate template, String userId);
 
     void generateCoupon(CouponTemplate template, String userId, Integer count);
+
+    /**
+     * 获取优惠金额
+     * @param coupon 指定的优惠卷
+     * @param amount 订单总价格
+     * @return
+     */
+    int getDiscountMoney(Coupon coupon, int amount);
 }
