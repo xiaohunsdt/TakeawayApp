@@ -10,7 +10,6 @@
         <module>user</module>
         <module>order</module>
         <module>goods</module>
-        <module>coupon</module>
         <module>setting</module>
         <module>activity</module>
         <module>category</module>
