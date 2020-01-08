@@ -8,11 +8,11 @@
     price-class="goods-card-price"
     thumb-mode="aspectFill"
     title-class="goods-card-title">
-    <view slot="thumb" class="goods-card-thumb">
+    <view class="goods-card-thumb" slot="thumb">
       <img
-        style="height: 100%;width: 100%"
+        :src="food.thumb?food.thumb:'/static/images/no_image.gif'"
         mode="aspectFill"
-        :src="food.thumb?food.thumb:'/static/images/no_image.gif'"/>
+        style="height: 100%;width: 100%"/>
     </view>
     <view class="goods-card-desc" slot="desc">
       <div class="desc">
@@ -31,6 +31,7 @@
     <view slot="footer" style="height: 0.4rem">
       <order-stepper :food="food" v-if="currentFoodCount > 0"/>
       <van-button
+        :disabled="food.state!=='ON'"
         @click="addCart"
         custom-class="order-btn"
         icon="goods-collect"
@@ -38,7 +39,12 @@
         size="small"
         type="primary"
         v-else>
-        下单
+        <span v-if="food.state==='ON'">
+          下单
+        </span>
+        <span v-else-if="food.state==='SHORTAGE'">
+          缺货
+        </span>
       </van-button>
     </view>
   </van-card>
@@ -47,7 +53,7 @@
 <script>
   import OrderStepper from '@/components/OrderStepper'
 
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'MainGoodsCard',
@@ -70,7 +76,10 @@
         'ADD_GOODS'
       ]),
       addCart () {
-        console.log(`id is ${this.food.id}`)
+        // console.log(`id is ${this.food.id}`)
+        if (this.food.state !== 'ON') {
+          return
+        }
         this.ADD_GOODS(this.food)
       }
     }

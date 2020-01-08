@@ -9,6 +9,7 @@
     <div class="action">
       <order-stepper :food="food" v-if="currentFoodCount > 0"/>
       <van-button
+        :disabled="food.state!=='ON'"
         @click="addCart"
         custom-class="order-btn"
         icon="goods-collect"
@@ -16,7 +17,12 @@
         size="small"
         type="primary"
         v-else>
-        下单
+        <span v-if="food.state==='ON'">
+          下单
+        </span>
+        <span v-else-if="food.state==='SHORTAGE'">
+          缺货
+        </span>
       </van-button>
     </div>
   </div>
@@ -49,6 +55,9 @@
       ]),
       addCart () {
         // console.log(`id is ${this.food.id}`)
+        if (this.food.state !== 'ON') {
+          return
+        }
         this.ADD_GOODS(this.food)
       }
     }

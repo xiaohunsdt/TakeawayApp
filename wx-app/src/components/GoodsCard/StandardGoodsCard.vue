@@ -14,11 +14,12 @@
         <van-icon name="label"/>
         {{ food.desc }}
       </div>
-<!--      <div class="goods-card-origin-price">₩ {{ food.price }}</div>-->
+      <!--      <div class="goods-card-origin-price">₩ {{ food.price }}</div>-->
       <span class="goods-card-price">₩ {{ food.price }}</span>
       <div style="height: 0rem">
         <order-stepper :food="food" v-if="currentFoodCount > 0"/>
         <van-button
+          :disabled="food.state!=='ON'"
           @click="addCart"
           custom-class="order-btn"
           icon="goods-collect"
@@ -26,7 +27,12 @@
           size="small"
           type="primary"
           v-else>
-          下单
+          <span v-if="food.state==='ON'">
+            下单
+          </span>
+          <span v-else-if="food.state==='SHORTAGE'">
+            缺货
+          </span>
         </van-button>
       </div>
     </div>
@@ -59,7 +65,10 @@
         'ADD_GOODS'
       ]),
       addCart () {
-        console.log(`id is ${this.food.id}`)
+        // console.log(`id is ${this.food.id}`)
+        if (this.food.state !== 'ON') {
+          return
+        }
         this.ADD_GOODS(this.food)
       }
     }
@@ -116,8 +125,8 @@
   }
 
   .goods-card-origin-price {
-    color:gray !important;
-    text-decoration:line-through
+    color: gray !important;
+    text-decoration: line-through
   }
 
   .goods-card-desc {
