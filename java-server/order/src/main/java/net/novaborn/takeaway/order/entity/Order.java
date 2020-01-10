@@ -39,8 +39,6 @@ public class Order extends Model<Order> {
     @Min(value = 1, message = "产品数量不能为空")
     private Integer goodsCount;
 
-    private String couponId;
-
     /**
      * 折扣
      */

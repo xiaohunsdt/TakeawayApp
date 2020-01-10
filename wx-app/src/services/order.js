@@ -7,6 +7,13 @@ import api from '@/utils/api'
  * 创建订单
  */
 export function createOrder (orderItems, address, paymentWay, coupon, ps) {
+  if (!address) {
+    mpvue.showToast({
+      title: '请设置地址!!',
+      image: '/static/images/error.png'
+    })
+  }
+
   let allCount = 0
   let allPrice = 0
   orderItems.forEach(item => {
@@ -15,7 +22,6 @@ export function createOrder (orderItems, address, paymentWay, coupon, ps) {
   })
   let order = {
     addressId: address.id,
-    couponId: coupon.id,
     goodsCount: allCount,
     discount: 0,
     discountedPrices: 0,
@@ -23,6 +29,10 @@ export function createOrder (orderItems, address, paymentWay, coupon, ps) {
     realPrice: allPrice,
     paymentWay,
     ps
+  }
+
+  if (coupon) {
+    order.couponId = coupon.id
   }
   return api.createOrder(order, orderItems)
 }
@@ -35,7 +45,7 @@ export function selectOrderById (orderId) {
 }
 
 export function getOrderListByPage (page, orderState) {
-  const args = Object.assign({}, page, { orderState })
+  const args = Object.assign({}, page, {orderState})
   return api.getOrderListByPage(args)
 }
 
