@@ -138,7 +138,7 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import {mapMutations} from 'vuex'
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import indexService from '@/services/index'
@@ -283,6 +283,9 @@
           })
           .catch(res => {
             this.submitLoading = false
+            if (res) {
+              console.error(res)
+            }
           })
       },
       checkExpressState (addressId, allPrice) {

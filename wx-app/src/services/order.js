@@ -7,34 +7,40 @@ import api from '@/utils/api'
  * 创建订单
  */
 export function createOrder (orderItems, address, paymentWay, coupon, ps) {
-  if (!address) {
-    mpvue.showToast({
-      title: '请设置地址!!',
-      image: '/static/images/error.png'
+  return new Promise(function (resolve, reject) {
+    if (!address) {
+      mpvue.showToast({
+        title: '请设置地址!!',
+        image: '/static/images/error.png'
+      })
+      // eslint-disable-next-line prefer-promise-reject-errors
+      reject()
+    }
+
+    let allCount = 0
+    let allPrice = 0
+    orderItems.forEach(item => {
+      allCount += item.goodsCount
+      allPrice += item.goodsCount * item.goodsPrice
     })
-  }
+    let order = {
+      addressId: address.id,
+      goodsCount: allCount,
+      discount: 0,
+      discountedPrices: 0,
+      allPrice,
+      realPrice: allPrice,
+      paymentWay,
+      ps
+    }
 
-  let allCount = 0
-  let allPrice = 0
-  orderItems.forEach(item => {
-    allCount += item.goodsCount
-    allPrice += item.goodsCount * item.goodsPrice
+    if (coupon) {
+      order.couponId = coupon.id
+    }
+    api.createOrder(order, orderItems)
+      .then(res => resolve(res))
+      .catch(err => reject(err))
   })
-  let order = {
-    addressId: address.id,
-    goodsCount: allCount,
-    discount: 0,
-    discountedPrices: 0,
-    allPrice,
-    realPrice: allPrice,
-    paymentWay,
-    ps
-  }
-
-  if (coupon) {
-    order.couponId = coupon.id
-  }
-  return api.createOrder(order, orderItems)
 }
 
 /**
