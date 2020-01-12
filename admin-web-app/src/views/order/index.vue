@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <base-card class="container-header">
-      <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
+      <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini" style="max-width: 1280px">
         <el-form-item label="昵称">
           <el-input placeholder="请输入昵称" v-model="formData.nickName"></el-input>
         </el-form-item>
@@ -11,6 +11,28 @@
         <el-form-item label="单号">
           <el-input placeholder="请输入单号" v-model="formData.number"></el-input>
         </el-form-item>
+        <el-form-item label="支付方式">
+          <el-select placeholder="选择支付方式" v-model="formData.paymentWay">
+            <el-option :value="null" label="所有"/>
+            <el-option :value="0" label="账户余额"/>
+            <el-option :value="1" label="通帐转帐"/>
+            <el-option :value="2" label="微信支付"/>
+            <el-option :value="3" label="支付宝支付"/>
+            <el-option :value="4" label="刷卡支付"/>
+            <el-option :value="5" label="现金支付"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="订单状态">
+          <el-select placeholder="选择订单状态" v-model="formData.orderState">
+            <el-option :value="null" label="所有"/>
+            <el-option :value="0" label="等待接单"/>
+            <el-option :value="1" label="生产中"/>
+            <el-option :value="2" label="配送中"/>
+            <el-option :value="3" label="已完成"/>
+            <el-option :value="4" label="退款"/>
+            <el-option :value="5" label="过期"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             end-placeholder="end date"
@@ -18,7 +40,7 @@
             start-placeholder="start date"
             type="daterange"
             v-model="formData.formDate"
-            value-format="yyyy-MM-dd" />
+            value-format="yyyy-MM-dd"/>
         </el-form-item>
         <el-form-item>
           <el-button @click="onSearch" type="primary">查询</el-button>
@@ -74,6 +96,9 @@
                       <el-form-item label="订单 ID">
                         <span>{{ props.row.id }}</span>
                       </el-form-item>
+                      <el-form-item label="用户 ID">
+                        <span>{{ props.row.userId }}</span>
+                      </el-form-item>
                       <el-form-item label="总金额">
                         <span>₩ {{ props.row.allPrice.toLocaleString() }}</span>
                       </el-form-item>
@@ -81,8 +106,8 @@
                         <span>₩ {{ props.row.discountedPrices.toLocaleString() }}</span>
                         <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
                       </el-form-item>
-                      <el-form-item label="实际金额">
-                        <span>₩ {{ props.row.realPrice.toLocaleString() }}</span>
+                      <el-form-item label="备注" v-if="props.row.ps!==''">
+                        <span>{{ props.row.ps }}</span>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -293,6 +318,8 @@
           nickName: null,
           number: null,
           orderId: null,
+          paymentWay: null,
+          orderState: null,
           formDate: [
             new Date(),
             new Date()
@@ -498,10 +525,6 @@
     width: 100%;
     background-color: $bg;
     overflow: hidden;
-  }
-
-  .el-form-item {
-    margin-bottom: unset !important;
   }
 
   .action-btns {

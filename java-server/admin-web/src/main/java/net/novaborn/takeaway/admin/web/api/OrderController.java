@@ -64,7 +64,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("getOrderDetail")
     public ResponseEntity getOrderDetail(@RequestParam String orderId) {
-        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        Optional<Order> order = Optional.ofNullable(orderService.selectOne(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
     }

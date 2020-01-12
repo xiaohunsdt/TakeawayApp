@@ -22,16 +22,23 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param userId 用户ID
      * @param paymentWay 支付方式
      * @param orderState 订单状态
+     * @param isShowDeleted 是否显示已被删除的账户
      * @return 筛选后的指定用户订单列表
      */
-    List<Order> getOrderListByUserId(@Param("userId") String userId, @Param("paymentWay") PaymentWay paymentWay, @Param("orderState") OrderState orderState);
+    List<Order> getOrderListByUserId(@Param("userId") String userId,
+                                     @Param("paymentWay") PaymentWay paymentWay,
+                                     @Param("orderState") OrderState orderState,
+                                     @Param("isShowDeleted") boolean isShowDeleted);
 
     /**
      * 分页获取订单列表
-     * @param page   分页实例
-     * @param args   userId 用户ID <br />
-     *               paymentWay 支付方式 <br />
-     *               orderState 订单状态
+     * @param page 分页实例
+     * @param args userIds 用户IDs <br />
+     *             orderId 订单ID <br />
+     *             number 编号 <br />
+     *             orderState 订单状态 <br />
+     *             paymentWay 支付方式 <br />
+     *             startDate endDate 范围时间
      * @return 订单列表
      */
     IPage<Order> getOrderListByPage(@Param("page") Page page, @Param("args") Map args);
