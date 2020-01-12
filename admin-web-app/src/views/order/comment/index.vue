@@ -51,11 +51,11 @@
           label="口味评分">
           <template v-slot="scope">
             <el-rate
-              v-model="scope.row.delicious"
               :score-template="scope.row.delicious.toString()"
               disabled
               show-score
-              text-color="#ff9900">
+              text-color="#ff9900"
+              v-model="scope.row.delicious">
             </el-rate>
           </template>
         </el-table-column>
@@ -64,11 +64,11 @@
           label="配送评分">
           <template v-slot="scope">
             <el-rate
-              v-model="scope.row.express"
               :score-template="scope.row.express.toString()"
               disabled
               show-score
-              text-color="#ff9900">
+              text-color="#ff9900"
+              v-model="scope.row.express">
             </el-rate>
           </template>
         </el-table-column>
@@ -77,11 +77,11 @@
           label="服务评分">
           <template v-slot="scope">
             <el-rate
-              v-model="scope.row.service"
               :score-template="scope.row.service.toString()"
               disabled
               show-score
-              text-color="#ff9900">
+              text-color="#ff9900"
+              v-model="scope.row.service">
             </el-rate>
           </template>
         </el-table-column>
@@ -109,6 +109,8 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import commentApi from '@/api/comment'
+
+  import { parseTime } from '@/utils/index'
 
   export default {
     name: 'CommentManagement',
@@ -142,8 +144,8 @@
         this.page.current = 1
 
         const params = Object.assign({}, this.formData)
-        params.startDate = params.formDate[0]
-        params.endDate = params.formDate[1]
+        params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
+        params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
         commentApi.getCommentListByPage(this.page, params)
           .then(response => {

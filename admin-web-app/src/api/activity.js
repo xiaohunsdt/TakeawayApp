@@ -32,9 +32,6 @@ export function getAllActivityList() {
 }
 
 export function createNewActivity(data) {
-  data.startDate = parseTime(data.startDate, '{y}-{m}-{d}')
-  data.endDate = parseTime(data.endDate, '{y}-{m}-{d}')
-
   return request({
     url: '/activity/createNewActivity',
     method: 'post',

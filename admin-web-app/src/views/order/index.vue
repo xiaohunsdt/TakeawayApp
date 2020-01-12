@@ -298,7 +298,7 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import orderApi from '@/api/order'
-  import { formatOrderState, formatPaymentWay, formatPayState } from '@/utils/index'
+  import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
 
   export default {
     name: 'OrderManagement',
@@ -347,8 +347,8 @@
         this.page.current = 1
 
         const params = Object.assign({}, this.formData)
-        params.startDate = params.formDate[0]
-        params.endDate = params.formDate[1]
+        params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
+        params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
         orderApi.getOrderListByPage(this.page, params)
           .then(response => {

@@ -38,7 +38,7 @@
 
 <script>
   import { getToken } from '@/utils/auth'
-  import { getQueryObject } from '@/utils/index'
+  import { getQueryObject, parseTime } from '@/utils/index'
   import activityApi from '@/api/activity'
 
   import BaseCard from '@/components/BaseCard'
@@ -53,7 +53,7 @@
     computed: {
       authHeader() {
         return {
-          Authorization: `Bearer ${getToken()}`
+          Authorization: `Bearer ${ getToken() }`
         }
       }
     },
@@ -90,14 +90,15 @@
     },
     methods: {
       onUploadImgSuccess(response, file, fileList) {
-        this.formData.mainImg = `/upload/images/activity/${response.message}`
+        this.formData.mainImg = `/upload/images/activity/${ response.message }`
       },
       saveActivity() {
         this.$refs.form.validate((valid) => {
           if (valid) {
             const params = Object.assign({}, this.formData)
-            params.startDate = params.formDate[0]
-            params.endDate = params.formDate[1]
+            params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
+            params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
+
             activityApi.createNewActivity(params)
               .then(response => {
                 this.$message({
