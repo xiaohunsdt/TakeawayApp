@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.order.dao.IOrderDao">
 
+    <select id="getById" resultType="Order">
+        SELECT * FROM `order`
+        <where>
+            `id` = #{orderId}
+            <if test="!isShowDeleted">
+                AND deleted = 0
+            </if>
+        </where>
+    </select>
+
+
     <select id="getOrderListByUserId" resultType="Order">
         SELECT * FROM `order`
         <where>
@@ -42,7 +53,7 @@
             <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
                 AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
             </if>
-#             AND deleted = 0
+            # AND deleted = 0
         </where>
         ORDER BY `create_date` DESC
     </select>

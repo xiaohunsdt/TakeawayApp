@@ -1,6 +1,8 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +66,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("getOrderDetail")
     public ResponseEntity getOrderDetail(@RequestParam String orderId) {
-        Optional<Order> order = Optional.ofNullable(orderService.selectOne(orderId));
+        Optional<Order> order = orderService.getById(orderId,true);
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
     }

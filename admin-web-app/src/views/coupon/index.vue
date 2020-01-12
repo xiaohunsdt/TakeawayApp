@@ -237,6 +237,8 @@
     methods: {
       onSearch() {
         this.listLoading = true
+        this.page.current = 1
+
         couponApi.getCouponListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records

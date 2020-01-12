@@ -101,6 +101,8 @@
     methods: {
       onSearch() {
         this.listLoading = true
+        this.page.current = 1
+
         addressApi.getAddressListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records

@@ -10,6 +10,7 @@ import net.novaborn.takeaway.order.enums.PaymentWay;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -20,6 +21,14 @@ import java.util.Map;
  * @since 2019-09-20
  */
 public interface IOrderService extends IService<Order> {
+    /**
+     *
+     * @param orderId 订单Id
+     * @param isShowDeleted 是否显示被删除的订单
+     * @return
+     */
+    Optional<Order> getById(String orderId, boolean isShowDeleted);
+
     /**
      * 获取指定用户的订单
      *

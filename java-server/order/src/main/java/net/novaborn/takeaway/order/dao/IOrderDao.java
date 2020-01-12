@@ -11,12 +11,21 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author xiaohun
  * @since 2019-09-20
  */
 public interface IOrderDao extends BaseMapper<Order> {
+    /**
+     *
+     * @param orderId 订单Id
+     * @param isShowDeleted 是否显示被删除的订单
+     * @return
+     */
+    Optional<Order> getById(@Param("orderId") String orderId, @Param("isShowDeleted") boolean isShowDeleted);
+
     /**
      * 获取指定用户的订单
      * @param userId 用户ID

@@ -181,11 +181,14 @@
           align="center"
           label="支付状态">
           <template v-slot="scope">
-            <el-tag type="success" v-if="scope.row.payState === 'PAID'">{{ scope.row.payState | payStateFormat }}
+            <el-tag type="success" v-if="scope.row.payState === 'PAID'">
+              {{ scope.row.payState | payStateFormat }}
             </el-tag>
-            <el-tag type="warning" v-if="scope.row.payState === 'PAY_LATER'">{{ scope.row.payState | payStateFormat }}
+            <el-tag type="warning" v-if="scope.row.payState === 'PAY_LATER'">
+              {{ scope.row.payState | payStateFormat }}
             </el-tag>
-            <el-tag type="danger" v-if="scope.row.payState === 'UN_PAY'">{{ scope.row.payState | payStateFormat }}
+            <el-tag type="danger" v-if="scope.row.payState === 'UN_PAY'">
+              {{ scope.row.payState | payStateFormat }}
             </el-tag>
           </template>
         </el-table-column>
@@ -193,16 +196,21 @@
           align="center"
           label="订单状态">
           <template v-slot="scope">
-            <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">{{ scope.row.orderState | orderStateFormat
-              }}
+            <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">
+              {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
-            <el-tag type="danger" v-else-if="scope.row.orderState === 'REFUND'">{{ scope.row.orderState |
-              orderStateFormat }}
+            <el-tag type="danger" v-else-if="scope.row.orderState === 'REFUND'">
+              {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
-            <el-tag type="info" v-else-if="scope.row.orderState === 'EXPIRED'">{{ scope.row.orderState |
-              orderStateFormat }}
+            <el-tag type="info" v-else-if="scope.row.orderState === 'EXPIRED'">
+              {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
-            <el-tag v-else>{{ scope.row.orderState | orderStateFormat }}</el-tag>
+            <el-tag v-else>
+              {{ scope.row.orderState | orderStateFormat }}
+            </el-tag>
+            <el-tag type="info" v-if="scope.row.deleted === 1">
+              已删除
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -265,7 +273,8 @@
                 @click="onDeleteOrder(scope.row)"
                 size="mini"
                 type="danger"
-                v-if="scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND'">删除
+                v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0">
+                删除
               </el-button>
             </div>
           </template>
@@ -335,6 +344,7 @@
     methods: {
       onSearch() {
         this.listLoading = true
+        this.page.current = 1
 
         const params = Object.assign({}, this.formData)
         params.startDate = params.formDate[0]

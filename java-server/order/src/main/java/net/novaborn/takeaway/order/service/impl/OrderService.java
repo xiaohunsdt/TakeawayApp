@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -23,6 +24,11 @@ import java.util.Map;
  */
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
+    @Override
+    public Optional<Order> getById(String orderId, boolean isShowDeleted) {
+        return this.baseMapper.getById(orderId, isShowDeleted);
+    }
+
     @Override
     public List<Order> getOrderListByUserId(String userId) {
         return this.getOrderListByUserId(userId, null, null, false);

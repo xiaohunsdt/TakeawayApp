@@ -185,6 +185,8 @@
     methods: {
       onSearch() {
         this.listLoading = true
+        this.page.current = 1
+
         couponTemplateApi.getTemplateListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
