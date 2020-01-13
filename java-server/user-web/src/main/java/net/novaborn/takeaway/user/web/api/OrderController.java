@@ -16,6 +16,7 @@ import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
@@ -47,6 +48,8 @@ public class OrderController extends BaseController {
     private UserService userService;
 
     private OrderService orderService;
+
+    private OrderItemService orderItemService;
 
     private OrderPayExpiredSender orderPayExpiredSender;
 
@@ -124,13 +127,15 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
         }
 
+        //检测订单商品项是否可以下单
+        orderItemService.checkOrderItems(orderItems);
+
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        int number = orderService.getOrderCountToday() + 1;
-
         //填写订单信息
+        int number = orderService.getOrderCountToday() + 1;
         order.setNumber(number);
         order.setUserId(user.get().getId());
 
@@ -142,7 +147,7 @@ public class OrderController extends BaseController {
             order.setPayState(PayState.UN_PAY);
         }
 
-        //先生成订单，在生成订单产品详情
+        //先生成订单，再生成订单产品详情
         if (order.insert()) {
             orderItems.parallelStream().forEach(item -> {
                 item.setOrderId(order.getId());

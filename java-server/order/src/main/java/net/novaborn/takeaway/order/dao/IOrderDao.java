@@ -52,9 +52,16 @@ public interface IOrderDao extends BaseMapper<Order> {
      */
     IPage<Order> getOrderListByPage(@Param("page") Page page, @Param("args") Map args);
 
-
+    /**
+     * 获取等待接单的订单
+     * @return 等待接单的订单列表
+     */
     List<Order> getWaitingReceiveOrder();
 
+    /**
+     * 获取等待接单的订单数量
+     * @return 等待接单的订单数量
+     */
     int getWaitingReceiveOrderCount();
 
     /**

@@ -1,15 +1,21 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.novaborn.takeaway.order.dao.IOrderDao;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.order.dao.IOrderItemDao;
-import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.IOrderItemService;
-import net.novaborn.takeaway.order.service.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -19,8 +25,13 @@ import java.util.List;
  * @author xiaohun
  * @since 2019-09-20
  */
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> implements IOrderItemService {
+    @Autowired
+    GoodsService goodsService;
+
     @Override
     public List<OrderItem> selectByOrderId(String orderId) {
         return this.baseMapper.selectByOrderId(orderId);
@@ -29,5 +40,19 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
     @Override
     public boolean removeByOrderId(String orderId) {
         return this.baseMapper.removeByOrderId(orderId);
+    }
+
+    @Override
+    public void checkOrderItems(List<OrderItem> orderItemList) {
+        orderItemList.parallelStream().forEach(item -> {
+            Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
+            goods.orElseThrow(()->new SysException(GoodsExceptionEnum.GOODS_NOT_FOUND));
+
+            if(goods.get().getState() == GoodsState.SHORTAGE){
+                SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
+                sysException.setMessage(goods.get().getName()+": 当前处于缺货中,无法下单!请下来刷新菜单!");
+                throw sysException;
+            }
+        });
     }
 }

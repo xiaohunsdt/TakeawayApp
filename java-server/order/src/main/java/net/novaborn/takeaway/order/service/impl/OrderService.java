@@ -3,11 +3,14 @@ package net.novaborn.takeaway.order.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.service.IOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +25,12 @@ import java.util.Optional;
  * @author xiaohun
  * @since 2019-09-20
  */
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
+
+
     @Override
     public Optional<Order> getById(String orderId, boolean isShowDeleted) {
         return this.baseMapper.getById(orderId, isShowDeleted);

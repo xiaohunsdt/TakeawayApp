@@ -29,4 +29,11 @@ public interface IOrderItemService extends IService<OrderItem> {
      * @return 是否成功
      */
     boolean removeByOrderId(String orderId);
+
+    /**
+     * 检测商品项是否可以下单
+     * 商品不足抛出 @GoodsExceptionEnum 异常
+     * @param orderItemList 被检测的订单商品项
+     */
+    void checkOrderItems(List<OrderItem> orderItemList);
 }
