@@ -139,6 +139,12 @@ public class OrderController extends BaseController {
         order.setNumber(number);
         order.setUserId(user.get().getId());
 
+        //设置折扣
+        int realPrice = (int)(order.getAllPrice() * 0.9);
+        order.setDiscount((short)90);
+        order.setDiscountedPrices(order.getAllPrice() - realPrice);
+        order.setRealPrice(realPrice);
+
         //设置订单的支付状态
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
             //刷卡和现金支付设置为后付状态
