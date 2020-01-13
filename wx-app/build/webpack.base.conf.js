@@ -28,6 +28,8 @@ const appEntry = { app: resolve('./src/main.js') }
 const pagesEntry = getEntry(resolve('./src'), 'pages/**/main.js')
 const entry = Object.assign({}, appEntry, pagesEntry)
 
+console.log(resolve('/static/vant/dialog/dialog'))
+
 let baseWebpackConfig = {
   // 如果要自定义生成的 dist 目录里面的文件路径，
   // 可以将 entry 写成 {'toPath': 'fromPath'} 的形式，
@@ -46,7 +48,8 @@ let baseWebpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue': 'mpvue',
-      '@': resolve('src')
+      '@': resolve('src'),
+      '$': resolve('')
     },
     symlinks: false,
     aliasFields: ['mpvue', 'weapp', 'browser'],
