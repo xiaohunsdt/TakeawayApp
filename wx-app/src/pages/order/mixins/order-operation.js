@@ -1,5 +1,6 @@
 import orderService from '@/services/order'
 import payService from '@/services/pay'
+import Dialog from '/static/vant/dialog/dialog'
 
 export default {
   methods: {
@@ -7,11 +8,16 @@ export default {
       payService.payOrder(this.order.id, this.order.paymentWay)
     },
     confirmGetFood (event) {
-      orderService.confirmGetOrder(this.order.id).then(res => {
-        this.$emit('refresh-list')
-        mpvue.showToast({
-          title: res.message,
-          duration: 2000
+      Dialog.confirm({
+        title: '提示',
+        message: '您确定已经收到订餐?!'
+      }).then(() => {
+        orderService.confirmGetOrder(this.order.id).then(res => {
+          this.$emit('refresh-list')
+          mpvue.showToast({
+            title: res.message,
+            duration: 2000
+          })
         })
       })
     },

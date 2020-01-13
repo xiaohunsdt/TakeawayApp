@@ -172,9 +172,8 @@
         })
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         goodsApi.getGoodsListByPage(this.page, this.formData)
           .then(response => {
@@ -184,6 +183,10 @@
           }).catch(() => {
           this.listLoading = false
         })
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       },
       onEdit(row) {
         this.currentGoods = row
@@ -197,7 +200,7 @@
         }).then(() => {
           goodsApi.deleteGoods(id)
             .then(() => {
-              this.onSearch()
+              this.getList()
             })
         })
       },
@@ -210,11 +213,11 @@
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
       }
     }
   }

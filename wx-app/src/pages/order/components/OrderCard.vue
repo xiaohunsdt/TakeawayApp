@@ -67,6 +67,7 @@
       </van-button>
     </div>
   </base-panel>
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>

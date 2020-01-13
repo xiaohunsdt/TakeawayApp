@@ -115,9 +115,8 @@
       this.onSearch()
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         activityApi.getActivityListByPage(this.page, this.formData)
           .then(response => {
@@ -130,11 +129,15 @@
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       },
       onIsShowChange(activity) {
         activityApi.changeIsShow(activity.id, activity.isShow)
@@ -158,7 +161,7 @@
         }).then(() => {
           activityApi.deleteActivity(id)
             .then(() => {
-              this.onSearch()
+              this.getList()
             })
         })
       }

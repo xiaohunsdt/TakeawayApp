@@ -183,9 +183,8 @@
       this.onSearch()
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         couponTemplateApi.getTemplateListByPage(this.page, this.formData)
           .then(response => {
@@ -203,11 +202,15 @@
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       },
       onEdit(id) {
         this.$router.push({
@@ -222,7 +225,7 @@
         }).then(() => {
           couponTemplateApi.deleteTemplate(id)
             .then(() => {
-              this.onSearch()
+              this.getList()
             })
         })
       }

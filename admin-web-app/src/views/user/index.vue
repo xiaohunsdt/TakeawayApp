@@ -125,9 +125,8 @@
       this.onSearch()
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         userApi.getUserListByPage(this.page, this.formData)
           .then(response => {
@@ -138,6 +137,10 @@
           this.listLoading = false
         })
       },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
+      },
       onDelete(id) {
         this.$confirm('是否确定删除此用户?', '提示', {
           confirmButtonText: '确定',
@@ -146,17 +149,17 @@
         }).then(() => {
           userApi.deleteUser(id)
             .then(() => {
-              this.onSearch()
+              this.getList()
             })
         })
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
       },
       handleSelectionChange(val) {
         this.multipleSelection = val

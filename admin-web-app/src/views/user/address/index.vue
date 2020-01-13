@@ -20,37 +20,37 @@
         style="width: 100%"
         v-loading="listLoading">
         <el-table-column
-          label="用户名"
-          align="center">
+          align="center"
+          label="用户名">
           <template v-slot="scope">
             <div v-if="scope.row.user.name !==''">{{ scope.row.user.name }}</div>
             <div>{{ scope.row.user.nickName }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="地址"
-          align="center">
+          align="center"
+          label="地址">
           <template v-slot="scope">
             <div>{{ scope.row.address }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="详细"
-          align="center">
+          align="center"
+          label="详细">
           <template v-slot="scope">
             <div>{{ scope.row.detail }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="手机"
-          align="center">
+          align="center"
+          label="手机">
           <template v-slot="scope">
             <div>{{ scope.row.phone }}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="是否默认"
-          align="center">
+          align="center"
+          label="是否默认">
           <template v-slot="scope">
             <div>{{ scope.row.isDefault }}</div>
           </template>
@@ -99,9 +99,8 @@
       this.onSearch()
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         addressApi.getAddressListByPage(this.page, this.formData)
           .then(response => {
@@ -114,11 +113,15 @@
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       }
     }
   }

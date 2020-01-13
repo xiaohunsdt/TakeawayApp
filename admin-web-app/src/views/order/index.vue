@@ -342,9 +342,8 @@
       this.onSearch()
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         const params = Object.assign({}, this.formData)
         params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
@@ -375,11 +374,15 @@
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       },
       onEditOrder(order) {
         console.log(order)
@@ -446,14 +449,21 @@
           })
       },
       onFinishOrder(order) {
-        orderApi.finishOrder(order.id)
-          .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
+        this.$confirm('确定当前订单已完成?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderApi.finishOrder(order.id)
+            .then(res => {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+              order.orderState = 'FINISHED'
             })
-            order.orderState = 'FINISHED'
-          })
+        })
+
       },
       onRefundOrder(order) {
         this.$confirm('确定要退款吗?', '提示', {
@@ -483,7 +493,7 @@
                 message: res.message,
                 type: 'success'
               })
-              this.onSearch()
+              this.getList()
             })
         })
       }

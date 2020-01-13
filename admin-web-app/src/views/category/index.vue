@@ -92,9 +92,8 @@
       }
     },
     methods: {
-      onSearch() {
+      getList() {
         this.listLoading = true
-        this.page.current = 1
 
         categoryApi.getCategoryListByPage(this.page, this.formData)
           .then(response => {
@@ -104,6 +103,10 @@
           }).catch(() => {
           this.listLoading = false
         })
+      },
+      onSearch() {
+        this.page.current = 1
+        this.getList()
       },
       onEdit(index, row) {
         categoryApi.updateCategory(row)
@@ -122,17 +125,17 @@
         }).then(() => {
           categoryApi.delteCategory(id)
             .then(() => {
-              this.onSearch()
+              this.getList()
             })
         })
       },
       handleSizeChange(val) {
         this.page.size = val
-        this.onSearch()
+        this.getList()
       },
       handleCurrentChange(val) {
         this.page.current = val
-        this.onSearch()
+        this.getList()
       }
     },
     created() {
