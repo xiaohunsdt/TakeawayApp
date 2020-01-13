@@ -140,10 +140,7 @@ public class OrderController extends BaseController {
         order.setUserId(user.get().getId());
 
         //设置折扣
-        int realPrice = (int)(order.getAllPrice() * 0.9);
-        order.setDiscount((short)90);
-        order.setDiscountedPrices(order.getAllPrice() - realPrice);
-        order.setRealPrice(realPrice);
+        orderService.setDiscount(order, orderItems, 90);
 
         //设置订单的支付状态
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {

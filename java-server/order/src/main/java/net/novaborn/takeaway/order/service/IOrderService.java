@@ -4,7 +4,9 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 
@@ -104,4 +106,9 @@ public interface IOrderService extends IService<Order> {
      * @return 当天的订单数量
      */
     int getOrderCountToday();
+
+
+    void setDiscount(Order order, List<OrderItem> orderItemList, int discount);
+
+    void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon);
 }
