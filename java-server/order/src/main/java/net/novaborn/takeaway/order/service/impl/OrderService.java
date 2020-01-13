@@ -79,6 +79,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public void setDiscount(Order order, List<OrderItem> orderItemList, int discount) {
+        // 刷卡除外
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
             return;
         }
@@ -86,6 +87,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int realPrice = orderItemList.parallelStream()
                 .map(orderItem -> {
                     Goods goods = goodsService.getById(orderItem.getGoodsId());
+                    // 鸭货除外
                     if (goods.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
                     } else {

@@ -107,7 +107,12 @@ public interface IOrderService extends IService<Order> {
      */
     int getOrderCountToday();
 
-
+    /**
+     * 设置折扣
+     * @param order 预设置的订单
+     * @param orderItemList 预设置的订单商品项
+     * @param discount 折扣, 1-99 的折扣大小
+     */
     void setDiscount(Order order, List<OrderItem> orderItemList, int discount);
 
     void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon);
