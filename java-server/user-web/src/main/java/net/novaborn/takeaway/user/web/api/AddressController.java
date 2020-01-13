@@ -83,6 +83,11 @@ public class AddressController extends BaseController {
         Optional<User> user = userService.selectByOpenId(openId);
         Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(user.get().getId());
 
+        // 清除空字符
+        address.setAddress(address.getAddress().trim());
+        address.setDetail(address.getDetail().trim());
+        address.setPhone(address.getPhone().trim());
+
         if (!PhoneUtil.validate(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
