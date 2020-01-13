@@ -29,7 +29,7 @@ public class OrderDetailWrapper extends OrderWrapper {
         List<OrderItem> orderItemList = orderItemService.selectByOrderId((String) map.get("id"));
 
         map.put("address", address);
-        map.put("orderItemList", orderItemList);
+        map.put("orderItemList", new OrderItemWrapper(orderItemList).warp());
 
         map.remove("addressId");
     }
