@@ -140,7 +140,14 @@ public class OrderController extends BaseController {
         order.setUserId(user.get().getId());
 
         //设置折扣
-        orderService.setDiscount(order, orderItems, 90);
+        orderService.setDiscount(order, orderItems, 85);
+
+        // 10000 以下不配送
+        if (order.getRealPrice() < 10000) {
+            SysException sysException = new SysException(OrderExceptionEnum.ORDER_BELOW_LOWEST_DELIVERY_PRICE);
+            sysException.setMessage("今日85折,低于10000韩币无法配送!!");
+            throw sysException;
+        }
 
         //设置订单的支付状态
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
