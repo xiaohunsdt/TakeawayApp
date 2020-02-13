@@ -7,6 +7,7 @@
             `user_id` = #{userId}
             <if test="onlyShowUseAble">
                 AND `state` = 0
+                AND (`expire_date` is null or `expire_date` > now())
             </if>
             AND deleted = 0
         </where>

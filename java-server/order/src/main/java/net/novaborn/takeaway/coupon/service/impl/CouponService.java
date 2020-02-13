@@ -59,6 +59,8 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             BeanUtil.copyProperties(template, target, CopyOptions.create().setIgnoreNullValue(true));
 
             target.setId(null);
+            target.setCreateDate(null);
+            target.setDeleted(null);
             target.setUserId(userId);
             if (template.getExpireDays() > 0) {
                 target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, template.getExpireDays()));
