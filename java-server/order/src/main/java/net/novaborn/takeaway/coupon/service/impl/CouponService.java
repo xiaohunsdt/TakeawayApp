@@ -11,9 +11,9 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.coupon.dao.ICouponDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
+import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
 import net.novaborn.takeaway.coupon.service.ICouponService;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -88,9 +89,14 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             throw sysException;
         }
 
-//        if (coupon == null) {
-//
-//        }
+        Optional<Coupon> coupon = Optional.ofNullable(this.getById(couponId));
+        // 没有这个优惠卷
+        coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
+
+        // 此优惠卷不可用
+        if(coupon.get().getState() != CouponState.UN_USE){
+            throw new SysException(CouponExceptionEnum.COUPON_CAN_NOT_BE_USED);
+        }
 //        int realPrice = orderItems.parallelStream()
 //                .map(orderItem -> {
 //                    Goods goods = goodsService.getById(orderItem.getGoodsId());

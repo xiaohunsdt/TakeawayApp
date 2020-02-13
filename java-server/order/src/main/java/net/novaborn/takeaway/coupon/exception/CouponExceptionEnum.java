@@ -12,6 +12,8 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 public enum CouponExceptionEnum implements ServiceExceptionEnum {
 
     UNSUPPORT_PAYMENT_WAY(5001, "不支持此支付方式"),
+    HAVE_NO_COUPON(5002, "没有这个优惠卷"),
+    COUPON_CAN_NOT_BE_USED(5003, "此优惠卷不可用"),
     UNKNOWN_ERROR(500, "未知错误!!!");
 
     CouponExceptionEnum(int code, String message) {
