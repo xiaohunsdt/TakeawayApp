@@ -7,10 +7,18 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.coupon.dao.ICouponDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
+import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
 import net.novaborn.takeaway.coupon.service.ICouponService;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.PaymentWay;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +34,8 @@ import java.util.Map;
  */
 @Service
 public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements ICouponService {
+    @Autowired
+    GoodsService goodsService;
 
     @Override
     public List<Coupon> getCouponListByUserId(String userId, boolean onlyShowUseAble) {
@@ -70,7 +80,32 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public int getDiscountMoney(Coupon coupon, int price) {
+    public int getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId) {
+        // 刷卡除外
+        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
+            SysException sysException = new SysException(CouponExceptionEnum.UNSUPPORT_PAYMENT_WAY);
+            sysException.setMessage("此优惠卷不支持刷卡支付");
+            throw sysException;
+        }
+
+//        if (coupon == null) {
+//
+//        }
+//        int realPrice = orderItems.parallelStream()
+//                .map(orderItem -> {
+//                    Goods goods = goodsService.getById(orderItem.getGoodsId());
+//                    // 鸭货除外
+//                    if (goods.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
+//                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+//                    } else {
+//                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+//                    }
+//                })
+//                .reduce(0, (x, y) -> x + y);
+//
+//        order.setDiscount((short) discount);
+//        order.setDiscountedPrices(order.getAllPrice() - realPrice);
+//        order.setRealPrice(realPrice);
         return 0;
     }
 }

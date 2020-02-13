@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.service.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
@@ -35,6 +36,9 @@ import java.util.Optional;
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
     @Autowired
     GoodsService goodsService;
+
+    @Autowired
+    CouponService couponService;
 
     @Override
     public Optional<Order> getById(String orderId, boolean isShowDeleted) {
@@ -78,6 +82,13 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
+    public void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon) {
+        couponService.getDiscountMoney(order, orderItemList, coupon.getId());
+        // 对优惠卷进行后续处理
+        // ...
+    }
+
+    @Override
     public void setDiscount(Order order, List<OrderItem> orderItemList, int discount) {
         // 刷卡除外
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
@@ -99,10 +110,5 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
         order.setRealPrice(realPrice);
-    }
-
-    @Override
-    public void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon) {
-
     }
 }

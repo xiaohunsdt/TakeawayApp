@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.user.web.dto;
 
 import lombok.Data;
+import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 
@@ -19,4 +20,6 @@ public class OrderDto {
     @Valid
     @Size(min = 1, message = "没有订单产品信息")
     private List<OrderItem> orderItems;
+
+    private String couponId;
 }

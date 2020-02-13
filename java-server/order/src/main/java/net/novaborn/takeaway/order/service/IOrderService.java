@@ -24,8 +24,7 @@ import java.util.Optional;
  */
 public interface IOrderService extends IService<Order> {
     /**
-     *
-     * @param orderId 订单Id
+     * @param orderId       订单Id
      * @param isShowDeleted 是否显示被删除的订单
      * @return
      */
@@ -69,6 +68,7 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 获取等待接单的订单数量
+     *
      * @return 等待接单的订单数量
      */
     int getWaitingReceiveOrderCount();
@@ -108,12 +108,20 @@ public interface IOrderService extends IService<Order> {
     int getOrderCountToday();
 
     /**
-     * 设置折扣
-     * @param order 预设置的订单
+     * 设置优惠卷折扣
+     *
+     * @param order
+     * @param orderItemList
+     * @param couponId
+     */
+    void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon);
+
+    /**
+     * 设置一般折扣
+     *
+     * @param order         预设置的订单
      * @param orderItemList 预设置的订单商品项
-     * @param discount 折扣, 1-99 的折扣大小
+     * @param discount      折扣, 1-99 的折扣大小
      */
     void setDiscount(Order order, List<OrderItem> orderItemList, int discount);
-
-    void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon);
 }

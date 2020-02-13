@@ -101,6 +101,15 @@
             <div>优惠卷</div>
             <div v-if="coupon">{{coupon.couponName}}</div>
           </div>
+          <div v-if="couponDiscountPrice > 0" class="coupon-discounted-prices">
+            - ₩{{ couponDiscountPrice }}
+          </div>
+          <div v-if="couponInfoTip" class="coupon-discounted-prices">
+            {{ couponInfoTip }}
+          </div>
+          <div class="coupon-detail-info">
+            鸭货除外、刷卡除外,本优惠卷只能使用一次，且退款不退回
+          </div>
         </base-panel>
         <base-panel @panel-click="setPs">
           <div @click="setPs">
@@ -116,7 +125,7 @@
           :decimal-length="0"
           :disabled="disableService"
           :loading="submitLoading"
-          :price="cartAllPrice * 100"
+          :price="(cartAllPrice - couponDiscountPrice) * 100"
           :tip="true"
           @submit="onSubmitOrder"
           button-class="submitBtn"
@@ -145,6 +154,7 @@
   import orderService from '@/services/order'
   import payService from '@/services/pay'
   import addressService from '@/services/address'
+  import couponService from '@/services/coupon'
 
   export default {
     components: {
@@ -187,6 +197,20 @@
         return this.$store.getters.currentCoupon
       }
     },
+    data () {
+      return {
+        submitLoading: false,
+        showOrderTip: false,
+        disableService: false,
+        tipNotice: '',
+        orderId: '',
+        order: {},
+        payWay: 'WEIXIN_PAY',
+        couponDiscountPrice: 0,
+        couponInfoTip: null,
+        psData: ''
+      }
+    },
     onLoad () {
       this.init()
       if (!this.address) {
@@ -222,18 +246,6 @@
           .catch(() => {
             mpvue.hideLoading()
           })
-      }
-    },
-    data () {
-      return {
-        submitLoading: false,
-        showOrderTip: false,
-        disableService: false,
-        tipNotice: '当前下单高峰期, 您可能需要等待较长时间才能就餐!',
-        orderId: '',
-        order: {},
-        payWay: 'WEIXIN_PAY',
-        psData: ''
       }
     },
     methods: {
@@ -274,19 +286,22 @@
       },
       onSubmitOrder () {
         this.submitLoading = true
-        orderService.createOrder(this.orderItems, this.address, this.payWay, this.coupon, this.psData)
-          .then(res => {
-            this.submitLoading = false
-            this.CLEAR_CART()
-            this.orderId = res.message
-            payService.payOrder(this.orderId, this.payWay)
-          })
-          .catch(res => {
-            this.submitLoading = false
-            if (res) {
-              console.error(res)
-            }
-          })
+        orderService.createOrder(
+          orderService.generateOrder(this.orderItems, this.payWay, this.psData),
+          this.orderItems,
+          this.coupon,
+          this.address
+        ).then(res => {
+          this.submitLoading = false
+          this.CLEAR_CART()
+          this.orderId = res.message
+          payService.payOrder(this.orderId, this.payWay)
+        }).catch(res => {
+          this.submitLoading = false
+          if (res) {
+            console.error(res)
+          }
+        })
       },
       checkExpressState (addressId, allPrice) {
         indexService.getExpressServiceState(addressId, allPrice)
@@ -296,6 +311,21 @@
               this.tipNotice = res.message
             }
           })
+      },
+      checkCouponDiscountPrice () {
+        this.couponDiscountPrice = 0
+        this.couponInfoTip = null
+        couponService.checkCouponDiscountPrice(
+          orderService.generateOrder(this.orderItems, this.payWay),
+          this.orderItems,
+          this.coupon
+        ).then(res => {
+          this.couponDiscountPrice = res.message
+        }).catch(res => {
+          if (res) {
+            this.couponInfoTip = res.message
+          }
+        })
       }
     }
   }
@@ -343,5 +373,18 @@
   .coupon-panel {
     display: flex;
     justify-content: space-between;
+  }
+
+  .coupon-discounted-prices {
+    color: red;
+    text-align: right;
+    font-weight: bold;
+    font-size: .27rem;
+  }
+
+  .coupon-detail-info {
+    color: #999999;
+    margin-top: .2rem;
+    font-size: .25rem;
   }
 </style>

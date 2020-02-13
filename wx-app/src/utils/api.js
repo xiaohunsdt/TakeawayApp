@@ -35,9 +35,10 @@ const api = {
   // 确认收到订单
   confirmGetOrder: (orderId) => request.post('order/confirmGetOrder', { orderId }),
   // 创建一个订单
-  createOrder: (order, orderItems) => request.post('order/createOrder', {
+  createOrder: (order, orderItems, couponId) => request.post('order/createOrder', {
     order,
-    orderItems
+    orderItems,
+    couponId
   }, { headers: { 'Content-Type': 'application/json' } }),
   deleteOrder: (orderId) => request.post('order/deleteOrder', { orderId }),
   createComment: (commentData) => request.post('order/createComment', commentData),
@@ -51,7 +52,12 @@ const api = {
   getActivityById: (id) => request.get('activity/getActivityById', { id }),
   getAllActivityList: () => request.get('activity/getAllActivityList'),
 
-  getCouponListU: () => request.get('coupon/getCouponListU')
+  getCouponListU: () => request.get('coupon/getCouponListU'),
+  checkCouponDiscountPrice: (order, orderItems, couponId) => request.post('coupon/checkCouponDiscountPrice', {
+    order,
+    orderItems,
+    couponId
+  }, { headers: { 'Content-Type': 'application/json' } })
 }
 
 export default api

@@ -4,9 +4,33 @@
 import api from '@/utils/api'
 
 /**
+ * 生成一个标准的订单
+ */
+export function generateOrder (orderItems, paymentWay, ps) {
+  let allCount = 0
+  let allPrice = 0
+  orderItems.forEach(item => {
+    allCount += item.goodsCount
+    allPrice += item.goodsCount * item.goodsPrice
+  })
+  let order = {
+    // addressId: address.id,
+    goodsCount: allCount,
+    discount: 0,
+    discountedPrices: 0,
+    allPrice,
+    realPrice: allPrice,
+    paymentWay,
+    ps
+  }
+
+  return order
+}
+
+/**
  * 创建订单
  */
-export function createOrder (orderItems, address, paymentWay, coupon, ps) {
+export function createOrder (order, orderItems, coupon, address) {
   return new Promise(function (resolve, reject) {
     if (!address) {
       mpvue.showToast({
@@ -16,28 +40,8 @@ export function createOrder (orderItems, address, paymentWay, coupon, ps) {
       // eslint-disable-next-line prefer-promise-reject-errors
       reject()
     }
-
-    let allCount = 0
-    let allPrice = 0
-    orderItems.forEach(item => {
-      allCount += item.goodsCount
-      allPrice += item.goodsCount * item.goodsPrice
-    })
-    let order = {
-      addressId: address.id,
-      goodsCount: allCount,
-      discount: 0,
-      discountedPrices: 0,
-      allPrice,
-      realPrice: allPrice,
-      paymentWay,
-      ps
-    }
-
-    if (coupon) {
-      order.couponId = coupon.id
-    }
-    api.createOrder(order, orderItems)
+    order.addressId = address.id
+    api.createOrder(order, orderItems, coupon.id)
       .then(res => resolve(res))
       .catch(err => reject(err))
   })
@@ -81,6 +85,7 @@ export default {
   getOrderListByPage,
   getOrderCountByState,
   confirmGetOrder,
+  generateOrder,
   createOrder,
   deleteOrder,
   createComment,

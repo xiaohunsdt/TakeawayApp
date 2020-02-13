@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
+import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
 
 import java.util.List;
 import java.util.Map;
@@ -61,9 +63,11 @@ public interface ICouponService extends IService<Coupon> {
 
     /**
      * 获取优惠金额
-     * @param coupon 指定的优惠卷
-     * @param amount 订单总价格
+     *
+     * @param order         订单中必须有优惠卷，支付方式，不然抛出异常
+     * @param orderItems    订单项
+     * @param couponId      优惠卷ID
      * @return
      */
-    int getDiscountMoney(Coupon coupon, int amount);
+    int getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId);
 }
