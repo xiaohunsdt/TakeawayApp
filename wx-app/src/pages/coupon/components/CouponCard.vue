@@ -71,7 +71,7 @@
         this.SET_COUPON(this.coupon)
 
         const pages = getPages()
-        if (pages.length > 1 && pages[pages.length - 1].route === 'pages/buy/main') {
+        if (pages.length > 1 && pages[pages.length - 1].route !== 'pages/buy/main') {
           mpvue.navigateBack()
         } else {
           mpvue.switchTab({
