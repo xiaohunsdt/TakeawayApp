@@ -32,8 +32,8 @@
     <name>takeaway</name>
 
     <properties>
-        <java.version>8</java.version>
-        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <java.version>11</java.version>
+        <mybatis-plus.version>3.3.0</mybatis-plus.version>
         <jwt.version>0.11.0</jwt.version>
         <hutool.version>5.1.3</hutool.version>
         <fastjson.version>1.2.62</fastjson.version>
