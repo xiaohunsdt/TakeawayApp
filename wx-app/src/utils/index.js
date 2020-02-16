@@ -73,7 +73,7 @@ export function formatPaymentWay (paymentWay) {
 
 export function orderRemainingTime (createDate) {
   let m = moment(createDate)
-  m.add(15, 'm')
+  m.add(30, 'm')
   return m.diff(moment())
 }
 

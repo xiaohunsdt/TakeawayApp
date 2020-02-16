@@ -88,6 +88,18 @@
           <div class="title">支付方式</div>
           <div class="content">{{paymentWayStr}}</div>
         </div>
+        <div class="order-row" v-if="couponName">
+          <div class="title">优惠卷</div>
+          <div class="content">{{couponName}}</div>
+        </div>
+        <div class="order-row" v-if="order.discount > 0">
+          <div class="title">优惠折扣</div>
+          <div class="content">{{order.discount}}折</div>
+        </div>
+        <div class="order-row" v-if="order.discountedPrices > 0">
+          <div class="title">优惠金额</div>
+          <div class="content">{{order.discountedPrices}}</div>
+        </div>
       </base-panel>
     </div>
   </div>
@@ -97,6 +109,7 @@
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import orderService from '@/services/order'
+  import couponService from '@/services/coupon'
   import indexUtil from '@/utils/index'
   import orderOperation from '../mixins/order-operation'
 
@@ -129,6 +142,7 @@
       return {
         orderId: '',
         order: {},
+        couponName: null,
         deliveryArriveTime: {
           date: '未知',
           time: '未知'
@@ -139,11 +153,18 @@
       init () {
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
+          if (this.order.discountedPrices) {
+            couponService.getCouponLogByOrderId(this.orderId)
+              .then(res => {
+                this.couponName = res[0].couponName
+              })
+          }
           if (this.order.orderState !== 'FINISHED') {
             // 获取预计送达时间
-            orderService.getDeliveryArriveTime(this.order.id).then(res => {
-              this.deliveryArriveTime = res
-            })
+            orderService.getDeliveryArriveTime(this.order.id)
+              .then(res => {
+                this.deliveryArriveTime = res
+              })
           }
         })
       }

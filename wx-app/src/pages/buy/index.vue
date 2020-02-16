@@ -320,6 +320,7 @@
         ).then(res => {
           this.submitLoading = false
           this.CLEAR_CART()
+          this.CLEAR_COUPON()
           this.orderId = res.message
           payService.payOrder(this.orderId, this.payWay)
         }).catch(res => {

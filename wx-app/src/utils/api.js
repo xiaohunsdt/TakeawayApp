@@ -53,6 +53,7 @@ const api = {
   getAllActivityList: () => request.get('activity/getAllActivityList'),
 
   getCouponListU: () => request.get('coupon/getCouponListU'),
+  getCouponLogByOrderId: (orderId) => request.post('coupon/getCouponLogByOrderId', { orderId }),
   checkCouponDiscountPrice: (order, orderItems, couponId) => request.post('coupon/checkCouponDiscountPrice', {
     order,
     orderItems,

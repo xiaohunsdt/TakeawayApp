@@ -4,6 +4,10 @@ export function getCouponListU () {
   return api.getCouponListU()
 }
 
+export function getCouponLogByOrderId (orderId) {
+  return api.getCouponLogByOrderId(orderId)
+}
+
 /**
  * 检查优惠卷可以获取折扣的价格
  * @param order
@@ -43,6 +47,7 @@ export function getCouponDetail (coupon) {
 
 export default {
   getCouponListU,
+  getCouponLogByOrderId,
   checkCouponDiscountPrice,
   getCouponDetail
 }
