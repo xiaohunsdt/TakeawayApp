@@ -14,7 +14,7 @@ server:
 
 spring:
   profiles:
-    active: dev-mac
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -33,10 +33,7 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
-    #连接超时时间
     timeout: 10000
-#    aop:
-#      proxy-target-class: true
 
 mybatis-plus:
   global-config:
@@ -55,35 +52,14 @@ logging:
 
 ---
 spring:
-  profiles: dev-pc
-  datasource:
-    url: jdbc:mysql://192.168.0.17:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
+  profiles: dev
   redis:
-    host: 192.168.0.17
     password: wy1996
 
 #logging:
 #    level:
 #        root: info
 #        net.novaborn: debug
-
-
----
-spring:
-  profiles: dev-mac
-  datasource:
-    url: jdbc:mysql://localhost:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
-  redis:
-    host: localhost
-
-#logging:
-#  level:
-#    root: info
-#    net.novaborn: debug
 
 ---
 spring:

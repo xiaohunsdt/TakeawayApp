@@ -25,7 +25,7 @@ server:
 
 spring:
   profiles:
-    active: dev-mac
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -78,16 +78,10 @@ sys:
   upload-server-url: http://localhost:8080
 
 spring:
-  profiles: dev-pc
-  datasource:
-    url: jdbc:mysql://192.168.0.17:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
+  profiles: dev
   redis:
-    host: 192.168.0.17
     password: wy1996
   rabbitmq:
-    host: 192.168.0.17
     username: xiaohun
     password: wy1996
 
@@ -96,24 +90,6 @@ spring:
 #        root: info
 #        net.novaborn: debug
 
-
----
-sys:
-  upload-server-url: http://localhost:8080
-
-spring:
-  profiles: dev-mac
-  datasource:
-    url: jdbc:mysql://localhost:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
-  redis:
-    host: localhost
-
-#logging:
-#  level:
-#    root: info
-#    net.novaborn: debug
 
 ---
 spring:

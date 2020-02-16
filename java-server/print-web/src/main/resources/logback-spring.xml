@@ -21,7 +21,7 @@
     <property name="FILE_LOG_PATTERN"
               value="--->%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n" />
 
-    <springProfile name="dev-mac,dev-pc,test">
+    <springProfile name="dev,test">
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <!--encoder 默认配置为PatternLayoutEncoder-->
             <encoder>

@@ -1,11 +1,15 @@
 package net.novaborn.takeaway.admin.common.auth.converter.jwt;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.DefaultClaims;
-import io.jsonwebtoken.impl.crypto.MacProvider;
+import cn.hutool.crypto.SecureUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.UUID;
 
 /**
  * jwt测试
@@ -16,28 +20,23 @@ import java.util.UUID;
 public class JWTTest {
 
     public static void main(String[] args) {
+        Key key = new SecretKeySpec(SecureUtil.sha256("wy1996").getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
 
-        Key key = MacProvider.generateKey();
-
-        String compactJws = Jwts.builder()
+        String jws = Jwts.builder()
                 .setSubject("Joe")
-                .setClaims(new DefaultClaims().setId(UUID.randomUUID().toString()))
-                .signWith(SignatureAlgorithm.HS512, key)
+                .signWith(key)
                 .compact();
 
-        System.out.println(compactJws);
+        System.out.println(jws);
 
-
-        assert Jwts.parser().setSigningKey(key).parseClaimsJws(compactJws).getBody().getSubject().equals("Joe");
+        assert Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody().getSubject().equals("Joe");
 
         try {
-            Claims body = Jwts.parser().setSigningKey(key).parseClaimsJws(compactJws).getBody();
+            Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody();
             System.out.println(body);
             System.out.println(body.getExpiration());
 
             System.out.println("trust");
-        } catch (SignatureException e) {
-            System.out.println("not trust");
         } catch (ExpiredJwtException e) {
             System.out.println("ExpiredJwtException");
         }

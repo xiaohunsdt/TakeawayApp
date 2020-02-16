@@ -7,7 +7,7 @@ server:
 
 spring:
   profiles:
-    active: pro
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -46,16 +46,14 @@ logging:
 
 ---
 spring:
-  profiles: dev-pc
+  profiles: dev
   datasource:
     url: jdbc:mysql://192.168.0.17:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: wy1996
   redis:
-    host: 192.168.0.17
     password: wy1996
   rabbitmq:
-    host: 192.168.0.17
     username: xiaohun
     password: wy1996
 
@@ -64,21 +62,6 @@ spring:
 #        root: info
 #        net.novaborn: debug
 
-
----
-spring:
-  profiles: dev-mac
-  datasource:
-    url: jdbc:mysql://localhost:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
-    username: root
-    password: wy1996
-  redis:
-    host: localhost
-
-#logging:
-#  level:
-#    root: info
-#    net.novaborn: debug
 
 ---
 spring:

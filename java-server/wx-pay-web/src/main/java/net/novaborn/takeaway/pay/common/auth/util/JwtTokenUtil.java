@@ -1,12 +1,19 @@
 package net.novaborn.takeaway.pay.common.auth.util;
 
 import cn.hutool.core.util.RandomUtil;
-import io.jsonwebtoken.*;
+import cn.hutool.crypto.SecureUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import net.novaborn.takeaway.pay.config.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,17 +91,8 @@ public class JwtTokenUtil {
      * 获取jwt的payload部分
      */
     public Claims getClaimFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtProperties.getSecret())
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    /**
-     * 解析token是否正确,不正确会报异常<br>
-     */
-    public void parseToken(String token) throws JwtException {
-        Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody();
+        Key key = new SecretKeySpec(SecureUtil.sha256(jwtProperties.getSecret()).getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     /**
@@ -127,13 +125,14 @@ public class JwtTokenUtil {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + jwtProperties.getExpiration() * 1000);
+        Key key = new SecretKeySpec(SecureUtil.sha256(jwtProperties.getSecret()).getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret())
+                .signWith(key)
                 .compact();
     }
 
