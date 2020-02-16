@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.service.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -34,11 +35,9 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
-    @Autowired
-    GoodsService goodsService;
+    private GoodsService goodsService;
 
-    @Autowired
-    CouponService couponService;
+    private CouponService couponService;
 
     @Override
     public Optional<Order> getById(String orderId, boolean isShowDeleted) {
@@ -82,10 +81,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon) {
-        couponService.getDiscountMoney(order, orderItemList, coupon.getId());
-        // 对优惠卷进行后续处理
-        // ...
+    public void setDiscount(Order order, List<OrderItem> orderItemList, String couponId) {
+        couponService.getDiscountMoney(order, orderItemList, couponId);
     }
 
     @Override

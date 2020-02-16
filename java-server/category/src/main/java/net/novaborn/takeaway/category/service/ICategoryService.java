@@ -23,7 +23,7 @@ public interface ICategoryService extends IService<Category> {
      * @param name 分类名称
      * @return 查询到的分类
      */
-    Optional<Category> selectByName(String name);
+    Optional<Category> getByName(String name);
 
     /**
      * 分页获取分类列表

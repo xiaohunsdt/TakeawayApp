@@ -22,7 +22,7 @@ import java.util.Date;
 public class CouponTemplate extends Model<CouponTemplate> {
     private static final long serialVersionUID = 7938277365634145592L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     @NotBlank(message = "名称不能为空")

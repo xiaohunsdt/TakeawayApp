@@ -7,6 +7,7 @@ import net.novaborn.takeaway.coupon.dao.ICouponLogDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponLog;
 import net.novaborn.takeaway.coupon.service.ICouponLogService;
+import net.novaborn.takeaway.order.entity.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +24,29 @@ import java.util.Map;
 @Service
 public class CouponLogService extends ServiceImpl<ICouponLogDao, CouponLog> implements ICouponLogService {
     @Override
-    public List<Coupon> getCouponLogListByOrderId(String orderId) {
-        return null;
+    public boolean makeNewCouponLog(Order order, Coupon coupon) {
+        CouponLog couponLog = new CouponLog();
+        couponLog.setUserId(order.getUserId());
+        couponLog.setCouponId(coupon.getId());
+        couponLog.setOrderId(order.getId());
+        couponLog.setCouponAmount(order.getDiscountedPrices());
+        couponLog.setOrderOriginalAmount(order.getAllPrice());
+        couponLog.setOrderFinalAmount(order.getRealPrice());
+        return couponLog.insert();
     }
 
     @Override
-    public IPage<Coupon> getCouponLogListByPage(Page page, Map args) {
+    public List<CouponLog> getLogListByCouponId(String couponId) {
+        return this.baseMapper.getLogListByCouponId(couponId);
+    }
+
+    @Override
+    public List<CouponLog> getLogListByOrderId(String orderId) {
+        return this.baseMapper.getLogListByOrderId(orderId);
+    }
+
+    @Override
+    public IPage<CouponLog> getLogListByPage(Page page, Map args) {
         return null;
     }
 }

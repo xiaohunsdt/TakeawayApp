@@ -9,6 +9,10 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.enums.CouponState;
+import net.novaborn.takeaway.coupon.service.impl.CouponLogService;
+import net.novaborn.takeaway.coupon.service.impl.CouponService;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
@@ -46,6 +50,10 @@ import java.util.Optional;
 @RequestMapping("/api/user/order")
 public class OrderController extends BaseController {
     private UserService userService;
+
+    private CouponService couponService;
+
+    private CouponLogService couponLogService;
 
     private OrderService orderService;
 
@@ -139,22 +147,17 @@ public class OrderController extends BaseController {
         order.setNumber(number);
         order.setUserId(user.get().getId());
 
-        //设置折扣
-        orderService.setDiscount(order, orderItems, 85);
-
-        // 10000 以下不配送
-        if (order.getRealPrice() < 10000) {
-            SysException sysException = new SysException(OrderExceptionEnum.ORDER_BELOW_LOWEST_DELIVERY_PRICE);
-            sysException.setMessage("今日85折,低于10000韩币无法配送!!");
-            throw sysException;
-        }
-
         //设置订单的支付状态
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
             //刷卡和现金支付设置为后付状态
             order.setPayState(PayState.PAY_LATER);
         } else {
             order.setPayState(PayState.UN_PAY);
+        }
+
+        //设置 优惠卷折扣
+        if (!orderDto.getCouponId().isBlank()) {
+            orderService.setDiscount(order, orderDto.getOrderItems(), orderDto.getCouponId());
         }
 
         //先生成订单，再生成订单产品详情
@@ -164,11 +167,21 @@ public class OrderController extends BaseController {
                 item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
                 item.insert();
             });
+
+            // 对优惠卷进行后续处理
+            if (!orderDto.getCouponId().isBlank()) {
+                Coupon coupon = couponService.getById(orderDto.getCouponId());
+                coupon.setState(CouponState.USED);
+                coupon.updateById();
+
+                // 添加优惠卷使用记录
+                couponLogService.makeNewCouponLog(order, coupon);
+            }
         }
 
         //将未支付的订单丢给订单过期队列
         if (order.getPayState() == PayState.UN_PAY) {
-            orderPayExpiredSender.send(order, 15 * 60);
+            orderPayExpiredSender.send(order, 30 * 60);
         }
 
         //将订单id返回

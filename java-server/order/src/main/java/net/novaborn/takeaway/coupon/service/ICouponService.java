@@ -67,7 +67,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param order         订单中必须有优惠卷，支付方式，不然抛出异常
      * @param orderItems    订单项
      * @param couponId      优惠卷ID
-     * @return
+     * @return order 一个Order实例,里面包含折扣信息
      */
-    int getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId);
+    Order getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId);
 }

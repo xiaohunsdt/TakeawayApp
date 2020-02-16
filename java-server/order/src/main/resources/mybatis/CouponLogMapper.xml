@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.coupon.dao.ICouponLogDao">
+    <select id="getLogListByCouponId" resultType="CouponLog">
+        SELECT * FROM `coupon_log`
+        <where>
+            `coupon_id` = #{couponId}
+        </where>
+        ORDER BY `use_date` DESC
+    </select>
 
+    <select id="getLogListByOrderId" resultType="CouponLog">
+        SELECT * FROM `coupon_log`
+        <where>
+            `order_id` = #{orderId}
+        </where>
+        ORDER BY `use_date` DESC
+    </select>
 </mapper>

@@ -114,7 +114,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderItemList
      * @param couponId
      */
-    void setDiscount(Order order, List<OrderItem> orderItemList, Coupon coupon);
+    void setDiscount(Order order, List<OrderItem> orderItemList, String couponId);
 
     /**
      * 设置一般折扣

@@ -17,7 +17,7 @@ import java.util.Date;
 public class Category extends Model<Category> {
     private static final long serialVersionUID = 2694607880571063999L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     // 名称

@@ -15,7 +15,7 @@ import java.util.Date;
 public class Admin extends Model<Admin> {
     private static final long serialVersionUID = 4163511315665773300L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     private String userName;

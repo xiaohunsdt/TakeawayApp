@@ -18,7 +18,7 @@ import java.util.Date;
 public class CouponLog extends Model<CouponLog> {
     private static final long serialVersionUID = 7938677365637245590L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     private String userId;

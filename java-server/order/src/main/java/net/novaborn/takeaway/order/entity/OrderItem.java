@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class OrderItem extends Model<OrderItem> {
     private static final long serialVersionUID = -6354741085522616794L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     private String orderId;

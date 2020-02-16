@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.entity.CouponLog;
+import net.novaborn.takeaway.coupon.service.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.dto.OrderDto;
+import net.novaborn.takeaway.user.web.wrapper.CouponLogWrapper;
 import net.novaborn.takeaway.user.web.wrapper.CouponWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,8 @@ public class CouponController extends BaseController {
 
     private CouponService couponService;
 
+    private CouponLogService couponLogService;
+
     private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("getCouponListU")
@@ -43,10 +49,18 @@ public class CouponController extends BaseController {
         return ResponseEntity.ok(new CouponWrapper(couponList).warp());
     }
 
+
+    @ResponseBody
+    @PostMapping("getCouponLogByOrderId")
+    public Object getCouponLogByOrderId(@RequestParam String orderId) {
+        List<CouponLog> couponLogList = couponLogService.getLogListByOrderId(orderId);
+        return new CouponLogWrapper(couponLogList).warp();
+    }
+
     @ResponseBody
     @PostMapping("checkCouponDiscountPrice")
-    public Tip checkCouponDiscountPrice(@RequestBody @Validated OrderDto orderDto) {
-        int money = couponService.getDiscountMoney(orderDto.getOrder(), orderDto.getOrderItems(), orderDto.getCouponId());
-        return new SuccessTip(String.valueOf(money));
+    public Tip checkCouponDiscountPrice(@RequestBody OrderDto orderDto) {
+        Order order = couponService.getDiscountMoney(orderDto.getOrder(), orderDto.getOrderItems(), orderDto.getCouponId());
+        return new SuccessTip(String.valueOf(order.getDiscountedPrices()));
     }
 }

@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 public class Setting extends Model<Setting> {
     private static final long serialVersionUID = -1365755510215805455L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     @NotEmpty(message = "名称不能为空")

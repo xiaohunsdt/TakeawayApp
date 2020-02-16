@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 public class CategoryService extends ServiceImpl<ICategoryDao, Category> implements ICategoryService {
     @Override
-    public Optional<Category> selectByName(String name) {
+    public Optional<Category> getByName(String name) {
         return this.baseMapper.selectByName(name);
     }
 

@@ -17,7 +17,7 @@ import java.util.Date;
 public class User extends Model<User> {
     private static final long serialVersionUID = 24295584861601121L;
 
-    @TableId(type = IdType.UUID)
+    @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 
     private String name;

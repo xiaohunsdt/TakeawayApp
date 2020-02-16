@@ -46,7 +46,7 @@ public class CategoryController extends BaseController {
     @ResponseBody
     @PostMapping("createNewCategory")
     public Tip createNewCategory(Category category) {
-        Optional<Category> tempCategory = categoryService.selectByName(category.getName());
+        Optional<Category> tempCategory = categoryService.getByName(category.getName());
         if (tempCategory.isPresent()) {
             return new ErrorTip(-1, "存在同名分类!");
         }
