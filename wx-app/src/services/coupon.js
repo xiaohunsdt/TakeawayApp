@@ -22,7 +22,7 @@ export function getCouponDetail (coupon) {
     if (coupon.allowGoods) {
       newArr.push(...coupon.allowGoods)
     }
-    detail = `只允许${newArr.join(',')}使用。`
+    detail += `只允许${newArr.join(',')}使用。`
   }
   if (coupon.limitCategory || coupon.limitGoods) {
     let newArr = []
@@ -32,12 +32,12 @@ export function getCouponDetail (coupon) {
     if (coupon.limitGoods) {
       newArr.push(...coupon.limitGoods)
     }
-    detail = `禁止${newArr.join(',')}使用。`
+    detail += `禁止${newArr.join(',')}使用。`
   }
   if (coupon.minimumMoney > 0) {
     detail += `最低消费金额${coupon.minimumMoney}。`
   }
-  detail += '本优惠卷只能使用一次，且退款时不退回!'
+  detail += '如果订单中存在不打折的商品项，系统自动踢出优惠! 本优惠卷只能使用一次，且退款时不退回!'
   return detail
 }
 

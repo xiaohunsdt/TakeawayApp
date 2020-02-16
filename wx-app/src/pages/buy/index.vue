@@ -109,7 +109,7 @@
           <div class="coupon-discounted-prices" v-if="couponInfoTip">
             {{ couponInfoTip }}
           </div>
-          <div class="coupon-detail-info" v-if="coupon">
+          <div class="coupon-detail-info" v-if="coupon" @click="setCoupon">
             {{ couponInfoDetail }}
           </div>
         </base-panel>
