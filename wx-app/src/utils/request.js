@@ -56,7 +56,7 @@ request.interceptors.response.use(
       title: response.message,
       icon: 'none'
     })
-    return promise.reject()
+    return promise.reject(response)
   }
 )
 

@@ -99,16 +99,18 @@
         <base-panel>
           <div @click="setCoupon" class="coupon-panel">
             <div>优惠卷</div>
-            <div v-if="coupon">{{coupon.couponName}}</div>
+            <div v-if="coupon">{{coupon.couponName}}
+              <van-icon @click.stop="deleteCoupon" class="coupon-delete-btn" color="red" name="close"/>
+            </div>
           </div>
-          <div v-if="couponDiscountPrice > 0" class="coupon-discounted-prices">
+          <div class="coupon-discounted-prices" v-if="couponDiscountPrice > 0">
             - ₩{{ couponDiscountPrice }}
           </div>
-          <div v-if="couponInfoTip" class="coupon-discounted-prices">
+          <div class="coupon-discounted-prices" v-if="couponInfoTip">
             {{ couponInfoTip }}
           </div>
-          <div class="coupon-detail-info">
-            鸭货除外、刷卡除外,本优惠卷只能使用一次，且退款不退回
+          <div class="coupon-detail-info" v-if="coupon">
+            {{ couponInfoDetail }}
           </div>
         </base-panel>
         <base-panel @panel-click="setPs">
@@ -147,7 +149,7 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
   import indexService from '@/services/index'
@@ -166,6 +168,20 @@
         // 检查当前的价格和位置是否可以下单
         this.disableService = false
         this.checkExpressState(newVal.id, this.cartAllPrice)
+      },
+      coupon (newVal) {
+        if (newVal) {
+          this.checkCouponDiscountPrice()
+        } else {
+          this.couponDiscountPrice = 0
+          this.couponInfoTip = null
+          this.couponInfoDetail = null
+        }
+      },
+      payWay (newVal) {
+        if (newVal && this.coupon) {
+          this.checkCouponDiscountPrice()
+        }
       }
     },
     computed: {
@@ -208,6 +224,7 @@
         payWay: 'WEIXIN_PAY',
         couponDiscountPrice: 0,
         couponInfoTip: null,
+        couponInfoDetail: null,
         psData: ''
       }
     },
@@ -219,6 +236,9 @@
             this.SET_ADDRESS(res)
           }
         })
+      }
+      if (this.coupon) {
+        this.checkCouponDiscountPrice()
       }
     },
     onShow () {
@@ -255,6 +275,9 @@
       ...mapMutations('address', [
         'SET_ADDRESS'
       ]),
+      ...mapMutations('coupon', [
+        'CLEAR_COUPON'
+      ]),
       init () {
         this.submitLoading = false
         this.showOrderTip = false
@@ -269,6 +292,9 @@
         mpvue.navigateTo({
           url: '/pages/coupon/main'
         })
+      },
+      deleteCoupon () {
+        this.CLEAR_COUPON()
       },
       setPs () {
         const $this = this
@@ -315,6 +341,7 @@
       checkCouponDiscountPrice () {
         this.couponDiscountPrice = 0
         this.couponInfoTip = null
+        this.couponInfoDetail = couponService.getCouponDetail(this.coupon)
         couponService.checkCouponDiscountPrice(
           orderService.generateOrder(this.orderItems, this.payWay),
           this.orderItems,
@@ -386,5 +413,10 @@
     color: #999999;
     margin-top: .2rem;
     font-size: .25rem;
+  }
+
+  .coupon-delete-btn {
+    position: relative;
+    top: .05rem;
   }
 </style>

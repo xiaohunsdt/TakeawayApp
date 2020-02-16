@@ -5,6 +5,9 @@ const state = {
 const mutations = {
   SET_COUPON: (state, coupon) => {
     state.currentCoupon = Object.assign({}, coupon)
+  },
+  CLEAR_COUPON: (state) => {
+    state.currentCoupon = null
   }
 }
 
