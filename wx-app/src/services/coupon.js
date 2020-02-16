@@ -13,7 +13,7 @@ export function checkCouponDiscountPrice (order, orderItems, coupon) {
 }
 
 export function getCouponDetail (coupon) {
-  let detail = ''
+  let detail = '刷卡不支持本优惠卷! '
   if (coupon.allowCategory || coupon.allowGoods) {
     let newArr = []
     if (coupon.allowCategory) {
@@ -34,7 +34,10 @@ export function getCouponDetail (coupon) {
     }
     detail = `禁止${newArr.join(',')}使用。`
   }
-  detail += '刷卡不支持本优惠卷! 本优惠卷只能使用一次，且退款时不退回!'
+  if (coupon.minimumMoney > 0) {
+    detail += `最低消费金额${coupon.minimumMoney}。`
+  }
+  detail += '本优惠卷只能使用一次，且退款时不退回!'
   return detail
 }
 
