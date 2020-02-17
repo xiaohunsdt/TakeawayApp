@@ -1,0 +1,99 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: xiaohunsdt/mysql-seoul:5.7.22
+    environment:
+      MYSQL_ROOT_PASSWORD: wy1996
+      MYSQL_USER: takeaway
+      MYSQL_DATABASE: takeaway
+      MYSQL_PASSWORD: takeaway123!
+      TZ: Asia/Seoul
+    restart: always
+    ports:
+      - "3306:3306"
+      - "6379:6379"
+      - "15672:15672"
+      - "5672:5672"
+#      - "8080:8080"
+#      - "8081:8081"
+#      - "8082:8082"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ~/server_data/mysql_data:/var/lib/mysql
+  redis:
+    image: redis
+    command: redis-server --requirepass wy1996 --appendonly yes
+    restart: always
+    network_mode: "service:mysql"
+    volumes:
+      - ~/server_data/redisdata:/data
+
+  rabbitmq:
+    #    image: rabbitmq:3.7.8-management
+    build:
+      context: .
+      dockerfile: Dockerfile-rabbitemp-deloy
+    environment:
+      TZ: Asia/Seoul
+      RABBITMQ_DEFAULT_USER: xiaohun
+      RABBITMQ_DEFAULT_PASS: wy1996
+    restart: always
+    network_mode: "service:mysql"
+
+  admin-web:
+    build:
+      context: .
+      dockerfile: Dockerfile-admin
+    environment:
+      PARAMS: --spring.profiles.active=pro
+    restart: always
+    volumes:
+      - ~/server_data/log_data/admin-web-logs:/admin-web-logs
+      - ~/server_data/upload:/upload
+    depends_on:
+      - redis
+      - mysql
+      - rabbitmq
+    network_mode: "service:mysql"
+
+  user-web:
+    build:
+      context: .
+      dockerfile: Dockerfile-user
+    environment:
+      PARAMS: --spring.profiles.active=pro
+    restart: always
+    volumes:
+      - ~/server_data/log_data/user-web-logs:/user-web-logs
+    depends_on:
+      - redis
+      - mysql
+      - rabbitmq
+    network_mode: "service:mysql"
+
+  wx-pay-web:
+    build:
+      context: .
+      dockerfile: Dockerfile-wx-pay
+    environment:
+      PARAMS: --spring.profiles.active=pro
+    restart: always
+    volumes:
+      - ~/server_data/log_data/wx-pay-web-logs:/wx-pay-web-logs
+    depends_on:
+      - redis
+      - mysql
+      - rabbitmq
+    network_mode: "service:mysql"
+
+  nginx:
+    image: nginx:1.15.2
+    restart: always
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/live/cxy.novaborn.net/fullchain.pem:/cert/fullchain.pem
+      - /etc/letsencrypt/live/cxy.novaborn.net/privkey.pem:/cert/privkey.pem
+      - /etc/letsencrypt/live/cxy.novaborn.net/chain.pem:/cert/chain.pem
+    network_mode: "service:mysql"
