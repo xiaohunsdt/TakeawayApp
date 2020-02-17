@@ -121,7 +121,6 @@
     mixins: [orderOperation],
     onLoad (options) {
       this.orderId = options.orderId
-      this.init()
     },
     onShow () {
       this.init()
@@ -161,7 +160,7 @@
           }
           if (this.order.orderState !== 'FINISHED') {
             // 获取预计送达时间
-            orderService.getDeliveryArriveTime(this.order.id)
+            orderService.getDeliveryArriveTime(this.orderId)
               .then(res => {
                 this.deliveryArriveTime = res
               })

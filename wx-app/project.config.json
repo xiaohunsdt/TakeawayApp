@@ -3,7 +3,7 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
-		"enhance": false,
+		"enhance": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
@@ -26,7 +26,7 @@
 	"projectname": "wx-app",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.9.4",
+	"libVersion": "2.10.1",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -90,7 +90,7 @@
 					"id": 5,
 					"name": "pages/order/detail/main",
 					"pathName": "pages/order/detail/main",
-					"query": "orderId=5c4038872373fc85f7e4fa4375d9b724",
+					"query": "orderId=878b256b05e1e5de790cf2bf4c3d8b60",
 					"scene": null
 				},
 				{
@@ -167,6 +167,7 @@
 					"id": -1,
 					"name": "pages/coupon/main",
 					"pathName": "pages/coupon/main",
+					"query": "",
 					"scene": null
 				}
 			]

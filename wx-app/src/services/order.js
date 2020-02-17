@@ -14,7 +14,6 @@ export function generateOrder (orderItems, paymentWay, ps) {
     allPrice += item.goodsCount * item.goodsPrice
   })
   let order = {
-    // addressId: address.id,
     goodsCount: allCount,
     discount: 0,
     discountedPrices: 0,
@@ -41,7 +40,8 @@ export function createOrder (order, orderItems, coupon, address) {
       reject()
     }
     order.addressId = address.id
-    api.createOrder(order, orderItems, coupon.id)
+    const couponId = coupon ? coupon.id : null
+    api.createOrder(order, orderItems, couponId)
       .then(res => resolve(res))
       .catch(err => reject(err))
   })
@@ -55,7 +55,7 @@ export function selectOrderById (orderId) {
 }
 
 export function getOrderListByPage (page, orderState) {
-  const args = Object.assign({}, page, {orderState})
+  const args = Object.assign({}, page, { orderState })
   return api.getOrderListByPage(args)
 }
 
