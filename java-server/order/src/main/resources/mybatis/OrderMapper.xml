@@ -53,7 +53,9 @@
             <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
                 AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
             </if>
-            # AND deleted = 0
+            <if test="args.showDelete == 0">
+                AND deleted = 0
+            </if>
         </where>
         ORDER BY `create_date` DESC
     </select>
