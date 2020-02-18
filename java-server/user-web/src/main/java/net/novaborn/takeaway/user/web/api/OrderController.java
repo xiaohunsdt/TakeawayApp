@@ -156,7 +156,7 @@ public class OrderController extends BaseController {
         }
 
         //设置 优惠卷折扣
-        if (!orderDto.getCouponId().isBlank()) {
+        if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
             orderService.setDiscount(order, orderDto.getOrderItems(), orderDto.getCouponId());
         }
 
@@ -169,7 +169,7 @@ public class OrderController extends BaseController {
             });
 
             // 对优惠卷进行后续处理
-            if (!orderDto.getCouponId().isBlank()) {
+            if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
                 Coupon coupon = couponService.getById(orderDto.getCouponId());
                 coupon.setState(CouponState.USED);
                 coupon.updateById();
