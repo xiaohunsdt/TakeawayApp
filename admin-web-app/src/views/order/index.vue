@@ -33,6 +33,12 @@
             <el-option :value="5" label="过期"/>
           </el-select>
         </el-form-item>
+        <el-form-item label="显示删除">
+          <el-select placeholder="是否显示删除的订单" v-model="formData.showDelete">
+            <el-option :value="0" label="不显示"/>
+            <el-option :value="1" label="显示"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             end-placeholder="end date"
@@ -329,6 +335,7 @@
           orderId: null,
           paymentWay: null,
           orderState: null,
+          showDelete: 0,
           formDate: [
             new Date(),
             new Date()
