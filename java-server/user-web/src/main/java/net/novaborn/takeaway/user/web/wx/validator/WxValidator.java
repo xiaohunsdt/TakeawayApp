@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * 账号密码验证
@@ -42,8 +41,7 @@ public class WxValidator implements IReqValidator {
             log.debug(session.getSessionKey());
             log.debug(session.getOpenid());
 
-            Optional<User> user = userService.selectByOpenId(session.getOpenid());
-            user.orElseGet(() -> {
+            User user = userService.selectByOpenId(session.getOpenid()).orElseGet(() -> {
                 // 创建一个新的用户并保存在数据库中
                 User newUser = new User();
                 newUser.setOpenId(session.getOpenid());
@@ -52,8 +50,8 @@ public class WxValidator implements IReqValidator {
             });
 
             //设置最后登陆时间
-            user.get().setLastLoginDate(new Date());
-            user.get().updateById();
+            user.setLastLoginDate(new Date());
+            user.updateById();
 
             //将 openId 和 sessionkey 保存在redis中
             ((WxAuthRequest) credence).setOpenId(session.getOpenid());
