@@ -43,7 +43,7 @@ public interface IGoodsService extends IService<Goods> {
     /**
      * 分页获取产品列表
      * @param page   分页实例
-     * @param args   name/categoryId
+     * @param args   name/categoryId/state
      * @return 产品列表
      */
     IPage<Goods> getGoodsListByPage(Page page, Map args);

@@ -37,6 +37,9 @@
             <if test="args.categoryId != '' and args.categoryId != null">
                 AND `category_id` = #{args.categoryId}
             </if>
+            <if test="args.state != '' and args.state != null">
+                AND `state` = #{args.state}
+            </if>
             AND deleted = 0
         </where>
         ORDER BY `create_date` ASC
