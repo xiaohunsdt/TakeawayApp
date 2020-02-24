@@ -56,8 +56,8 @@ public class IndexController extends BaseController {
     public Object getServiceState() {
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
         Setting service_close_notice = settingService.getSettingByName("service_close_notice", SettingScope.SYSTEM);
-        if (!Boolean.parseBoolean((String) service_running.getValue())) {
-            return new ServiceStateDto(-1, (String) service_close_notice.getValue());
+        if (!Boolean.parseBoolean(service_running.getValue())) {
+            return new ServiceStateDto(-1, service_close_notice.getValue());
         }
         return new ServiceStateDto();
     }
