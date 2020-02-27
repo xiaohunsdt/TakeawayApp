@@ -55,17 +55,29 @@ public class AuthFilter extends OncePerRequestFilter {
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
                 if (flag) {
-                    RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()), HttpStatus.BAD_REQUEST);
+                    RenderUtil.renderJson(
+                            response,
+                            new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()),
+                            HttpStatus.BAD_REQUEST
+                    );
                     return;
                 }
             } catch (JwtException e) {
                 //有异常就是token解析失败
-                RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()), HttpStatus.BAD_REQUEST);
+                RenderUtil.renderJson(
+                        response,
+                        new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()),
+                        HttpStatus.BAD_REQUEST
+                );
                 return;
             }
         } else {
             //header没有带Bearer字段
-            RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()), HttpStatus.BAD_REQUEST);
+            RenderUtil.renderJson(
+                    response,
+                    new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()),
+                    HttpStatus.BAD_REQUEST
+            );
             return;
         }
         chain.doFilter(request, response);
