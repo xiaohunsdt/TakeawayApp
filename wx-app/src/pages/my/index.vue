@@ -91,7 +91,7 @@
             </div>
           </view>
         </van-cell>
-        <van-cell clickable custom-class="profile-cell" is-link url="/pages/coupon/main">
+        <van-cell clickable custom-class="profile-cell" is-link url="/pages/sub-packages/coupon/index/main">
           <view class="profile-title" slot="title">
             <img class="title-img" src="/static/images/profile/coupon.png">
             <div>
@@ -137,7 +137,7 @@
         orderCount: {
           waitPay: 0,
           waitEat: 0,
-          waitComment: 3,
+          waitComment: 0,
           refund: 0
         }
       }

@@ -2,7 +2,6 @@
   "pages": [
     "pages/index/main",
     "pages/activity/main",
-    "pages/activity/detail/main",
     "pages/my/main",
     "pages/my/address/main",
     "pages/my/auth/main",
@@ -11,10 +10,25 @@
     "pages/buy/main",
     "pages/pay/main",
     "pages/buy/remark/main",
-    "pages/coupon/main",
     "pages/order/main",
     "pages/order/comment/main",
     "pages/order/detail/main"
+  ],
+  "subPackages": [
+    {
+      "root":"pages/sub-packages/activity/",
+      "pages":[
+        "index/main",
+        "detail/main"
+      ],
+      "independent": true
+    },
+    {
+      "root":"pages/sub-packages/coupon/",
+      "pages":[
+        "index/main"
+      ]
+    }
   ],
   "permission": {
     "scope.userLocation": {
