@@ -137,7 +137,7 @@
         orderCount: {
           waitPay: 0,
           waitEat: 0,
-          waitComment: 3,
+          waitComment: 0,
           refund: 0
         }
       }
