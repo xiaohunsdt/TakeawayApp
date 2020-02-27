@@ -3,6 +3,7 @@ package net.novaborn.takeaway.user.common.auth.util;
 import com.alibaba.fastjson.JSON;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,12 +21,17 @@ public class RenderUtil {
      * 渲染json对象
      */
     public static void renderJson(HttpServletResponse response, Object jsonObject) {
+        renderJson(response, jsonObject, HttpStatus.OK);
+    }
+
+    public static void renderJson(HttpServletResponse response, Object jsonObject, HttpStatus httpStatus) {
         try {
             response.setContentType("application/json");
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "*");
             response.setHeader("Access-Control-Allow-Methods", "*");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(httpStatus.value());
             PrintWriter writer = response.getWriter();
             writer.write(JSON.toJSONString(jsonObject));
         } catch (IOException e) {
