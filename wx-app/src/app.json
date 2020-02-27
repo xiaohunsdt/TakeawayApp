@@ -10,7 +10,6 @@
     "pages/buy/main",
     "pages/pay/main",
     "pages/buy/remark/main",
-    "pages/coupon/main",
     "pages/order/main",
     "pages/order/comment/main",
     "pages/order/detail/main"
@@ -23,6 +22,12 @@
         "detail/main"
       ],
       "independent": true
+    },
+    {
+      "root":"pages/sub-packages/coupon/",
+      "pages":[
+        "index/main"
+      ]
     }
   ],
   "permission": {

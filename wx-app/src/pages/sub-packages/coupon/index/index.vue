@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import CouponCard from './components/CouponCard'
+  import CouponCard from '../components/CouponCard'
   import couponService from '@/services/coupon'
 
   export default {

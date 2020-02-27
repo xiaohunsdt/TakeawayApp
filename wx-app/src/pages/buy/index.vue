@@ -290,7 +290,7 @@
       },
       setCoupon () {
         mpvue.navigateTo({
-          url: '/pages/coupon/main'
+          url: '/pages/sub-packages/coupon/index/main'
         })
       },
       deleteCoupon () {
