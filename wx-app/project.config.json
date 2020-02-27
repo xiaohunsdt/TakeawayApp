@@ -26,7 +26,7 @@
 	"projectname": "wx-app",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.10.1",
+	"libVersion": "2.10.2",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -167,6 +167,13 @@
 					"id": -1,
 					"name": "pages/coupon/main",
 					"pathName": "pages/coupon/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/sub-packages/activity/index/main",
+					"pathName": "pages/sub-packages/activity/index/main",
 					"query": "",
 					"scene": null
 				}
