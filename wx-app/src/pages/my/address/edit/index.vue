@@ -26,7 +26,7 @@
             :value="address.phone"
             @change="phoneInput"
             label="手机号"
-            placeholder="请输入手机号, 请务必填写正确!!"
+            placeholder="请输入手机号,手机格式为:01056511996"
             required/>
         </van-cell-group>
       </base-panel>
