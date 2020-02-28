@@ -5,11 +5,10 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.PayState;
-import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.user.config.mq.OrderQueueConfig;
+import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.enums.CouponState;
+import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.user.config.mq.CouponQueueConfig;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -32,25 +31,25 @@ import java.util.Map;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Component
-@RabbitListener(queues = OrderQueueConfig.QUEUE_NAME)
-public class OrderPayExpiredReceiver {
+@RabbitListener(queues = CouponQueueConfig.QUEUE_NAME)
+public class CouponExpiredReceiver {
 
-    private OrderService orderService;
+    private CouponService couponService;
 
     @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
-        log.debug("订单过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+    public void process(@Payload Coupon coupon, Channel channel, @Headers Map<String, Object> headers) {
+        log.debug("优惠卷过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
-        Order target = orderService.getById(order.getId());
+        Coupon target = couponService.getById(coupon.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (target!= null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
+        if (target!= null && target.getState() != CouponState.EXPIRED) {
             try {
-                target.setOrderState(OrderState.EXPIRED);
+                target.setState(CouponState.EXPIRED);
                 target.updateById();
             } catch (Exception e) {
-                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
+                log.error("优惠卷ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
                 channel.basicReject(deliveryTag, true);
                 return;
             }
