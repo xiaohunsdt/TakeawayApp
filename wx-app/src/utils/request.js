@@ -1,4 +1,5 @@
 import md5 from 'js-md5'
+
 let Base64 = require('js-base64').Base64
 
 var Fly = require('flyio/dist/npm/wx')
@@ -40,22 +41,23 @@ request.interceptors.response.use(
         image: '/static/images/error.png',
         duration: 2000
       })
-      if (response.data.code === 700) {
-        mpvue.navigateTo({
-          url: '/pages/my/auth/main'
-        })
-      }
       return promise.reject(response.data)
     }
     return promise.resolve(response.data)
   },
   (err, promise) => {
-    const response = err.response.data
     mpvue.hideNavigationBarLoading()
-    mpvue.showToast({
-      title: response.message,
-      icon: 'none'
-    })
+    const response = err.response.data
+    if (response.code === 700) {
+      mpvue.navigateTo({
+        url: '/pages/my/auth/main'
+      })
+    } else {
+      mpvue.showToast({
+        title: response.message,
+        icon: 'none'
+      })
+    }
     return promise.reject(response)
   }
 )
