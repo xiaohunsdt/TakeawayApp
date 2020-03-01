@@ -17,6 +17,7 @@
         <module>user-web</module>
         <module>wx-pay-web</module>
         <module>print-web</module>
+        <module>mq</module>
     </modules>
 
     <parent>

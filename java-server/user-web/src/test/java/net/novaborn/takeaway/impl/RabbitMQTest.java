@@ -2,10 +2,10 @@ package net.novaborn.takeaway.impl;
 
 import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.mq.sender.CouponExpiredSender;
+import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.user.UserApplication;
-import net.novaborn.takeaway.user.mq.CouponExpiredSender;
-import net.novaborn.takeaway.user.mq.OrderPayExpiredSender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

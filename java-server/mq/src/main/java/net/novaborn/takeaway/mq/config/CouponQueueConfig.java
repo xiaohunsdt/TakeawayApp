@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.user.config.mq;
+package net.novaborn.takeaway.mq.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

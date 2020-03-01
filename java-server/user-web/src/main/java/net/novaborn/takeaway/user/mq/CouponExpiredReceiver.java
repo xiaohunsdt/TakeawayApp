@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.service.impl.CouponService;
-import net.novaborn.takeaway.user.config.mq.CouponQueueConfig;
+import net.novaborn.takeaway.mq.config.CouponQueueConfig;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -44,7 +44,7 @@ public class CouponExpiredReceiver {
         Coupon target = couponService.getById(coupon.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (target!= null && target.getState() != CouponState.EXPIRED) {
+        if (target != null && target.getState() != CouponState.EXPIRED) {
             try {
                 target.setState(CouponState.EXPIRED);
                 target.updateById();
