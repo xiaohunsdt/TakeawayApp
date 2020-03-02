@@ -47,6 +47,6 @@ public class CouponLogService extends ServiceImpl<ICouponLogDao, CouponLog> impl
 
     @Override
     public IPage<CouponLog> getLogListByPage(Page page, Map args) {
-        return null;
+        return this.baseMapper.getLogListByPage(page, args);
     }
 }

@@ -141,7 +141,6 @@
     methods: {
       onSearch() {
         this.listLoading = true
-        this.page.current = 1
 
         const params = Object.assign({}, this.formData)
         params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')

@@ -46,12 +46,14 @@ public interface ICouponLogService extends IService<CouponLog> {
     List<CouponLog> getLogListByOrderId(String orderId);
 
     /**
-     * 分页获取优惠卷记录列表
+     * 分页获取优惠卷使用列表
      *
      * @param page 分页实例
      * @param args userId 用户ID
+     *             couponId 优惠卷ID
+     *             orderId 订单ID
      *             startDate endDate 范围时间
-     * @return 优惠卷记录列表
+     * @return 优惠卷列表
      */
     IPage<CouponLog> getLogListByPage(Page page, Map args);
 }
