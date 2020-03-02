@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.user.mq;
+package net.novaborn.takeaway.admin.mq;
 
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
@@ -53,9 +53,7 @@ public class CouponExpiredReceiver {
                 channel.basicReject(deliveryTag, true);
                 return;
             }
-
         }
-
         channel.basicAck(deliveryTag, false);
     }
 }
