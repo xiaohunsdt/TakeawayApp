@@ -84,7 +84,7 @@
           content: '您确定要删除这个地址吗?',
           success (res) {
             if (res.confirm) {
-              addressService.deteleAddress(addressId)
+              addressService.deleteAddress(addressId)
                 .then(res => {
                   $this.init()
                 })
