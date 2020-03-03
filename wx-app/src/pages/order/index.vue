@@ -29,16 +29,16 @@
       this.orderState = options.state
       let title = '全部订单'
       switch (this.orderState) {
-        case 'waitPay':
+        case 'WAIT_PAY':
           title = '未支付的订单'
           break
-        case 'waitEat':
+        case 'WAIT_EAT':
           title = '待就餐的订单'
           break
-        case 'waitComment':
+        case 'WAIT_COMMENT':
           title = '待评价的订单'
           break
-        case 'refund':
+        case 'REFUND':
           title = '退款的订单'
           break
       }

@@ -4,25 +4,24 @@
     <div class="container-contain">
       <div id="banner">
         <search-bar background="#FFD200"></search-bar>
-<!--        <div id="scrollImg">-->
-<!--          <swiper-->
-<!--            autoplay="true"-->
-<!--            circular="true"-->
-<!--            easing-function="easeInOutCubic"-->
-<!--            indicator-dots="true"-->
-<!--            style="height: 10rem">-->
-<!--            <swiper-item>-->
-<!--              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg">-->
-<!--            </swiper-item>-->
-<!--            <swiper-item>-->
-<!--              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg">-->
-<!--            </swiper-item>-->
-<!--          </swiper>-->
-<!--        </div>-->
+        <div id="scrollImg">
+          <swiper
+            autoplay="true"
+            circular="true"
+            easing-function="easeInOutCubic"
+            indicator-dots="true"
+            style="height: 10rem">
+            <swiper-item>
+              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner1.jpg">
+            </swiper-item>
+            <swiper-item>
+              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/banner2.jpg">
+            </swiper-item>
+          </swiper>
+        </div>
       </div>
 <!--      <div id="newUserCoupon">-->
-<!--        <img alt=""-->
-<!--             mode="widthFix"-->
+<!--        <img mode="widthFix"-->
 <!--             src="/static/images/newcoupon.png"-->
 <!--             style="width: 100%"/>-->
 <!--      </div>-->
