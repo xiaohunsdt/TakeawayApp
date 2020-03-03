@@ -5,11 +5,11 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.user.config.mq.OrderPayExpiredQueueConfig;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -32,7 +32,7 @@ import java.util.Map;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Component
-@RabbitListener(queues = OrderPayExpiredQueueConfig.QUEUE_NAME)
+@RabbitListener(queues = OrderQueueConfig.QUEUE_NAME)
 public class OrderPayExpiredReceiver {
 
     private OrderService orderService;
@@ -45,12 +45,12 @@ public class OrderPayExpiredReceiver {
         Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (target!= null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
+        if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
             try {
                 target.setOrderState(OrderState.EXPIRED);
                 target.updateById();
             } catch (Exception e) {
-                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", order.getId());
+                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
                 channel.basicReject(deliveryTag, true);
                 return;
             }

@@ -55,6 +55,9 @@ spring:
   profiles: dev
   redis:
     password: wy1996
+  rabbitmq:
+    username: xiaohun
+    password: wy1996
 
 #logging:
 #    level:

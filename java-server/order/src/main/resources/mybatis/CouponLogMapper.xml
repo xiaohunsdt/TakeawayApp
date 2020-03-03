@@ -16,4 +16,25 @@
         </where>
         ORDER BY `use_date` DESC
     </select>
+    <select id="getLogListByPage" resultType="CouponLog">
+        SELECT * FROM `coupon_log`
+        <where>
+            <if test="args.userIds != null">
+                `user_id` IN
+                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="args.couponId != null and args.couponId != ''">
+                `coupon_id` = #{args.couponId}
+            </if>
+            <if test="args.orderId != null and args.orderId != ''">
+                `order_id` = #{args.orderId}
+            </if>
+            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+            </if>
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
 </mapper>

@@ -22,6 +22,20 @@ export function getCouponListByPage(page, args) {
   })
 }
 
+export function getCouponLogListByPage(page, args) {
+  const data = Object.assign({}, page, args)
+  return request({
+    url: '/coupon/log/getCouponLogListByPage',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function generateCoupon(data) {
   return request({
     url: '/coupon/generateCoupon',
@@ -53,6 +67,7 @@ export function deleteCoupon(id) {
 export default {
   getCouponById,
   getCouponListByPage,
+  getCouponLogListByPage,
   generateCoupon,
   deleteCoupon
 }

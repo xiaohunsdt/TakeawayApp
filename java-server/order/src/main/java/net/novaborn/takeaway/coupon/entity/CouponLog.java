@@ -34,5 +34,5 @@ public class CouponLog extends Model<CouponLog> {
     private Integer orderFinalAmount;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date useDate;
+    private Date createDate;
 }

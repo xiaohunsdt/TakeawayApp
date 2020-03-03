@@ -165,8 +165,8 @@
           label="折扣/抵扣金额"
           width="160">
           <template v-slot="scope">
-            <div v-if="scope.row.discount !==''">{{ scope.row.discount }}</div>
-            <div>₩ {{ scope.row.discountedPrices.toLocaleString() }}</div>
+            <div v-if="scope.row.discount > 0">{{ scope.row.discount }}折</div>
+            <div v-if="scope.row.discountedPrices > 0">₩ {{ scope.row.discountedPrices.toLocaleString() }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -470,7 +470,6 @@
               order.orderState = 'FINISHED'
             })
         })
-
       },
       onRefundOrder(order) {
         this.$confirm('确定要退款吗?', '提示', {
