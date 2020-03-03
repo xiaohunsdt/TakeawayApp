@@ -18,6 +18,7 @@ import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -73,39 +74,25 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
-    public ResponseEntity getOrderListByPage(
-            @ModelAttribute Page page,
-            @RequestParam(required = false) String orderState) {
+    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam(required = false) OrderStateEx orderState) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        Map<String, Object> args = new HashMap<>();
-        args.put("userId", user.get().getId());
-        if (orderState != null) {
-            args.put("orderState", orderState);
-        }
-
         page.setOptimizeCountSql(false);
-        page = (Page) orderService.getOrderListByPageU(page, args);
+        page = (Page) orderService.getOrderListByPageU(page, user.get().getId(), orderState);
         page.setRecords((List) new OrderDetailWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
     @ResponseBody
     @PostMapping("getOrderCountByState")
-    public ResponseEntity getOrderCountByState(String orderState) {
+    public ResponseEntity getOrderCountByState(OrderStateEx orderState) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        Map<String, Object> args = new HashMap<>();
-        args.put("userId", user.get().getId());
-        if (orderState != null) {
-            args.put("orderState", orderState);
-        }
-
-        int count = orderService.getOrderCountByStateU(args);
+        int count = orderService.getOrderCountByStateU(user.get().getId(), orderState);
         return ResponseEntity.ok(count);
     }
 

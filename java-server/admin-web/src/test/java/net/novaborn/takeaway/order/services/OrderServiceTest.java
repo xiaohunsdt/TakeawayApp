@@ -1,8 +1,7 @@
 package net.novaborn.takeaway.order.services;
 
 import net.novaborn.takeaway.admin.AdminApplication;
-import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import org.junit.Test;
@@ -23,6 +22,16 @@ public class OrderServiceTest {
     @Test
     public void getOrderCountTodayTest() {
         System.out.println(orderService.getOrderCountToday());
+    }
+
+    @Test
+    public void getOrderCountByStateUTest() {
+        System.out.println(orderService.getOrderCountByStateU(null, OrderStateEx.WAIT_EAT));
+    }
+
+    @Test
+    public void getTodayOrderCountByStateUTest() {
+        System.out.println(orderService.getTodayOrderCountByStateU(null, OrderStateEx.WAIT_EAT));
     }
 }
 

@@ -4,10 +4,10 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 
 import java.util.List;
@@ -76,29 +76,29 @@ public interface IOrderService extends IService<Order> {
     /**
      * 用户端分页获取订单列表
      *
-     * @param page 分页实例
-     * @param args userId 用户ID <br />
-     *             orderState 订单状态
-     *             - waitPay 等待支付
-     *             - waitEat 等待就餐
-     *             - waitComment 等待评价
-     *             - refund 退款
+     * @param page       分页实例
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单列表
      */
-    IPage<Order> getOrderListByPageU(Page page, Map args);
+    IPage<Order> getOrderListByPageU(Page page, String userId, OrderStateEx orderState);
 
     /**
      * 用户端获取指定订单类型的数量
      *
-     * @param args userId 用户ID <br />
-     *             orderState 订单状态
-     *             - waitPay 等待支付
-     *             - waitEat 等待就餐
-     *             - waitComment 等待评价
-     *             - refund 退款
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单数量
      */
-    int getOrderCountByStateU(Map args);
+    int getOrderCountByStateU(String userId, OrderStateEx orderState);
+
+    /**
+     * 用户端获取今日指定订单类型的数量
+     * @param userId        用户ID
+     * @param orderState    订单状态
+     * @return 订单数量
+     */
+    int getTodayOrderCountByStateU(String userId, OrderStateEx orderState);
 
     /**
      * 获取当天的订单数量
