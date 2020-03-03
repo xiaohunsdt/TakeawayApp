@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.coupon.entity.Coupon;
-import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.service.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -14,6 +12,7 @@ import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,13 +65,18 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public IPage<Order> getOrderListByPageU(Page page, Map args) {
-        return this.baseMapper.getOrderListByPageU(page, args);
+    public IPage<Order> getOrderListByPageU(Page page, String userId, OrderStateEx orderState) {
+        return this.baseMapper.getOrderListByPageU(page, userId, orderState);
     }
 
     @Override
-    public int getOrderCountByStateU(Map args) {
-        return this.baseMapper.getOrderCountByStateU(args);
+    public int getOrderCountByStateU(String userId, OrderStateEx orderState) {
+        return this.baseMapper.getOrderCountByStateU(userId, orderState);
+    }
+
+    @Override
+    public int getTodayOrderCountByStateU(String userId, OrderStateEx orderState) {
+        return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
     }
 
     @Override
