@@ -70,7 +70,7 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item label="外卖人员">
-              <el-input v-model="expressSetting.courier_count"></el-input>
+              <el-input v-model="expressSetting.deliverier_count"></el-input>
             </el-form-item>
             <el-form-item label="最远配送距离">
               <el-tooltip content="最远配送距离，单位为米" placement="right">
@@ -119,7 +119,7 @@
         expressSetting: {
           base_express_time: 0,
           average_express_time: 0,
-          courier_count: 0,
+          deliverier_count: 0,
           max_express_distance: 0
         }
       }

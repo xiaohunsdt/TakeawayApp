@@ -233,6 +233,7 @@ public class OrderController extends BaseController {
 
         int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
         int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
+        int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.EXPRESS).getValue());
 
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
                 .sorted(Comparator.comparing(Order::getCreateDate))
@@ -243,7 +244,7 @@ public class OrderController extends BaseController {
         if (index == 0) {
             deliveryDate = DateUtil.offsetMinute(new Date(), base_express_time);
         } else {
-            deliveryDate = DateUtil.offsetMinute(new Date(), base_express_time + index * average_express_time);
+            deliveryDate = DateUtil.offsetMinute(new Date(), (base_express_time + index * average_express_time) / deliverier_count);
         }
 
         return new DeliveryArriveTimeDto(deliveryDate);
