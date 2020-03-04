@@ -93,7 +93,15 @@ public interface IOrderService extends IService<Order> {
     int getOrderCountByStateU(String userId, OrderStateEx orderState);
 
     /**
-     * 用户端获取今日指定订单类型的数量
+     * 用户端获取今日指定类型的订单
+     * @param userId        用户ID
+     * @param orderState    订单状态
+     * @return 订单数量
+     */
+    List<Order> getTodayOrderByStateU(String userId, OrderStateEx orderState);
+
+    /**
+     * 用户端获取今日指定类型的数量
      * @param userId        用户ID
      * @param orderState    订单状态
      * @return 订单数量

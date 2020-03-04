@@ -118,6 +118,15 @@
         </where>
     </select>
 
+    <select id="getTodayOrderByStateU" resultType="Order">
+        SELECT * FROM `order`
+        <where>
+            <include refid="common_order_list_where_u"/>
+            AND TO_DAYS(create_date) = TO_DAYS(NOW())
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+
     <select id="getTodayOrderCountByStateU" resultType="java.lang.Integer">
         SELECT count(*) FROM `order`
         <where>

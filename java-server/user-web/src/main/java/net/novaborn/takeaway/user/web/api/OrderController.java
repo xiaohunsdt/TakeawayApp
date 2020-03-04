@@ -37,9 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -210,7 +208,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("getDeliveryArriveTime")
     public DeliveryArriveTimeWrapper getDeliveryArriveTime(@RequestParam String orderId) {
-//        orderService.getOrderCountByStateU()
+        List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT);
         return new DeliveryArriveTimeWrapper(null);
     }
 }
