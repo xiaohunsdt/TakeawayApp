@@ -11,7 +11,8 @@
               订餐号
             </div>
           </div>
-          <div class="estimated-arrival-time" v-if="order.orderState !== 'FINISHED'">
+          <div class="estimated-arrival-time"
+               v-if="order.payState !== 'UN_PAY' && (order.orderState === 'PRODUCING' || order.orderState === 'DELIVERING')">
             <div class="time">
               {{deliveryArriveTime.date}}
               <span style="font-size: 2rem">{{deliveryArriveTime.time}}</span>
@@ -21,9 +22,19 @@
               预计到达
             </div>
           </div>
+          <div class="estimated-arrival-time" v-if="order.payState === 'UN_PAY' || order.orderState === 'WAITING_RECEIVE'">
+            <div class="time" style="margin-top: .5rem">
+              <span style="font-size: 2rem">未知</span>
+            </div>
+          </div>
           <div class="estimated-arrival-time" v-if="order.orderState === 'FINISHED'">
             <div class="time" style="margin-top: .5rem">
               <span style="font-size: 2rem">已完成</span>
+            </div>
+          </div>
+          <div class="estimated-arrival-time" v-if="order.orderState === 'REFUND'">
+            <div class="time" style="margin-top: .5rem">
+              <span style="font-size: 2rem">已退款</span>
             </div>
           </div>
         </div>
@@ -143,8 +154,8 @@
         order: {},
         couponName: null,
         deliveryArriveTime: {
-          date: '未知',
-          time: '未知'
+          date: '',
+          time: ''
         }
       }
     },
@@ -158,10 +169,13 @@
                 this.couponName = res[0].couponName
               })
           }
-          if (this.order.orderState !== 'FINISHED') {
+          if ((this.order.orderState === 'PRODUCING' || this.order.orderState === 'DELIVERING') && this.order.payState !== 'UN_PAY') {
             // 获取预计送达时间
             orderService.getDeliveryArriveTime(this.orderId)
               .then(res => {
+                if (res.code) {
+                  this.deliveryArriveTime = null
+                }
                 this.deliveryArriveTime = res
               })
           }

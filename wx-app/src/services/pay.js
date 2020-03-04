@@ -23,7 +23,7 @@ export function payOrder (orderId, payWay) {
       break
     default:
       mpvue.redirectTo({
-        url: '/pages/order/main?state=waitEat'
+        url: '/pages/order/main?state=WAIT_EAT'
       })
   }
 }
