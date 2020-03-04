@@ -20,8 +20,7 @@ import java.util.Optional;
  */
 public interface IOrderDao extends BaseMapper<Order> {
     /**
-     *
-     * @param orderId 订单Id
+     * @param orderId       订单Id
      * @param isShowDeleted 是否显示被删除的订单
      * @return
      */
@@ -29,9 +28,10 @@ public interface IOrderDao extends BaseMapper<Order> {
 
     /**
      * 获取指定用户的订单
-     * @param userId 用户ID
-     * @param paymentWay 支付方式
-     * @param orderState 订单状态
+     *
+     * @param userId        用户ID
+     * @param paymentWay    支付方式
+     * @param orderState    订单状态
      * @param isShowDeleted 是否显示已被删除的账户
      * @return 筛选后的指定用户订单列表
      */
@@ -42,6 +42,7 @@ public interface IOrderDao extends BaseMapper<Order> {
 
     /**
      * 分页获取订单列表
+     *
      * @param page 分页实例
      * @param args userIds 用户IDs <br />
      *             orderId 订单ID <br />
@@ -55,43 +56,58 @@ public interface IOrderDao extends BaseMapper<Order> {
 
     /**
      * 获取等待接单的订单
+     *
      * @return 等待接单的订单列表
      */
     List<Order> getWaitingReceiveOrder();
 
     /**
      * 获取等待接单的订单数量
+     *
      * @return 等待接单的订单数量
      */
     int getWaitingReceiveOrderCount();
 
     /**
      * 用户端分页获取订单列表
-     * @param page   分页实例
-     * @param userId        用户ID
-     * @param orderState    订单状态
+     *
+     * @param page       分页实例
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单列表
      */
-    IPage<Order> getOrderListByPageU(@Param("page") Page page, String userId, OrderStateEx orderState);
+    IPage<Order> getOrderListByPageU(@Param("page") Page page, @Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 用户端获取指定订单类型的数量
-     * @param userId        用户ID
-     * @param orderState    订单状态
+     *
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单数量
      */
-    int getOrderCountByStateU(String userId, OrderStateEx orderState);
+    int getOrderCountByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
 
     /**
-     * 用户端获取今日指定订单类型的数量
-     * @param userId        用户ID
-     * @param orderState    订单状态
+     * 用户端获取今日指定类型的订单
+     *
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单数量
      */
-    int getTodayOrderCountByStateU(String userId, OrderStateEx orderState);
+    List<Order> getTodayOrderByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
+
+    /**
+     * 用户端获取今日指定类型的订单数量
+     *
+     * @param userId     用户ID
+     * @param orderState 订单状态
+     * @return 订单数量
+     */
+    int getTodayOrderCountByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 获取当天的订单数量
+     *
      * @return 当天的订单数量
      */
     int getOrderCountToday();

@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.user.web.api;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
@@ -24,11 +25,13 @@ import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
+import net.novaborn.takeaway.user.web.dto.DeliveryArriveTimeDto;
 import net.novaborn.takeaway.user.web.dto.OrderDto;
-import net.novaborn.takeaway.user.web.wrapper.DeliveryArriveTimeWrapper;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +40,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaohun
@@ -59,6 +63,8 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     private OrderItemService orderItemService;
+
+    private SettingService settingService;
 
     private OrderPayExpiredSender orderPayExpiredSender;
 
@@ -209,8 +215,37 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getDeliveryArriveTime")
-    public DeliveryArriveTimeWrapper getDeliveryArriveTime(@RequestParam String orderId) {
-//        orderService.getOrderCountByStateU()
-        return new DeliveryArriveTimeWrapper(null);
+    public Object getDeliveryArriveTime(@RequestParam String orderId) {
+        Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (order.get().getPayState() == PayState.UN_PAY) {
+            return new SuccessTip("未知");
+        }
+
+        if (order.get().getOrderState() == OrderState.FINISHED) {
+            return new SuccessTip("已完成");
+        }
+
+        if (order.get().getOrderState() == OrderState.REFUND) {
+            return new SuccessTip("已退款");
+        }
+
+        int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
+        int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
+
+        List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
+                .sorted(Comparator.comparing(Order::getCreateDate))
+                .collect(Collectors.toList());
+        int index = orderList.indexOf(order.get());
+
+        Date deliveryDate;
+        if (index == 0) {
+            deliveryDate = DateUtil.offsetMinute(new Date(), base_express_time);
+        } else {
+            deliveryDate = DateUtil.offsetMinute(new Date(), base_express_time + index * average_express_time);
+        }
+
+        return new DeliveryArriveTimeDto(deliveryDate);
     }
 }

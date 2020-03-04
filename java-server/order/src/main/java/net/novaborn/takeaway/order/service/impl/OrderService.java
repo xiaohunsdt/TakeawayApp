@@ -75,6 +75,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
+    public List<Order> getTodayOrderByStateU(String userId, OrderStateEx orderState) {
+        return this.baseMapper.getTodayOrderByStateU(userId, orderState);
+    }
+
+    @Override
     public int getTodayOrderCountByStateU(String userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
     }
