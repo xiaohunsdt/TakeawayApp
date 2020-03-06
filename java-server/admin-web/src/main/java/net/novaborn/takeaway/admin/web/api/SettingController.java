@@ -1,7 +1,10 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.NaverMapUtil;
@@ -14,12 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * @author xiaohun
  */
+@Slf4j
 @Controller
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/admin/setting")
@@ -65,7 +74,7 @@ public class SettingController extends BaseController {
                 Setting coordinate_x = settingService.getSettingByName("store_address_x", settingScope);
                 Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
 
-                if (coordinate_x  == null || coordinate_y  == null || !setting.getValue().equals(value)) {
+                if (coordinate_x == null || coordinate_y == null || !setting.getValue().equals(value)) {
                     Coordinate coordinate = NaverMapUtil.getGeocode((String) value);
                     coordinate_x = new Setting();
                     coordinate_x.setKey("store_address_x");
@@ -78,6 +87,18 @@ public class SettingController extends BaseController {
                     coordinate_y.setScope(settingScope);
                     coordinate_y.setValue(coordinate.getY().toString());
                     coordinate_y.insertOrUpdate();
+                }
+            }
+
+            if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
+                // 转义从前端传来的日期字符串
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                sf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                try {
+                    value = DateUtil.formatDateTime(sf.parse((String) value));
+                } catch (ParseException e) {
+                    log.error("", e);
+                    throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
                 }
             }
 

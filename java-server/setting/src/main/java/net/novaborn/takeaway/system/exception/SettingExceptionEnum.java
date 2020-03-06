@@ -12,7 +12,8 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 public enum SettingExceptionEnum implements ServiceExceptionEnum {
 
 
-    SCOPE_NOT_EXIST(500, "域不存在!");
+    SCOPE_NOT_EXIST(500, "域不存在!"),
+    UPDATE_ERROR(500, "更新失败!");
 
     SettingExceptionEnum(int code, String message) {
         this.code = code;

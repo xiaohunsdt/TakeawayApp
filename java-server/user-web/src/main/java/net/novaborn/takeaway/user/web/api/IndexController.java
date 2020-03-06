@@ -1,18 +1,20 @@
 package net.novaborn.takeaway.user.web.api;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
-import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.service.impl.AddressService;
-import net.novaborn.takeaway.user.web.dto.GoodsPageSettingDto;
 import net.novaborn.takeaway.user.web.dto.ServiceStateDto;
+import net.novaborn.takeaway.user.web.wrapper.AppointmentTimesWrapper;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -66,7 +72,7 @@ public class IndexController extends BaseController {
     @GetMapping("getExpressServiceState")
     @ResponseBody
     public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
-        Setting maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS);
+        int maxExpressDistance = Integer.parseInt(settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValue());
         double distance = addressService.getDistanceWithStore(addressId);
 
         // 10000 以下不配送
@@ -74,7 +80,7 @@ public class IndexController extends BaseController {
 //            return new ServiceStateDto(-1,"今日85折,低于10000韩币无法配送!!");
 //        }
 
-        if (distance > Integer.parseInt((String) maxExpressDistance.getValue())) {
+        if (distance > maxExpressDistance) {
             return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
         }
 
@@ -89,5 +95,31 @@ public class IndexController extends BaseController {
         }
 
         return new ServiceStateDto();
+    }
+
+    @GetMapping("getAppointmentTimes")
+    @ResponseBody
+    public Object getAppointmentTimes() {
+        Date currentDate = DateUtil.date();
+        String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+        LocalTime store_open_time = TimeUtil.parseLocalTime(settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        LocalTime store_close_time = TimeUtil.parseLocalTime(settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        List<Map<Date, Date>> times = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            if (i != 0) {
+                currentDate = DateUtil.offsetDay(currentDate, 1);
+            }
+            // 指定日期是否营业
+            if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
+                continue;
+            }
+            Date startDate;
+            Date endDate;
+//            if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+//                startDate = currentDate;
+//                endDate = DateTime.of(currentDate).setField(DateField.HOUR, )
+//            }
+        }
+        return new AppointmentTimesWrapper(null).warp();
     }
 }

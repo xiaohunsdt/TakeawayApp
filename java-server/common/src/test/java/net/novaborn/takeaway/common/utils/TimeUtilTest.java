@@ -1,11 +1,12 @@
 package net.novaborn.takeaway.common.utils;
 
+import cn.hutool.core.date.DateUtil;
 import org.junit.Test;
 
 public class TimeUtilTest {
 
     @Test
     public void isBetween() {
-        System.out.println(TimeUtil.isBetween("2019-11-14T15:00:01.000Z", "2019-11-15T13:30:00.000Z"));
+        System.out.println(TimeUtil.isBetween(DateUtil.now(),"2019-11-14 11:00:00", "2019-11-15 22:30:00"));
     }
 }

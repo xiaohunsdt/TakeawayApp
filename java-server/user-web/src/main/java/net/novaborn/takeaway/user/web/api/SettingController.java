@@ -60,7 +60,6 @@ public class SettingController extends BaseController {
         // store
         String store_open_date = this.getSettingByName("store_open_date", SettingScope.STORE).getValue();
 
-        SimpleDateFormat df = new SimpleDateFormat(DatePattern.UTC_MS_PATTERN);
         String store_open_time;
         String store_close_time;
         store_open_time = this.getSettingByName("store_open_time", SettingScope.STORE).getValue();
