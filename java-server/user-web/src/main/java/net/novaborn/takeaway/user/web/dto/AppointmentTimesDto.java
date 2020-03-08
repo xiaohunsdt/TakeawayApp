@@ -6,15 +6,16 @@ import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 public class AppointmentTimesDto {
-    private Map<String,List> appointmentTimes = new LinkedHashMap<>(3);
+    private Map<String, Map<Integer, List<Integer>>> appointmentTimes = new LinkedHashMap<>(3);
 
     public AppointmentTimesDto(List<Map<String, Date>> timePairs) {
         timePairs.forEach(item -> {
             DateTime currentDate = DateTime.now();
-            List<String> times = new ArrayList();
+            List<DateTime> times = new ArrayList();
             DateTime start = DateTime.of(item.get("start"));
             DateTime end = DateTime.of(item.get("end"));
             String dateStr;
@@ -32,12 +33,21 @@ public class AppointmentTimesDto {
             start = DateUtil.ceiling(start, DateField.MINUTE)
                     .setField(DateField.MINUTE, (start.getField(DateField.MINUTE) / 10 + 1) * 10);
             do {
-                String time = DateUtil.format(start, "HH:mm");
-                times.add(time);
+                times.add(start);
                 start = DateUtil.offsetMinute(start, 10);
             } while (start.before(end));
 
-            appointmentTimes.put(dateStr,times);
+            Map<Integer, List<Integer>> timeMap = new LinkedHashMap<>();
+            times.stream()
+                    .map((time) -> time.getField(DateField.HOUR_OF_DAY))
+                    .forEach(hour -> {
+                        List<Integer> minutes = times.parallelStream()
+                                .filter((tempTime) -> tempTime.getField(DateField.HOUR_OF_DAY) == hour)
+                                .map((tempTime) -> tempTime.getField(DateField.MINUTE))
+                                .collect(Collectors.toList());
+                        timeMap.put(hour,minutes);
+                    });
+            appointmentTimes.put(dateStr, timeMap);
         });
     }
 }

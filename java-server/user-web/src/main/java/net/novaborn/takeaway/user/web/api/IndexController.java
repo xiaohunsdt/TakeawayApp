@@ -137,11 +137,14 @@ public class IndexController extends BaseController {
                 continue;
             }
 
-            // 预定要提前3个小时
-            startDate = DateTime.of(currentDate).offset(DateField.HOUR_OF_DAY, 3);
+            // 预定要提前2个小时
+            startDate = DateTime.of(currentDate).offset(DateField.HOUR_OF_DAY, 2);
             if (TimeUtil.isAfter(startDate, endDate)) {
                 continue;
             }
+
+            // 最迟截止下单日期的后20分钟到达
+            endDate = DateTime.of(endDate).offset(DateField.MINUTE, 20);
 
             Map<String, Date> timePair = new HashMap<>();
             timePair.put("start", startDate);
