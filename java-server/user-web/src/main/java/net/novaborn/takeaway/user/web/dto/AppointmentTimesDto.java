@@ -1,0 +1,43 @@
+package net.novaborn.takeaway.user.web.dto;
+
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import lombok.Data;
+
+import java.util.*;
+
+@Data
+public class AppointmentTimesDto {
+    private Map<String,List> appointmentTimes = new LinkedHashMap<>(3);
+
+    public AppointmentTimesDto(List<Map<String, Date>> timePairs) {
+        timePairs.forEach(item -> {
+            DateTime currentDate = DateTime.now();
+            List<String> times = new ArrayList();
+            DateTime start = DateTime.of(item.get("start"));
+            DateTime end = DateTime.of(item.get("end"));
+            String dateStr;
+
+            if (DateUtil.isSameDay(start, currentDate)) {
+                dateStr = "今天";
+            } else if (DateUtil.betweenDay(currentDate, start, true) == 1) {
+                dateStr = "明天";
+            } else if (DateUtil.betweenDay(currentDate, start, true) == 2) {
+                dateStr = "后天";
+            } else {
+                dateStr = DateUtil.format(start, "MM-dd");
+            }
+
+            start = DateUtil.ceiling(start, DateField.MINUTE)
+                    .setField(DateField.MINUTE, (start.getField(DateField.MINUTE) / 10 + 1) * 10);
+            do {
+                String time = DateUtil.format(start, "HH:mm");
+                times.add(time);
+                start = DateUtil.offsetMinute(start, 10);
+            } while (start.before(end));
+
+            appointmentTimes.put(dateStr,times);
+        });
+    }
+}

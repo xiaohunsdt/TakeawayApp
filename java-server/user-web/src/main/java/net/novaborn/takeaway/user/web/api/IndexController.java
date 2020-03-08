@@ -13,8 +13,8 @@ import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.service.impl.AddressService;
+import net.novaborn.takeaway.user.web.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.user.web.dto.ServiceStateDto;
-import net.novaborn.takeaway.user.web.wrapper.AppointmentTimesWrapper;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,11 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -102,24 +98,56 @@ public class IndexController extends BaseController {
     public Object getAppointmentTimes() {
         Date currentDate = DateUtil.date();
         String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
-        LocalTime store_open_time = TimeUtil.parseLocalTime(settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        LocalTime store_close_time = TimeUtil.parseLocalTime(settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        List<Map<Date, Date>> times = new ArrayList<>();
+        String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
+        String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
+        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time);
+        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time);
+        List<Map<String, Date>> timePairs = new ArrayList<>();
+
         for (int i = 0; i < 3; i++) {
             if (i != 0) {
-                currentDate = DateUtil.offsetDay(currentDate, 1);
+                currentDate = DateUtil.offsetDay(currentDate, 1)
+                        .setField(DateField.HOUR_OF_DAY, 0)
+                        .setField(DateField.MINUTE, 0)
+                        .setField(DateField.SECOND, 0);
             }
             // 指定日期是否营业
             if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
                 continue;
             }
+
             Date startDate;
             Date endDate;
-//            if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
-//                startDate = currentDate;
-//                endDate = DateTime.of(currentDate).setField(DateField.HOUR, )
-//            }
+            if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+                startDate = currentDate;
+                endDate = new DateTime(currentDate)
+                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+            } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
+                startDate = new DateTime(currentDate)
+                        .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
+                        .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
+                        .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND));
+                endDate = new DateTime(currentDate)
+                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+            } else {
+                continue;
+            }
+
+            // 预定要提前3个小时
+            startDate = DateTime.of(currentDate).offset(DateField.HOUR_OF_DAY, 3);
+            if (TimeUtil.isAfter(startDate, endDate)) {
+                continue;
+            }
+
+            Map<String, Date> timePair = new HashMap<>();
+            timePair.put("start", startDate);
+            timePair.put("end", endDate);
+            timePairs.add(timePair);
         }
-        return new AppointmentTimesWrapper(null).warp();
+        return new AppointmentTimesDto(timePairs);
     }
 }

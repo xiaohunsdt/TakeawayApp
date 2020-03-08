@@ -46,10 +46,19 @@ public class TimeUtil {
         return targetTime.isAfter(startTime) && targetTime.isBefore(endTime);
     }
 
-    public static LocalTime parseLocalTime(String target, String formatter) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
-                .ofPattern(formatter)
-                .withZone(ZoneId.systemDefault());
-        return ZonedDateTime.parse(target, dateTimeFormatter).withZoneSameInstant(ZoneId.systemDefault()).toLocalTime();
+    public static boolean isBefore(Date date1, Date date2){
+        LocalTime time1;
+        LocalTime time2;
+        time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        time2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        return time1.isBefore(time2);
+    }
+
+    public static boolean isAfter(Date date1, Date date2){
+        LocalTime time1;
+        LocalTime time2;
+        time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        time2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        return time1.isAfter(time2);
     }
 }

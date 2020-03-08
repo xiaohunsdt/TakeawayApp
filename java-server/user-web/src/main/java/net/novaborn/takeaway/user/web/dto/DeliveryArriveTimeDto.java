@@ -19,9 +19,9 @@ public class DeliveryArriveTimeDto {
         Date currentDate = new Date();
         if (DateUtil.isSameDay(date, currentDate)) {
             this.date = "今天";
-        } else if (DateUtil.betweenDay(currentDate, date, false) == 1) {
+        } else if (DateUtil.betweenDay(currentDate, date, true) == 1) {
             this.date = "明天";
-        } else if (DateUtil.betweenDay(currentDate, date, false) == 1) {
+        } else if (DateUtil.betweenDay(currentDate, date, true) == 2) {
             this.date = "后天";
         } else {
             this.date = DateUtil.format(date, "MM-dd");
