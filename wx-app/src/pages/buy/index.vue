@@ -259,7 +259,7 @@
               })
             } else {
               mpvue.reLaunch({
-                url: '/pages/order/main?state=waitPay'
+                url: '/pages/order/main?state=WAIT_PAY'
               })
             }
           })
