@@ -11,7 +11,7 @@ const api = {
   getServiceState: () => request.get('index/getServiceState'),
   // 获取指定地址是否可以配送
   getExpressServiceState: (addressId, allPrice) => request.get('index/getExpressServiceState', { addressId, allPrice }),
-
+  getAppointmentTimes: () => request.get('index/getAppointmentTimes'),
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品

@@ -19,9 +19,14 @@ export function getExpressServiceState (addressId, allPrice) {
   return api.getExpressServiceState(addressId, allPrice)
 }
 
+export function getAppointmentTimes () {
+  return api.getAppointmentTimes()
+}
+
 export default {
   getNewGoodsList,
   getHotGoodsList,
   getServiceState,
-  getExpressServiceState
+  getExpressServiceState,
+  getAppointmentTimes
 }

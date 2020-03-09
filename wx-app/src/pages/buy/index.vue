@@ -4,29 +4,66 @@
     <div class="container-contain">
       <div id="header">
         <base-panel>
-          <div v-if="address">
-            <van-cell
-              :title="address.address + ' ' + address.detail"
-              is-link
-              url="/pages/my/address/main">
-              <view slot="icon" style="margin-right: 0.2rem">
-                <van-icon color="#FFD200" name="location" size="1.2rem"/>
-              </view>
-            </van-cell>
-            <van-cell
-              :title="address.phone"
-              is-link
-              url="/pages/my/address/main">
-              <view slot="icon" style="margin-right: 0.2rem">
-                <van-icon color="#FFD200" name="phone" size="1.2rem"/>
-              </view>
-            </van-cell>
+          <div>
+            <div v-if="address">
+              <van-cell
+                :title="address.address + ' ' + address.detail"
+                is-link
+                url="/pages/my/address/main">
+                <view slot="icon" style="margin-right: 0.2rem">
+                  <van-icon color="#FFD200" name="location" size="1.2rem"/>
+                </view>
+              </van-cell>
+              <van-cell
+                :title="address.phone"
+                is-link
+                url="/pages/my/address/main">
+                <view slot="icon" style="margin-right: 0.2rem">
+                  <van-icon color="#FFD200" name="phone" size="1.2rem"/>
+                </view>
+              </van-cell>
+            </div>
+            <div v-else>
+              <van-cell is-link title="选择地址" url="/pages/my/address/main"/>
+            </div>
           </div>
-          <div v-else>
-            <van-cell is-link title="选择地址" url="/pages/my/address/main"/>
-          </div>
+          <van-cell
+            :title="appointment?'预约点餐':'尽快送达'"
+            @click="showTimePicker=true"
+            value="今天 12:30">
+            <view slot="icon" style="margin-right: 0.2rem">
+              <van-icon color="#FFD200" name="clock" size="1.2rem"/>
+            </view>
+          </van-cell>
         </base-panel>
       </div>
+      <van-action-sheet
+        :show="showTimePicker"
+        :z-index="99999"
+        @cancel="showTimePicker =false"
+        @click-overlay="showTimePicker =false"
+        @close="showTimePicker =false"
+        close-on-click-overlay
+        overlay
+        title="预约时间">
+        <view class="time-picker-content">
+          <picker-view :value="appointment" @change="onTimePickerChange" indicator-style="height: 50px"
+                       style="width: 100%;height: 100%;">
+            <picker-view-column>
+              <view style="line-height: 50px" v-for="item in appointmentTimes[0]">{{item}}</view>
+            </picker-view-column>
+            <picker-view-column>
+              <view style="line-height: 50px" v-for="item in appointmentTimes[1]">
+                <view v-if="item!=='立即配送'">{{item}}点</view>
+                <view v-else>{{item}}</view>
+              </view>
+            </picker-view-column>
+            <picker-view-column>
+              <view style="line-height: 50px" v-for="item in appointmentTimes[2]">{{item}}分</view>
+            </picker-view-column>
+          </picker-view>
+        </view>
+      </van-action-sheet>
       <div :class="{'show-order-tip':showOrderTip}" id="buy-content">
         <base-panel>
           <order-item
@@ -109,7 +146,7 @@
           <div class="coupon-discounted-prices" v-if="couponInfoTip">
             {{ couponInfoTip }}
           </div>
-          <div class="coupon-detail-info" v-if="coupon" @click="setCoupon">
+          <div @click="setCoupon" class="coupon-detail-info" v-if="coupon">
             {{ couponInfoDetail }}
           </div>
         </base-panel>
@@ -158,6 +195,8 @@
   import addressService from '@/services/address'
   import couponService from '@/services/coupon'
 
+  let times = null
+
   export default {
     components: {
       BasePanel,
@@ -185,21 +224,6 @@
       }
     },
     computed: {
-      orderItems () {
-        const cartGoodsList = this.$store.getters.cartGoodsList
-        let orderItemList = []
-        cartGoodsList.forEach(item => {
-          let orderItem = {}
-          orderItem.goodsId = item.goodsId
-          orderItem.goodsName = item.goods.name
-          orderItem.goodsThumb = item.goods.thumb
-          orderItem.goodsPrice = item.goods.price
-          orderItem.goodsCount = item.count
-          orderItemList.push(orderItem)
-        })
-
-        return orderItemList
-      },
       cartCount () {
         return this.$store.getters.cartAllCount
       },
@@ -221,11 +245,15 @@
         tipNotice: '',
         orderId: '',
         order: {},
+        orderItems: null,
         payWay: 'WEIXIN_PAY',
         couponDiscountPrice: 0,
         couponInfoTip: null,
         couponInfoDetail: null,
-        psData: ''
+        psData: '',
+        showTimePicker: true,
+        appointment: [],
+        appointmentTimes: []
       }
     },
     onLoad () {
@@ -284,9 +312,43 @@
         this.disableService = false
         this.orderId = ''
         this.order = {}
+        this.orderItems = []
         this.payWay = 'WEIXIN_PAY'
         this.coupon = null
         this.psData = ''
+        this.appointment = null
+        this.appointmentTimes = []
+
+        // 获取订单项
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        cartGoodsList.forEach(item => {
+          let orderItem = {}
+          orderItem.goodsId = item.goodsId
+          orderItem.goodsName = item.goods.name
+          orderItem.goodsThumb = item.goods.thumb
+          orderItem.goodsPrice = item.goods.price
+          orderItem.goodsCount = item.count
+          this.orderItems.push(orderItem)
+        })
+
+        // 获取预约时间项
+        indexService.getAppointmentTimes()
+          .then(res => {
+            times = res.appointmentTimes
+            const canDeliveryNow = res.canDeliveryNow
+            const days = Object.keys(times)
+            const day = days[0]
+            const hours = Object.keys(times[day])
+            const hour = hours[0]
+            let minutes = times[day][hour]
+            if (Object.keys(times).includes('今天') && canDeliveryNow) {
+              times['今天'] = Object.assign({}, { '立即配送': [] }, times['今天'])
+              hours.splice(0, 0, '立即配送')
+              minutes = []
+            }
+            this.appointmentTimes = [days, hours, minutes]
+            this.appointment = [0, 0, 0]
+          })
       },
       setCoupon () {
         mpvue.navigateTo({
@@ -354,6 +416,32 @@
             this.couponInfoTip = res.message
           }
         })
+      },
+      onTimePickerChange (event) {
+        const { value } = event.mp.detail
+        console.log(value)
+
+        const days = Object.keys(times)
+        const day = days[value[0]]
+        const hours = Object.keys(times[day])
+        if (hours.includes('立即配送')) {
+          hours.splice(hours.length - 1, 1)
+          hours.splice(0, 0, '立即配送')
+        }
+        const hour = hours[value[1]]
+        const minutes = times[day][hour]
+
+        // const minute = times[day][hour][value[2]]
+        if (this.appointment[0] !== value[0]) {
+          this.appointmentTimes[1] = hours
+          this.appointmentTimes[2] = minutes
+        }
+
+        if (this.appointment[1] !== value[1]) {
+          this.appointmentTimes[2] = minutes
+        }
+
+        this.appointment = value
       }
     }
   }
@@ -419,5 +507,11 @@
   .coupon-delete-btn {
     position: relative;
     top: .05rem;
+  }
+
+  .time-picker-content {
+    height: 4rem;
+    padding: 0 .8rem;
+    text-align: center
   }
 </style>

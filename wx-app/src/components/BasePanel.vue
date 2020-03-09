@@ -17,7 +17,7 @@
   .base-panel {
     padding: 0 .2rem;
     position: relative;
-    z-index: 100;
+    z-index: 1;
     background-color: transparent;
     margin-bottom: 0.2rem;
   }
