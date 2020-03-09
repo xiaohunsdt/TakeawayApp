@@ -10,9 +10,11 @@ import java.util.stream.Collectors;
 
 @Data
 public class AppointmentTimesDto {
-    private Map<String, Map<Integer, List<Integer>>> appointmentTimes = new LinkedHashMap<>(3);
+    private Boolean canDeliveryNow;
+    private Map<String, Map<String, List<Integer>>> appointmentTimes = new LinkedHashMap<>(3);
 
-    public AppointmentTimesDto(List<Map<String, Date>> timePairs) {
+    public AppointmentTimesDto(List<Map<String, Date>> timePairs, Boolean canDeliveryNow) {
+        this.canDeliveryNow = canDeliveryNow;
         timePairs.forEach(item -> {
             DateTime currentDate = DateTime.now();
             List<DateTime> times = new ArrayList();
@@ -37,7 +39,7 @@ public class AppointmentTimesDto {
                 start = DateUtil.offsetMinute(start, 10);
             } while (start.before(end));
 
-            Map<Integer, List<Integer>> timeMap = new LinkedHashMap<>();
+            Map<String, List<Integer>> timeMap = new LinkedHashMap<>();
             times.stream()
                     .map((time) -> time.getField(DateField.HOUR_OF_DAY))
                     .forEach(hour -> {
@@ -45,7 +47,7 @@ public class AppointmentTimesDto {
                                 .filter((tempTime) -> tempTime.getField(DateField.HOUR_OF_DAY) == hour)
                                 .map((tempTime) -> tempTime.getField(DateField.MINUTE))
                                 .collect(Collectors.toList());
-                        timeMap.put(hour,minutes);
+                        timeMap.put(String.valueOf(hour), minutes);
                     });
             appointmentTimes.put(dateStr, timeMap);
         });
