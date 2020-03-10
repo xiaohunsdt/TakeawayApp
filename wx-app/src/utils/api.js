@@ -43,6 +43,7 @@ const api = {
   deleteOrder: (orderId) => request.post('order/deleteOrder', { orderId }),
   createComment: (commentData) => request.post('order/createComment', commentData),
   getDeliveryArriveTime: (orderId) => request.post('order/getDeliveryArriveTime', { orderId }),
+  getCanOrderNow: () => request.post('order/getCanOrderNow'),
 
   // 获取指定域的设置
   getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', { scope }),

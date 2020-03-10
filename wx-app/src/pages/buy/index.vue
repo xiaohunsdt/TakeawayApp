@@ -28,9 +28,9 @@
             </div>
           </div>
           <van-cell
-            :title="appointment?'预约点餐':'尽快送达'"
-            @click="showTimePicker=true"
-            value="今天 12:30">
+            :title="deliveryType"
+            :value="deliveryArriveTime"
+            @click="showTimePicker=true">
             <view slot="icon" style="margin-right: 0.2rem">
               <van-icon color="#FFD200" name="clock" size="1.2rem"/>
             </view>
@@ -47,14 +47,14 @@
         overlay
         title="预约时间">
         <view class="time-picker-content">
-          <picker-view :value="appointment" @change="onTimePickerChange" indicator-style="height: 50px"
+          <picker-view :value="appointmentIndex" @change="onTimePickerChange" indicator-style="height: 50px"
                        style="width: 100%;height: 100%;">
             <picker-view-column>
               <view style="line-height: 50px" v-for="item in appointmentTimes[0]">{{item}}</view>
             </picker-view-column>
             <picker-view-column>
               <view style="line-height: 50px" v-for="item in appointmentTimes[1]">
-                <view v-if="item!=='立即配送'">{{item}}点</view>
+                <view v-if="item!=='尽快配送'">{{item}}点</view>
                 <view v-else>{{item}}</view>
               </view>
             </picker-view-column>
@@ -221,6 +221,27 @@
         if (newVal && this.coupon) {
           this.checkCouponDiscountPrice()
         }
+      },
+      showTimePicker (newVal) {
+        if (!newVal && times) {
+          const day = this.appointment[0]
+          const hour = this.appointment[1]
+          const minute = this.appointment[2]
+          if (day === '今天' && hour === '尽快配送') {
+            this.deliveryType = '尽快配送'
+          } else {
+            this.deliveryType = '预约点餐'
+            this.deliveryArriveTime = `${day} ${hour}:${minute}`
+          }
+        }
+      },
+      deliveryType (newVal) {
+        if (newVal === '尽快配送') {
+          orderService.getDeliveryArriveTime()
+            .then(res => {
+              this.deliveryArriveTime = `大约 ${res.date} ${res.time}`
+            })
+        }
       }
     },
     computed: {
@@ -251,9 +272,12 @@
         couponInfoTip: null,
         couponInfoDetail: null,
         psData: '',
-        showTimePicker: true,
+        showTimePicker: false,
         appointment: [],
-        appointmentTimes: []
+        appointmentIndex: [],
+        appointmentTimes: [],
+        deliveryType: '',
+        deliveryArriveTime: null
       }
     },
     onLoad () {
@@ -316,8 +340,11 @@
         this.payWay = 'WEIXIN_PAY'
         this.coupon = null
         this.psData = ''
+        times = null
+        this.showTimePicker = false
         this.appointment = null
-        this.appointmentTimes = []
+        this.deliveryType = ''
+        this.deliveryArriveTime = null
 
         // 获取订单项
         const cartGoodsList = this.$store.getters.cartGoodsList
@@ -342,12 +369,21 @@
             const hour = hours[0]
             let minutes = times[day][hour]
             if (Object.keys(times).includes('今天') && canDeliveryNow) {
-              times['今天'] = Object.assign({}, { '立即配送': [] }, times['今天'])
-              hours.splice(0, 0, '立即配送')
+              times['今天'] = Object.assign({}, { '尽快配送': [] }, times['今天'])
+              hours.splice(0, 0, '尽快配送')
               minutes = []
             }
+
+            if (days[0] === '今天' && hours[0] === '尽快配送') {
+              this.deliveryType = '尽快配送'
+            } else {
+              this.deliveryType = '预约点餐'
+              this.deliveryArriveTime = `${days[0]} ${hours[0]}:${minutes[0]}`
+            }
+
             this.appointmentTimes = [days, hours, minutes]
-            this.appointment = [0, 0, 0]
+            this.appointmentIndex = [0, 0, 0]
+            this.appointment = [days[0], hours[0], minutes[0]]
           })
       },
       setCoupon () {
@@ -424,24 +460,25 @@
         const days = Object.keys(times)
         const day = days[value[0]]
         const hours = Object.keys(times[day])
-        if (hours.includes('立即配送')) {
+        if (hours.includes('尽快配送')) {
           hours.splice(hours.length - 1, 1)
-          hours.splice(0, 0, '立即配送')
+          hours.splice(0, 0, '尽快配送')
         }
         const hour = hours[value[1]]
         const minutes = times[day][hour]
 
         // const minute = times[day][hour][value[2]]
-        if (this.appointment[0] !== value[0]) {
+        if (this.appointment[0] !== days[value[0]]) {
           this.appointmentTimes[1] = hours
           this.appointmentTimes[2] = minutes
         }
 
-        if (this.appointment[1] !== value[1]) {
+        if (this.appointment[1] !== hours[value[1]]) {
           this.appointmentTimes[2] = minutes
         }
 
-        this.appointment = value
+        this.appointmentIndex = value
+        this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
       }
     }
   }

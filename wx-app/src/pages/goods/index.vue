@@ -84,6 +84,7 @@
 <script>
   import categoryService from '@/services/category'
   import goodsService from '@/services/goods'
+  import orderService from '@/services/order'
   import settingService from '@/services/setting'
 
   import BasePanel from '@/components/BasePanel'
@@ -200,9 +201,26 @@
         }
       },
       onSubmitOrder () {
-        mpvue.navigateTo({
-          url: `/pages/buy/main`
-        })
+        orderService.getCanOrderNow()
+          .then(res => {
+            if (!res) {
+              mpvue.showModal({
+                title: '提示',
+                content: `当前时间无法下单!\r\n请问是否要进行预约?`,
+                success (res) {
+                  if (res.confirm) {
+                    mpvue.navigateTo({
+                      url: `/pages/buy/main`
+                    })
+                  }
+                }
+              })
+            } else {
+              mpvue.navigateTo({
+                url: `/pages/buy/main`
+              })
+            }
+          })
       },
       onOpenCart () {
         this.showCart = true

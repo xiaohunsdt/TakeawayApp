@@ -80,6 +80,10 @@ export function getDeliveryArriveTime (orderId) {
   return api.getDeliveryArriveTime(orderId)
 }
 
+export function getCanOrderNow () {
+  return api.getCanOrderNow()
+}
+
 export default {
   selectOrderById,
   getOrderListByPage,
@@ -89,5 +93,6 @@ export default {
   createOrder,
   deleteOrder,
   createComment,
-  getDeliveryArriveTime
+  getDeliveryArriveTime,
+  getCanOrderNow
 }
