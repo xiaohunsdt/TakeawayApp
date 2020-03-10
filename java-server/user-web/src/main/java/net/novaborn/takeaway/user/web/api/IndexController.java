@@ -95,7 +95,7 @@ public class IndexController extends BaseController {
 
     @GetMapping("getAppointmentTimes")
     @ResponseBody
-    public Object getAppointmentTimes() {
+    public AppointmentTimesDto getAppointmentTimes() {
         Date currentDate = DateUtil.date();
         String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
@@ -151,6 +151,6 @@ public class IndexController extends BaseController {
             timePair.put("end", endDate);
             timePairs.add(timePair);
         }
-        return new AppointmentTimesDto(timePairs);
+        return new AppointmentTimesDto(timePairs,TimeUtil.isBetween(store_open_time, store_close_time));
     }
 }
