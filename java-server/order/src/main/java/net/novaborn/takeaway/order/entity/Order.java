@@ -78,6 +78,9 @@ public class Order extends Model<Order> {
     private Boolean isCommented;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date appointmentDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

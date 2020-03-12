@@ -53,6 +53,9 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
                 sysException.setMessage(goods.get().getName()+": 当前处于缺货中,无法下单!请下来刷新菜单!");
                 throw sysException;
             }
+
+            //从新录入价格
+            item.setGoodsPrice(goods.get().getPrice());
         });
     }
 }

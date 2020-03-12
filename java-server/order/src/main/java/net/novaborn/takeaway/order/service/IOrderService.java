@@ -94,16 +94,18 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 用户端获取今日指定类型的订单
-     * @param userId        用户ID
-     * @param orderState    订单状态
+     *
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单数量
      */
     List<Order> getTodayOrderByStateU(String userId, OrderStateEx orderState);
 
     /**
      * 用户端获取今日指定类型的数量
-     * @param userId        用户ID
-     * @param orderState    订单状态
+     *
+     * @param userId     用户ID
+     * @param orderState 订单状态
      * @return 订单数量
      */
     int getTodayOrderCountByStateU(String userId, OrderStateEx orderState);
@@ -132,4 +134,11 @@ public interface IOrderService extends IService<Order> {
      * @param discount      折扣, 1-99 的折扣大小
      */
     void setDiscount(Order order, List<OrderItem> orderItemList, int discount);
+
+    /**
+     * 检查此订单是否可以下单
+     * @param order         预检查的订单
+     * @param orderItemList 预检查的订单商品项
+     */
+    void checkOrder(Order order, List<OrderItem> orderItemList);
 }

@@ -10,6 +10,7 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.service.impl.CouponLogService;
@@ -130,6 +131,7 @@ public class OrderController extends BaseController {
 
         //检测订单商品项是否可以下单
         orderItemService.checkOrderItems(orderItems);
+        orderService.checkOrder(order, orderItems);
 
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
@@ -213,40 +215,60 @@ public class OrderController extends BaseController {
         return new SuccessTip("删除成功!");
     }
 
+    @RequestMapping("getCanOrderNow")
+    @ResponseBody
+    public Boolean getCanOrderNow() {
+        Date now = new Date();
+        String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+        String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
+        String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
+
+        if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(now)))) {
+            return false;
+        }
+        return TimeUtil.isBetween(store_open_time, store_close_time);
+    }
+
     @ResponseBody
     @PostMapping("getDeliveryArriveTime")
-    public Object getDeliveryArriveTime(@RequestParam String orderId) {
+    public Object getDeliveryArriveTime(@RequestParam(required = false) String orderId) {
+        Date deliveryDate;
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
-        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
-
-        if (order.get().getPayState() == PayState.UN_PAY) {
-            return new SuccessTip("未知");
-        }
-
-        if (order.get().getOrderState() == OrderState.FINISHED) {
-            return new SuccessTip("已完成");
-        }
-
-        if (order.get().getOrderState() == OrderState.REFUND) {
-            return new SuccessTip("已退款");
-        }
-
+//        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
         int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
         int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.EXPRESS).getValue());
-
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
                 .sorted(Comparator.comparing(Order::getCreateDate))
                 .collect(Collectors.toList());
-        int index = orderList.indexOf(order.get());
 
-        Date deliveryDate;
+        int index = 0;
+        if (order.isPresent()) {
+            if (order.get().getAppointmentDate() != null) {
+                return new DeliveryArriveTimeDto(order.get().getAppointmentDate());
+            }
+            if (order.get().getPayState() == PayState.UN_PAY) {
+                return new SuccessTip("未知");
+            }
+
+            if (order.get().getOrderState() == OrderState.FINISHED) {
+                return new SuccessTip("已完成");
+            }
+
+            if (order.get().getOrderState() == OrderState.REFUND) {
+                return new SuccessTip("已退款");
+            }
+
+            index = orderList.indexOf(order.get());
+        } else {
+            index = orderList.size() - 1;
+        }
+
         if (index == 0) {
             deliveryDate = DateUtil.offsetMinute(new Date(), base_express_time);
         } else {
             deliveryDate = DateUtil.offsetMinute(new Date(), (base_express_time + index * average_express_time) / deliverier_count);
         }
-
         return new DeliveryArriveTimeDto(deliveryDate);
     }
 }

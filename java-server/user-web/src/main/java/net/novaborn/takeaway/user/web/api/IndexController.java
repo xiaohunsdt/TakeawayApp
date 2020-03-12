@@ -2,6 +2,7 @@ package net.novaborn.takeaway.user.web.api;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -119,7 +120,8 @@ public class IndexController extends BaseController {
             Date startDate;
             Date endDate;
             if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
-                startDate = currentDate;
+                // 预定要提前2个小时
+                startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
                 endDate = new DateTime(currentDate)
                         .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                         .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
@@ -133,12 +135,15 @@ public class IndexController extends BaseController {
                         .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                         .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
                         .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+
+                long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
+                if (diffMinutes < 120) {
+                    startDate = DateTime.of(startDate).offset(DateField.MINUTE, 120 - (int) diffMinutes);
+                }
             } else {
                 continue;
             }
 
-            // 预定要提前2个小时
-            startDate = DateTime.of(currentDate).offset(DateField.HOUR_OF_DAY, 2);
             if (TimeUtil.isAfter(startDate, endDate)) {
                 continue;
             }
@@ -151,6 +156,6 @@ public class IndexController extends BaseController {
             timePair.put("end", endDate);
             timePairs.add(timePair);
         }
-        return new AppointmentTimesDto(timePairs,TimeUtil.isBetween(store_open_time, store_close_time));
+        return new AppointmentTimesDto(timePairs, TimeUtil.isBetween(store_open_time, store_close_time));
     }
 }
