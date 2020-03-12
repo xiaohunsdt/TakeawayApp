@@ -2,7 +2,11 @@
   <base-panel>
     <div @click.stop="openOrderDetail">
       <div class="order-header">
-        <div class="header-left"></div>
+        <div class="header-left">
+          <div v-if="order.appointmentDate!==''">
+            <van-icon name="clock"  color="#FFD200" size="1.3rem"/>
+          </div>
+        </div>
         <div class="header-right">
           <div v-if="order.payState === 'PAID' || order.payState === 'PAY_LATER'">
             {{orderStateStr}}

@@ -22,7 +22,8 @@
               预计到达
             </div>
           </div>
-          <div class="estimated-arrival-time" v-if="order.payState === 'UN_PAY' || order.orderState === 'WAITING_RECEIVE'">
+          <div class="estimated-arrival-time"
+               v-if="order.payState === 'UN_PAY' || order.orderState === 'WAITING_RECEIVE'">
             <div class="time" style="margin-top: .5rem">
               <span style="font-size: 2rem">未知</span>
             </div>
@@ -90,6 +91,15 @@
         <div class="order-row">
           <div class="title">订单号</div>
           <div class="content">{{order.id}}</div>
+        </div>
+        <div class="order-row">
+          <div class="title">订单类型</div>
+          <div class="content" v-if="order.appointmentDate===''">一般订单</div>
+          <div class="content" v-else>预约订单</div>
+        </div>
+        <div class="order-row" v-if="order.appointmentDate!==''">
+          <div class="title">预约时间</div>
+          <div class="content">{{order.appointmentDate}}</div>
         </div>
         <div class="order-row">
           <div class="title">下单时间</div>

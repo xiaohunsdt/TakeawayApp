@@ -411,7 +411,7 @@
       onSubmitOrder () {
         this.submitLoading = true
         orderService.createOrder(
-          orderService.generateOrder(this.orderItems, this.payWay, this.psData),
+          orderService.generateOrder(this.orderItems, this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment)),
           this.orderItems,
           this.coupon,
           this.address
