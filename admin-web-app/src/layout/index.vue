@@ -17,9 +17,9 @@
 
 <script>
   import RightPanel from '@/components/RightPanel'
-  import { AppMain, Navbar, Sidebar, SysSetting, TagsView } from './components'
+  import {AppMain, Navbar, Sidebar, SysSetting, TagsView} from './components'
   import ResizeMixin from './mixin/ResizeHandler'
-  import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
   import orderApi from '@/api/order'
 
   export default {
@@ -53,34 +53,57 @@
     data() {
       return {
         timer: null,
-        audio: null
+        normalOrderAudio: null,
+        appointmentOrderAudio: null
       }
     },
     methods: {
       handleClickOutside() {
-        this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+        this.$store.dispatch('app/closeSideBar', {withoutAnimation: false})
       },
-      getWaitingReceiveOrderCount() {
-        orderApi.getWaitingReceiveOrderCount()
+      getWaitingReceiveNormalOrderCount() {
+        orderApi.getWaitingReceiveOrderCount('NORMAL')
           .then(res => {
             if (res > 0) {
-              this.audio.play()
-                .catch(error => {
+              this.normalOrderAudio.play().catch(error => {
                 console.log(error.toString())
                 alert('有新的订单,请及时处理!')
+              })
+            }
+          })
+      },
+      getWaitingReceiveAppointmentOrderCount() {
+        orderApi.getWaitingReceiveOrderCount('APPOINTMENT')
+          .then(res => {
+            if (res > 0) {
+              this.appointmentOrderAudio.play().catch(error => {
+                console.log(error.toString())
+                alert('有新的预约订单,请及时处理!')
               })
             }
           })
       }
     },
     mounted() {
-      this.audio = new Audio()
-      this.audio.muted = false
-      this.audio.autoplay = false
-      this.audio.loop = false
-      this.audio.id = 'audio'
-      this.audio.src = require('@/assets/voice/order.mp3')
-      this.timer = setInterval(this.getWaitingReceiveOrderCount, 1000 * 10)
+      // init normal order audio
+      this.normalOrderAudio = new Audio()
+      this.normalOrderAudio.muted = false
+      this.normalOrderAudio.autoplay = false
+      this.normalOrderAudio.loop = false
+      this.normalOrderAudio.id = 'audio'
+      this.normalOrderAudio.src = require('@/assets/voice/order.mp3')
+      this.timer = setInterval(this.getWaitingReceiveNormalOrderCount, 1000 * 10)
+
+      // init appointment order audio
+      this.appointmentOrderAudio = new Audio()
+      this.appointmentOrderAudio.muted = false
+      this.appointmentOrderAudio.autoplay = false
+      this.appointmentOrderAudio.loop = false
+      this.appointmentOrderAudio.id = 'audio'
+      this.appointmentOrderAudio.src = require('@/assets/voice/order-appointment.mp3')
+      setTimeout(() => {
+        this.timer = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
+      }, 4000)
     },
     beforeDestroy() {
       clearInterval(this.timer)

@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,17 +58,19 @@ public interface IOrderDao extends BaseMapper<Order> {
 
     /**
      * 获取等待接单的订单
+     * @param deliveryType 配送类型
      *
      * @return 等待接单的订单列表
      */
-    List<Order> getWaitingReceiveOrder();
+    List<Order> getWaitingReceiveOrder(@Param("deliveryType") DeliveryType deliveryType);
 
     /**
      * 获取等待接单的订单数量
+     * @param deliveryType 配送类型
      *
      * @return 等待接单的订单数量
      */
-    int getWaitingReceiveOrderCount();
+    int getWaitingReceiveOrderCount(@Param("deliveryType") DeliveryType deliveryType);
 
     /**
      * 用户端分页获取订单列表
@@ -106,9 +110,11 @@ public interface IOrderDao extends BaseMapper<Order> {
     int getTodayOrderCountByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
 
     /**
-     * 获取当天的订单数量
+     * 获取订单数量
+     * @param day           指定的日期
+     * @param deliveryType  配送类型
      *
-     * @return 当天的订单数量
+     * @return 订单数量
      */
-    int getOrderCountToday();
+    int getOrderCount(@Param("day") Date day, @Param("deliveryType") DeliveryType deliveryType);
 }

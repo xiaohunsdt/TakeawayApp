@@ -13,6 +13,7 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -73,8 +74,8 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @RequestMapping("getWaitingReceiveOrderCount")
-    public int getWaitingReceiveOrderCount() {
-        return orderService.getWaitingReceiveOrderCount();
+    public int getWaitingReceiveOrderCount(@RequestParam DeliveryType deliveryType) {
+        return orderService.getWaitingReceiveOrderCount(deliveryType);
     }
 
     @ResponseBody

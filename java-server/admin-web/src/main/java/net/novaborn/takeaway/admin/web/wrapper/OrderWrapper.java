@@ -32,6 +32,11 @@ public class OrderWrapper extends BaseControllerWrapper {
         }
 
         Date createDate = (Date) map.get("createDate");
+        Date appointmentDate = (Date) map.get("appointmentDate");
+
+        if (appointmentDate != null) {
+            map.put("appointmentDate", DateUtil.format(appointmentDate, "MM-dd HH:mm"));
+        }
         map.put("createDate", DateUtil.format(createDate, "MM-dd HH:mm"));
     }
 }

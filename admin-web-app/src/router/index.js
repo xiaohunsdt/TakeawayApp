@@ -95,10 +95,17 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'OrderManagement',
+        name: 'NormalOrder',
         // props: true,
         component: () => import('@/views/order/index'),
-        meta: { title: '订单管理', icon: 'order' }
+        meta: { title: '一般订单', icon: 'order' }
+      },
+      {
+        path: 'appointment',
+        name: 'AppointmentOrder',
+        // props: true,
+        component: () => import('@/views/order/appointment'),
+        meta: { title: '预约订单', icon: 'order' }
       },
       {
         path: 'comment',

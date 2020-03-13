@@ -11,6 +11,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
@@ -18,6 +19,7 @@ import net.novaborn.takeaway.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,8 +62,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
 
     @Override
-    public int getWaitingReceiveOrderCount() {
-        return this.baseMapper.getWaitingReceiveOrderCount();
+    public int getWaitingReceiveOrderCount(DeliveryType deliveryType) {
+        return this.baseMapper.getWaitingReceiveOrderCount(deliveryType);
     }
 
     @Override
@@ -85,8 +87,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public int getOrderCountToday() {
-        return this.baseMapper.getOrderCountToday();
+    public int getOrderCount(Date day, DeliveryType deliveryType) {
+        return this.baseMapper.getOrderCount(day, deliveryType);
     }
 
     @Override

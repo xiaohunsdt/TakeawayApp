@@ -19,10 +19,7 @@ import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PayState;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
@@ -138,7 +135,14 @@ public class OrderController extends BaseController {
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         //填写订单信息
-        int number = orderService.getOrderCountToday() + 1;
+        int number;
+        if (order.getAppointmentDate() == null) {
+            // 一般订单
+            number = orderService.getOrderCount(new Date(), DeliveryType.NORMAL) + 1;
+        } else {
+            // 预约订单
+            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + orderService.getOrderCount(order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+        }
         order.setNumber(number);
         order.setUserId(user.get().getId());
 

@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,10 +71,11 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 获取等待接单的订单数量
+     * @param deliveryType 配送类型
      *
      * @return 等待接单的订单数量
      */
-    int getWaitingReceiveOrderCount();
+    int getWaitingReceiveOrderCount(DeliveryType deliveryType);
 
     /**
      * 用户端分页获取订单列表
@@ -111,11 +115,13 @@ public interface IOrderService extends IService<Order> {
     int getTodayOrderCountByStateU(String userId, OrderStateEx orderState);
 
     /**
-     * 获取当天的订单数量
+     * 获取订单数量
+     * @param day           指定的日期
+     * @param deliveryType  配送类型
      *
-     * @return 当天的订单数量
+     * @return 订单数量
      */
-    int getOrderCountToday();
+    int getOrderCount(Date day, DeliveryType deliveryType);
 
     /**
      * 设置优惠卷折扣

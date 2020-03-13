@@ -1,11 +1,10 @@
 package net.novaborn.takeaway.user.web.wrapper;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import net.novaborn.takeaway.common.BaseControllerWrapper;
-import net.novaborn.takeaway.common.SpringContextHolder;
-import net.novaborn.takeaway.user.entity.User;
-import net.novaborn.takeaway.user.service.impl.UserService;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -35,6 +34,10 @@ public class CouponWrapper extends BaseControllerWrapper {
 
         if (StrUtil.isNotBlank((String) map.get("limitGoods"))) {
             map.put("limitGoods", ((String) map.get("limitGoods")).split(","));
+        }
+
+        if (map.get("expireDate") != null) {
+            map.put("expireDate", DateUtil.format((Date) map.get("expireDate"), "yyyy-MM-dd HH:mm"));
         }
     }
 }

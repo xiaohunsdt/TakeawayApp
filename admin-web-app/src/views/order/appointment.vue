@@ -39,7 +39,7 @@
             <el-option :value="1" label="显示"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="日期">
+        <el-form-item label="预约日期">
           <el-date-picker
             end-placeholder="end date"
             format="yyyy-MM-dd"
@@ -105,6 +105,9 @@
                       <el-form-item label="用户 ID">
                         <span>{{ props.row.userId }}</span>
                       </el-form-item>
+                      <el-form-item label="创建时间">
+                        <span>{{ props.row.createDate }}</span>
+                      </el-form-item>
                       <el-form-item label="总金额">
                         <span>₩ {{ props.row.allPrice.toLocaleString() }}</span>
                       </el-form-item>
@@ -135,9 +138,9 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="单号"
+          label="预约号"
           prop="number"
-          width="60">
+          width="80">
         </el-table-column>
         <el-table-column
           align="center"
@@ -221,8 +224,8 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="创建时间"
-          prop="createDate">
+          label="预约时间"
+          prop="appointmentDate">
         </el-table-column>
         <el-table-column
           align="center"
@@ -304,18 +307,18 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import orderApi from '@/api/order'
-  import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
+  import {formatOrderState, formatPaymentWay, formatPayState, parseTime} from '@/utils/index'
 
   export default {
-    name: 'NormalOrder',
+    name: 'AppointmentOrder',
     filters: {
-      orderStateFormat: function(value) {
+      orderStateFormat: function (value) {
         return formatOrderState(value)
       },
-      payStateFormat: function(value) {
+      payStateFormat: function (value) {
         return formatPayState(value)
       },
-      paymentWayFormat: function(value) {
+      paymentWayFormat: function (value) {
         return formatPaymentWay(value)
       }
     },
@@ -336,16 +339,18 @@
           paymentWay: null,
           orderState: null,
           showDelete: 0,
-          formDate: [
-            new Date(),
-            new Date()
-          ]
+          deliveryType: 'appointment',
+          formDate: [null, null]
         },
         listLoading: false,
         tableData: []
       }
     },
     created() {
+      let temp = new Date()
+      temp = temp.setHours(temp.getHours() + 3 * 24)
+      this.formData.formDate[0] = new Date()
+      this.formData.formDate[1] = new Date(temp)
       this.onSearch()
     },
     methods: {
@@ -353,8 +358,8 @@
         this.listLoading = true
 
         const params = Object.assign({}, this.formData)
-        params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
-        params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
+        params.appointmentStartDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
+        params.appointmentEndDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
         orderApi.getOrderListByPage(this.page, params)
           .then(response => {
