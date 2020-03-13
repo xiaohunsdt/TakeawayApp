@@ -4,7 +4,7 @@
       <div class="info">
         <div class="description">{{coupon.couponName}}</div>
         <van-tag color="#FFD200">{{couponType}}</van-tag>
-        <div class="endDate">有限期至 <span v-if="coupon.expireDate">{{expireDate}}</span></div>
+        <div class="endDate">有限期至 <span v-if="coupon.expireDate">{{coupon.expireDate}}</span></div>
       </div>
       <div class="priceInfo">
         <div class="price">
@@ -35,7 +35,7 @@
 <script>
   import {mapMutations} from 'vuex'
   import BasePanel from '@/components/BasePanel'
-  import {formatCouponState, formatCouponType, formatDate} from '@/utils/index'
+  import {formatCouponState, formatCouponType} from '@/utils/index'
   import {getPages} from '@/utils/util'
 
   export default {
@@ -50,9 +50,6 @@
       }
     },
     computed: {
-      expireDate () {
-        return formatDate(new Date(this.coupon.expireDate))
-      },
       couponType () {
         return formatCouponType(this.coupon.couponType)
       },
@@ -71,7 +68,7 @@
         this.SET_COUPON(this.coupon)
 
         const pages = getPages()
-        if (pages.length > 1 && pages[pages.length - 1].route !== 'pages/buy/main') {
+        if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/main') {
           mpvue.navigateBack()
         } else {
           mpvue.switchTab({
