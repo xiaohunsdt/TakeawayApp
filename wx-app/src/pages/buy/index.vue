@@ -478,7 +478,10 @@
         }
 
         this.appointmentIndex = value
-        this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
+
+        if (this.showTimePicker) {
+          this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
+        }
       }
     }
   }

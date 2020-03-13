@@ -5,7 +5,7 @@
       <base-panel>
         <div class="order-header" v-if="order!==undefined">
           <div class="order-number">
-            <div class="number"># <span style="font-size: 2rem">{{order.number}}</span></div>
+            <div class="number"># <span style="font-size: 1.8rem">{{order.number}}</span></div>
             <div class="text">
               <img class="text-img" src="/static/images/order/yellow_num.png"/>
               订餐号
@@ -14,10 +14,10 @@
           <div class="estimated-arrival-time">
             <div class="time" style="margin-top: .5rem">
               <div v-if="order.paymentWay==='ALI_PAY'">
-                ¥ <span style="font-size: 2.5rem">{{order.realPrice * 6 / 1000}}</span>
+                ¥ <span style="font-size: 2rem">{{order.realPrice * 6 / 1000}}</span>
               </div>
               <div v-if="order.paymentWay==='TRANSFER'">
-                ₩ <span style="font-size: 2.5rem">{{order.realPrice}}</span>
+                ₩ <span style="font-size: 2rem">{{order.realPrice}}</span>
               </div>
             </div>
           </div>

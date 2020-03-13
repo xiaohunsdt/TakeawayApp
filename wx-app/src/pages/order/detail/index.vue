@@ -5,7 +5,7 @@
       <base-panel>
         <div class="order-header">
           <div class="order-number">
-            <div class="number"># <span style="font-size: 2rem">{{order.number}}</span></div>
+            <div class="number"># <span style="font-size: 1.8rem">{{order.number}}</span></div>
             <div class="text">
               <img class="text-img" src="/static/images/order/yellow_num.png"/>
               订餐号
