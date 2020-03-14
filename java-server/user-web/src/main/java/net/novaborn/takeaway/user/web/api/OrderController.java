@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -242,8 +241,18 @@ public class OrderController extends BaseController {
         int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
         int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
         int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.EXPRESS).getValue());
+        Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
-                .sorted(Comparator.comparing(Order::getCreateDate))
+                .filter(item -> {
+                    // 返回今天的要配送的订单
+                    Date target = item.getAppointmentDate() == null ? item.getCreateDate() : item.getAppointmentDate();
+                    return DateUtil.isSameDay(target, current);
+                })
+                .sorted((o1, o2) -> {
+                    Date dateForO1 = o1.getAppointmentDate() == null ? o1.getCreateDate() : o1.getAppointmentDate();
+                    Date dateForO2 = o2.getAppointmentDate() == null ? o2.getCreateDate() : o2.getAppointmentDate();
+                    return dateForO1.compareTo(dateForO2);
+                })
                 .collect(Collectors.toList());
 
         int index = 0;

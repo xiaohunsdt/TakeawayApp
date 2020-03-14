@@ -66,7 +66,12 @@
                 AND deleted = 0
             </if>
         </where>
-        ORDER BY `create_date` DESC
+        <if test="args.deliveryType == null or args.deliveryType == 'normal'">
+            ORDER BY `create_date` DESC
+        </if>
+        <if test="args.deliveryType != null and args.deliveryType == 'appointment'">
+            ORDER BY `appointment_date` DESC
+        </if>
     </select>
 
     <sql id="common_get_waiting_receive_order">
