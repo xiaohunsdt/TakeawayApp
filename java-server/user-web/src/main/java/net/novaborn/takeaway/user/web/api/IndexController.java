@@ -148,8 +148,8 @@ public class IndexController extends BaseController {
                 continue;
             }
 
-            // 最迟截止下单日期的后20分钟到达
-            endDate = DateTime.of(endDate).offset(DateField.MINUTE, 20);
+            // 最迟截止下单日期的后30分钟到达
+            endDate = DateTime.of(endDate).offset(DateField.MINUTE, 30);
 
             Map<String, Date> timePair = new HashMap<>();
             timePair.put("start", startDate);
