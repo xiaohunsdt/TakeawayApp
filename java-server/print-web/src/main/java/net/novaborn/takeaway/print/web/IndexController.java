@@ -5,10 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.anastaciocintra.escpos.EscPos;
 import com.github.anastaciocintra.escpos.EscPosConst;
 import com.github.anastaciocintra.escpos.Style;
-import com.github.anastaciocintra.escpos.image.BitImageWrapper;
-import com.github.anastaciocintra.escpos.image.Bitonal;
-import com.github.anastaciocintra.escpos.image.BitonalThreshold;
-import com.github.anastaciocintra.escpos.image.EscPosImage;
+import com.github.anastaciocintra.escpos.image.*;
 import com.github.anastaciocintra.output.PrinterOutputStream;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -71,15 +68,19 @@ public class IndexController extends BaseController {
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
 
         PrintService printService;
-        if(StrUtil.isNotBlank(printerName)){
+        if (StrUtil.isNotBlank(printerName)) {
             printService = PrinterOutputStream.getPrintServiceByName(this.printerName);
-        }else {
+        } else {
             printService = PrinterOutputStream.getDefaultPrintService();
         }
         EscPos escpos = new EscPos(new PrinterOutputStream(printService));
         escpos.setCharsetName("gbk");
         Style title = new Style()
                 .setFontSize(Style.FontSize._5, Style.FontSize._5)
+                .setJustification(EscPosConst.Justification.Center);
+
+        Style appointmentTitle = new Style()
+                .setFontSize(Style.FontSize._4, Style.FontSize._4)
                 .setJustification(EscPosConst.Justification.Center);
 
         Style subtitle = new Style(escpos.getStyle())
@@ -97,25 +98,33 @@ public class IndexController extends BaseController {
         Bitonal algorithm = new BitonalThreshold(127);
         BitImageWrapper imageWrapper = new BitImageWrapper();
         BufferedImage githubBufferedImage = textToImage(address.getAddress() + " " + address.getDetail());
-        EscPosImage escposImage = new EscPosImage(githubBufferedImage, algorithm);
+        EscPosImage escposImage = new EscPosImage(new CoffeeImageImpl(githubBufferedImage), algorithm);
 
-        escpos.writeLF(title, "#" + order.getNumber())
-                .feed(1)
-                .writeLF(subtitle, "川香苑品牌中餐厅")
-                .writeLF(" ")
-                .writeLF(
-                        paymentState,
-                        String.format("%s-%s",
-                                OrderFormatUtil.formatPaymentWay(order.getPaymentWay()),
-                                OrderFormatUtil.formatPayState(order.getPayState())
-                        )
+        if (order.getAppointmentDate() == null) {
+            escpos.writeLF(title, "#" + order.getNumber());
+        } else {
+            escpos.writeLF(appointmentTitle, "#" + order.getNumber());
+        }
+        escpos.writeLF(subtitle, "川香苑品牌中餐厅").writeLF(" ");
+        if (order.getAppointmentDate() != null) {
+            escpos.writeLF(paymentState, "预约订单").writeLF(" ");
+        }
+        escpos.writeLF(
+                paymentState,
+                String.format("%s-%s",
+                        OrderFormatUtil.formatPaymentWay(order.getPaymentWay()),
+                        OrderFormatUtil.formatPayState(order.getPayState())
                 )
-                .writeLF("--------------------------------")
-                .writeLF(bold, String.format("下单时间: %s", DateUtil.formatDateTime(order.getCreateDate())))
-                .feed(2)
-                .writeLF(bold, "--------------菜品--------------");
+        );
+        escpos.writeLF("--------------------------------")
+                .writeLF(bold, String.format("下单时间: %s", DateUtil.formatDateTime(order.getCreateDate())));
+
+        if (order.getAppointmentDate() != null) {
+            escpos.writeLF(" ").writeLF(bold, String.format("送达时间: %s", DateUtil.formatDateTime(order.getAppointmentDate())));
+        }
+        escpos.writeLF(" ").writeLF(bold, "--------------菜品--------------");
         for (OrderItem item : orderItemList) {
-            escpos.writeLF(" ").writeLF(bold, String.format("%s   x%d", item.getGoodsName(), item.getGoodsCount()));
+            escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \tx%d", item.getGoodsName(), item.getGoodsCount()));
         }
         escpos.writeLF(bold, "--------------------------------")
                 .writeLF(bold, String.format("合计: %d韩元", order.getRealPrice()))
@@ -129,13 +138,24 @@ public class IndexController extends BaseController {
         escpos.write(imageWrapper, escposImage)
 //                .writeLF(address.getDetail())
                 .writeLF(bold, "联系方式: " + address.getPhone())
-                .writeLF(" ")
-                .writeLF(bold, "--------------------------------")
-                .feed(3);
+                .writeLF(" ");
+//                .writeLF(bold, "--------------------------------");
+//                .feed(3);
 
+        // 防疫安全卡
+        escpos.writeLF(paymentState, "防疫安心卡");
+        escpos.writeLF("--------------------------------");
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "厨师", "36.5℃"));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "外卖员", "36.2℃"));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "王老板", "36.4℃"));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "王老板的对象", "36.6℃"));
+        escpos.writeLF(" ").writeLF(bold,"川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
+
+
+        escpos.feed(3);
         Thread.sleep(1000);
+        escpos.cut(EscPos.CutMode.PART);
         escpos.close();
-
     }
 
     private BufferedImage textToImage(String str) throws IOException {

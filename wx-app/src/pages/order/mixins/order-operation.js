@@ -26,7 +26,10 @@ export default {
       })
     },
     shareOrder (event) {
-      console.log(event)
+      mpvue.showToast({
+        title: '正在开发中...',
+        duration: 2000
+      })
     },
     comment () {
       mpvue.navigateTo({

@@ -1,5 +1,5 @@
 sys:
-  printer-name: 11
+  printer-name: xp-58
 
 
 server:
@@ -47,6 +47,8 @@ logging:
 ---
 spring:
   profiles: dev
+  datasource:
+    url: jdbc:mysql://192.168.0.7:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
   redis:
     password: wy1996
   rabbitmq:

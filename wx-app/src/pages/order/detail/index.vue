@@ -72,18 +72,18 @@
             v-if="order.payState !== 'UN_PAY' && order.orderState=== 'FINISHED' && !order.isCommented">
             评价
           </van-button>
-          <van-button
-            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"
-            round size="small"
-            v-if="order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'">
-            分享领红包
-          </van-button>
-          <van-button
-            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"
-            round size="small"
-            v-if="order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'">
-            删除
-          </van-button>
+<!--          <van-button-->
+<!--            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"-->
+<!--            round size="small"-->
+<!--            v-if="order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'">-->
+<!--            分享领红包-->
+<!--          </van-button>-->
+<!--          <van-button-->
+<!--            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"-->
+<!--            round size="small"-->
+<!--            v-if="order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'">-->
+<!--            删除-->
+<!--          </van-button>-->
         </div>
       </base-panel>
 

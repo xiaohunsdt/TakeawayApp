@@ -47,7 +47,7 @@ public class EscPosTest {
         Bitonal algorithm = new BitonalThreshold(127);
         BitImageWrapper imageWrapper = new BitImageWrapper();
         BufferedImage githubBufferedImage = textToImage("서울특별시 마포구 노고산동33-42외1필지 제2층 제302호 楼下密码111333#");
-        EscPosImage escposImage = new EscPosImage(githubBufferedImage, algorithm);
+//        EscPosImage escposImage = new EscPosImage(githubBufferedImage, algorithm);
 
         escpos.writeLF(title, "#1")
                 .feed(1)
@@ -67,7 +67,7 @@ public class EscPosTest {
                 .writeLF(bold, "--------------------------------")
                 .writeLF(bold, "合计: 12000韩元")
                 .writeLF(" ")
-                .write(imageWrapper, escposImage)
+//                .write(imageWrapper, escposImage)
                 .writeLF(" ")
                 .writeLF(bold, "联系方式: 01056511996")
                 .writeLF(" ")
