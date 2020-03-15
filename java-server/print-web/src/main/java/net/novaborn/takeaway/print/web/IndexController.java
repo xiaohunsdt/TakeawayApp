@@ -19,6 +19,8 @@ import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.order.utils.OrderFormatUtil;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,8 @@ public class IndexController extends BaseController {
     private OrderItemService orderItemService;
 
     private AddressService addressService;
+
+    private SettingService settingService;
 
     @Setter
     @Value("${sys.printer-name}")
@@ -145,10 +149,10 @@ public class IndexController extends BaseController {
         // 防疫安全卡
         escpos.writeLF(paymentState, "防疫安心卡");
         escpos.writeLF("--------------------------------");
-        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "厨师", "36.5℃"));
-        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "外卖员", "36.2℃"));
-        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "王老板", "36.4℃"));
-        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s", "王老板的对象", "36.6℃"));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "厨师", settingService.getSettingByName("temperature1", SettingScope.STORE).getValue()));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "外卖员", settingService.getSettingByName("temperature2", SettingScope.STORE).getValue()));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板", settingService.getSettingByName("temperature3", SettingScope.STORE).getValue()));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板的对象", settingService.getSettingByName("temperature4", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold,"川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
 
 
