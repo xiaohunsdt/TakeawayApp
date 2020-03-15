@@ -141,22 +141,21 @@ public class IndexController extends BaseController {
         }
         escpos.write(imageWrapper, escposImage)
 //                .writeLF(address.getDetail())
-                .writeLF(bold, "联系方式: " + address.getPhone())
-                .writeLF(" ");
+                .writeLF(bold, "联系方式: " + address.getPhone());
 //                .writeLF(bold, "--------------------------------");
 //                .feed(3);
 
         // 防疫安全卡
-        escpos.writeLF(paymentState, "防疫安心卡");
+        escpos.writeLF(" ").writeLF(paymentState, "防疫安心卡");
         escpos.writeLF("--------------------------------");
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "厨师", settingService.getSettingByName("temperature1", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "外卖员", settingService.getSettingByName("temperature2", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板", settingService.getSettingByName("temperature3", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板的对象", settingService.getSettingByName("temperature4", SettingScope.STORE).getValue()));
-        escpos.writeLF(" ").writeLF(bold,"川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
+        escpos.writeLF(" ").writeLF(bold, "川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
 
 
-        escpos.feed(3);
+        escpos.feed(5);
         Thread.sleep(1000);
         escpos.cut(EscPos.CutMode.PART);
         escpos.close();
