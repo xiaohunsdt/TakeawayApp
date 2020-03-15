@@ -181,7 +181,6 @@ public class IndexController extends BaseController {
         int StrPixelWidth = metrics.stringWidth(str);
         // 算出行数
         int lineSize = (int) Math.ceil(StrPixelWidth * 1.0 / width);
-        System.out.println(StrPixelWidth + "---:");
         // 页面宽度（width）小于 字符串长度
         if (width < StrPixelWidth) {
             // 存储每一行的字符串
