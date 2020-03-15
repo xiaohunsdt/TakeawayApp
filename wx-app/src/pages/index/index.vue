@@ -12,7 +12,10 @@
             indicator-dots="true"
             style="height: 10rem">
             <swiper-item>
-              <img alt="" class="itemImg" mode="widthFix" src="/static/images/banner/appointment.jpg">
+              <img class="itemImg" mode="widthFix" src="/static/images/banner/appointment.jpg">
+            </swiper-item>
+            <swiper-item>
+              <img class="itemImg" mode="widthFix" src="/static/images/banner/yiqing.png">
             </swiper-item>
           </swiper>
         </div>

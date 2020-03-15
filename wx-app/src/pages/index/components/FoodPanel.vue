@@ -1,25 +1,21 @@
 <template>
   <div class="foodView">
-    <van-panel>
-      <view slot="header" class="food-panel-header">
-        <van-tag
-          mark
-          size="large"
-          :type="titleStyle">
-          {{ title }}
-        </van-tag>
+    <view class="food-panel-header" slot="header">
+      <van-tag
+        :type="titleStyle"
+        mark
+        size="large">
+        {{ title }}
+      </van-tag>
+    </view>
+    <view class="food-item-panel">
+      <view class="food-item-content">
+        <main-goods-card
+          :food="food"
+          :key="food.id"
+          v-for="food in foodList"/>
       </view>
-      <view>
-        <van-panel custom-class="food-item-panel">
-          <view class="food-item-content">
-            <main-goods-card
-              v-for="food in foodList"
-              :key="food.id"
-              :food="food" />
-          </view>
-        </van-panel>
-      </view>
-    </van-panel>
+    </view>
   </div>
 </template>
 
@@ -71,9 +67,10 @@
 
 <style scoped>
   .foodView {
-    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
     width: 100%;
     background-color: white;
     overflow: hidden;
+    border: none !important;
   }
 </style>

@@ -205,7 +205,6 @@
     watch: {
       address (newVal) {
         // 检查当前的价格和位置是否可以下单
-        this.disableService = false
         this.checkExpressState(newVal.id, this.cartAllPrice)
       },
       coupon (newVal) {
@@ -318,6 +317,8 @@
           .catch(() => {
             mpvue.hideLoading()
           })
+      } else if (this.address) {
+        this.checkExpressState(this.address.id, this.cartAllPrice)
       }
     },
     methods: {
@@ -429,6 +430,8 @@
         })
       },
       checkExpressState (addressId, allPrice) {
+        this.disableService = false
+        this.tipNotice = null
         indexService.getExpressServiceState(addressId, allPrice)
           .then(res => {
             if (res.state !== 0) {
