@@ -28,7 +28,7 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="店铺设置">
-          <el-form :model="storeSetting" label-width="80px" ref="form" style="max-width: 660px">
+          <el-form :model="storeSetting" label-width="130px" ref="form" style="max-width: 660px">
             <el-form-item label="运营周期" size="small">
               <el-checkbox-group v-model="storeSetting.store_open_date">
                 <el-checkbox-button label="2">星期一</el-checkbox-button>
@@ -51,6 +51,18 @@
             </el-form-item>
             <el-form-item label="店铺地址">
               <el-input v-model="storeSetting.store_address"></el-input>
+            </el-form-item>
+            <el-form-item label="厨师体温">
+              <el-input v-model="storeSetting.temperature1"></el-input>
+            </el-form-item>
+            <el-form-item label="外卖员体温">
+              <el-input v-model="storeSetting.temperature2"></el-input>
+            </el-form-item>
+            <el-form-item label="王老板体温">
+              <el-input v-model="storeSetting.temperature3"></el-input>
+            </el-form-item>
+            <el-form-item label="王老板的对象体温">
+              <el-input v-model="storeSetting.temperature4"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button @click="saveSetting('STORE')" type="primary">保存设置</el-button>
@@ -114,7 +126,11 @@
           store_open_date: [],
           store_open_time: null,
           store_close_time: null,
-          store_address: ''
+          store_address: '',
+          temperature1: null,
+          temperature2: null,
+          temperature3: null,
+          temperature4: null
         },
         expressSetting: {
           base_express_time: 0,
