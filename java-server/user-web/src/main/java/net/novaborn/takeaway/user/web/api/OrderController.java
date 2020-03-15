@@ -125,6 +125,10 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
         }
 
+        if (order.getAppointmentDate() == null && !this.getCanOrderNow()) {
+            throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
+        }
+
         //检测订单商品项是否可以下单
         orderItemService.checkOrderItems(orderItems);
         orderService.checkOrder(order, orderItems);

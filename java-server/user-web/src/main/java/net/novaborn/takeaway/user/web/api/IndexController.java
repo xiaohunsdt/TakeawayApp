@@ -65,7 +65,6 @@ public class IndexController extends BaseController {
         return new ServiceStateDto();
     }
 
-
     @GetMapping("getExpressServiceState")
     @ResponseBody
     public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
@@ -77,21 +76,21 @@ public class IndexController extends BaseController {
 //            return new ServiceStateDto(-1,"今日85折,低于10000韩币无法配送!!");
 //        }
 
-        if (distance > maxExpressDistance) {
+        if (distance >= maxExpressDistance) {
             return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
         }
 
         // 大于3公里，价格小于30000
-        if (distance > 2800 && allPrice < 30000) {
+        if (distance >= 2400 && allPrice < 30000) {
             return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 30000));
         }
 
-        // 大于2公里，价格小于10000
+        // 大于2公里，价格小于18000
         if (distance > 1800 && allPrice < 18000) {
-            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
+            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 18000));
         }
 
-        // 大于2公里，价格小于10000
+        // 大于1公里，价格小于10000
         if (distance > 1000 && allPrice < 10000) {
             return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
         }
