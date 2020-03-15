@@ -24,6 +24,6 @@ public class AddressServiceTest {
 
     @Test
     public void getDistanceWithStoreTest() {
-        System.out.println(addressService.getDistanceWithStore("c874b562acd809cbe4ddb0e186ddc4e7"));
+        System.out.println(addressService.getDistanceWithStore("e02d7f688ec2b1fcd5c6ee07dccf1e20"));
     }
 }

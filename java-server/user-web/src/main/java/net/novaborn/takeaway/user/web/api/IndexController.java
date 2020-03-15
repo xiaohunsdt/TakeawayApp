@@ -87,7 +87,12 @@ public class IndexController extends BaseController {
         }
 
         // 大于2公里，价格小于10000
-        if (distance > 1500 && allPrice < 10000) {
+        if (distance > 1800 && allPrice < 18000) {
+            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
+        }
+
+        // 大于2公里，价格小于10000
+        if (distance > 1000 && allPrice < 10000) {
             return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
         }
 
