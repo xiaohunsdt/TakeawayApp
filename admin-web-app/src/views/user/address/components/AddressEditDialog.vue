@@ -5,13 +5,13 @@
         <el-input v-model="formData.id"></el-input>
       </el-form-item>
       <el-form-item label="地址" label-width="120">
-        <el-input v-model.number="formData.address"></el-input>
+        <el-input v-model="formData.address"></el-input>
       </el-form-item>
       <el-form-item label="详细" label-width="120">
-        <el-input v-model.number="formData.detail"></el-input>
+        <el-input v-model="formData.detail"></el-input>
       </el-form-item>
       <el-form-item label="手机" label-width="120">
-        <el-input v-model.number="formData.phone"></el-input>
+        <el-input v-model="formData.phone"></el-input>
       </el-form-item>
     </el-form>
     <div class="dialog-footer" slot="footer">
