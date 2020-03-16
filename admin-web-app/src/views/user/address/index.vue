@@ -55,6 +55,12 @@
             <div>{{ scope.row.isDefault }}</div>
           </template>
         </el-table-column>
+        <el-table-column
+          label="操作">
+          <template v-slot="scope">
+            <el-button @click="onEdit(scope.row.id)" size="mini" type="primary">编辑</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
         :current-page="page.current"
@@ -68,17 +74,20 @@
         style="margin-top: 15px">
       </el-pagination>
     </base-card>
+    <address-edit-dialog ref="address-edit-dialog" @updated-address="onUpdatedAddress"/>
   </div>
 </template>
 
 <script>
   import BaseCard from '@/components/BaseCard'
+  import AddressEditDialog from './components/AddressEditDialog'
   import addressApi from '@/api/address'
 
   export default {
     name: 'AddressManagement',
     components: {
-      BaseCard
+      BaseCard,
+      AddressEditDialog
     },
     data() {
       return {
@@ -122,6 +131,15 @@
       onSearch() {
         this.page.current = 1
         this.getList()
+      },
+      onEdit(addressId) {
+        this.$refs['address-edit-dialog'].openDialog(addressId)
+      },
+      onUpdatedAddress(address) {
+        const index = this.tableData.findIndex(item => item.id === address.id)
+        if (index > -1) {
+          this.tableData[index] = Object.assign(this.tableData[index], address)
+        }
       }
     }
   }

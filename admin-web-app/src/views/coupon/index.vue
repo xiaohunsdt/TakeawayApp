@@ -196,7 +196,7 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import GenerateCouponDialog from '@/components/coupon/generate-dialog'
+  import GenerateCouponDialog from '@/components/coupon/GenerateDialog'
 
   import couponApi from '@/api/coupon'
   import { formatCouponState, formatCouponType } from '@/utils/index'
