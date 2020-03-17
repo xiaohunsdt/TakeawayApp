@@ -144,16 +144,16 @@ public class IndexController extends BaseController {
                 if (diffMinutes < 120) {
                     startDate = DateTime.of(startDate).offset(DateField.MINUTE, 120 - (int) diffMinutes);
                 }
-            } else {
-                continue;
-            }
-
-            if (TimeUtil.isAfter(startDate, endDate)) {
+            }else {
                 continue;
             }
 
             // 最迟截止下单日期的后30分钟到达
             endDate = DateTime.of(endDate).offset(DateField.MINUTE, 30);
+
+            if (TimeUtil.isAfter(startDate, endDate)) {
+                continue;
+            }
 
             Map<String, Date> timePair = new HashMap<>();
             timePair.put("start", startDate);

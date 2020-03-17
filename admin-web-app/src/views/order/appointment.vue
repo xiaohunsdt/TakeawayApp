@@ -123,7 +123,7 @@
                       <el-form-item label="地址">
                         <div>
                           <div>{{ props.row.detail.address.address }}</div>
-                          <div>({{ props.row.detail.address.detail }})</div>
+                          <div>{{ props.row.detail.address.detail }}</div>
                         </div>
                       </el-form-item>
                       <el-form-item label="联系方式">

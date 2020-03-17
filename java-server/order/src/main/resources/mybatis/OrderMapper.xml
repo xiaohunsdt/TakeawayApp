@@ -60,7 +60,8 @@
                 AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
             </if>
             <if test="args.appointmentStartDate !=null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
-                AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
+                AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND
+                DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
             </if>
             <if test="args.showDelete == 0">
                 AND deleted = 0
@@ -160,11 +161,12 @@
     <select id="getOrderCount" resultType="java.lang.Integer">
         SELECT count(*) FROM `order`
         <where>
-            TO_DAYS(`create_date`) = TO_DAYS(#{day})
             <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
+                TO_DAYS(`create_date`) = TO_DAYS(#{day})
                 AND `appointment_date` is null
             </if>
             <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
+                TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
                 AND `appointment_date` is not null
             </if>
         </where>

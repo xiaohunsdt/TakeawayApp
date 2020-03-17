@@ -91,7 +91,7 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import GenerateCouponDialog from '@/components/coupon/generate-dialog'
+  import GenerateCouponDialog from '@/components/coupon/GenerateDialog'
   import userApi from '@/api/user'
 
   export default {
