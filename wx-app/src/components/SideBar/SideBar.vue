@@ -25,8 +25,8 @@
             :id="'xh_'+category.id"
             :key="category.id"
             class="pesticide"
-            v-if="category.goodsList.length > 0"
-            v-for="category in categoryGoods">
+            v-for="category in categoryGoods"
+            v-if="category.goodsList.length > 0">
             <div class="type-name">
               <div class="line"></div>
               <div class="name">{{category.name}}</div>
@@ -110,7 +110,9 @@
 
         let query = mpvue.createSelectorQuery()
         query.select('.content-container').boundingClientRect((res) => {
-          this.containerH = res.height
+          if (res) {
+            this.containerH = res.height
+          }
         }).exec()
         let s = 0
         query.selectAll('.pesticide').boundingClientRect((react) => {
