@@ -8,6 +8,7 @@ import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class OrderServiceTest {
 
     @Autowired
     OrderItemService orderItemService;
+
+    @Autowired
+    AddressService addressService;
 
     @Test
     public void getOrderCountTodayTest() {
@@ -55,7 +59,10 @@ public class OrderServiceTest {
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
                 .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
                 .collect(Collectors.toList());
-        orderList.stream().forEach(order-> System.out.println(order.getUserId()));
+//        orderList.stream().forEach(order-> System.out.println(order.getUserId()));
+        System.out.println(orderList.stream()
+                .map(order -> addressService.getById(order.getAddressId()).getPhone())
+                .collect(Collectors.joining(",")));
     }
 }
 
