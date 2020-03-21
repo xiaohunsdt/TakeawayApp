@@ -134,7 +134,8 @@ public class IndexController extends BaseController {
                 startDate = new DateTime(currentDate)
                         .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
                         .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND));
+                        .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
+                        .offset(DateField.MINUTE, 30);
                 endDate = new DateTime(currentDate)
                         .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                         .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
@@ -144,7 +145,7 @@ public class IndexController extends BaseController {
                 if (diffMinutes < 120) {
                     startDate = DateTime.of(startDate).offset(DateField.MINUTE, 120 - (int) diffMinutes);
                 }
-            }else {
+            } else {
                 continue;
             }
 
