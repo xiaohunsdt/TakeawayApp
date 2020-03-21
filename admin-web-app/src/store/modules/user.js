@@ -27,10 +27,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ userName: userName.trim(), password: password }).then(response => {
         const { randomKey, token } = response
-        commit('SET_TOKEN', token)
-        commit('SET_RANDOM_KEY', randomKey)
         authUtil.setToken(token)
         authUtil.setRandomKey(randomKey)
+        commit('SET_TOKEN', token)
+        commit('SET_RANDOM_KEY', randomKey)
         resolve()
       }).catch(error => {
         reject(error)

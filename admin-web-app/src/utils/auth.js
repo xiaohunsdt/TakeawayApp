@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import { getRebate, getRecentCalculateHistory } from '../api/dashboard'
+// import { getRebate, getRecentCalculateHistory } from '../api/dashboard'
 
 const TokenKey = 'admin_token'
 const RandomKey = 'admin_randomKey'
@@ -9,7 +9,7 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  return Cookies.set(TokenKey, token, { expires: 90 })
 }
 
 export function removeToken() {
@@ -21,7 +21,7 @@ export function getRandomKey() {
 }
 
 export function setRandomKey(randomKey) {
-  return Cookies.set(RandomKey, randomKey)
+  return Cookies.set(RandomKey, randomKey, { expires: 90 })
 }
 
 export function removeRandomKey() {
