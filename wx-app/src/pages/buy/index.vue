@@ -364,14 +364,21 @@
           .then(res => {
             times = res.appointmentTimes
             const canDeliveryNow = res.canDeliveryNow
+            if (canDeliveryNow && !Object.keys(times).includes('今天')) {
+              times = Object.assign({}, { '今天': { '尽快配送': [] } }, times)
+            }
+
             const days = Object.keys(times)
             const day = days[0]
             const hours = Object.keys(times[day])
             const hour = hours[0]
             let minutes = times[day][hour]
-            if (Object.keys(times).includes('今天') && canDeliveryNow) {
+
+            if (canDeliveryNow) {
               times['今天'] = Object.assign({}, { '尽快配送': [] }, times['今天'])
-              hours.splice(0, 0, '尽快配送')
+              if (!hours.includes('尽快配送')) {
+                hours.splice(0, 0, '尽快配送')
+              }
               minutes = []
             }
 
@@ -483,7 +490,15 @@
         this.appointmentIndex = value
 
         if (this.showTimePicker) {
-          this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
+          if (value[0] < days.length && value[1] < hours.length && value[2] < minutes.length) {
+            this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
+          } else {
+            let minute = null
+            if (minutes && minutes.length > 0) {
+              minute = minutes[0]
+            }
+            this.appointment = [days[0], hours[0], minute]
+          }
         }
       }
     }
