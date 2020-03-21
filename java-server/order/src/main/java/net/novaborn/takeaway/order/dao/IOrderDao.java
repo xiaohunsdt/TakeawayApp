@@ -42,6 +42,21 @@ public interface IOrderDao extends BaseMapper<Order> {
                                      @Param("orderState") OrderState orderState,
                                      @Param("isShowDeleted") boolean isShowDeleted);
 
+
+    /**
+     * 获取订单列表
+     *
+     * @param args userIds 用户IDs <br />
+     *             orderId 订单ID <br />
+     *             number 编号 <br />
+     *             orderState 订单状态 <br />
+     *             paymentWay 支付方式 <br />
+     *             deliveryType 配送方式 <br />
+     *             startDate endDate 范围时间
+     * @return 订单列表
+     */
+    List<Order> getOrderList(@Param("args") Map args);
+
     /**
      * 分页获取订单列表
      *
@@ -51,6 +66,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      *             number 编号 <br />
      *             orderState 订单状态 <br />
      *             paymentWay 支付方式 <br />
+     *             deliveryType 配送方式 <br />
      *             startDate endDate 范围时间
      * @return 订单列表
      */

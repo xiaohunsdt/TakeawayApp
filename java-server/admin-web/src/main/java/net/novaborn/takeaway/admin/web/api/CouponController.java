@@ -70,7 +70,7 @@ public class CouponController extends BaseController {
         Optional<CouponTemplate> couponTemplate = Optional.ofNullable(couponTemplateService.getById(templateId));
         couponTemplate.orElseThrow(() -> new SysException(CouponTemplateExceptionEnum.HAVE_NO_THIS_TEMPLATE));
 
-        List<String> userIdArray = Arrays.asList(userIds.split("\r\n"));
+        List<String> userIdArray = Arrays.asList(userIds.replaceAll("\r", "").split("\n"));
         couponService.generateCoupon(couponTemplate.get(), userIdArray, count);
         return new SuccessTip();
     }

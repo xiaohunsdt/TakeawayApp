@@ -12,7 +12,6 @@
         </where>
     </select>
 
-
     <select id="getOrderListByUserId" resultType="Order">
         SELECT * FROM `order`
         <where>
@@ -29,43 +28,55 @@
         </where>
     </select>
 
+    <sql id="common_order_list_where">
+        <if test="args.userIds != null">
+            `user_id` IN
+            <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </if>
+        <if test="args.orderId != null and args.orderId != ''">
+            AND `id` = #{args.orderId}
+        </if>
+        <if test="args.number != null and args.number != ''">
+            AND `number` = #{args.number}
+        </if>
+        <if test="args.paymentWay != null and args.paymentWay != ''">
+            AND `payment_way` = #{args.paymentWay}
+        </if>
+        <if test="args.orderState != null and args.orderState != ''">
+            AND `order_state` = #{args.orderState}
+        </if>
+        <if test="args.deliveryType == null or args.deliveryType == 'normal'">
+            AND `appointment_date` is null
+        </if>
+        <if test="args.deliveryType != null and args.deliveryType == 'appointment'">
+            AND `appointment_date` is not null
+        </if>
+        <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+            AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+        </if>
+        <if test="args.appointmentStartDate !=null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
+            AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND
+            DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
+        </if>
+        <if test="args.showDelete == 0">
+            AND deleted = 0
+        </if>
+    </sql>
+
+    <select id="getOrderList" resultType="Order">
+        SELECT * FROM `order`
+        <where>
+            <include refid="common_order_list_where"/>
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+
     <select id="getOrderListByPage" resultType="Order">
         SELECT * FROM `order`
         <where>
-            <if test="args.userIds != null">
-                `user_id` IN
-                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
-                    #{id}
-                </foreach>
-            </if>
-            <if test="args.orderId != null and args.orderId != ''">
-                AND `id` = #{args.orderId}
-            </if>
-            <if test="args.number != null and args.number != ''">
-                AND `number` = #{args.number}
-            </if>
-            <if test="args.paymentWay != null and args.paymentWay != ''">
-                AND `payment_way` = #{args.paymentWay}
-            </if>
-            <if test="args.orderState != null and args.orderState != ''">
-                AND `order_state` = #{args.orderState}
-            </if>
-            <if test="args.deliveryType == null or args.deliveryType == 'normal'">
-                AND `appointment_date` is null
-            </if>
-            <if test="args.deliveryType != null and args.deliveryType == 'appointment'">
-                AND `appointment_date` is not null
-            </if>
-            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
-                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
-            </if>
-            <if test="args.appointmentStartDate !=null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
-                AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND
-                DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
-            </if>
-            <if test="args.showDelete == 0">
-                AND deleted = 0
-            </if>
+            <include refid="common_order_list_where"/>
         </where>
         <if test="args.deliveryType == null or args.deliveryType == 'normal'">
             ORDER BY `create_date` DESC
