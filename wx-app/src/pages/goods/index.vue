@@ -24,7 +24,7 @@
         <!--            :key="categoryIndex"-->
         <!--            :title="category.name"-->
         <!--            v-for="(category,categoryIndex) in categories">-->
-        <!--            <div :class="{'food-content':true,'has-submit-bar':cartCount > 0}">-->
+        <!--            <div :class="{'food-content':true,'has-submit-bar':cartAllCount > 0}">-->
         <!--              <simple-goods-card-->
         <!--                :food="food"-->
         <!--                :key="foodIndex"-->
@@ -39,43 +39,9 @@
         <!--            v-for="(category,categoryIndex) in categories">-->
         <!--          </van-sidebar-item>-->
         <!--        </van-sidebar>-->
-        <side-bar :categoryGoods="categories"/>
-      </div>
-      <div id="footer" v-if="cartCount > 0">
-        <van-action-sheet
-          :show="showCart"
-          :z-index="99999"
-          @cancel="showCart =false"
-          @click-overlay="showCart =false"
-          @close="showCart =false"
-          close-on-click-overlay
-          overlay
-          title="购物车">
-          <view class="cart-content">
-            <simple-goods-card
-              :food="item"
-              :key="item.id"
-              v-for="item in orderItems"/>
-          </view>
-        </van-action-sheet>
-        <van-submit-bar
-          :decimal-length="0"
-          :disabled="pageSettings.disableService"
-          :price="cartAllPrice * 100"
-          @submit="onSubmitOrder"
-          button-class="submit-btn"
-          button-text="提交订单"
-          currency="₩"
-          custom-class="order-submit-bar"
-          price-class="order-price">
-          <div @click="onOpenCart" id="order-bar-left-content">
-            <img alt="" src="/static/images/order/cart.png">
-            <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
-              {{ cartCount }}
-            </div>
-          </div>
-          <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
-        </van-submit-bar>
+        <side-bar
+          :categoryGoods="categories"
+          :pageSettings="pageSettings"/>
       </div>
     </div>
   </div>
@@ -84,7 +50,6 @@
 <script>
   import categoryService from '@/services/category'
   import goodsService from '@/services/goods'
-  import orderService from '@/services/order'
   import settingService from '@/services/setting'
 
   import BasePanel from '@/components/BasePanel'
@@ -101,39 +66,28 @@
       return {
         currentIndex: 0,
         categories: [],
-        pageSettings: {},
-        showCart: false
+        pageSettings: {}
       }
     },
-    computed: {
-      orderItems () {
-        const cartGoodsList = this.$store.getters.cartGoodsList
-        let orderItemList = []
-        cartGoodsList.forEach(item => {
-          orderItemList.push(item.goods)
-        })
-        return orderItemList
-      },
-      cartCount () {
-        return this.$store.getters.cartAllCount
-      },
-      cartAllPrice () {
-        return this.$store.getters.cartAllPrice
+    watch: {
+      showCart (newVal) {
+        if (newVal) {
+          this.getOrderItems()
+        }
       }
     },
     onLoad () {
-      this.init(this.currentIndex)
+      this.init()
     },
     onPullDownRefresh () {
-      this.init(this.currentIndex)
+      this.init()
       mpvue.stopPullDownRefresh()
     },
     methods: {
-      init (index) {
+      init () {
         // 先初始化数据
-        this.currentIndex = 0
-        this.pageSettings = {}
-        this.showCart = false
+        Object.assign(this.$data, this.$options.data())
+
         // 获取相关设置项
         settingService.getGoodsPageSettings()
           .then(res => {
@@ -188,42 +142,6 @@
             })
           }
         })
-      },
-      onChange (event) {
-        const index = event.mp.detail.name
-        this.currentIndex = index
-
-        this.getGoodsListByIndex(index)
-
-        // 提前加载下一页,如果可能的话
-        if (this.categories.length > index + 1) {
-          this.getGoodsListByIndex(index + 1)
-        }
-      },
-      onSubmitOrder () {
-        orderService.getCanOrderNow()
-          .then(res => {
-            if (!res) {
-              mpvue.showModal({
-                title: '提示',
-                content: `当前时间无法下单!\r\n请问是否要进行预约?`,
-                success (res) {
-                  if (res.confirm) {
-                    mpvue.navigateTo({
-                      url: `/pages/buy/main`
-                    })
-                  }
-                }
-              })
-            } else {
-              mpvue.navigateTo({
-                url: `/pages/buy/main`
-              })
-            }
-          })
-      },
-      onOpenCart () {
-        this.showCart = true
       }
     }
   }
@@ -267,25 +185,25 @@
     height: 100%;
   }
 
-  #activityInfo {
-    padding: 0 0.2rem;
-    margin-top: 0.2rem;
-  }
+  /*#activityInfo {*/
+  /*  padding: 0 0.2rem;*/
+  /*  margin-top: 0.2rem;*/
+  /*}*/
 
-  #activityInfo > van-tag {
-    margin-right: 0.1rem;
-  }
+  /*#activityInfo > van-tag {*/
+  /*  margin-right: 0.1rem;*/
+  /*}*/
 
-  #order-content {
-    min-height: 5rem;
-    margin-top: 0.2rem;
-    background-color: white;
-  }
+  /*#order-content {*/
+  /*  min-height: 5rem;*/
+  /*  margin-top: 0.2rem;*/
+  /*  background-color: white;*/
+  /*}*/
 
-  .food-content {
-    background-color: white;
-    padding: 0.2rem;
-  }
+  /*.food-content {*/
+  /*  background-color: white;*/
+  /*  padding: 0.2rem;*/
+  /*}*/
 
   .has-submit-bar {
     padding-bottom: .7rem;

@@ -10,17 +10,17 @@ const getters = {
     return count
   },
 
-  cartCountByGoodsId: (state) => (goodsId) => {
-    const existData = state.cart.cartList.find(item => item.goodsId === goodsId)
-    return existData ? existData.count : 0
-  },
-
   cartAllPrice: state => {
     let price = 0
     state.cart.cartList.forEach(item => {
       price += item.goods.price * item.count
     })
     return price
+  },
+
+  cartCountByGoodsId: (state) => (goodsId) => {
+    const existData = state.cart.cartList.find(item => item.goodsId === goodsId)
+    return existData ? existData.count : 0
   },
 
   // address

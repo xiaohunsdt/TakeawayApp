@@ -288,6 +288,7 @@
           }
         })
       }
+
       if (this.coupon) {
         this.checkCouponDiscountPrice()
       }

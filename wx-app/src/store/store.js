@@ -10,8 +10,7 @@ import coupon from './modules/coupon'
 
 Vue.use(Vuex)
 
-// const debug = process.env.NODE_ENV !== 'production'
-const debug = false
+const debug = process.env.NODE_ENV !== 'production'
 
 const plugins = [
   createPersistedState({
@@ -33,8 +32,8 @@ const store = new Vuex.Store({
     address,
     coupon
   },
-  getters
-  // strict: debug
+  getters,
+  strict: debug
   // plugins
 })
 

@@ -3,7 +3,7 @@
     <div class="nav">
       <scroll-view class="nav-scroll" scroll-y="true" style="height: 100%;">
         <div
-          :class="{'active':currentId===category.id}"
+          :class="{'active':currentId === category.id}"
           :key="category.id"
           @click="chooseType(category.id)"
           class="nav-item"
@@ -47,15 +47,56 @@
         </view>
       </scroll-view>
     </div>
+    <div id="footer" v-if="cartAllCount > 0">
+      <van-action-sheet
+        :show="showCart"
+        :z-index="99999"
+        @cancel="showCart =false"
+        @click-overlay="showCart =false"
+        @close="showCart =false"
+        close-on-click-overlay
+        overlay
+        title="购物车">
+        <view class="cart-content">
+          <simple-goods-card
+            :food="item"
+            :key="item.id"
+            v-for="item in orderItems"/>
+        </view>
+      </van-action-sheet>
+      <van-submit-bar
+        :decimal-length="0"
+        :disabled="pageSettings.disableService"
+        :price="cartAllPrice * 100"
+        @submit="onSubmitOrder"
+        button-class="submit-btn"
+        button-text="提交订单"
+        currency="₩"
+        custom-class="order-submit-bar"
+        price-class="order-price">
+        <div @click="onOpenCart" id="order-bar-left-content">
+          <img alt="" src="/static/images/order/cart.png">
+          <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
+            {{ cartAllCount }}
+          </div>
+        </div>
+        <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
+      </van-submit-bar>
+    </div>
   </div>
 </template>
 
 <script>
   import StandardGoodsCard from '@/components/GoodsCard/StandardGoodsCard'
+  import orderService from '@/services/order'
 
   export default {
     name: 'SideBar',
     props: {
+      pageSettings: {
+        type: Object,
+        required: true
+      },
       categoryGoods: {
         type: Object,
         required: true
@@ -79,12 +120,22 @@
         deep: true
       }
     },
+    computed: {
+      cartAllCount () {
+        return this.$store.getters.cartAllCount
+      },
+      cartAllPrice () {
+        return this.$store.getters.cartAllPrice
+      }
+    },
     data () {
       return {
         currentId: '',
         contentId: '',
         heightArr: [],
-        containerH: 0
+        containerH: 0,
+        showCart: false,
+        orderItems: []
       }
     },
     methods: {
@@ -123,6 +174,38 @@
             }
           })
         }).exec()
+      },
+      onSubmitOrder () {
+        orderService.getCanOrderNow()
+          .then(res => {
+            if (!res) {
+              mpvue.showModal({
+                title: '提示',
+                content: `当前时间无法下单!\r\n请问是否要进行预约?`,
+                success (res) {
+                  if (res.confirm) {
+                    mpvue.navigateTo({
+                      url: `/pages/buy/main`
+                    })
+                  }
+                }
+              })
+            } else {
+              mpvue.navigateTo({
+                url: `/pages/buy/main`
+              })
+            }
+          })
+      },
+      onOpenCart () {
+        this.showCart = true
+      },
+      getOrderItems () {
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        this.orderItems = []
+        cartGoodsList.forEach(item => {
+          this.orderItems.push(item.goods)
+        })
       }
     }
   }
@@ -217,5 +300,24 @@
 
   .content .has-no-more .name {
     margin: 0 .16rem;
+  }
+
+  .has-submit-bar {
+    padding-bottom: .7rem;
+  }
+
+  #order-bar-left-content {
+    padding-left: 0.2rem;
+    padding-top: 0.2rem;
+    display: flex;
+  }
+
+  #order-bar-left-content img {
+    width: 0.6rem;
+    height: 0.5rem;
+  }
+
+  .cart-content {
+    padding: .2rem;
   }
 </style>
