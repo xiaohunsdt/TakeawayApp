@@ -91,7 +91,7 @@
         // 获取相关设置项
         settingService.getGoodsPageSettings()
           .then(res => {
-            this.pageSettings = res
+            Object.assign(this.pageSettings, res)
           })
 
         // 获取所有分类
@@ -204,23 +204,4 @@
   /*  background-color: white;*/
   /*  padding: 0.2rem;*/
   /*}*/
-
-  .has-submit-bar {
-    padding-bottom: .7rem;
-  }
-
-  #order-bar-left-content {
-    padding-left: 0.2rem;
-    padding-top: 0.2rem;
-    display: flex;
-  }
-
-  #order-bar-left-content img {
-    width: 0.6rem;
-    height: 0.5rem;
-  }
-
-  .cart-content {
-    padding: .2rem;
-  }
 </style>
