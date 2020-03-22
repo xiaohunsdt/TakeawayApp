@@ -33,9 +33,9 @@ const store = new Vuex.Store({
     address,
     coupon
   },
-  getters,
-  strict: debug,
-  plugins
+  getters
+  // strict: debug
+  // plugins
 })
 
 export default store

@@ -55,7 +55,7 @@
         'SET_ADDRESS'
       ]),
       init () {
-        this.addressList.splice(0, this.addressList.length)
+        Object.assign(this.$data, this.$options.data())
         addressService.getMyAddressList()
           .then(res => {
             res.forEach(item => {

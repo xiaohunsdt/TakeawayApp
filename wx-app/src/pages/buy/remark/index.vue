@@ -52,7 +52,7 @@
     },
     methods: {
       init () {
-        this.inputVal = ''
+        Object.assign(this.$data, this.$options.data())
       },
       addPs (data) {
         if (this.inputVal) {

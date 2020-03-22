@@ -71,7 +71,7 @@
             :key="item.goodsName"
             v-for="item in orderItems"/>
           <div id="order-amount">
-            共<span style="color: #FFD200">{{ cartCount }}</span>个商品,
+            共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
             小计 <span style="color: #FFD200">₩ {{ cartAllPrice }}</span>
           </div>
         </base-panel>
@@ -175,7 +175,7 @@
           <div id="order-bar-left-content">
             <img alt="" src="/static/images/order/cart.png">
             <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
-              {{ cartCount }}
+              {{ cartAllCount }}
             </div>
           </div>
           <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>
@@ -244,7 +244,7 @@
       }
     },
     computed: {
-      cartCount () {
+      cartAllCount () {
         return this.$store.getters.cartAllCount
       },
       cartAllPrice () {
@@ -265,7 +265,7 @@
         tipNotice: '',
         orderId: '',
         order: {},
-        orderItems: null,
+        orderItems: [],
         payWay: 'WEIXIN_PAY',
         couponDiscountPrice: 0,
         couponInfoTip: null,
@@ -332,20 +332,7 @@
         'CLEAR_COUPON'
       ]),
       init () {
-        this.submitLoading = false
-        this.showOrderTip = false
-        this.disableService = false
-        this.orderId = ''
-        this.order = {}
-        this.orderItems = []
-        this.payWay = 'WEIXIN_PAY'
-        this.coupon = null
-        this.psData = ''
-        times = null
-        this.showTimePicker = false
-        this.appointment = null
-        this.deliveryType = ''
-        this.deliveryArriveTime = null
+        Object.assign(this.$data, this.$options.data())
 
         // 获取订单项
         const cartGoodsList = this.$store.getters.cartGoodsList
@@ -419,7 +406,7 @@
       onSubmitOrder () {
         this.submitLoading = true
         orderService.createOrder(
-          orderService.generateOrder(this.orderItems, this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment)),
+          orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment)),
           this.orderItems,
           this.coupon,
           this.address
@@ -452,7 +439,7 @@
         this.couponInfoTip = null
         this.couponInfoDetail = couponService.getCouponDetail(this.coupon)
         couponService.checkCouponDiscountPrice(
-          orderService.generateOrder(this.orderItems, this.payWay),
+          orderService.generateOrder(this.payWay),
           this.orderItems,
           this.coupon
         ).then(res => {

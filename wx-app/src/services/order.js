@@ -6,19 +6,15 @@ import api from '@/utils/api'
 /**
  * 生成一个标准的订单
  */
-export function generateOrder (orderItems, paymentWay, ps, appointmentDate) {
-  let allCount = 0
-  let allPrice = 0
-  orderItems.forEach(item => {
-    allCount += item.goodsCount
-    allPrice += item.goodsCount * item.goodsPrice
-  })
+export function generateOrder (paymentWay, ps, appointmentDate) {
+  // orderItems,allCount,allPrice,
+  // let allCount = 0
+  // let allPrice = 0
+  // orderItems.forEach(item => {
+  //   allCount += item.goodsCount
+  //   allPrice += item.goodsCount * item.goodsPrice
+  // })
   let order = {
-    goodsCount: allCount,
-    discount: 0,
-    discountedPrices: 0,
-    allPrice,
-    realPrice: allPrice,
     paymentWay,
     ps,
     appointmentDate

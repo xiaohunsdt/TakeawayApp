@@ -83,11 +83,8 @@
     },
     methods: {
       init () {
-        this.rateData.delicious = 0
-        this.rateData.express = 0
-        this.rateData.service = 0
-        this.rateData.comment = ''
-        this.submitLoad = false
+        Object.assign(this.$data, this.$options.data())
+
         orderService.selectOrderById(this.orderId).then(res => {
           this.order = res
         })
