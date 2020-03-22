@@ -24,7 +24,12 @@
           .then(() => {
             mpvue.hideLoading()
             const pages = util.getPages()
-            const pre = pages[pages.length - 2]
+            let pre = null
+            let index = 2
+            do {
+              pre = pages[pages.length - index++]
+            } while (pre.route === 'pages/my/auth/main' && pages.length >= index)
+
             mpvue.reLaunch({
               url: `/${pre.route}`
             })

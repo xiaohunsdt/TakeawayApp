@@ -121,11 +121,6 @@
           }, 3000)
         },
         deep: true
-      },
-      showCart (newVal) {
-        if (newVal) {
-          this.getOrderItems()
-        }
       }
     },
     computed: {
@@ -134,6 +129,17 @@
       },
       cartAllPrice () {
         return this.$store.getters.cartAllPrice
+      },
+      orderItems () {
+        if (!this.showCart) {
+          return []
+        }
+        const cartGoodsList = this.$store.getters.cartGoodsList
+        let orderItems = []
+        cartGoodsList.forEach(item => {
+          orderItems.push(item.goods)
+        })
+        return orderItems
       }
     },
     data () {
@@ -142,8 +148,7 @@
         contentId: '',
         heightArr: [],
         containerH: 0,
-        showCart: false,
-        orderItems: []
+        showCart: false
       }
     },
     methods: {
@@ -207,13 +212,6 @@
       },
       onOpenCart () {
         this.showCart = true
-      },
-      getOrderItems () {
-        const cartGoodsList = this.$store.getters.cartGoodsList
-        this.orderItems = []
-        cartGoodsList.forEach(item => {
-          this.orderItems.push(item.goods)
-        })
       }
     }
   }
