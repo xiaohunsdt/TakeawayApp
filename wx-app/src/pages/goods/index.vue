@@ -54,26 +54,17 @@
 
   import BasePanel from '@/components/BasePanel'
   import SideBar from '@/components/SideBar/SideBar'
-  import SimpleGoodsCard from '@/components/GoodsCard/SimpleGoodsCard'
 
   export default {
     components: {
       BasePanel,
-      SideBar,
-      SimpleGoodsCard
+      SideBar
     },
     data () {
       return {
         currentIndex: 0,
         categories: [],
         pageSettings: {}
-      }
-    },
-    watch: {
-      showCart (newVal) {
-        if (newVal) {
-          this.getOrderItems()
-        }
       }
     },
     onLoad () {

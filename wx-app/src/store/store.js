@@ -33,8 +33,8 @@ const store = new Vuex.Store({
     coupon
   },
   getters,
-  strict: debug
-  // plugins
+  strict: debug,
+  plugins
 })
 
 export default store

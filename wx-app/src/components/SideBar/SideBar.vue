@@ -88,6 +88,8 @@
 
 <script>
   import StandardGoodsCard from '@/components/GoodsCard/StandardGoodsCard'
+  import SimpleGoodsCard from '@/components/GoodsCard/SimpleGoodsCard'
+
   import orderService from '@/services/order'
 
   export default {
@@ -103,11 +105,12 @@
       }
     },
     components: {
-      StandardGoodsCard
+      StandardGoodsCard,
+      SimpleGoodsCard
     },
     watch: {
       categoryGoods: {
-        handler: function (val) {
+        handler: function () {
           if (this.categoryGoods && this.categoryGoods.length > 0) {
             this.currentId = this.categoryGoods[0].id
             this.contentId = `xh_${this.currentId}`
@@ -118,6 +121,11 @@
           }, 3000)
         },
         deep: true
+      },
+      showCart (newVal) {
+        if (newVal) {
+          this.getOrderItems()
+        }
       }
     },
     computed: {

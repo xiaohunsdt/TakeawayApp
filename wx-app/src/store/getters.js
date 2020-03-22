@@ -2,25 +2,13 @@ const getters = {
   // cart
   cartGoodsList: state => state.cart.cartList,
 
-  cartAllCount: state => {
-    let count = 0
-    state.cart.cartList.forEach(item => {
-      count += item.count
-    })
-    return count
-  },
+  cartAllCount: state => state.cart.cartAllCount,
 
-  cartAllPrice: state => {
-    let price = 0
-    state.cart.cartList.forEach(item => {
-      price += item.goods.price * item.count
-    })
-    return price
-  },
+  cartAllPrice: state => state.cart.cartAllPrice,
 
   cartCountByGoodsId: (state) => (goodsId) => {
-    const existData = state.cart.cartList.find(item => item.goodsId === goodsId)
-    return existData ? existData.count : 0
+    const index = state.cart.cartList.findIndex(item => item.goodsId === goodsId)
+    return index > -1 ? state.cart.cartList[index].count : 0
   },
 
   // address
