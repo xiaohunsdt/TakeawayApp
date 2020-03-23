@@ -6,7 +6,7 @@
         <where>
             `coupon_id` = #{couponId}
         </where>
-        ORDER BY `use_date` DESC
+        ORDER BY `create_date` DESC
     </select>
 
     <select id="getLogListByOrderId" resultType="CouponLog">
@@ -14,7 +14,7 @@
         <where>
             `order_id` = #{orderId}
         </where>
-        ORDER BY `use_date` DESC
+        ORDER BY `create_date` DESC
     </select>
     <select id="getLogListByPage" resultType="CouponLog">
         SELECT * FROM `coupon_log`
