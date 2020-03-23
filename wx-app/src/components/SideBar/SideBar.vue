@@ -16,7 +16,6 @@
       <scroll-view
         :scroll-into-view="contentId"
         :scroll-y="contentId"
-        @scroll="onScroll"
         class="content-scroll"
         scroll-with-animation="true"
         style="height: 100%;">
@@ -26,7 +25,7 @@
             :key="category.id"
             class="pesticide"
             v-for="category in categoryGoods"
-            v-if="category.goodsList.length > 0">
+            v-show="category.goodsList.length > 0 && 'xh_'+category.id === contentId">
             <div class="type-name">
               <div class="line"></div>
               <div class="name">{{category.name}}</div>
@@ -109,20 +108,28 @@
       SimpleGoodsCard
     },
     watch: {
-      categoryGoods: {
-        handler: function () {
-          if (this.categoryGoods && this.categoryGoods.length > 0) {
-            this.currentId = this.categoryGoods[0].id
-            this.contentId = `xh_${this.currentId}`
-          }
-          let this_ = this
-          setTimeout(function () {
-            this_.getDivInfo()
-          }, 3000)
-        },
-        deep: true
+      categoryGoods () {
+        if (this.categoryGoods.length > 0) {
+          this.currentId = this.categoryGoods[0].id
+          this.contentId = `xh_${this.currentId}`
+        }
       }
     },
+    // watch: {
+    //   categoryGoods: {
+    //     handler: function () {
+    //       if (this.categoryGoods && this.categoryGoods.length > 0) {
+    //         this.currentId = this.categoryGoods[0].id
+    //         this.contentId = `xh_${this.currentId}`
+    //       }
+    //       let this_ = this
+    //       setTimeout(function () {
+    //         this_.getDivInfo()
+    //       }, 3000)
+    //     },
+    //     deep: true
+    //   }
+    // },
     computed: {
       cartAllCount () {
         return this.$store.getters.cartAllCount
@@ -153,43 +160,50 @@
         showCart: false
       }
     },
+    mounted () {
+      console.log('吹昂见了')
+      if (this.categoryGoods.length > 0) {
+        this.currentId = this.categoryGoods[0].id
+        this.contentId = `xh_${this.currentId}`
+      }
+    },
     methods: {
       chooseType (event) {
         this.currentId = event
         this.contentId = `xh_${this.currentId}`
       },
-      onScroll (event) {
-        let scrollTop = event.mp.detail.scrollTop
-        let scrollArr = this.heightArr
-        if (!scrollTop >= scrollArr[scrollArr.length - 1] - this.containerH) {
-          for (let i = 0; i < scrollArr.length; i++) {
-            if (scrollTop >= 0 && scrollTop < scrollArr[0]) {
-              this.currentId = this.categoryGoods[0].id
-            } else if (scrollTop >= scrollArr[i - 1] && scrollTop < scrollArr[i]) {
-              this.currentId = this.categoryGoods[i].id
-            }
-          }
-        }
-      },
-      getDivInfo () {
-        this.heightArr.splice(0, this.heightArr.length)
-
-        let query = mpvue.createSelectorQuery()
-        query.select('.content-container').boundingClientRect((res) => {
-          if (res) {
-            this.containerH = res.height
-          }
-        }).exec()
-        let s = 0
-        query.selectAll('.pesticide').boundingClientRect((react) => {
-          react.forEach((res) => {
-            s += res.height
-            if (this.heightArr.findIndex(item => s === item) < 0) {
-              this.heightArr.push(s)
-            }
-          })
-        }).exec()
-      },
+      // onScroll (event) {
+      //   let scrollTop = event.mp.detail.scrollTop
+      //   let scrollArr = this.heightArr
+      //   if (!scrollTop >= scrollArr[scrollArr.length - 1] - this.containerH) {
+      //     for (let i = 0; i < scrollArr.length; i++) {
+      //       if (scrollTop >= 0 && scrollTop < scrollArr[0]) {
+      //         this.currentId = this.categoryGoods[0].id
+      //       } else if (scrollTop >= scrollArr[i - 1] && scrollTop < scrollArr[i]) {
+      //         this.currentId = this.categoryGoods[i].id
+      //       }
+      //     }
+      //   }
+      // },
+      // getDivInfo () {
+      //   this.heightArr.splice(0, this.heightArr.length)
+      //
+      //   let query = mpvue.createSelectorQuery()
+      //   query.select('.content-container').boundingClientRect((res) => {
+      //     if (res) {
+      //       this.containerH = res.height
+      //     }
+      //   }).exec()
+      //   let s = 0
+      //   query.selectAll('.pesticide').boundingClientRect((react) => {
+      //     react.forEach((res) => {
+      //       s += res.height
+      //       if (this.heightArr.findIndex(item => s === item) < 0) {
+      //         this.heightArr.push(s)
+      //       }
+      //     })
+      //   }).exec()
+      // },
       onSubmitOrder () {
         orderService.getCanOrderNow()
           .then(res => {

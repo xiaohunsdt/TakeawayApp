@@ -15,30 +15,6 @@
         </base-panel>
       </div>
       <div id="goods-content">
-        <!--        <van-tabs-->
-        <!--          @change="onChange"-->
-        <!--          border-->
-        <!--          custom-class="foodTab"-->
-        <!--          nav-class="nav-class">-->
-        <!--          <van-tab-->
-        <!--            :key="categoryIndex"-->
-        <!--            :title="category.name"-->
-        <!--            v-for="(category,categoryIndex) in categories">-->
-        <!--            <div :class="{'food-content':true,'has-submit-bar':cartAllCount > 0}">-->
-        <!--              <simple-goods-card-->
-        <!--                :food="food"-->
-        <!--                :key="foodIndex"-->
-        <!--                v-for="(food,foodIndex) in category.goodsList"/>-->
-        <!--            </div>-->
-        <!--          </van-tab>-->
-        <!--        </van-tabs>-->
-        <!--        <van-sidebar :active-key="currentIndex" bind:change="onChange">-->
-        <!--          <van-sidebar-item-->
-        <!--            :key="categoryIndex"-->
-        <!--            :title="category.name"-->
-        <!--            v-for="(category,categoryIndex) in categories">-->
-        <!--          </van-sidebar-item>-->
-        <!--        </van-sidebar>-->
         <side-bar
           :categoryGoods="categories"
           :pageSettings="pageSettings"/>
@@ -48,7 +24,6 @@
 </template>
 
 <script>
-  import categoryService from '@/services/category'
   import goodsService from '@/services/goods'
   import settingService from '@/services/setting'
 
@@ -92,54 +67,15 @@
             Object.assign(this.pageSettings, res)
           })
 
-        // 获取所有分类
-        categoryService.getAllCategory().then((res) => {
-          res.forEach(item => {
-            item.goodsList = []
+        // 获取所有商品
+        goodsService.getAllGoodsList()
+          .then(res => {
+            this.categories.push(...res.categoryGoods)
+            mpvue.hideLoading()
           })
-
-          this.categories = []
-          this.categories.push(...res)
-          // 获取数据
-          // if (this.categories.length > 0) {
-          //   this.getGoodsListByIndex(0)
-          // }
-          if (this.categories.length > 0) {
-            mpvue.showLoading({
-              title: '加载数据中...'
-            })
-            goodsService.getAllGoodsList()
-              .then(res => {
-                this.categories.forEach(category => {
-                  res.forEach(goods => {
-                    if (goods.category === category.name) {
-                      category.goodsList.push(goods)
-                    }
-                  })
-                })
-                mpvue.hideLoading()
-              })
-              .catch(() => {
-                mpvue.hideLoading()
-              })
-          }
-        })
-      },
-      getGoodsListByIndex (index) {
-        return new Promise((resolve, reject) => {
-          if (this.categories.length > index) {
-            // 如果已经存在数据就直接返回
-            if (this.categories[index].goodsList.length > 0) {
-              return
-            }
-
-            const categoryId = this.categories[index].id
-            goodsService.getGoodsListByCategoryId(categoryId).then(res => {
-              this.categories[index].goodsList.push(...res)
-              resolve()
-            })
-          }
-        })
+          .catch(() => {
+            mpvue.hideLoading()
+          })
       }
     }
   }
