@@ -128,9 +128,10 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public void checkOrder(Order order, List<OrderItem> orderItemList) {
         int allCount = orderItemList.parallelStream().mapToInt(OrderItem::getGoodsCount).sum();
-        int AllPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
+        int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
 
         order.setGoodsCount(allCount);
-        order.setAllPrice(AllPrice);
+        order.setAllPrice(allPrice);
+        order.setRealPrice(allPrice);
     }
 }

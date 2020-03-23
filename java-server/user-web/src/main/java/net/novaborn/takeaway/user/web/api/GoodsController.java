@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.user.web.dto.GoodsListDto;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,6 @@ public class GoodsController extends BaseController {
         List<Goods> goodsList = goodsService.list().stream()
                 .filter(item -> !item.getState().equals(GoodsState.OFF))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(new GoodsWrapper(goodsList).warp());
+        return ResponseEntity.ok(new GoodsListDto(goodsList));
     }
 }
