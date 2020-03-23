@@ -7,23 +7,28 @@
       ₩ {{food.price}}
     </div>
     <div class="action">
-      <order-stepper :food="food" v-if="currentFoodCount > 0"/>
-      <van-button
-        :disabled="food.state!=='ON'"
-        @click="addCart"
-        custom-class="order-btn"
-        icon="goods-collect"
-        round
-        size="small"
-        type="primary"
-        v-else>
-        <span v-if="food.state==='ON'">
-          下单
-        </span>
-        <span v-else-if="food.state==='SHORTAGE'">
-          缺货
-        </span>
-      </van-button>
+      <order-stepper
+        :food="food"
+        :currentFoodCount="currentFoodCount"
+        @added-goods="onAddedGoods"
+        @reduced-goods="onReducedGoods"
+        />
+      <!--      <van-button-->
+      <!--        :disabled="food.state!=='ON'"-->
+      <!--        @click="addCart"-->
+      <!--        custom-class="order-btn"-->
+      <!--        icon="goods-collect"-->
+      <!--        round-->
+      <!--        size="small"-->
+      <!--        type="primary"-->
+      <!--        v-else>-->
+      <!--        <span v-if="food.state==='ON'">-->
+      <!--          下单-->
+      <!--        </span>-->
+      <!--        <span v-else-if="food.state==='SHORTAGE'">-->
+      <!--          缺货-->
+      <!--        </span>-->
+      <!--      </van-button>-->
     </div>
   </div>
 </template>
@@ -44,10 +49,18 @@
     components: {
       OrderStepper
     },
-    computed: {
-      currentFoodCount () {
-        return this.$store.getters.cartCountByGoodsId(this.food.id)
+    // computed: {
+    //   currentFoodCount () {
+    //     return this.$store.getters.cartCountByGoodsId(this.food.id)
+    //   }
+    // },
+    data () {
+      return {
+        currentFoodCount: 0
       }
+    },
+    created () {
+      this.currentFoodCount = this.$store.getters.cartCountByGoodsId(this.food.id)
     },
     methods: {
       ...mapMutations('cart', [
@@ -59,6 +72,12 @@
           return
         }
         this.ADD_GOODS(this.food)
+      },
+      onAddedGoods (goods) {
+        this.currentFoodCount++
+      },
+      onReducedGoods (goods) {
+        this.currentFoodCount--
       }
     }
   }
@@ -69,6 +88,7 @@
     border: none !important;
     display: block;
   }
+
   .action .order-stepper-root {
     bottom: unset !important;
     right: unset !important;
@@ -81,10 +101,12 @@
     display: flex;
     justify-content: space-between;
   }
-  .name{
+
+  .name {
     width: 40%;
     overflow: hidden;
   }
+
   .name, .price, .action {
     font-weight: bolder;
     line-height: .7rem;
@@ -95,7 +117,8 @@
     width: 1.8rem;
     text-align: right;
   }
-  .price{
+
+  .price {
     min-width: 1.5rem;
     margin-right: .2rem;
   }

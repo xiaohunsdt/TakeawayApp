@@ -29,7 +29,10 @@
       </div>
     </view>
     <view slot="footer" style="height: 0.4rem">
-      <order-stepper :food="food" v-if="currentFoodCount > 0"/>
+      <order-stepper
+        :currentFoodCount="currentFoodCount"
+        :food="food"
+        v-if="currentFoodCount > 0"/>
       <van-button
         :disabled="food.state!=='ON'"
         @click="addCart"

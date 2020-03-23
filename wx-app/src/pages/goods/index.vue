@@ -54,6 +54,7 @@
 
   import BasePanel from '@/components/BasePanel'
   import SideBar from '@/components/SideBar/SideBar'
+  import { mapMutations } from 'vuex'
 
   export default {
     components: {
@@ -69,12 +70,18 @@
     },
     onLoad () {
       this.init()
+
+      // 初始化购物车数量
+      this.INIT_CRET()
     },
     onPullDownRefresh () {
       this.init()
       mpvue.stopPullDownRefresh()
     },
     methods: {
+      ...mapMutations('cart', [
+        'INIT_CRET'
+      ]),
       init () {
         // 先初始化数据
         Object.assign(this.$data, this.$options.data())

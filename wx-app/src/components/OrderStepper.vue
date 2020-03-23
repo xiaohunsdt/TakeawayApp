@@ -1,8 +1,8 @@
 <template>
   <van-stepper
-    async-change
     :value="currentFoodCount"
     @change="onChange"
+    async-change
     custom-class="order-stepper-root"
     disable-input="true"
     input-class="order-stepper-input"
@@ -12,18 +12,16 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
 
   export default {
     props: {
       food: {
         type: Object,
         required: true
-      }
-    },
-    computed: {
-      currentFoodCount () {
-        return this.$store.getters.cartCountByGoodsId(this.food.id)
+      },
+      currentFoodCount: {
+        required: true
       }
     },
     methods: {
@@ -35,8 +33,10 @@
         const currentVal = event.mp.detail
         if (currentVal > this.currentFoodCount) {
           this.ADD_GOODS(this.food)
+          this.$emit('added-goods', this.food)
         } else {
           this.REDUCE_GOODS(this.food)
+          this.$emit('reduced-goods', this.food)
         }
       }
     }
@@ -55,12 +55,13 @@
   }
 
   .order-stepper-plus, .order-stepper-minus {
-     background-color: #FFD200 !important;
-     font-weight: 800 !important;
-     border-radius: 50% !important;
-     width: 0.5rem !important;
-     height: 0.5rem !important;
-   }
+    background-color: #FFD200 !important;
+    font-weight: 800 !important;
+    border-radius: 50% !important;
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+  }
+
   .order-stepper-plus:active, .order-stepper-minus:active {
     background-color: #ffb105 !important;
   }

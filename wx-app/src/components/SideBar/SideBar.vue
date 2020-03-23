@@ -47,23 +47,23 @@
         </view>
       </scroll-view>
     </div>
+    <van-action-sheet
+      :show="showCart"
+      :z-index="99999"
+      @cancel="showCart =false"
+      @click-overlay="showCart =false"
+      @close="showCart =false"
+      close-on-click-overlay
+      overlay
+      title="购物车">
+      <view class="cart-content">
+        <simple-goods-card
+          :food="item"
+          :key="item.id"
+          v-for="item in orderItems"/>
+      </view>
+    </van-action-sheet>
     <div id="footer" v-if="cartAllCount > 0">
-      <van-action-sheet
-        :show="showCart"
-        :z-index="99999"
-        @cancel="showCart =false"
-        @click-overlay="showCart =false"
-        @close="showCart =false"
-        close-on-click-overlay
-        overlay
-        title="购物车">
-        <view class="cart-content">
-          <simple-goods-card
-            :food="item"
-            :key="item.id"
-            v-for="item in orderItems"/>
-        </view>
-      </van-action-sheet>
       <van-submit-bar
         :decimal-length="0"
         :disabled="pageSettings.disableService"
@@ -136,9 +136,11 @@
         }
         const cartGoodsList = this.$store.getters.cartGoodsList
         let orderItems = []
-        cartGoodsList.forEach(item => {
-          orderItems.push(item.goods)
-        })
+        cartGoodsList
+          .filter(item => item.count > 0)
+          .forEach(item => {
+            orderItems.push(item.goods)
+          })
         return orderItems
       }
     },

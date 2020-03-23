@@ -50,6 +50,19 @@ const mutations = {
     state.cartList = []
     state.cartAllCount = 0
     state.cartAllPrice = 0
+  },
+  INIT_CRET: (state) => {
+    let count = 0
+    state.cartList.forEach(item => {
+      count += item.count
+    })
+    state.cartAllCount = count
+
+    let price = 0
+    state.cartList.forEach(item => {
+      price += item.count * item.goods.price
+    })
+    state.cartAllPrice = price
   }
 }
 

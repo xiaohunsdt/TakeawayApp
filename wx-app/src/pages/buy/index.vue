@@ -337,7 +337,9 @@
 
         // 获取订单项
         const cartGoodsList = this.$store.getters.cartGoodsList
-        cartGoodsList.forEach(item => {
+        cartGoodsList
+          .filter(item => item.count > 0)
+          .forEach(item => {
           let orderItem = {}
           orderItem.goodsId = item.goodsId
           orderItem.goodsName = item.goods.name

@@ -17,7 +17,10 @@
       <!--      <div class="goods-card-origin-price">₩ {{ food.price }}</div>-->
       <span class="goods-card-price">₩ {{ food.price }}</span>
       <div style="height: 0rem">
-        <order-stepper :food="food" v-if="currentFoodCount > 0"/>
+        <order-stepper
+          :food="food"
+          :currentFoodCount="currentFoodCount"
+          v-if="currentFoodCount > 0"/>
         <van-button
           :disabled="food.state!=='ON'"
           @click="addCart"

@@ -6,9 +6,25 @@ const getters = {
 
   cartAllPrice: state => state.cart.cartAllPrice,
 
+  // cartAllCount: state => {
+  //   let count = 0
+  //   state.cart.cartList.forEach(item => {
+  //     count += item.count
+  //   })
+  //   return count
+  // },
+  //
+  // cartAllPrice: state => {
+  //   let price = 0
+  //   state.cart.cartList.forEach(item => {
+  //     price += item.count * item.goods.price
+  //   })
+  //   return price
+  // },
+
   cartCountByGoodsId: (state) => (goodsId) => {
-    const index = state.cart.cartList.findIndex(item => item.goodsId === goodsId)
-    return index > -1 ? state.cart.cartList[index].count : 0
+    const existData = state.cart.cartList.find(item => item.goodsId === goodsId)
+    return existData !== undefined ? existData.count : 0
   },
 
   // address
