@@ -3,14 +3,15 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
-		"enhance": false,
-		"postcss": true,
+		"enhance": true,
+		"postcss": false,
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
 		"nodeModules": true,
 		"autoAudits": false,
-		"uglifyFileName": true,
+		"showShadowRootInWxmlPanel": false,
+		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -18,7 +19,8 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"bundle": true
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",

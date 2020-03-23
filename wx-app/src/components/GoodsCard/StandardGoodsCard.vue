@@ -17,10 +17,17 @@
       <!--      <div class="goods-card-origin-price">₩ {{ food.price }}</div>-->
       <span class="goods-card-price">₩ {{ food.price }}</span>
       <div style="height: 0rem">
-        <order-stepper
-          :food="food"
-          :currentFoodCount="currentFoodCount"
-          v-if="currentFoodCount > 0"/>
+        <van-stepper
+          async-change
+          :value="currentFoodCount"
+          @change="onChange"
+          custom-class="order-stepper-root"
+          disable-input="true"
+          input-class="order-stepper-input"
+          min="0"
+          minus-class="order-stepper-minus"
+          plus-class="order-stepper-plus"
+          v-if="currentFoodCount>0"/>
         <van-button
           :disabled="food.state!=='ON'"
           @click="addCart"
@@ -43,9 +50,8 @@
 </template>
 
 <script>
-  import OrderStepper from '@/components/OrderStepper'
-
   import { mapMutations } from 'vuex'
+  import orderStepper from '../mixins/order-stepper'
 
   export default {
     name: 'MainGoodsCard',
@@ -55,9 +61,7 @@
         required: true
       }
     },
-    components: {
-      OrderStepper
-    },
+    mixins: [orderStepper],
     computed: {
       currentFoodCount () {
         return this.$store.getters.cartCountByGoodsId(this.food.id)
@@ -139,5 +143,44 @@
     text-overflow: ellipsis;
     max-height: .6rem;
     margin-bottom: 0.1rem;
+  }
+</style>
+<style>
+  .order-stepper-input {
+    background-color: transparent !important;
+    width: 0.4rem !important;
+    font-weight: 600 !important;
+  }
+
+  .order-stepper-input.van-stepper__input--disabled {
+    color: black;
+  }
+
+  .order-stepper-plus, .order-stepper-minus {
+    background-color: #FFD200 !important;
+    font-weight: 800 !important;
+    border-radius: 50% !important;
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+  }
+
+  .order-stepper-plus:active, .order-stepper-minus:active {
+    background-color: #ffb105 !important;
+  }
+
+  .order-stepper-plus:before,
+  .order-stepper-plus:after,
+  .order-stepper-minus:before, .order-stepper-minus:after {
+    background-color: white !important;
+  }
+
+  .order-stepper-minus:before, .order-stepper-plus:before {
+    height: 0.05rem !important;
+    width: 0.24rem !important;
+  }
+
+  .order-stepper-minus:after, .order-stepper-plus:after {
+    width: 0.05rem !important;
+    height: 0.24rem !important;
   }
 </style>
