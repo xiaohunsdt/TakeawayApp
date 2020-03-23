@@ -161,7 +161,6 @@
       }
     },
     mounted () {
-      console.log('吹昂见了')
       if (this.categoryGoods.length > 0) {
         this.currentId = this.categoryGoods[0].id
         this.contentId = `xh_${this.currentId}`
