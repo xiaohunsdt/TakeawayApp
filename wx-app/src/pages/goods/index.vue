@@ -68,6 +68,9 @@
           })
 
         // 获取所有商品
+        mpvue.showLoading({
+          title: '正在加载中...'
+        })
         goodsService.getAllGoodsList()
           .then(res => {
             this.categories.push(...res.categoryGoods)
