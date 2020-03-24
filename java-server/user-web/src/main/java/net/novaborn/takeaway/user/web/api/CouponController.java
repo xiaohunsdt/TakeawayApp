@@ -6,8 +6,8 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponLog;
-import net.novaborn.takeaway.coupon.service.impl.CouponLogService;
-import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
+import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
@@ -18,7 +18,6 @@ import net.novaborn.takeaway.user.web.wrapper.CouponWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

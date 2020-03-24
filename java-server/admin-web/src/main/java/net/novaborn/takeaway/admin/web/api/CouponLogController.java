@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import net.novaborn.takeaway.admin.web.wrapper.CouponLogWrapper;
-import net.novaborn.takeaway.coupon.service.impl.CouponLogService;
+import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

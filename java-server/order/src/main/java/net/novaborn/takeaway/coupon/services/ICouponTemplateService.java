@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.coupon.service;
+package net.novaborn.takeaway.coupon.services;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;

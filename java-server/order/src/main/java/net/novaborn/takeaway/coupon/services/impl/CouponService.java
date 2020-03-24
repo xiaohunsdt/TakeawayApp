@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.coupon.service.impl;
+package net.novaborn.takeaway.coupon.services.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
@@ -13,7 +13,7 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
-import net.novaborn.takeaway.coupon.service.ICouponService;
+import net.novaborn.takeaway.coupon.services.ICouponService;
 import net.novaborn.takeaway.coupon.util.CouponUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;

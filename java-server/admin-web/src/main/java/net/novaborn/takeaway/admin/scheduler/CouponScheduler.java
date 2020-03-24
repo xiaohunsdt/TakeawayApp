@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
-import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.mq.sender.CouponExpiredSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,7 +30,7 @@ public class CouponScheduler {
     @Scheduled(cron = "0 1 0 * * ?")
     public void couponExpired() {
         // 获取所有状态为未使用的优惠卷
-        QueryWrapper queryWrapper = new QueryWrapper<Coupon>().eq("state", 0);
+        QueryWrapper queryWrapper = new QueryWrapper<Coupon>().eq("state", 0).eq("deleted",0);
         List<Coupon> couponList = couponService.list(queryWrapper);
         Date current = new Date();
         couponList.parallelStream()

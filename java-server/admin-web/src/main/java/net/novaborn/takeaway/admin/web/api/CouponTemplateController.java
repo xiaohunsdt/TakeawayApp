@@ -12,7 +12,7 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.exception.CouponTemplateExceptionEnum;
-import net.novaborn.takeaway.coupon.service.impl.CouponTemplateService;
+import net.novaborn.takeaway.coupon.services.impl.CouponTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

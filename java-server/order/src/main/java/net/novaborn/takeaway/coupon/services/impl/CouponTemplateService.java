@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.coupon.service.impl;
+package net.novaborn.takeaway.coupon.services.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import net.novaborn.takeaway.coupon.dao.ICouponTemplateDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
-import net.novaborn.takeaway.coupon.service.ICouponTemplateService;
+import net.novaborn.takeaway.coupon.services.ICouponTemplateService;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

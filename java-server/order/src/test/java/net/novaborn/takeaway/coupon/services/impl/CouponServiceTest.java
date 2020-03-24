@@ -1,10 +1,8 @@
-package net.novaborn.takeaway.coupon.service.impl;
+package net.novaborn.takeaway.coupon.services.impl;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class CouponServiceTest {
 

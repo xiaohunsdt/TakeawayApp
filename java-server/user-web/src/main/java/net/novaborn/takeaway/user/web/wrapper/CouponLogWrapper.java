@@ -2,7 +2,7 @@ package net.novaborn.takeaway.user.web.wrapper;
 
 import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
-import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.coupon.services.impl.CouponService;
 
 import java.util.Map;
 

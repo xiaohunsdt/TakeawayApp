@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
-import net.novaborn.takeaway.coupon.service.impl.CouponService;
+import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.mq.config.CouponQueueConfig;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
