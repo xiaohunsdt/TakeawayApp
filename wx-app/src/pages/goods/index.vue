@@ -45,7 +45,6 @@
       }
     },
     onLoad () {
-      this.setHeaderHeight()
       this.init()
 
       // 初始化购物车数量
@@ -67,13 +66,12 @@
         settingService.getGoodsPageSettings()
           .then(res => {
             Object.assign(this.pageSettings, res)
+            // 设置高度
+            const _this = this
+            setTimeout(function () {
+              _this.setHeaderHeight()
+            }, 1000)
           })
-
-        // 设置高度
-        const _this = this
-        setTimeout(function () {
-          _this.setHeaderHeight()
-        }, 3000)
 
         // 获取所有商品
         mpvue.showLoading({

@@ -4,13 +4,14 @@
 		"urlCheck": false,
 		"es6": true,
 		"enhance": true,
-		"postcss": false,
+		"postcss": true,
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
 		"nodeModules": true,
 		"autoAudits": false,
 		"showShadowRootInWxmlPanel": false,
+		"scopeDataCheck": false,
 		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
@@ -20,7 +21,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"bundle": true
+		"bundle": false
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",

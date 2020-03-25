@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "活动",
-  "enablePullDownRefresh": true,
+  "enablePullDownRefresh": false,
   "backgroundTextStyle": "light",
   "backgroundColor": "#FFD200"
 }

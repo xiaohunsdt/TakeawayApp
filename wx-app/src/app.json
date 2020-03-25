@@ -20,8 +20,7 @@
       "pages":[
         "index/main",
         "detail/main"
-      ],
-      "independent": true
+      ]
     },
     {
       "root":"pages/sub-packages/coupon/",
