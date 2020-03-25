@@ -14,7 +14,7 @@
           </div>
         </base-panel>
       </div>
-      <div id="goods-content">
+      <div :style="'height:'+height+'px'" id="goods-content">
         <side-bar
           :categoryGoods="categories"
           :pageSettings="pageSettings"/>
@@ -38,12 +38,14 @@
     },
     data () {
       return {
+        height: 800,
         currentIndex: 0,
         categories: [],
         pageSettings: {}
       }
     },
     onLoad () {
+      this.setHeaderHeight()
       this.init()
 
       // 初始化购物车数量
@@ -59,7 +61,7 @@
       ]),
       init () {
         // 先初始化数据
-        Object.assign(this.$data, this.$options.data())
+        // Object.assign(this.$data, this.$options.data())
 
         // 获取相关设置项
         settingService.getGoodsPageSettings()
@@ -67,18 +69,36 @@
             Object.assign(this.pageSettings, res)
           })
 
+        // 设置高度
+        const _this = this
+        setTimeout(function () {
+          _this.setHeaderHeight()
+        }, 3000)
+
         // 获取所有商品
         mpvue.showLoading({
           title: '正在加载中...'
         })
         goodsService.getAllGoodsList()
           .then(res => {
+            this.categories = []
             this.categories.push(...res.categoryGoods)
             mpvue.hideLoading()
           })
           .catch(() => {
             mpvue.hideLoading()
           })
+      },
+      setHeaderHeight () {
+        const _this = this
+
+        mpvue.createSelectorQuery().select('#header').boundingClientRect(function (headerRect) {
+          mpvue.getSystemInfo({
+            success: function (res, rect) {
+              _this.height = res.windowHeight - headerRect.height - 10
+            }
+          })
+        }).exec()
       }
     }
   }
@@ -118,9 +138,9 @@
 </style>
 
 <style scoped>
-  .container, .container-contain, #goods-content {
-    height: 100%;
-  }
+  /*.container, .container-contain, #goods-content {*/
+  /*  height: calc(100% - 76rpx);*/
+  /*}*/
 
   /*#activityInfo {*/
   /*  padding: 0 0.2rem;*/
