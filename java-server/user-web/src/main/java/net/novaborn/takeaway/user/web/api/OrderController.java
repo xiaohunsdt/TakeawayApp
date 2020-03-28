@@ -5,6 +5,7 @@ import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -118,6 +119,10 @@ public class OrderController extends BaseController {
     @Transactional(rollbackFor = RuntimeException.class)
     @PostMapping("createOrder")
     public Tip createOrder(@RequestBody @Validated OrderDto orderDto) {
+        String openId = jwtTokenUtil.getUsernameFromToken(request);
+        Optional<User> user = userService.selectByOpenId(openId);
+        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
+
         Order order = orderDto.getOrder();
         List<OrderItem> orderItems = orderDto.getOrderItems();
 
@@ -132,10 +137,6 @@ public class OrderController extends BaseController {
         //检测订单商品项是否可以下单
         orderItemService.checkOrderItems(orderItems);
         orderService.checkOrder(order, orderItems);
-
-        String openId = jwtTokenUtil.getUsernameFromToken(request);
-        Optional<User> user = userService.selectByOpenId(openId);
-        user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         //填写订单信息
         int number;
@@ -155,6 +156,17 @@ public class OrderController extends BaseController {
             order.setPayState(PayState.PAY_LATER);
         } else {
             order.setPayState(PayState.UN_PAY);
+        }
+
+        //设置互联折扣
+        if (order.getFrom() != null) {
+            // 延世大学联活动
+            if (order.getFrom() == From.YONSEI) {
+                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
+                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
+                }
+                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
+            }
         }
 
         //设置 优惠卷折扣
