@@ -17,6 +17,9 @@
             <swiper-item>
               <img class="itemImg" mode="widthFix" src="/static/images/banner/yiqing.png">
             </swiper-item>
+            <swiper-item>
+              <img @click="gotoActivity" class="itemImg" mode="widthFix" src="/static/images/banner/yonsei.jpg">
+            </swiper-item>
           </swiper>
         </div>
       </div>
@@ -59,6 +62,11 @@
 
         indexService.getHotGoodsList().then(res => {
           this.hotGoodsList = res
+        })
+      },
+      gotoActivity () {
+        mpvue.navigateTo({
+          url: '/pages/sub-packages/activity/index/main'
         })
       }
     },
