@@ -7,6 +7,7 @@ import getters from './getters'
 import cart from './modules/cart'
 import address from './modules/address'
 import coupon from './modules/coupon'
+import from from './modules/from'
 
 Vue.use(Vuex)
 
@@ -31,7 +32,8 @@ const store = new Vuex.Store({
   modules: {
     cart,
     address,
-    coupon
+    coupon,
+    from
   },
   getters,
   strict: debug,

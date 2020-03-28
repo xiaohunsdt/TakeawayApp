@@ -42,7 +42,7 @@
       },
       onActivityClick (id) {
         mpvue.navigateTo({
-          url: `/pages/activity/detail/main?activityId=${id}`
+          url: `../detail/main?activityId=${id}`
         })
       }
     }

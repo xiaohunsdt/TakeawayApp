@@ -20,11 +20,11 @@
           </swiper>
         </div>
       </div>
-<!--      <div id="newUserCoupon">-->
-<!--        <img mode="widthFix"-->
-<!--             src="/static/images/newcoupon.png"-->
-<!--             style="width: 100%"/>-->
-<!--      </div>-->
+      <!--      <div id="newUserCoupon">-->
+      <!--        <img mode="widthFix"-->
+      <!--             src="/static/images/newcoupon.png"-->
+      <!--             style="width: 100%"/>-->
+      <!--      </div>-->
       <food-panel :foodList="newGoodsList" title="新品"/>
       <food-panel :foodList="hotGoodsList" title="热门"/>
     </div>
@@ -35,6 +35,7 @@
   import indexService from '@/services/index'
   import SearchBar from '@/components/SearchBar'
   import FoodPanel from './components/FoodPanel'
+  import { mapMutations } from 'vuex'
 
   export default {
     components: {
@@ -48,6 +49,9 @@
       }
     },
     methods: {
+      ...mapMutations('from', [
+        'SET_FROM'
+      ]),
       init () {
         indexService.getNewGoodsList().then(res => {
           this.newGoodsList = res
@@ -58,19 +62,23 @@
         })
       }
     },
-    onLoad () {
+    onLoad (option) {
+      console.log(option)
+      if (option.from) {
+        this.SET_FROM(option.from)
+        console.log(option.from)
+      }
       this.init()
     },
     onPullDownRefresh () {
       this.init()
       mpvue.stopPullDownRefresh()
     },
-    // 原生的分享功能
     onShareAppMessage: function () {
       return {
-        title: '川湘苑',
-        desc: '川湘苑品牌中餐厅',
-        path: '/pages/index/index'
+        title: '川香苑',
+        desc: '川香苑品牌中餐厅',
+        path: '/pages/index/main'
       }
     }
   }

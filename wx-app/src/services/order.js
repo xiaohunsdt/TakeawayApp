@@ -6,7 +6,7 @@ import api from '@/utils/api'
 /**
  * 生成一个标准的订单
  */
-export function generateOrder (paymentWay, ps, appointmentDate) {
+export function generateOrder (paymentWay, ps, appointmentDate, from) {
   // orderItems,allCount,allPrice,
   // let allCount = 0
   // let allPrice = 0
@@ -17,7 +17,8 @@ export function generateOrder (paymentWay, ps, appointmentDate) {
   let order = {
     paymentWay,
     ps,
-    appointmentDate
+    appointmentDate,
+    from
   }
 
   return order

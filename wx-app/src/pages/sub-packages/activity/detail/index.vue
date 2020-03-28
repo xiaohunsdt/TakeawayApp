@@ -32,6 +32,13 @@
         activity: null
       }
     },
+    onShareAppMessage: function () {
+      return {
+        title: this.activity.title,
+        desc: '川香苑品牌中餐厅',
+        path: `/pages/sub-packages/activity/detail/main?activityId=${this.activityId}`
+      }
+    },
     methods: {
       init () {
         activityService.getActivityById(this.activityId).then(res => {
