@@ -24,6 +24,7 @@ public enum OrderExceptionEnum implements ServiceExceptionEnum {
     ORDER_NOT_FINISHED(500, "订单还没有完成!"),
     ORDER_STATE_ERROR(500, "当前的状态无法支持此操作!"),
     ORDER_CAN_NOT_CREATE_FOR_NOW(500,"当前时间段无法下单!"),
+    ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON(500,"已设置优惠卷，无法享受其他折扣!"),
     ORDER_BELOW_LOWEST_DELIVERY_PRICE(500, "订单金额低于起送价格!");
 
     OrderExceptionEnum(int code, String message) {
