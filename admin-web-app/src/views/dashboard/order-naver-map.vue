@@ -25,11 +25,11 @@
         :order="order"
         :key="order.id"
         :icon="{
-          content:`<div class='pin'>${order.number}</div>`
+          content:`<div class='pin-number'>${order.number}</div><div class='pin'></div><div class='pulse'></div>`
         }"
         @click="onMarkerClicked"
         @load="onMarkerLoaded"/>
-      <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="500"/>
+      <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="800"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>
@@ -127,19 +127,21 @@
     margin-bottom: 17px;
   }
 
-  body,
-  html {
-    height: 100%;
+  .pin-number {
+    position: relative;
+    z-index: 100;
+    font-weight: bolder;
+    color: red;
+    top: -4px;
+    left: -5px;
   }
-  body {
-    background: #2f2f2f;
-  }
+
   .pin {
     width: 30px;
     height: 30px;
     -webkit-border-radius: 50% 50% 50% 0;
     border-radius: 50% 50% 50% 0;
-    background: #80a1b6;
+    background: #3FAF3F;
     position: absolute;
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
@@ -165,16 +167,18 @@
     -ms-animation-duration: 1s;
     animation-duration: 1s;
   }
+
   .pin:after {
     content: '';
     width: 14px;
     height: 14px;
     margin: 8px 0 0 8px;
-    background: #30414c;
+    background: #328932;
     position: absolute;
     -webkit-border-radius: 50%;
     border-radius: 50%;
   }
+
   .pulse {
     background: rgba(0, 0, 0, 0.2);
     -webkit-border-radius: 50%;
@@ -192,6 +196,7 @@
     transform: rotateX(55deg);
     z-index: -2;
   }
+
   .pulse:after {
     content: "";
     -webkit-border-radius: 50%;
@@ -221,6 +226,7 @@
     -ms-animation-delay: 1.1s;
     animation-delay: 1.1s;
   }
+
   @-moz-keyframes pulsate {
     0% {
       -webkit-transform: scale(0.1, 0.1);
@@ -248,6 +254,7 @@
       filter: alpha(opacity=0);
     }
   }
+
   @-webkit-keyframes pulsate {
     0% {
       -webkit-transform: scale(0.1, 0.1);
@@ -275,6 +282,7 @@
       filter: alpha(opacity=0);
     }
   }
+
   @-o-keyframes pulsate {
     0% {
       -webkit-transform: scale(0.1, 0.1);
@@ -302,6 +310,7 @@
       filter: alpha(opacity=0);
     }
   }
+
   @keyframes pulsate {
     0% {
       -webkit-transform: scale(0.1, 0.1);
@@ -329,6 +338,7 @@
       filter: alpha(opacity=0);
     }
   }
+
   @-moz-keyframes bounce {
     0% {
       opacity: 0;
@@ -365,6 +375,7 @@
       transform: translateY(0) rotate(-45deg);
     }
   }
+
   @-webkit-keyframes bounce {
     0% {
       opacity: 0;
@@ -401,6 +412,7 @@
       transform: translateY(0) rotate(-45deg);
     }
   }
+
   @-o-keyframes bounce {
     0% {
       opacity: 0;
@@ -437,6 +449,7 @@
       transform: translateY(0) rotate(-45deg);
     }
   }
+
   @keyframes bounce {
     0% {
       opacity: 0;
