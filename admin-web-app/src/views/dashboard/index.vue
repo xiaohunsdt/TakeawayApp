@@ -1,20 +1,25 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ userData.name }}</div>
+<!--    <div class="dashboard-text">name: {{ userData.name }}</div>-->
+    <naver-map />
   </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+  import {mapGetters} from 'vuex'
+  import NaverMap from './order-naver-map'
 
-    export default {
-        name: 'Dashboard',
-        computed: {
-            ...mapGetters([
-                'userData'
-            ])
-        }
+  export default {
+    name: 'Dashboard',
+    components: {
+      NaverMap
+    },
+    computed: {
+      ...mapGetters([
+        'userData'
+      ])
     }
+  }
 </script>
 
 <style lang="scss" scoped>

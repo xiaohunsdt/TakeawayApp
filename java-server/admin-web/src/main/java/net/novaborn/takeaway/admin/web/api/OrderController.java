@@ -1,13 +1,12 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
+import net.novaborn.takeaway.admin.web.wrapper.OrderWrapperEx;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
@@ -15,6 +14,7 @@ import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
@@ -65,9 +65,16 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("getOrderListByState")
+    public ResponseEntity getOrderListByState(OrderStateEx orderState) {
+        List<Order> orderList = orderService.getTodayOrderByStateU(null, orderState);
+        return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
+    }
+
+    @ResponseBody
     @PostMapping("getOrderDetail")
     public ResponseEntity getOrderDetail(@RequestParam String orderId) {
-        Optional<Order> order = orderService.getById(orderId,true);
+        Optional<Order> order = orderService.getById(orderId, true);
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
     }

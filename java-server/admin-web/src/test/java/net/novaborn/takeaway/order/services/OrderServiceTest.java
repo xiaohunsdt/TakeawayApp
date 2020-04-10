@@ -50,8 +50,8 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListTest() {
-        Date start = DateUtil.parseDateTime("2020-03-21 14:20:00");
-        Date end = DateUtil.parseDateTime("2020-03-21 15:40:00");
+        Date start = DateUtil.parseDateTime("2020-04-08 12:40:00");
+        Date end = DateUtil.parseDateTime("2020-04-08 15:40:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
@@ -59,7 +59,7 @@ public class OrderServiceTest {
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
                 .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
                 .collect(Collectors.toList());
-//        orderList.stream().forEach(order-> System.out.println(order.getUserId()));
+        orderList.stream().forEach(order-> System.out.println(order.getUserId()));
         System.out.println(orderList.stream()
                 .map(order -> addressService.getById(order.getAddressId()).getPhone())
                 .collect(Collectors.joining(",")));

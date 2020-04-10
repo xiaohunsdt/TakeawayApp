@@ -23,13 +23,22 @@ import '@/permission' // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online! ! !
  */
-import { mockXHR } from '../mock'
+import {mockXHR} from '../mock'
+
+import naver from 'vue-naver-maps'
+
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+Vue.use(ElementUI, {locale})
+
+Vue.use(naver, {
+  clientID: 'jwsa1q8wp1',
+  useGovAPI: false, // 공공 클라우드 API 사용 (선택)
+  subModules: '' // 서브모듈 (선택)
+})
 
 Vue.config.productionTip = false
 Vue.prototype.$VUE_APP_BASE_API = process.env.VUE_APP_BASE_API
@@ -40,3 +49,6 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+
+
