@@ -186,6 +186,13 @@
 					"pathName": "pages/my/auth/main",
 					"query": "orderId=a086d5cc93a290db5ed67187fdf0f7d3",
 					"scene": null
+				},
+				{
+					"id": 19,
+					"name": "pages/index/main",
+					"pathName": "pages/index/main",
+					"query": "from=YONSEI",
+					"scene": 1011
 				}
 			]
 		}

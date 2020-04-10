@@ -4,7 +4,8 @@ const state = {
 
 const mutations = {
   SET_ADDRESS: (state, address) => {
-    state.currentAddress = Object.assign({}, address)
+    // state.currentAddress = Object.assign({}, address)
+    state.currentAddress = address
   }
 }
 

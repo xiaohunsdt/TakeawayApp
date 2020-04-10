@@ -3,6 +3,15 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <div id="header">
+        <base-panel v-if="from">
+          <div>
+            <van-notice-bar
+              scrollable="true"
+              text="延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!下单即可享受学联专属88折扣,刷卡鸭货不支持哦!小伙伴们加油!"
+              v-if="from==='YONSEI'"
+              wrapable/>
+          </div>
+        </base-panel>
         <base-panel>
           <div>
             <div v-if="address">
@@ -255,6 +264,9 @@
       },
       coupon () {
         return this.$store.getters.currentCoupon
+      },
+      from () {
+        return this.$store.getters.from
       }
     },
     data () {
@@ -332,6 +344,9 @@
       ...mapMutations('coupon', [
         'CLEAR_COUPON'
       ]),
+      ...mapMutations('from', [
+        'CLEAR_FROM'
+      ]),
       init () {
         Object.assign(this.$data, this.$options.data())
 
@@ -340,14 +355,14 @@
         cartGoodsList
           .filter(item => item.count > 0)
           .forEach(item => {
-          let orderItem = {}
-          orderItem.goodsId = item.goodsId
-          orderItem.goodsName = item.goods.name
-          orderItem.goodsThumb = item.goods.thumb
-          orderItem.goodsPrice = item.goods.price
-          orderItem.goodsCount = item.count
-          this.orderItems.push(orderItem)
-        })
+            let orderItem = {}
+            orderItem.goodsId = item.goodsId
+            orderItem.goodsName = item.goods.name
+            orderItem.goodsThumb = item.goods.thumb
+            orderItem.goodsPrice = item.goods.price
+            orderItem.goodsCount = item.count
+            this.orderItems.push(orderItem)
+          })
 
         // 获取预约时间项
         indexService.getAppointmentTimes()
@@ -409,7 +424,7 @@
       onSubmitOrder () {
         this.submitLoading = true
         orderService.createOrder(
-          orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment)),
+          orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment), this.from),
           this.orderItems,
           this.coupon,
           this.address
@@ -417,6 +432,7 @@
           this.submitLoading = false
           this.CLEAR_CART()
           this.CLEAR_COUPON()
+          this.CLEAR_FROM()
           this.orderId = res.message
           payService.payOrder(this.orderId, this.payWay)
         }).catch(res => {
@@ -442,7 +458,7 @@
         this.couponInfoTip = null
         this.couponInfoDetail = couponService.getCouponDetail(this.coupon)
         couponService.checkCouponDiscountPrice(
-          orderService.generateOrder(this.payWay),
+          orderService.generateOrder(this.payWay, null, null, this.from),
           this.orderItems,
           this.coupon
         ).then(res => {
