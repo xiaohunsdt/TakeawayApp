@@ -108,10 +108,17 @@ export const constantRoutes = [
         meta: { title: '预约订单', icon: 'order' }
       },
       {
+        path: 'map',
+        name: 'OrderMap',
+        // props: true,
+        component: () => import('@/views/order/order-map'),
+        meta: { title: '订单地图', icon: 'order' }
+      },
+      {
         path: 'comment',
         name: 'CommentManagement',
         // props: true,
-        component: () => import('@/views/order/comment/index'),
+        component: () => import('@/views/order/comment'),
         meta: { title: '评价管理', icon: 'goods' }
       }
     ]

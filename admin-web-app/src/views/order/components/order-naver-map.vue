@@ -44,8 +44,8 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import MapInfoWindow from './components/naver-map/MapInfoWindow'
-  import MapMarker from './components/naver-map/MapMarker'
+  import MapInfoWindow from './naver-map/MapInfoWindow'
+  import MapMarker from './naver-map/MapMarker'
 
   import orderApi from '@/api/order'
 
