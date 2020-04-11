@@ -12,8 +12,27 @@
         :marker="marker"
         ref="info-window">
         <div class="info-window-container">
-          <base-card>
-            {{info}}
+          <base-card v-if="selectedOrder">
+            <div>
+              {{selectedOrder.address.address}} {{selectedOrder.address.detail}}
+              <br/>
+              {{selectedOrder.address.phone}}
+            </div>
+            <div style="margin-top: 8px">
+              <el-button-group>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"
+                  v-clipboard:success="onCopySuccess"
+                  v-clipboard:error="onCopyError">
+                  复制地址
+                </el-button>
+                <el-button size="mini" type="primary"><a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
+                </el-button>
+                <el-button size="mini" type="success" @click="onFinishOrder(selectedOrder)">完成订单</el-button>
+              </el-button-group>
+            </div>
           </base-card>
         </div>
       </map-info-window>
@@ -43,6 +62,7 @@
 </template>
 
 <script>
+  import { Message } from 'element-ui'
   import BaseCard from '@/components/BaseCard'
   import MapInfoWindow from './naver-map/MapInfoWindow'
   import MapMarker from './naver-map/MapMarker'
@@ -59,7 +79,7 @@
     data() {
       return {
         height: 1000,
-        info: '',
+        selectedOrder: null,
         isOpen: false,
         marker: null,
         map: null,
@@ -90,9 +110,9 @@
       },
       onMarkerClicked(event) {
         if (event.order) {
-          this.info = `${event.order.address.address} ${event.order.address.detail} \r\n ${event.order.address.phone}`
+          this.selectedOrder = event.order
         } else {
-          this.info = ''
+          this.selectedOrder = null
         }
         // this.info = '1111111111111111111111111111111'
 
@@ -109,12 +129,46 @@
       },
       onMarkerLoaded(event) {
         this.marker = event.marker
+      },
+      getWaitEatOrderList(){
+        orderApi.getOrderListByState('WAIT_EAT').then(res => {
+          this.waitEatOrders = res
+        })
+      },
+      onCopySuccess() {
+        Message({
+          message: '复制成功',
+          type: 'success',
+          duration: 2 * 1000
+        })
+      },
+      onCopyError() {
+        Message({
+          message: '复制失败',
+          type: 'error',
+          duration: 2 * 1000
+        })
+      },
+      onFinishOrder(order) {
+        this.$confirm('确定当前订单已完成?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          orderApi.finishOrder(order.id)
+            .then(res => {
+              this.$message({
+                message: res.message,
+                type: 'success'
+              })
+              this.isOpen = false
+              this.getWaitEatOrderList()
+            })
+        })
       }
     },
     mounted() {
-      orderApi.getOrderListByState('WAIT_EAT').then(res => {
-        this.waitEatOrders = res
-      })
+      this.getWaitEatOrderList()
     }
   }
 </script>
@@ -131,7 +185,7 @@
     position: relative;
     z-index: 100;
     font-weight: bolder;
-    color: red;
+    color: black;
     top: -4px;
     left: -5px;
   }

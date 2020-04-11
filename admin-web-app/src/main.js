@@ -25,8 +25,6 @@ import '@/permission' // permission control
  */
 import {mockXHR} from '../mock'
 
-import naver from 'vue-naver-maps'
-
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
@@ -34,11 +32,16 @@ if (process.env.NODE_ENV === 'production') {
 // set ElementUI lang to EN
 Vue.use(ElementUI, {locale})
 
+import naver from 'vue-naver-maps'
 Vue.use(naver, {
   clientID: 'jwsa1q8wp1',
   useGovAPI: false, // 공공 클라우드 API 사용 (선택)
   subModules: '' // 서브모듈 (선택)
 })
+
+import VueClipboard from 'vue-clipboard2'
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
 Vue.prototype.$VUE_APP_BASE_API = process.env.VUE_APP_BASE_API
