@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity getAllGoodsList() {
         List<Goods> goodsList = goodsService.list().stream()
                 .filter(item -> !item.getState().equals(GoodsState.OFF))
+                .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new GoodsListDto(goodsList));
     }
