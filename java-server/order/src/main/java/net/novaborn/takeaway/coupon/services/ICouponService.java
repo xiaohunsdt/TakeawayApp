@@ -51,6 +51,8 @@ public interface ICouponService extends IService<Coupon> {
 
     void generateCoupon(CouponTemplate template, List<String> userIds, Integer count);
 
+    void generateCoupon(CouponTemplate template, List<String> userIds, Integer expireDays, Integer count);
+
     /**
      * 生成优惠卷
      *
@@ -61,12 +63,14 @@ public interface ICouponService extends IService<Coupon> {
 
     void generateCoupon(CouponTemplate template, String userId, Integer count);
 
+    void generateCoupon(CouponTemplate template, String userId, Integer expireDays, Integer count);
+
     /**
      * 获取优惠金额
      *
-     * @param order         订单中必须有优惠卷，支付方式，不然抛出异常
-     * @param orderItems    订单项
-     * @param couponId      优惠卷ID
+     * @param order      订单中必须有优惠卷，支付方式，不然抛出异常
+     * @param orderItems 订单项
+     * @param couponId   优惠卷ID
      * @return order 一个Order实例,里面包含折扣信息
      */
     Order getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId);
