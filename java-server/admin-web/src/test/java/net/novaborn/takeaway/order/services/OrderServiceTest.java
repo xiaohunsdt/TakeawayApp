@@ -50,8 +50,8 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListTest() {
-        Date start = DateUtil.parseDateTime("2020-04-08 12:40:00");
-        Date end = DateUtil.parseDateTime("2020-04-08 15:40:00");
+        Date start = DateUtil.parseDateTime("2020-04-17 11:00:00");
+        Date end = DateUtil.parseDateTime("2020-04-17 15:40:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));

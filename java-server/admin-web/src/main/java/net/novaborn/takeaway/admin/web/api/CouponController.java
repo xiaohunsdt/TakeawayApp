@@ -66,7 +66,7 @@ public class CouponController extends BaseController {
 
     @ResponseBody
     @PostMapping("generateCoupon")
-    public Tip generateCoupon(String templateId, String userIds, Integer count) {
+    public Tip generateCoupon(String templateId, String userIds,Integer expireDays, Integer count) {
         Optional<CouponTemplate> couponTemplate = Optional.ofNullable(couponTemplateService.getById(templateId));
         couponTemplate.orElseThrow(() -> new SysException(CouponTemplateExceptionEnum.HAVE_NO_THIS_TEMPLATE));
 
