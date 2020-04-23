@@ -61,6 +61,11 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
+    public void generateCoupon(CouponTemplate template, Integer expireDays, Integer count) {
+        this.generateCoupon(template, "", expireDays, 1);
+    }
+
+    @Override
     public void generateCoupon(CouponTemplate template, List<String> userIds, Integer expireDays, Integer count) {
         userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, expireDays, count));
     }
@@ -84,10 +89,15 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             target.setId(null);
             target.setCreateDate(null);
             target.setDeleted(null);
-            target.setUserId(userId);
+
+            if (!userId.isBlank()) {
+                target.setUserId(userId);
+            }
+
             if (expireDays != null && expireDays > 0) {
                 target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, expireDays));
             }
+
             target.insert();
         }
     }

@@ -225,7 +225,8 @@
         formData: {
           nickName: '',
           couponType: '',
-          couponState: ''
+          couponState: '',
+          bindState: 1
         },
         listLoading: false,
         tableData: []

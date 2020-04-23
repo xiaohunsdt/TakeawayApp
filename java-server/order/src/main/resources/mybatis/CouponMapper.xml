@@ -18,16 +18,25 @@
         SELECT * FROM `coupon`
         <where>
             <if test="args.userIds != null">
-                `user_id` IN
+                AND `user_id` IN
                 <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
                     #{id}
                 </foreach>
             </if>
             <if test="args.couponType != null and args.couponType != ''">
-                `coupon_type` = #{args.couponType}
+                AND `coupon_type` = #{args.couponType}
             </if>
             <if test="args.couponState != null and args.couponState != ''">
-                `coupon_state` = #{args.couponState}
+                AND `state` = #{args.couponState}
+            </if>
+            <if test="args.bindState != null">
+                <if test="args.bindState == 0">
+                    AND `user_id` is null
+                </if>
+
+                <if test="args.bindState == 1">
+                    AND `user_id` is not null
+                </if>
             </if>
             <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
                 AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
