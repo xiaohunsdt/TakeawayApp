@@ -29,12 +29,17 @@
     <base-card class="container-main">
       <el-table
         :data="tableData"
+        @selection-change="handleSelectionChange"
         class="tb-edit"
         element-loading-text="正在加载中..."
         highlight-current-row
         stripe
         style="width: 100%"
         v-loading="listLoading">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column type="expand">
           <template v-slot="props">
             <div class="template-expand">
@@ -216,7 +221,8 @@
           bindState: 0
         },
         listLoading: false,
-        tableData: []
+        tableData: [],
+        multipleSelection: []
       }
     },
     created() {
@@ -243,6 +249,9 @@
         this.page.current = val
         this.getList()
       },
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
       onSearch() {
         this.page.current = 1
         this.getList()
@@ -263,12 +272,12 @@
         this.$refs['generate-coupon-dialog'].openDialog()
       },
       exportToExecl() {
-        if (this.tableData.length > 0) {
+        if (this.multipleSelection.length > 0) {
           import('@/vendor/Export2Excel').then(excel => {
             // 导出的表头
             const tHeader = ['ID', '优惠卷名称', '优惠卷类型', '优惠卷面值', '优惠卷折扣', '最低消费', '过期日期']
             const filterVal = ['id', 'couponName', 'couponType', 'couponMoney', 'couponDiscount', 'minimumMoney', 'expireDate']
-            const data = this.formatJson(filterVal, this.tableData)
+            const data = this.formatJson(filterVal, this.multipleSelection)
             // 导出表头要对应的数据
             excel.export_json_to_excel({
               header: tHeader,
