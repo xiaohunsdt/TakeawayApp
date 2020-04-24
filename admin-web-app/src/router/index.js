@@ -161,6 +161,13 @@ export const constantRoutes = [
         meta: { title: '优惠券列表', icon: 'example' }
       },
       {
+        path: 'unbind',
+        name: 'UnBindCouponManagement',
+        // props: true,
+        component: () => import('@/views/coupon/unbind'),
+        meta: { title: '未兑换的优惠券', icon: 'example' }
+      },
+      {
         path: 'template',
         name: 'CouponTemplateManagement',
         // props: true,

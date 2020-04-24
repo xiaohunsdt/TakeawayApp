@@ -8,6 +8,7 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,14 @@ public interface ICouponService extends IService<Coupon> {
     void generateCoupon(CouponTemplate template, String userId, Integer count);
 
     void generateCoupon(CouponTemplate template, String userId, Integer expireDays, Integer count);
+
+    /**
+     * 绑定优惠卷
+     * @param userId
+     * @param couponId
+     * @return
+     */
+    boolean bindCoupon(String userId, String couponId);
 
     /**
      * 获取优惠金额
