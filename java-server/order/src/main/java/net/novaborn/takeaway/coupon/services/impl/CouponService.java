@@ -4,11 +4,13 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.coupon.dao.ICouponDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -101,7 +104,6 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             if (expireDays != null && expireDays > 0) {
                 target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, expireDays));
             }
-
             target.insert();
         }
     }
@@ -112,10 +114,18 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
 
         if (coupon.get().getUserId() != null) {
-           throw new SysException(CouponExceptionEnum.HAD_BOUND);
+            throw new SysException(CouponExceptionEnum.HAD_BOUND);
+        }
+
+        if (StrUtil.isBlank(userId)) {
+            throw new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER);
         }
 
         coupon.get().setUserId(userId);
+        if (coupon.get().getExpireDate() != null) {
+            long diffent = DateUtil.betweenMs(coupon.get().getCreateDate(), coupon.get().getExpireDate());
+            coupon.get().setExpireDate(DateUtil.offsetMillisecond(new Date(), (int) diffent));
+        }
         return coupon.get().updateById();
     }
 
