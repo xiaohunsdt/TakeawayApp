@@ -4,7 +4,11 @@
       <div class="info">
         <div class="description">{{coupon.couponName}}</div>
         <van-tag color="#FFD200">{{couponType}}</van-tag>
-        <div class="endDate">有限期至 <span v-if="coupon.expireDate">{{coupon.expireDate}}</span></div>
+        <div class="endDate">
+          有限期至
+          <span v-if="coupon.expireDate!==''">{{coupon.expireDate}}</span>
+          <span v-else>无限制</span>
+        </div>
       </div>
       <div class="priceInfo">
         <div class="price">
@@ -33,10 +37,10 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
   import BasePanel from '@/components/BasePanel'
-  import {formatCouponState, formatCouponType} from '@/utils/index'
-  import {getPages} from '@/utils/util'
+  import { formatCouponState, formatCouponType } from '@/utils/index'
+  import { getPages } from '@/utils/util'
 
   export default {
     name: 'CouponCard',

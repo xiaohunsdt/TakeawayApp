@@ -3,15 +3,15 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <div id="header">
-        <base-panel v-if="from">
-          <div>
-            <van-notice-bar
-              scrollable="true"
-              text="延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!下单即可享受学联专属88折扣,刷卡鸭货不支持哦!小伙伴们加油!"
-              v-if="from==='YONSEI'"
-              wrapable/>
-          </div>
-        </base-panel>
+<!--        <base-panel v-if="from">-->
+<!--          <div>-->
+<!--            <van-notice-bar-->
+<!--              scrollable="true"-->
+<!--              text="延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!下单即可享受学联专属88折扣,刷卡鸭货不支持哦!小伙伴们加油!"-->
+<!--              v-if="from==='YONSEI'"-->
+<!--              wrapable/>-->
+<!--          </div>-->
+<!--        </base-panel>-->
         <base-panel>
           <div>
             <div v-if="address">

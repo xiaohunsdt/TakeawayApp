@@ -59,7 +59,8 @@ const api = {
     order,
     orderItems,
     couponId
-  }, { headers: { 'Content-Type': 'application/json' } })
+  }, { headers: { 'Content-Type': 'application/json' } }),
+  exchangeCoupon: (couponId) => request.post('coupon/exchangeCoupon', { couponId })
 }
 
 export default api

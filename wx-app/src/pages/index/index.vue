@@ -17,9 +17,9 @@
             <swiper-item>
               <img class="itemImg" mode="widthFix" src="/static/images/banner/yiqing.png">
             </swiper-item>
-            <swiper-item>
-              <img @click="gotoActivity" class="itemImg" mode="widthFix" src="/static/images/banner/yonsei.jpg">
-            </swiper-item>
+<!--            <swiper-item>-->
+<!--              <img @click="gotoActivity" class="itemImg" mode="widthFix" src="/static/images/banner/yonsei.jpg">-->
+<!--            </swiper-item>-->
           </swiper>
         </div>
       </div>

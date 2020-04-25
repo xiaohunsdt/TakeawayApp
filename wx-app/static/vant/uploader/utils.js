@@ -1,6 +1,6 @@
-const IMAGE_EXT = ['jpeg', 'jpg', 'gif', 'png', 'svg'];
-export function isImageUrl(url) {
-    return IMAGE_EXT.some(ext => url.indexOf(`.${ext}`) !== -1);
+const IMAGE_REGEXP = /\.(jpeg|jpg|gif|png|svg|webp|jfif|bmp|dpg)/i;
+function isImageUrl(url) {
+    return IMAGE_REGEXP.test(url);
 }
 export function isImageFile(item) {
     if (item.type) {

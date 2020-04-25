@@ -45,9 +45,14 @@ export function getCouponDetail (coupon) {
   return detail
 }
 
+export function exchangeCoupon (couponId) {
+  return api.exchangeCoupon(couponId)
+}
+
 export default {
   getCouponListU,
   getCouponLogByOrderId,
   checkCouponDiscountPrice,
-  getCouponDetail
+  getCouponDetail,
+  exchangeCoupon
 }
