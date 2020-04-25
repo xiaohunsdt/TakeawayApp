@@ -2,7 +2,7 @@
   <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible" size="mini" title="生成优惠卷" width="600px">
     <el-form :model="formData">
       <el-form-item label="优惠卷模板" label-width="120">
-        <el-select placeholder="请选择优惠卷模板" v-model="formData.templateId">
+        <el-select placeholder="请选择优惠卷模板" v-model="formData.templateId" @change="onTemplateChange">
           <el-option
             :key="template.id"
             :label="template.couponName"
@@ -12,6 +12,9 @@
       </el-form-item>
       <el-form-item label="用户ID" label-width="120">
         <el-input :autosize="{ minRows: 5, maxRows: 15}" type="textarea" v-model="formData.userIds"></el-input>
+      </el-form-item>
+      <el-form-item label="到期天数" label-width="120">
+        <el-input v-model.number="formData.expireDays"></el-input>
       </el-form-item>
       <el-form-item label="优惠卷数量" label-width="120">
         <el-input v-model.number="formData.count"></el-input>
@@ -47,6 +50,7 @@
         formData: {
           templateId: '',
           userIds: '',
+          expireDays: 0,
           count: 1
         }
       }
@@ -75,6 +79,9 @@
               type: 'success'
             })
           })
+      },
+      onTemplateChange(event) {
+        this.formData.expireDays = this.templateArr.find(item => item.id === event).expireDays
       }
     }
   }

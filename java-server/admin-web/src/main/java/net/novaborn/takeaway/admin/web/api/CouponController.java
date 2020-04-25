@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,12 +63,17 @@ public class CouponController extends BaseController {
 
     @ResponseBody
     @PostMapping("generateCoupon")
-    public Tip generateCoupon(String templateId, String userIds, Integer count) {
+    public Tip generateCoupon(String templateId, String userIds, Integer expireDays, Integer count) {
         Optional<CouponTemplate> couponTemplate = Optional.ofNullable(couponTemplateService.getById(templateId));
         couponTemplate.orElseThrow(() -> new SysException(CouponTemplateExceptionEnum.HAVE_NO_THIS_TEMPLATE));
 
-        List<String> userIdArray = Arrays.asList(userIds.replaceAll("\r", "").split("\n"));
-        couponService.generateCoupon(couponTemplate.get(), userIdArray, count);
+        List<String> userIdArray = new ArrayList<>(List.of(userIds.replaceAll("\r", "").split("\n")));
+        userIdArray.removeAll(Arrays.asList("", null));
+        if (userIdArray.size() > 0) {
+            couponService.generateCoupon(couponTemplate.get(), userIdArray, expireDays, count);
+        } else {
+            couponService.generateCoupon(couponTemplate.get(), expireDays, count);
+        }
         return new SuccessTip();
     }
 

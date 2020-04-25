@@ -41,7 +41,7 @@ public class CouponTemplateController extends BaseController {
     @PostMapping("getTemplateListByPage")
     public ResponseEntity<Page> getTemplateListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page = (Page) couponTemplateService.getCouponTemplateListByPage(page, args);
-        page.setRecords((List)new CouponTemplateWrapper(page.getRecords()).warp());
+        page.setRecords((List) new CouponTemplateWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
@@ -56,8 +56,19 @@ public class CouponTemplateController extends BaseController {
     public Tip createNewTemplate(@Valid CouponTemplate couponTemplate) {
         boolean result;
 
-        if (couponTemplate.getCouponMoney() == 0 && couponTemplate.getCouponDiscount() == 0) {
-            throw new SysException(CouponTemplateExceptionEnum.HAVE_NO_MONEY_OR_DISCOUNT);
+        switch (couponTemplate.getCouponType()) {
+            case MONEY:
+                if (couponTemplate.getCouponMoney() == null || couponTemplate.getCouponMoney() == 0) {
+                    throw new SysException(CouponTemplateExceptionEnum.HAVE_NO_MONEY_OR_DISCOUNT);
+                }
+                break;
+            case DISCOUNT:
+                if (couponTemplate.getCouponDiscount() == null || couponTemplate.getCouponDiscount() == 0) {
+                    throw new SysException(CouponTemplateExceptionEnum.HAVE_NO_MONEY_OR_DISCOUNT);
+                }
+                break;
+            default:
+                throw new SysException(CouponTemplateExceptionEnum.ERROR_COUPON_TYPE);
         }
 
         if (StrUtil.isBlank(couponTemplate.getId())) {

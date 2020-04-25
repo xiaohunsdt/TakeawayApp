@@ -10,7 +10,9 @@ import lombok.Data;
 import net.novaborn.takeaway.coupon.enums.CouponType;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -37,11 +39,15 @@ public class CouponTemplate extends Model<CouponTemplate> {
     /**
      * 最小消费金额
      */
+    @NotNull(message = "最低消费:必须设置数值!最小为0,表示没有限制!")
+    @Min(value = 0, message = "最低消费:最小值为0,表示没有限制!")
     private Integer minimumMoney;
 
     /**
      * 可使用时间
      */
+    @NotNull(message = "过期天数:必须设置数值! 最小为0,表示没有限制!")
+    @Min(value = 0, message = "过期天数:最小值为0,表示没有限制!")
     private Integer expireDays;
 
     /**

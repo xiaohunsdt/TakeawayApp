@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.coupon.dao.ICouponDao;
 import net.novaborn.takeaway.coupon.entity.Coupon;
@@ -21,6 +22,7 @@ import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,10 +37,12 @@ import java.util.Optional;
  * @author xiaohun
  * @since 2019-09-20
  */
+@Controller
+@Setter(onMethod_ = {@Autowired})
 @Service
 public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements ICouponService {
-    @Autowired
-    GoodsService goodsService;
+
+    private GoodsService goodsService;
 
     @Override
     public List<Coupon> getCouponListByUserId(String userId, boolean onlyShowUseAble) {
@@ -61,12 +65,27 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
+    public void generateCoupon(CouponTemplate template, Integer expireDays, Integer count) {
+        this.generateCoupon(template, "", expireDays, count);
+    }
+
+    @Override
+    public void generateCoupon(CouponTemplate template, List<String> userIds, Integer expireDays, Integer count) {
+        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, expireDays, count));
+    }
+
+    @Override
     public void generateCoupon(CouponTemplate template, String userId) {
         this.generateCoupon(template, userId, 1);
     }
 
     @Override
     public void generateCoupon(CouponTemplate template, String userId, Integer count) {
+        this.generateCoupon(template, userId, template.getExpireDays(), 1);
+    }
+
+    @Override
+    public void generateCoupon(CouponTemplate template, String userId, Integer expireDays, Integer count) {
         for (int i = 0; i < count; i++) {
             Coupon target = new Coupon();
             BeanUtil.copyProperties(template, target, CopyOptions.create().setIgnoreNullValue(true));
@@ -74,12 +93,30 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             target.setId(null);
             target.setCreateDate(null);
             target.setDeleted(null);
-            target.setUserId(userId);
-            if (template.getExpireDays() > 0) {
-                target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, template.getExpireDays()));
+
+            if (!userId.isBlank()) {
+                target.setUserId(userId);
             }
+
+            if (expireDays != null && expireDays > 0) {
+                target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, expireDays));
+            }
+
             target.insert();
         }
+    }
+
+    @Override
+    public boolean bindCoupon(String userId, String couponId) {
+        Optional<Coupon> coupon = Optional.ofNullable(this.baseMapper.selectById(couponId));
+        coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
+
+        if (coupon.get().getUserId() != null) {
+           throw new SysException(CouponExceptionEnum.HAD_BOUND);
+        }
+
+        coupon.get().setUserId(userId);
+        return coupon.get().updateById();
     }
 
     @Override

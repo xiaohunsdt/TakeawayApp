@@ -28,7 +28,9 @@ public interface ICouponDao extends BaseMapper<Coupon> {
      *
      * @param page 分页实例
      * @param args userId 用户ID
-     *             state 优惠卷状态
+     *             couponType 优惠卷类型
+     *             couponState 优惠卷状态
+     *             bindState 是否已被用户绑定   0 未绑定    1 已绑定
      *             startDate endDate 范围时间
      * @return 优惠卷列表
      */

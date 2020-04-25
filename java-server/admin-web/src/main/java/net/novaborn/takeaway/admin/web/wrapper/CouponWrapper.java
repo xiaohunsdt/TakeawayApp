@@ -24,7 +24,9 @@ public class CouponWrapper extends BaseControllerWrapper {
         UserService userService = SpringContextHolder.getBean(UserService.class);
         User user = userService.getById((String) map.get("userId"));
 
-        map.put("nickName", user.getNickName());
+        if (user != null) {
+            map.put("nickName", user.getNickName());
+        }
 
         if (StrUtil.isNotBlank((String) map.get("allowCategory"))) {
             map.put("allowCategory", ((String) map.get("allowCategory")).split(","));
