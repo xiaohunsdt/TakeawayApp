@@ -174,7 +174,7 @@ public class OrderController extends BaseController {
         }
 
         // 处理订单不需要支付的情况
-        if (order.getRealPrice() == 0) {
+        if (order.getRealPrice() <= 0) {
             order.setPaymentWay(PaymentWay.CASH);
             order.setPayState(PayState.PAID);
         }
