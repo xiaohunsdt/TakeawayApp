@@ -43,26 +43,6 @@ public class GlobalExceptionHandler {
         return new ErrorTip(e.getCode(), e.getMessage());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorTip handleBindException1(MethodArgumentNotValidException e) {
-        return new ErrorTip(
-                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
-                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
-        );
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorTip handleBindException2(ConstraintViolationException e) {
-        return new ErrorTip(
-                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
-                SysExceptionEnum.ARGUMENT_VALID_ERROR.getMessage()
-        );
-    }
-
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -71,5 +51,16 @@ public class GlobalExceptionHandler {
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 e.getFieldError().getDefaultMessage()
         );
+    }
+
+    /**
+     * 拦截未知的运行时异常
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip error(Exception e) {
+        log.error("系统异常:" + e.getMessage(), e);
+        return new ErrorTip(-1, "系统异常:" + e.getMessage());
     }
 }

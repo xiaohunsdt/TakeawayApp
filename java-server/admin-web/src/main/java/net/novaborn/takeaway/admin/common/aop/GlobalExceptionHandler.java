@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.admin.common.aop;
 
+import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
@@ -48,5 +49,16 @@ public class GlobalExceptionHandler {
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 e.getFieldError().getDefaultMessage()
         );
+    }
+
+    /**
+     * 拦截未知的运行时异常
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip error(Exception e) {
+        log.error("系统异常:" + e.getMessage(), e);
+        return new ErrorTip(-1, "系统异常:" + e.getMessage());
     }
 }

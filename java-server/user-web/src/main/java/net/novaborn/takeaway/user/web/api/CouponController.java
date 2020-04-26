@@ -2,6 +2,7 @@ package net.novaborn.takeaway.user.web.api;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.coupon.entity.Coupon;
@@ -48,12 +49,24 @@ public class CouponController extends BaseController {
         return ResponseEntity.ok(new CouponWrapper(couponList).warp());
     }
 
-
     @ResponseBody
     @PostMapping("getCouponLogByOrderId")
     public Object getCouponLogByOrderId(@RequestParam String orderId) {
         List<CouponLog> couponLogList = couponLogService.getLogListByOrderId(orderId);
         return new CouponLogWrapper(couponLogList).warp();
+    }
+
+    @ResponseBody
+    @PostMapping("exchangeCoupon")
+    public Tip exchangeCoupon(@RequestParam String couponId) {
+        String openId = jwtTokenUtil.getUsernameFromToken(request);
+        Optional<User> user = userService.selectByOpenId(openId);
+
+        if (couponService.bindCoupon(user.get().getId(), couponId.trim())) {
+            return new SuccessTip();
+        } else {
+            return new ErrorTip(-1,"兑换失败!请联系客服!");
+        }
     }
 
     @ResponseBody
