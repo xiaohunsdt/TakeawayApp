@@ -3,6 +3,7 @@ package net.novaborn.takeaway.coupon.services.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -121,11 +122,11 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             throw new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER);
         }
 
-        coupon.get().setUserId(userId);
         if (coupon.get().getExpireDate() != null) {
-            long diffent = DateUtil.betweenMs(coupon.get().getCreateDate(), coupon.get().getExpireDate());
-            coupon.get().setExpireDate(DateUtil.offsetMillisecond(new Date(), (int) diffent));
+            long diffent = DateUtil.between(coupon.get().getCreateDate(), coupon.get().getExpireDate(), DateUnit.SECOND);
+            coupon.get().setExpireDate(DateUtil.offsetSecond(new Date(), (int) diffent));
         }
+        coupon.get().setUserId(userId);
         return coupon.get().updateById();
     }
 
