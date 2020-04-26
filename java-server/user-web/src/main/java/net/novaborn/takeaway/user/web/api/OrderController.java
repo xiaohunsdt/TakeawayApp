@@ -5,7 +5,6 @@ import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
@@ -172,6 +171,12 @@ public class OrderController extends BaseController {
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
             orderService.setDiscount(order, orderDto.getOrderItems(), orderDto.getCouponId());
+        }
+
+        // 处理订单不需要支付的情况
+        if (order.getRealPrice() == 0) {
+            order.setPaymentWay(PaymentWay.CASH);
+            order.setPayState(PayState.PAID);
         }
 
         //先生成订单，再生成订单产品详情

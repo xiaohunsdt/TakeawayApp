@@ -189,8 +189,15 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         if (discount > 0) {
             order.setDiscount((short) discount);
         }
-        order.setDiscountedPrices(discountedMoney);
-        order.setRealPrice(allPrice - discountedMoney);
+
+        if (allPrice - discountedMoney >= 0) {
+            order.setDiscountedPrices(discountedMoney);
+            order.setRealPrice(allPrice - discountedMoney);
+        } else {
+            order.setDiscountedPrices(discountedMoney);
+            order.setRealPrice(0);
+        }
+
         return order;
     }
 }
