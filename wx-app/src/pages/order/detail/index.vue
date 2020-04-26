@@ -60,12 +60,12 @@
             v-if="order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'">
             立刻付款
           </van-button>
-          <van-button
-            @click.stop="confirmGetFood"
-            color="#FFD200" custom-class="action-btn" round size="small"
-            v-if="order.payState !== 'UN_PAY' && (order.orderState=== 'WAITING_RECEIVE' || order.orderState=== 'PRODUCING' || order.orderState=== 'DELIVERING')">
-            确认取餐
-          </van-button>
+<!--          <van-button-->
+<!--            @click.stop="confirmGetFood"-->
+<!--            color="#FFD200" custom-class="action-btn" round size="small"-->
+<!--            v-if="order.payState !== 'UN_PAY' && (order.orderState=== 'WAITING_RECEIVE' || order.orderState=== 'PRODUCING' || order.orderState=== 'DELIVERING')">-->
+<!--            确认取餐-->
+<!--          </van-button>-->
           <van-button
             @click.stop="comment" color="#FFD200" custom-class="action-btn"
             round size="small"
