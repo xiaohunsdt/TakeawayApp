@@ -58,7 +58,7 @@ public class WxValidator implements IReqValidator {
             ((WxAuthRequest) credence).setOpenId(session.getOpenid());
             wxService.setSessionKey(session.getOpenid(), session.getSessionKey());
         } catch (WxErrorException e) {
-            log.error("", e);
+            log.error(null, e);
         }
         return true;
     }

@@ -18,6 +18,7 @@ import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class OrderController extends BaseController {
     private UserService userService;
 
     private OrderService orderService;
+
+    private OrderSmsUtil orderSmsUtil;
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
@@ -116,6 +119,8 @@ public class OrderController extends BaseController {
         if (!order.get().updateById()) {
             return new ErrorTip(-1, "操作失败!");
         }
+
+        orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
 
@@ -133,6 +138,8 @@ public class OrderController extends BaseController {
         if (!order.get().updateById()) {
             return new ErrorTip(-1, "操作失败!");
         }
+
+        orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
 
@@ -152,6 +159,8 @@ public class OrderController extends BaseController {
         if (!order.get().updateById()) {
             return new ErrorTip(-1, "操作失败!");
         }
+
+        orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
 

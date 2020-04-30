@@ -60,7 +60,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/index.html").addResourceLocations("classpath:/view/index.html");
         registry.addResourceHandler("/res/**").addResourceLocations("classpath:/res/");
 
-        log.info(String.format("upload文件夹为：%s", System.getProperty("user.dir") + File.separator + "upload" + File.separator));
+        log.info("upload文件夹为：{}", System.getProperty("user.dir") + File.separator + "upload" + File.separator);
         if (!"/".equals(System.getProperty("user.dir"))) {
             registry.addResourceHandler("/upload/**").addResourceLocations("file:" + System.getProperty("user.dir") + File.separator + "upload" + File.separator);
         } else {

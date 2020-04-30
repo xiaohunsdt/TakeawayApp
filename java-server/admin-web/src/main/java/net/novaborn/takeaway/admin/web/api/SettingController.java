@@ -97,7 +97,7 @@ public class SettingController extends BaseController {
                 try {
                     value = DateUtil.formatDateTime(sf.parse((String) value));
                 } catch (ParseException e) {
-                    log.error("", e);
+                    log.error(null, e);
                     throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
                 }
             }

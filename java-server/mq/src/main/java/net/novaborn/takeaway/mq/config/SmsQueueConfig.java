@@ -19,8 +19,8 @@ import java.util.Map;
  */
 @Configuration
 public class SmsQueueConfig {
-    public final static String QUEUE_NAME = "delayed.live.queue.sms";
-    public final static String EXCHANGE_NAME = "delayed.live.exchange.sms";
+    public final static String QUEUE_NAME = "direct.live.queue.sms";
+    public final static String EXCHANGE_NAME = "direct.live.exchange.sms";
 
     @Bean
     public Queue smsQueue() {

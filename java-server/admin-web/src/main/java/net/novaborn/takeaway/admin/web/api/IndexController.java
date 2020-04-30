@@ -77,7 +77,7 @@ public class IndexController extends BaseController {
                 //图片压缩
                 ImgUtil.compress(target, target, 0.1f);
             } catch (Exception e) {
-                log.error("", e);
+                log.error(null, e);
                 throw new SysException(SysExceptionEnum.UPLOAD_IMAGE_FAILED);
             }
         } else {

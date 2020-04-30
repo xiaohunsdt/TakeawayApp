@@ -1,8 +1,7 @@
 package net.novaborn.takeaway.mq.sender;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.coupon.entity.Coupon;
-import net.novaborn.takeaway.mq.config.CouponQueueConfig;
 import net.novaborn.takeaway.mq.config.SmsQueueConfig;
 import net.novaborn.takeaway.mq.dto.SmsDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -23,6 +22,6 @@ public class SmsSender {
     private RabbitTemplate rabbitTemplate;
 
     public void send(SmsDto sms) {
-        rabbitTemplate.convertAndSend(SmsQueueConfig.EXCHANGE_NAME, SmsQueueConfig.QUEUE_NAME, sms);
+        rabbitTemplate.convertAndSend(SmsQueueConfig.EXCHANGE_NAME, SmsQueueConfig.QUEUE_NAME, JSON.toJSONBytes(sms));
     }
 }

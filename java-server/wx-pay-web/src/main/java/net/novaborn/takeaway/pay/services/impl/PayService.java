@@ -48,7 +48,7 @@ public class PayService implements IPayService {
         try {
             result = wxPayService.createOrder(request);
         } catch (WxPayException e) {
-            log.error("", e);
+            log.error(null, e);
             SysException sysException = new SysException(PayExceptionEnum.PAY_CREATE_ERROR);
             sysException.setMessage(e.getErrCodeDes());
             throw sysException;
@@ -63,7 +63,7 @@ public class PayService implements IPayService {
         try {
             result = wxPayService.queryOrder(null, orderId);
         } catch (WxPayException e) {
-            log.error("", e);
+            log.error(null, e);
             SysException sysException = new SysException(PayExceptionEnum.QUERY_PAY_ERROR);
             sysException.setMessage(e.getErrCodeDes());
             throw sysException;
