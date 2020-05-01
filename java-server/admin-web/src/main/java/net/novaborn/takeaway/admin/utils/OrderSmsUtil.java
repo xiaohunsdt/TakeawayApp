@@ -36,12 +36,12 @@ public class OrderSmsUtil {
 
     private static Map<OrderState, String> orderStateStringMap = new HashMap<>();
 
-    private final int DELAY_TIME = 30;
+    private final int DELAY_TIME = 15;
 
     static {
-        orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
-        orderStateStringMap.put(OrderState.DELIVERING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已开始配送！请稍等片刻！\n详情请到订单详细页面查看");
-        orderStateStringMap.put(OrderState.FINISHED, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已完成！就餐过后请对本单进行评价！我们的服务离不开您的宝贵评价，感谢您的支持！");
+        orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n\n尊敬的顾客，您好！\n\n订单ID: %s\n\n已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
+        orderStateStringMap.put(OrderState.DELIVERING, "[川香苑系统消息]\n\n尊敬的顾客，您好！\n\n订单ID: %s\n\n已开始配送！请稍等片刻！\n详情请到订单详细页面查看");
+        orderStateStringMap.put(OrderState.FINISHED, "[川香苑系统消息]\n\n尊敬的顾客，您好！\n\n订单ID: %s\n\n已完成！就餐过后请对本单进行评价！我们的进步离不开您的宝贵意见，感谢您的支持！");
     }
 
     public OrderSmsUtil() {
