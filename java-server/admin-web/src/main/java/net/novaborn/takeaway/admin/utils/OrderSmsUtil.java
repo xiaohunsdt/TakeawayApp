@@ -39,9 +39,9 @@ public class OrderSmsUtil {
     private final int DELAY_TIME = 30;
 
     static {
-        orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
-        orderStateStringMap.put(OrderState.DELIVERING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单已开始配送！请稍等片刻！\n详情请到订单详细页面查看");
-        orderStateStringMap.put(OrderState.FINISHED, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单已完成！就餐过后请对本单进行评价！我们的服务离不开您的宝贵评价，感谢您的支持！");
+        orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
+        orderStateStringMap.put(OrderState.DELIVERING, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已开始配送！请稍等片刻！\n详情请到订单详细页面查看");
+        orderStateStringMap.put(OrderState.FINISHED, "[川香苑系统消息]\n尊敬的顾客您好！\n您的订单: %s\n已完成！就餐过后请对本单进行评价！我们的服务离不开您的宝贵评价，感谢您的支持！");
     }
 
     public OrderSmsUtil() {
@@ -104,7 +104,9 @@ public class OrderSmsUtil {
 
                     Order _order = orderService.getById(take.order.getId());
                     Address address = addressService.getById(_order.getAddressId());
-                    smsSender.send(new SmsDto(address.getPhone(), orderStateStringMap.get(_order.getOrderState())));
+                    String msg = String.format(orderStateStringMap.get(_order.getOrderState()), _order.getId());
+
+                    smsSender.send(new SmsDto(address.getPhone(), msg));
                 } catch (InterruptedException e) {
                     log.error(null, e);
                 }
