@@ -54,6 +54,19 @@ export function getWaitingReceiveOrderCount(deliveryType) {
   })
 }
 
+export function editOrder(data) {
+  return request({
+    url: '/order/editOrder',
+    method: 'post',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    data,
+    transformRequest: [function (data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
 export function printOrder(order) {
   const orderId = order.id
   return request({
@@ -152,6 +165,7 @@ export default {
   getOrderListByState,
   getOrderDetail,
   getWaitingReceiveOrderCount,
+  editOrder,
   printOrder,
   confirmPay,
   receiveOrder,

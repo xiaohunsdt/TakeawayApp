@@ -1,9 +1,12 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapperEx;
@@ -17,8 +20,8 @@ import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,8 @@ public class OrderController extends BaseController {
     private UserService userService;
 
     private OrderService orderService;
+
+    private OrderItemService orderItemService;
 
     private OrderSmsUtil orderSmsUtil;
 
@@ -86,6 +91,27 @@ public class OrderController extends BaseController {
     @RequestMapping("getWaitingReceiveOrderCount")
     public int getWaitingReceiveOrderCount(@RequestParam(required = false) DeliveryType deliveryType) {
         return orderService.getWaitingReceiveOrderCount(deliveryType);
+    }
+
+    @ResponseBody
+    @PostMapping("editOrder")
+    public Tip editOrder(@ModelAttribute Order order) {
+        Optional<Order> targetOrder = Optional.ofNullable(orderService.getById(order.getId()));
+        targetOrder.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        if (targetOrder.get().getOrderState() == OrderState.FINISHED || targetOrder.get().getOrderState() == OrderState.REFUND || targetOrder.get().getOrderState() == OrderState.EXPIRED) {
+            throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        if (!order.getDiscount().equals(targetOrder.get().getDiscount())) {
+            orderService.setDiscount(targetOrder.get(), orderItemService.selectByOrderId(targetOrder.get().getId()), order.getDiscount());
+        }
+        BeanUtil.copyProperties(order, targetOrder.get(), CopyOptions.create().setIgnoreNullValue(true));
+
+        if (!targetOrder.get().updateById()) {
+            return new ErrorTip(-1, "操作失败!");
+        }
+        return new SuccessTip();
     }
 
     @ResponseBody

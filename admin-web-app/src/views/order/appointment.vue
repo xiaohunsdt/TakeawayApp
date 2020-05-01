@@ -234,7 +234,7 @@
           <template v-slot="scope">
             <div class="action-btns">
               <el-button
-                @click="onEditOrder(scope.row)"
+                @click="onEditOrder(scope.row.id)"
                 size="mini"
                 type="primary"
                 v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'">编辑
@@ -301,11 +301,13 @@
         style="margin-top: 15px">
       </el-pagination>
     </base-card>
+    <edit-order-dialog ref="edit-order-dialog"/>
   </div>
 </template>
 
 <script>
   import BaseCard from '@/components/BaseCard'
+  import EditOrderDialog from './components/EditOrderDialog'
   import orderApi from '@/api/order'
   import {formatOrderState, formatPaymentWay, formatPayState, parseTime} from '@/utils/index'
 
@@ -323,7 +325,8 @@
       }
     },
     components: {
-      BaseCard
+      BaseCard,
+      EditOrderDialog
     },
     data() {
       return {
@@ -396,8 +399,8 @@
         this.page.current = 1
         this.getList()
       },
-      onEditOrder(order) {
-        console.log(order)
+      onEditOrder(orderId) {
+        this.$refs['edit-order-dialog'].openDialog(orderId)
       },
       onPrintOrder(order) {
         const loading = this.$loading({
