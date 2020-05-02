@@ -40,6 +40,18 @@ public class PayController extends BaseController {
         return result;
     }
 
+    @PostMapping("closeOrder")
+    @ResponseBody
+    public WxPayMpOrderResult closeOrder(@RequestParam String orderId) throws WxPayException {
+        String openId = jwtTokenUtil.getUsernameFromToken(request);
+
+        WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
+        log.info("订单:{},创建微信支付预信息成功!!", orderId);
+
+        orderPayStatusSender.send(orderId, 30);
+        return result;
+    }
+
     @RequestMapping("confirmOrder")
     @ResponseBody
     public SuccessTip confirmOrder(@RequestParam String orderId) {
