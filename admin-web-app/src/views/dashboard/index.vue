@@ -1,15 +1,53 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ userData.name }}</div>
+    <!--    <div class="dashboard-text">name: {{ userData.name }}</div>-->
+    <panel-group/>
+    <panel-group2/>
+    <base-card style="margin: 20px 15px 0px 15px">
+      <line-chart style="margin-top: 20px"/>
+    </base-card>
+    <el-row :gutter="30" style="margin-top: 30px;padding: 0 15px">
+      <el-col :lg="8" :sm="24" :xs="24">
+        <base-card>
+          <pie-chart/>
+        </base-card>
+      </el-col>
+      <el-col :lg="8" :sm="24" :xs="24">
+        <base-card>
+          <bar-chart/>
+        </base-card>
+      </el-col>
+      <el-col :lg="8" :sm="24" :xs="24">
+        <base-card>
+          <order-naver-map :height="300"/>
+        </base-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
   import {mapGetters} from 'vuex'
+  import BaseCard from '@/components/BaseCard'
+
+  import PanelGroup from './components/PanelGroup'
+  import PanelGroup2 from './components/PanelGroup2'
+  import LineChart from './components/LineChart'
+  import PieChart from './components/PieChart'
+  import BarChart from './components/BarChart'
+  import OrderNaverMap from '../order/components/order-naver-map'
 
   export default {
     name: 'Dashboard',
-
+    components: {
+      BaseCard,
+      PanelGroup,
+      PanelGroup2,
+      LineChart,
+      PieChart,
+      BarChart,
+      OrderNaverMap
+    },
     computed: {
       ...mapGetters([
         'userData'
@@ -19,9 +57,12 @@
 </script>
 
 <style lang="scss" scoped>
+  $bg: #F3F3F9;
+
   .dashboard {
     &-container {
-      margin: 30px;
+      background-color: $bg;
+      min-height: inherit;
     }
 
     &-text {

@@ -4,17 +4,11 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="wechat-pay"/>
+            <svg-icon class-name="card-panel-icon" icon-class="waiting"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              总金额
-            </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              订单数
+              待配送
             </div>
             <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
           </div>
@@ -24,17 +18,11 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="alipay"/>
+            <svg-icon class-name="card-panel-icon" icon-class="delivery"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              总金额
-            </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              订单数
+              配送中
             </div>
             <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
           </div>
@@ -44,17 +32,11 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="card"/>
+            <svg-icon class-name="card-panel-icon" icon-class="finish"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              总金额
-            </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              订单数
+              已完成
             </div>
             <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
           </div>
@@ -64,17 +46,11 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="cash"/>
+            <svg-icon class-name="card-panel-icon" icon-class="total"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              总金额
-            </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              订单数
+              总订单
             </div>
             <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
           </div>
@@ -126,12 +102,12 @@
         }
 
         .icon-money {
-          background: #f4516c;
+          background: #34bfa3;
         }
       }
 
       .icon-money {
-        color: #f4516c;
+        color: #34bfa3;
       }
 
       .card-panel-icon-wrapper {

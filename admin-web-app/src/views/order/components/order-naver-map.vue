@@ -2,14 +2,14 @@
   <div>
     <naver-maps
       :height="height"
-      :mapOptions="mapOptions"
       :initLayers="initLayers"
+      :mapOptions="mapOptions"
       @load="onLoad">
       <map-info-window
-        class="info-window"
-        @load="onWindowLoad"
         :isOpen="isOpen"
         :marker="marker"
+        @load="onWindowLoad"
+        class="info-window"
         ref="info-window">
         <div class="info-window-container">
           <base-card v-if="selectedOrder">
@@ -24,13 +24,13 @@
                   size="mini"
                   type="primary"
                   v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"
-                  v-clipboard:success="onCopySuccess"
-                  v-clipboard:error="onCopyError">
+                  v-clipboard:error="onCopyError"
+                  v-clipboard:success="onCopySuccess">
                   复制地址
                 </el-button>
                 <el-button size="mini" type="primary"><a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
                 </el-button>
-                <el-button size="mini" type="success" @click="onFinishOrder(selectedOrder)">完成订单</el-button>
+                <el-button @click="onFinishOrder(selectedOrder)" size="mini" type="success">完成订单</el-button>
               </el-button-group>
             </div>
           </base-card>
@@ -38,16 +38,16 @@
       </map-info-window>
       <map-marker :lat="mapOptions.lat" :lng="mapOptions.lng" @click="onMarkerClicked" @load="onMarkerLoaded"/>
       <map-marker
-        v-for="order in waitEatOrders"
-        :lat="order.address.y"
-        :lng="order.address.x"
-        :order="order"
-        :key="order.id"
         :icon="{
           content:`<div class='pin-number'>${order.number}</div><div class='pin'></div><div class='pulse'></div>`
         }"
+        :key="order.id"
+        :lat="order.address.y"
+        :lng="order.address.x"
+        :order="order"
         @click="onMarkerClicked"
-        @load="onMarkerLoaded"/>
+        @load="onMarkerLoaded"
+        v-for="order in waitEatOrders"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="800"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>
       <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import { Message } from 'element-ui'
+  import {Message} from 'element-ui'
   import BaseCard from '@/components/BaseCard'
   import MapInfoWindow from './naver-map/MapInfoWindow'
   import MapMarker from './naver-map/MapMarker'
@@ -71,6 +71,12 @@
 
   export default {
     name: 'NaverMap',
+    props: {
+      height: {
+        type: Number,
+        default: 1000
+      }
+    },
     components: {
       BaseCard,
       MapInfoWindow,
@@ -78,7 +84,6 @@
     },
     data() {
       return {
-        height: 1000,
         selectedOrder: null,
         isOpen: false,
         marker: null,
@@ -130,7 +135,7 @@
       onMarkerLoaded(event) {
         this.marker = event.marker
       },
-      getWaitEatOrderList(){
+      getWaitEatOrderList() {
         orderApi.getOrderListByState('WAIT_EAT').then(res => {
           this.waitEatOrders = res
         })
