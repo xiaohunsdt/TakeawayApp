@@ -47,7 +47,7 @@
         <if test="args.orderState != null and args.orderState != ''">
             AND `order_state` = #{args.orderState}
         </if>
-        <if test="args.deliveryType == null or args.deliveryType == 'normal'">
+        <if test="args.deliveryType != null and args.deliveryType == 'normal'">
             AND `appointment_date` is null
         </if>
         <if test="args.deliveryType != null and args.deliveryType == 'appointment'">

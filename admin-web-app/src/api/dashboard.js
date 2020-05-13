@@ -1,21 +1,13 @@
 import request from '@/utils/request'
 // import Qs from 'qs'
 
-export function getRebate() {
+export function getDashboardData() {
   return request({
-    url: '/marketer/getRebate',
-    method: 'get'
-  })
-}
-
-export function getRecentCalculateHistory() {
-  return request({
-    url: '/marketer/getRecentCalculateHistory',
+    url: '/getDashboardData',
     method: 'get'
   })
 }
 
 export default {
-  getRebate,
-  getRecentCalculateHistory
+  getDashboardData
 }

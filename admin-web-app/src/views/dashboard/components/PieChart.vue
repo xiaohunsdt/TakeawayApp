@@ -21,6 +21,10 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    dashboardData: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -57,17 +61,17 @@ export default {
         },
         series: [
           {
-            name: '今日支付方式占比',
+            name: '今日支付占比',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: '微信' },
-              { value: 240, name: '支付宝' },
-              { value: 149, name: '通帐转账' },
-              { value: 100, name: '现金' },
-              { value: 59, name: '刷卡' }
+              { value: this.dashboardData.wechatOrderAllCount, name: '微信' },
+              { value: this.dashboardData.alipayOrderAllCount, name: '支付宝' },
+              { value: this.dashboardData.transferOrderAllCount, name: '通帐转账' },
+              { value: this.dashboardData.creditOrderAllCount, name: '现金' },
+              { value: this.dashboardData.cashOrderAllCount, name: '刷卡' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

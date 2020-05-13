@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20" class="panel-group">
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
-        <div class="card-panel">
+        <div @click="onCardClick(null,'WEIXIN_PAY')" class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon class-name="card-panel-icon" icon-class="wechat-pay"/>
           </div>
@@ -10,19 +10,21 @@
             <div class="card-panel-text">
               总金额
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.wechatOrderAllPrice" :start-val="0"
+                      class="card-panel-num"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               订单数
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.wechatOrderAllCount" :start-val="0"
+                      class="card-panel-num"/>
           </div>
         </div>
       </el-col>
 
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
-        <div class="card-panel">
+        <div @click="onCardClick(null,'ALI_PAY')" class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon class-name="card-panel-icon" icon-class="alipay"/>
           </div>
@@ -30,19 +32,43 @@
             <div class="card-panel-text">
               总金额
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.alipayOrderAllPrice" :start-val="0"
+                      class="card-panel-num"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               订单数
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.alipayOrderAllCount" :start-val="0"
+                      class="card-panel-num"/>
           </div>
         </div>
       </el-col>
 
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
-        <div class="card-panel">
+        <div @click="onCardClick(null,'TRANSFER')" class="card-panel">
+          <div class="card-panel-icon-wrapper icon-money">
+            <svg-icon class-name="card-panel-icon" icon-class="transfer"/>
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              总金额
+            </div>
+            <count-to :duration="3200" :end-val="dashboardData.transferOrderAllPrice" :start-val="0"
+                      class="card-panel-num"/>
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              订单数
+            </div>
+            <count-to :duration="3200" :end-val="dashboardData.transferOrderAllCount" :start-val="0"
+                      class="card-panel-num"/>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
+        <div @click="onCardClick(null,'CREDIT_CARD')" class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon class-name="card-panel-icon" icon-class="card"/>
           </div>
@@ -50,19 +76,21 @@
             <div class="card-panel-text">
               总金额
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.creditOrderAllPrice" :start-val="0"
+                      class="card-panel-num"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               订单数
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.creditOrderAllCount" :start-val="0"
+                      class="card-panel-num"/>
           </div>
         </div>
       </el-col>
 
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
-        <div class="card-panel">
+        <div @click="onCardClick(null,'CASH')" class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
             <svg-icon class-name="card-panel-icon" icon-class="cash"/>
           </div>
@@ -70,32 +98,68 @@
             <div class="card-panel-text">
               总金额
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.cashOrderAllPrice" :start-val="0"
+                      class="card-panel-num"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               订单数
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.cashOrderAllCount" :start-val="0"
+                      class="card-panel-num"/>
+          </div>
+        </div>
+      </el-col>
+
+      <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
+        <div @click="onCardClick(null,null)" class="card-panel">
+          <div class="card-panel-icon-wrapper icon-money">
+            <svg-icon class-name="card-panel-icon" icon-class="total"/>
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              总金额
+            </div>
+            <count-to :duration="3200" :end-val="dashboardData.allPrice" :start-val="0" class="card-panel-num"/>
+          </div>
+          <div class="card-panel-description">
+            <div class="card-panel-text">
+              总订单
+            </div>
+            <count-to :duration="3200" :end-val="dashboardData.allCount" :start-val="0" class="card-panel-num"/>
           </div>
         </div>
       </el-col>
     </el-row>
+    <simple-order-dialog ref="simple-order-dialog"/>
   </div>
 </template>
 
 <script>
   import CountTo from 'vue-count-to'
-  import {mapGetters} from 'vuex'
+  import SimpleOrderDialog from './SimpleOrderDialog'
+  import { mapGetters } from 'vuex'
 
   export default {
+    props: {
+      dashboardData: {
+        type: Object,
+        required: true
+      }
+    },
     components: {
-      CountTo
+      CountTo,
+      SimpleOrderDialog
     },
     computed: {
       ...mapGetters([
         'userData'
       ])
+    },
+    methods: {
+      onCardClick(orderState, paymentWay) {
+        this.$refs['simple-order-dialog'].openDialog(orderState, paymentWay)
+      }
     }
   }
 </script>

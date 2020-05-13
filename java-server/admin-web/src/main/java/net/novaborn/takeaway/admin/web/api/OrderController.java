@@ -15,10 +15,7 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.DeliveryType;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PayState;
+import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
@@ -67,6 +64,14 @@ public class OrderController extends BaseController {
             }
         }
 
+        if (StrUtil.isNotBlank((String)args.get("paymentWay"))) {
+            args.put("paymentWay", (PaymentWay.valueOf((String) args.get("paymentWay"))).getCode());
+        }
+
+        if (StrUtil.isNotBlank((String)args.get("orderState"))) {
+            args.put("orderState", (OrderState.valueOf((String) args.get("orderState"))).getCode());
+        }
+
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
@@ -81,7 +86,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getTodayOrderList")
-    public ResponseEntity getTodayOrderList(){
+    public ResponseEntity getTodayOrderList() {
         List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
                 .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
                 .collect(Collectors.toList());

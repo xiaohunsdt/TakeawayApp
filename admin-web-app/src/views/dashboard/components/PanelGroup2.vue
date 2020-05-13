@@ -10,7 +10,7 @@
             <div class="card-panel-text">
               待配送
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.waitDeliveryCount" :start-val="0" class="card-panel-num"/>
           </div>
         </div>
       </el-col>
@@ -24,7 +24,7 @@
             <div class="card-panel-text">
               配送中
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.deliveringCount" :start-val="0" class="card-panel-num"/>
           </div>
         </div>
       </el-col>
@@ -38,7 +38,7 @@
             <div class="card-panel-text">
               已完成
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.finishCount" :start-val="0" class="card-panel-num"/>
           </div>
         </div>
       </el-col>
@@ -46,13 +46,13 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="total"/>
+            <svg-icon class-name="card-panel-icon" icon-class="finish"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              总订单
+              已退款
             </div>
-            <count-to :duration="3200" :end-val="userData.money" :start-val="0" class="card-panel-num"/>
+            <count-to :duration="3200" :end-val="dashboardData.refundCount" :start-val="0" class="card-panel-num"/>
           </div>
         </div>
       </el-col>
@@ -65,6 +65,12 @@
   import {mapGetters} from 'vuex'
 
   export default {
+    props: {
+      dashboardData: {
+        type: Object,
+        required: true
+      }
+    },
     components: {
       CountTo
     },

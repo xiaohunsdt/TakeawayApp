@@ -14,23 +14,23 @@
         <el-form-item label="支付方式">
           <el-select placeholder="选择支付方式" v-model="formData.paymentWay">
             <el-option :value="null" label="所有"/>
-            <el-option :value="0" label="账户余额"/>
-            <el-option :value="1" label="通帐转帐"/>
-            <el-option :value="2" label="微信支付"/>
-            <el-option :value="3" label="支付宝支付"/>
-            <el-option :value="4" label="刷卡支付"/>
-            <el-option :value="5" label="现金支付"/>
+            <el-option value="BALANCE" label="账户余额"/>
+            <el-option value="TRANSFER" label="通帐转帐"/>
+            <el-option value="WEIXIN_PAY" label="微信支付"/>
+            <el-option value="ALI_PAY" label="支付宝支付"/>
+            <el-option value="CREDIT_CARD" label="刷卡支付"/>
+            <el-option value="CASH" label="现金支付"/>
           </el-select>
         </el-form-item>
         <el-form-item label="订单状态">
           <el-select placeholder="选择订单状态" v-model="formData.orderState">
             <el-option :value="null" label="所有"/>
-            <el-option :value="0" label="等待接单"/>
-            <el-option :value="1" label="生产中"/>
-            <el-option :value="2" label="配送中"/>
-            <el-option :value="3" label="已完成"/>
-            <el-option :value="4" label="退款"/>
-            <el-option :value="5" label="过期"/>
+            <el-option value="WAITING_RECEIVE" label="等待接单"/>
+            <el-option value="PRODUCING" label="生产中"/>
+            <el-option value="DELIVERING" label="配送中"/>
+            <el-option value="FINISHED" label="已完成"/>
+            <el-option value="REFUND" label="退款"/>
+            <el-option value="EXPIRED" label="过期"/>
           </el-select>
         </el-form-item>
         <el-form-item label="显示删除">
