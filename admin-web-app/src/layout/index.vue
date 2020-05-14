@@ -91,6 +91,7 @@
       this.normalOrderAudio.autoplay = false
       this.normalOrderAudio.loop = false
       this.normalOrderAudio.id = 'audio'
+      this.normalOrderAudio.volume = 0.2
       this.normalOrderAudio.src = require('@/assets/voice/order.mp3')
       this.timer = setInterval(this.getWaitingReceiveNormalOrderCount, 1000 * 10)
 
@@ -100,6 +101,7 @@
       this.appointmentOrderAudio.autoplay = false
       this.appointmentOrderAudio.loop = false
       this.appointmentOrderAudio.id = 'audio'
+      this.normalOrderAudio.volume = 0.2
       this.appointmentOrderAudio.src = require('@/assets/voice/order-appointment.mp3')
       setTimeout(() => {
         this.timer = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
