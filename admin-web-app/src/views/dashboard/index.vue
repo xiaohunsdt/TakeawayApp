@@ -1,33 +1,35 @@
 <template>
-  <div class="dashboard-container">
-    <!--    <div class="dashboard-text">name: {{ userData.name }}</div>-->
-    <panel-group/>
-    <panel-group2/>
-    <base-card style="margin: 20px 15px 0px 15px">
-      <line-chart style="margin-top: 20px"/>
-    </base-card>
-    <el-row :gutter="30" style="margin-top: 30px;padding: 0 15px">
-      <el-col :lg="8" :sm="24" :xs="24">
-        <base-card>
-          <pie-chart/>
+    <div class="dashboard-container">
+        <!--    <div class="dashboard-text">name: {{ userData.name }}</div>-->
+        <panel-group/>
+        <panel-group2/>
+        <base-card style="margin: 20px 15px 0px 15px">
+            <line-chart style="margin-top: 20px"/>
         </base-card>
-      </el-col>
-      <el-col :lg="8" :sm="24" :xs="24">
-        <base-card>
-          <bar-chart/>
-        </base-card>
-      </el-col>
-      <el-col :lg="8" :sm="24" :xs="24">
-        <base-card>
-          <order-naver-map :height="300"/>
-        </base-card>
-      </el-col>
-    </el-row>
-  </div>
+        <el-row :gutter="30" style="margin-top: 30px;padding: 0 15px">
+            <el-col :lg="8" :sm="24" :xs="24">
+                <base-card>
+                    <pie-chart/>
+                </base-card>
+            </el-col>
+            <el-col :lg="8" :sm="24" :xs="24">
+                <base-card>
+                    <bar-chart/>
+                </base-card>
+            </el-col>
+            <el-col :lg="8" :sm="24" :xs="24">
+                <base-card>
+                    <order-naver-map
+                            :height="300"
+                            :all-order="true"/>
+                </base-card>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
   import BaseCard from '@/components/BaseCard'
 
   import PanelGroup from './components/PanelGroup'
@@ -57,17 +59,17 @@
 </script>
 
 <style lang="scss" scoped>
-  $bg: #F3F3F9;
+    $bg: #F3F3F9;
 
-  .dashboard {
-    &-container {
-      background-color: $bg;
-      min-height: inherit;
-    }
+    .dashboard {
+        &-container {
+            background-color: $bg;
+            min-height: inherit;
+        }
 
-    &-text {
-      font-size: 30px;
-      line-height: 46px;
+        &-text {
+            font-size: 30px;
+            line-height: 46px;
+        }
     }
-  }
 </style>

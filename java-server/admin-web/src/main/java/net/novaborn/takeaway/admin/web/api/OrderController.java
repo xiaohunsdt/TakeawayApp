@@ -73,9 +73,18 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("getOrderListByState")
-    public ResponseEntity getOrderListByState(OrderStateEx orderState) {
+    @PostMapping("getTodayOrderListByState")
+    public ResponseEntity getTodayOrderListByState(OrderStateEx orderState) {
         List<Order> orderList = orderService.getTodayOrderByStateU(null, orderState);
+        return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
+    }
+
+    @ResponseBody
+    @PostMapping("getTodayOrderList")
+    public ResponseEntity getTodayOrderList(){
+        List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
+                .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
     }
 
