@@ -24,28 +24,5 @@ public class GoodsServiceTest {
 
     @Autowired
     OrderItemService orderItemService;
-
-    @Test
-    public void getGoodsSale() {
-//        List<Goods> goodsList = goodsService.list();
-        TreeMap<String, Integer> goodsSale = new TreeMap<>();
-
-        orderService.list().stream()
-                .filter(order -> order.getOrderState() == OrderState.FINISHED)
-                .forEach(order -> {
-                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                        Integer count = orderItem.getGoodsCount();
-                        if (goodsSale.containsKey(orderItem.getGoodsName())) {
-                            count += goodsSale.get(orderItem.getGoodsName());
-                        }
-                        goodsSale.put(orderItem.getGoodsName(), count);
-                    });
-                });
-
-        List<Map.Entry<String,Integer>> list = new ArrayList<>(goodsSale.entrySet());
-        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-        System.out.println(list);
-
-    }
 }
 

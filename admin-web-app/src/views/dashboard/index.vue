@@ -14,7 +14,7 @@
             </el-col>
             <el-col :lg="8" :sm="24" :xs="24">
                 <base-card>
-                    <bar-chart/>
+                    <bar-chart :dashboardData="dashboardData" v-if="dashboardData"/>
                 </base-card>
             </el-col>
             <el-col :lg="8" :sm="24" :xs="24">

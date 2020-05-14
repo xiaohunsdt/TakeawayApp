@@ -19,10 +19,7 @@ import net.novaborn.takeaway.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * <p>
@@ -36,6 +33,8 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
+    private OrderItemService orderItemService;
+
     private GoodsService goodsService;
 
     private CouponService couponService;
@@ -133,5 +132,26 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setGoodsCount(allCount);
         order.setAllPrice(allPrice);
         order.setRealPrice(allPrice);
+    }
+
+    @Override
+    public List<Map.Entry<String, Integer>> getGoodsSales(List<Order> orderList) {
+        TreeMap<String, Integer> goodsSale = new TreeMap<>();
+
+        orderList.stream()
+                .filter(order -> order.getOrderState() == OrderState.FINISHED)
+                .forEach(order -> {
+                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                        Integer count = orderItem.getGoodsCount();
+                        if (goodsSale.containsKey(orderItem.getGoodsName())) {
+                            count += goodsSale.get(orderItem.getGoodsName());
+                        }
+                        goodsSale.put(orderItem.getGoodsName(), count);
+                    });
+                });
+
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(goodsSale.entrySet());
+        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        return list;
     }
 }

@@ -4,8 +4,9 @@
 
 <script>
   import echarts from 'echarts'
-  require('echarts/theme/macarons') // echarts theme
   import resize from './mixins/resize'
+
+  require('echarts/theme/macarons') // echarts theme
 
   const animationDuration = 6000
 
@@ -23,6 +24,10 @@
       height: {
         type: String,
         default: '300px'
+      },
+      dashboardData: {
+        type: Object,
+        required: true
       }
     },
     data() {
@@ -32,7 +37,9 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.initChart()
+        const keys = this.dashboardData.topSaleGoodsList.map(item=>Object.keys(item)[0])
+        const values = this.dashboardData.topSaleGoodsList.map(item=>item[Object.keys(item)[0]])
+        this.initChart(keys,values)
       })
     },
     beforeDestroy() {
@@ -43,14 +50,14 @@
       this.chart = null
     },
     methods: {
-      initChart() {
+      initChart(keys,values) {
         this.chart = echarts.init(this.$el, 'macarons')
 
         this.chart.setOption({
           tooltip: {
             trigger: 'axis',
             axisPointer: { // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+              type: 'line' // 默认为直线，可选为：'line' | 'shadow'
             }
           },
           grid: {
@@ -62,7 +69,7 @@
           },
           xAxis: [{
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: keys,
             axisTick: {
               alignWithLabel: true
             }
@@ -73,28 +80,16 @@
               show: false
             }
           }],
-          series: [{
-            name: 'pageA',
-            type: 'bar',
-            stack: 'vistors',
-            barWidth: '60%',
-            data: [79, 52, 200, 334, 390, 330, 220],
-            animationDuration
-          }, {
-            name: 'pageB',
-            type: 'bar',
-            stack: 'vistors',
-            barWidth: '60%',
-            data: [80, 52, 200, 334, 390, 330, 220],
-            animationDuration
-          }, {
-            name: 'pageC',
-            type: 'bar',
-            stack: 'vistors',
-            barWidth: '60%',
-            data: [30, 52, 200, 334, 390, 330, 220],
-            animationDuration
-          }]
+          series: [
+            {
+              name: '数量',
+              type: 'bar',
+              stack: 'vistors',
+              barWidth: '60%',
+              data: values,
+              animationDuration
+            }
+          ]
         })
       }
     }
