@@ -1,7 +1,9 @@
 package net.novaborn.takeaway.admin.web.dto;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class DashboardDto {
@@ -37,9 +39,12 @@ public class DashboardDto {
 
     private int refundCount;
 
-    private PerHourOrderList perHourOrderList;
+    private PerHourOrderDto perHourOrderCount = new PerHourOrderDto();
 
     @Data
-    private class PerHourOrderList {
+    public class PerHourOrderDto {
+        private List hours;
+
+        private List<Integer> preHourOrderCount;
     }
 }

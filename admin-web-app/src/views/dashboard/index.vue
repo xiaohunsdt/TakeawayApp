@@ -4,7 +4,7 @@
         <panel-group :dashboardData="dashboardData" v-if="dashboardData"/>
         <panel-group2 :dashboardData="dashboardData" v-if="dashboardData"/>
         <base-card style="margin: 20px 15px 0px 15px">
-            <line-chart style="margin-top: 20px"/>
+            <line-chart :dashboardData="dashboardData" style="margin-top: 20px" v-if="dashboardData"/>
         </base-card>
         <el-row :gutter="30" style="margin-top: 30px;padding: 0 15px">
             <el-col :lg="8" :sm="24" :xs="24">

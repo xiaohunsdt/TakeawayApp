@@ -1,5 +1,8 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
 import lombok.Setter;
@@ -27,8 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -54,19 +56,19 @@ public class IndexController extends BaseController {
     @GetMapping("getDashboardData")
     @ResponseBody
     public DashboardDto getDashboardData() {
-        List<Order> orderList = orderService.getTodayOrderByStateU(null,null).stream()
+        List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
                 .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
                 .collect(Collectors.toList());
 
-        List<Order> wechatOrderList = orderList.stream().filter(order -> order.getPaymentWay()== PaymentWay.WEIXIN_PAY).collect(Collectors.toList());
-        List<Order> alipayOrderList = orderList.stream().filter(order -> order.getPaymentWay()== PaymentWay.ALI_PAY).collect(Collectors.toList());
-        List<Order> transferOrderList = orderList.stream().filter(order -> order.getPaymentWay()== PaymentWay.TRANSFER).collect(Collectors.toList());
-        List<Order> creditOrderList = orderList.stream().filter(order -> order.getPaymentWay()== PaymentWay.CREDIT_CARD).collect(Collectors.toList());
-        List<Order> cashOrderList = orderList.stream().filter(order -> order.getPaymentWay()== PaymentWay.CASH).collect(Collectors.toList());
-        List<Order> waitDeliveryOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.WAITING_RECEIVE || order.getOrderState()==OrderState.PRODUCING).collect(Collectors.toList());
-        List<Order> deliveringOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.DELIVERING).collect(Collectors.toList());
-        List<Order> finishOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.FINISHED).collect(Collectors.toList());
-        List<Order> refundOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.REFUND).collect(Collectors.toList());
+        List<Order> wechatOrderList = orderList.stream().filter(order -> order.getPaymentWay() == PaymentWay.WEIXIN_PAY).collect(Collectors.toList());
+        List<Order> alipayOrderList = orderList.stream().filter(order -> order.getPaymentWay() == PaymentWay.ALI_PAY).collect(Collectors.toList());
+        List<Order> transferOrderList = orderList.stream().filter(order -> order.getPaymentWay() == PaymentWay.TRANSFER).collect(Collectors.toList());
+        List<Order> creditOrderList = orderList.stream().filter(order -> order.getPaymentWay() == PaymentWay.CREDIT_CARD).collect(Collectors.toList());
+        List<Order> cashOrderList = orderList.stream().filter(order -> order.getPaymentWay() == PaymentWay.CASH).collect(Collectors.toList());
+        List<Order> waitDeliveryOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.WAITING_RECEIVE || order.getOrderState() == OrderState.PRODUCING).collect(Collectors.toList());
+        List<Order> deliveringOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.DELIVERING).collect(Collectors.toList());
+        List<Order> finishOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.FINISHED).collect(Collectors.toList());
+        List<Order> refundOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.REFUND).collect(Collectors.toList());
 
         DashboardDto dashboardDto = new DashboardDto();
         dashboardDto.setWechatOrderAllCount(wechatOrderList.size());
@@ -86,6 +88,21 @@ public class IndexController extends BaseController {
         dashboardDto.setDeliveringCount(deliveringOrderList.size());
         dashboardDto.setFinishCount(finishOrderList.size());
         dashboardDto.setRefundCount(refundOrderList.size());
+
+
+        List<Integer> hours = new ArrayList<>();
+        List<Integer> preHourOrderCount = new ArrayList<>();
+        for (int i = 0; i <= DateUtil.date().getField(DateField.HOUR_OF_DAY); i++) {
+            int finalI = i;
+            int count = (int) orderList.stream()
+                    .filter(order -> DateTime.of(order.getCreateDate()).getField(DateField.HOUR_OF_DAY) == finalI)
+                    .count();
+            hours.add(i);
+            preHourOrderCount.add(count);
+        }
+
+        dashboardDto.getPerHourOrderCount().setHours(hours);
+        dashboardDto.getPerHourOrderCount().setPreHourOrderCount(preHourOrderCount);
         return dashboardDto;
     }
 

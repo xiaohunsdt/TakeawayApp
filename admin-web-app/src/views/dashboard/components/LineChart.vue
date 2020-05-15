@@ -6,9 +6,6 @@
   import echarts from 'echarts'
   import resize from './mixins/resize'
 
-  const lineChartData = {
-    expectedData: [100, 120, 161, 134, 105, 160, 165]
-  }
   require('echarts/theme/macarons') // echarts theme
   export default {
     mixins: [resize],
@@ -28,6 +25,10 @@
       autoResize: {
         type: Boolean,
         default: true
+      },
+      dashboardData: {
+        type: Object,
+        required: true
       }
     },
     data() {
@@ -58,12 +59,13 @@
     methods: {
       initChart() {
         this.chart = echarts.init(this.$el, 'macarons')
-        this.setOptions(lineChartData)
+        this.setOptions(this.dashboardData.perHourOrderCount)
       },
-      setOptions({expectedData, actualData} = {}) {
+      setOptions({ hours, preHourOrderCount } = {}) {
+        hours = hours.map(item => item + '点')
         this.chart.setOption({
           xAxis: {
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            data: hours,
             boundaryGap: false,
             axisTick: {
               show: false
@@ -89,11 +91,11 @@
             }
           },
           legend: {
-            data: ['expected']
+            data: ['时刻订单数']
           },
           series: [
             {
-              name: 'expected',
+              name: '时刻订单数',
               itemStyle: {
                 normal: {
                   color: '#FF005A',
@@ -105,7 +107,7 @@
               },
               smooth: true,
               type: 'line',
-              data: expectedData,
+              data: preHourOrderCount,
               animationDuration: 2800,
               animationEasing: 'cubicInOut'
             }
