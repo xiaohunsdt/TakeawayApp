@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.novaborn.takeaway.banner.dao.IBannerDao">
+
+    <select id="getBannerListByPage" resultType="Activity">
+        SELECT * FROM `banner`
+        <where>
+            <if test="args.isShow != null and args.isShow != ''">
+                `is_show` = #{args.isShow}
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+</mapper>
