@@ -1,14 +1,13 @@
 package net.novaborn.takeaway.order.services;
 
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.admin.AdminApplication;
-import net.novaborn.takeaway.admin.web.wrapper.OrderWrapperEx;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.service.impl.AddressService;
@@ -16,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -54,14 +52,15 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByDateTest() {
-        Date start = DateUtil.parseDateTime("2020-05-10 12:30:00");
-        Date end = DateUtil.parseDateTime("2020-05-10 15:00:00");
+        Date start = DateUtil.parseDateTime("2020-05-15 00:30:00");
+        Date end = DateUtil.parseDateTime("2020-05-15 23:00:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
                 .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
+                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 60)
                 .collect(Collectors.toList());
         orderList.stream().forEach(order -> System.out.println(order.getUserId()));
         System.out.println(orderList.stream()
