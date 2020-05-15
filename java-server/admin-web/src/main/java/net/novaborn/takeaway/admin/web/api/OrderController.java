@@ -117,7 +117,7 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
-        if (!order.getDiscount().equals(targetOrder.get().getDiscount())) {
+        if (order.getDiscount() != null && !order.getDiscount().equals(targetOrder.get().getDiscount())) {
             orderService.setDiscount(targetOrder.get(), orderItemService.selectByOrderId(targetOrder.get().getId()), order.getDiscount());
         }
         BeanUtil.copyProperties(order, targetOrder.get(), CopyOptions.create().setIgnoreNullValue(true));

@@ -13,6 +13,9 @@
       <el-form-item label="折扣" label-width="80">
         <el-input type="number" v-model.number="formData.discount"></el-input>
       </el-form-item>
+      <el-form-item label="备注" label-width="80">
+        <el-input :rows="3" type="textarea" v-model="formData.ps"></el-input>
+      </el-form-item>
     </el-form>
     <div class="dialog-footer" slot="footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -39,7 +42,8 @@
           .then(res => {
             this.formData = {
               id: res.id,
-              discount: res.discount
+              discount: res.discount,
+              ps: res.ps
             }
           })
       },

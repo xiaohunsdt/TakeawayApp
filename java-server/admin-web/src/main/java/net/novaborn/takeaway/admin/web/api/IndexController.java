@@ -68,32 +68,24 @@ public class IndexController extends BaseController {
         List<Order> finishOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.FINISHED).collect(Collectors.toList());
         List<Order> refundOrderList = orderList.stream().filter(order -> order.getOrderState()==OrderState.REFUND).collect(Collectors.toList());
 
-
         DashboardDto dashboardDto = new DashboardDto();
         dashboardDto.setWechatOrderAllCount(wechatOrderList.size());
         dashboardDto.setWechatOrderAllPrice(wechatOrderList.stream().mapToInt(Order::getRealPrice).sum());
-
         dashboardDto.setAlipayOrderAllCount(alipayOrderList.size());
         dashboardDto.setAlipayOrderAllPrice(alipayOrderList.stream().mapToInt(Order::getRealPrice).sum());
-
         dashboardDto.setTransferOrderAllCount(transferOrderList.size());
         dashboardDto.setTransferOrderAllPrice(transferOrderList.stream().mapToInt(Order::getRealPrice).sum());
-
         dashboardDto.setCreditOrderAllCount(creditOrderList.size());
-        dashboardDto.setCashOrderAllPrice(creditOrderList.stream().mapToInt(Order::getRealPrice).sum());
-
+        dashboardDto.setCreditOrderAllPrice(creditOrderList.stream().mapToInt(Order::getRealPrice).sum());
         dashboardDto.setCashOrderAllCount(cashOrderList.size());
         dashboardDto.setCashOrderAllPrice(cashOrderList.stream().mapToInt(Order::getRealPrice).sum());
-
         dashboardDto.setAllCount(orderList.size());
         dashboardDto.setAllPrice(orderList.stream().mapToInt(Order::getRealPrice).sum());
-
 
         dashboardDto.setWaitDeliveryCount(waitDeliveryOrderList.size());
         dashboardDto.setDeliveringCount(deliveringOrderList.size());
         dashboardDto.setFinishCount(finishOrderList.size());
         dashboardDto.setRefundCount(refundOrderList.size());
-
         return dashboardDto;
     }
 

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import NaverMap from './components/order-naver-map'
+  import NaverMap from './components/OrderNaverMap'
 
   export default {
     name: 'OrderMap',

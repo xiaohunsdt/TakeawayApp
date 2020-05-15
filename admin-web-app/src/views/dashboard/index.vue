@@ -38,7 +38,7 @@
   import LineChart from './components/LineChart'
   import PieChart from './components/PieChart'
   import BarChart from './components/BarChart'
-  import OrderNaverMap from '../order/components/order-naver-map'
+  import OrderNaverMap from '../order/components/OrderNaverMap'
 
   export default {
 	name: 'Dashboard',

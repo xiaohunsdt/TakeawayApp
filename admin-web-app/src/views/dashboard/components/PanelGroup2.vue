@@ -46,7 +46,7 @@
       <el-col :lg="6" :sm="12" :xs="24" class="card-panel-col">
         <div class="card-panel">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon class-name="card-panel-icon" icon-class="finish"/>
+            <svg-icon class-name="card-panel-icon" icon-class="refund"/>
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">

@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.web.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class DashboardDto {
@@ -35,4 +36,10 @@ public class DashboardDto {
     private int finishCount;
 
     private int refundCount;
+
+    private PerHourOrderList perHourOrderList;
+
+    @Data
+    private class PerHourOrderList {
+    }
 }

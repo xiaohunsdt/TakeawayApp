@@ -35,7 +35,7 @@
             </map-info-window>
             <map-marker :lat="mapOptions.lat" :lng="mapOptions.lng" @click="onMarkerClicked" @load="onMarkerLoaded"/>
             <map-marker
-                :icon="{content:`<div class='pin-number'>${order.number}</div><div class='pin'></div><div class='pulse'></div>`}"
+                :icon="{content:`<div class='pin-number'>${order.number}</div><div class='pin ${order.orderState}'></div><div class='pulse'></div>`}"
                 :lat="order.address.y"
                 :lng="order.address.x"
                 :order="order"
@@ -96,12 +96,14 @@
 		  mapTypeControl: true
 		},
 		initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN', 'TRANSIT', 'CHINESE'],
-		orderList: []
+		orderList: [],
+		timer: null
 	  }
 	},
 	mounted() {
 	  if (!this.allOrder) {
 		this.getWaitEatOrderList()
+		this.timer = setInterval(this.getWaitEatOrderList, 1000 * 60)
 	  } else {
 		this.getAllTodayOrderList()
 	  }
@@ -177,6 +179,9 @@
 			})
 		})
 	  }
+	},
+	beforeDestroy() {
+	  clearInterval(this.timer)
 	}
   }
 </script>
@@ -239,6 +244,22 @@
         position: absolute;
         -webkit-border-radius: 50%;
         border-radius: 50%;
+    }
+
+    .pin.DELIVERING {
+        background: #f4516c;
+    }
+
+    .pin.DELIVERING:after {
+        background: #f4516c;
+    }
+
+    .pin.FINISHED {
+        background: gray;
+    }
+
+    .pin.FINISHED:after {
+        background: gray;
     }
 
     .pulse {

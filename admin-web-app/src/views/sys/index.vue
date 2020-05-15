@@ -61,7 +61,7 @@
             <el-form-item label="王老板体温">
               <el-input v-model="storeSetting.temperature3"></el-input>
             </el-form-item>
-            <el-form-item label="王老板的对象体温">
+            <el-form-item label="打包员体温">
               <el-input v-model="storeSetting.temperature4"></el-input>
             </el-form-item>
             <el-form-item>
