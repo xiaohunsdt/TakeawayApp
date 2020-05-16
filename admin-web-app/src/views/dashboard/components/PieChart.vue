@@ -70,8 +70,8 @@ export default {
               { value: this.dashboardData.wechatOrderAllCount, name: '微信' },
               { value: this.dashboardData.alipayOrderAllCount, name: '支付宝' },
               { value: this.dashboardData.transferOrderAllCount, name: '通帐转账' },
-              { value: this.dashboardData.creditOrderAllCount, name: '现金' },
-              { value: this.dashboardData.cashOrderAllCount, name: '刷卡' }
+              { value: this.dashboardData.cashOrderAllCount, name: '现金' },
+              { value: this.dashboardData.creditOrderAllCount, name: '刷卡' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

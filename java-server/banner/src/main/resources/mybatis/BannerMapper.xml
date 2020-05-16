@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.banner.dao.IBannerDao">
 
-    <select id="getBannerListByPage" resultType="Activity">
+    <select id="getBannerListByPage" resultType="Banner">
         SELECT * FROM `banner`
         <where>
             <if test="args.isShow != null and args.isShow != ''">

@@ -38,26 +38,11 @@
           label="主图">
           <template v-slot="props">
             <img
-              :src="$VUE_APP_BASE_API + props.row.mainImg"
+              :src="$VUE_APP_BASE_API + props.row.img"
               style="height: 40px;width: auto;"
-              v-if="props.row.mainImg!==''"/>
+              v-if="props.row.img!==''"/>
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          label="内容"
-          prop="content"
-          width="200"/>
-        <el-table-column
-          align="center"
-          label="开始日期"
-          prop="startDate"
-          width="200"/>
-        <el-table-column
-          align="center"
-          label="结束日期"
-          prop="endDate"
-          width="200"/>
         <el-table-column
           align="center"
           label="显示">
@@ -95,10 +80,10 @@
 
 <script>
   import BaseCard from '@/components/BaseCard'
-  import activityApi from '@/api/activity'
+  import bannerApi from '@/api/banner'
 
   export default {
-    name: 'ActivityManagement',
+    name: 'BannerManagement',
     components: {
       BaseCard
     },
@@ -123,7 +108,7 @@
       getList() {
         this.listLoading = true
 
-        activityApi.getActivityListByPage(this.page, this.formData)
+        bannerApi.getBannerListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
@@ -144,8 +129,8 @@
         this.page.current = 1
         this.getList()
       },
-      onIsShowChange(activity) {
-        activityApi.changeIsShow(activity.id, activity.isShow)
+      onIsShowChange(banner) {
+        bannerApi.changeIsShow(banner.id, banner.isShow)
           .then(response => {
             this.$message({
               message: response.message,
@@ -155,16 +140,16 @@
       },
       onEdit(id) {
         this.$router.push({
-          path: '/activity/edit', query: { activityId: id }
+          path: '/banner/edit', query: { bannerId: id }
         })
       },
       onDelete(id) {
-        this.$confirm('是否确定删除此活动?', '提示', {
+        this.$confirm('是否确定删除此横幅?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          activityApi.deleteActivity(id)
+          bannerApi.deleteBanner(id)
             .then(() => {
               this.getList()
             })

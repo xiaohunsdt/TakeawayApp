@@ -41,7 +41,7 @@
                 :order="order"
                 @click="onMarkerClicked"
                 @load="onMarkerLoaded"
-                key="order.id"
+                :key="order.id"
                 v-for="order in orderList"/>
             <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="800"/>
             <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>
@@ -175,7 +175,11 @@
 				type: 'success'
 			  })
 			  this.isOpen = false
-			  this.getWaitEatOrderList()
+			  if (!this.allOrder) {
+				this.getWaitEatOrderList()
+			  } else {
+				this.getAllTodayOrderList()
+			  }
 			})
 		})
 	  }

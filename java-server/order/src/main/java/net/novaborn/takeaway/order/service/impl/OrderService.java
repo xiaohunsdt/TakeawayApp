@@ -11,10 +11,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.DeliveryType;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,7 +136,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         TreeMap<String, Integer> goodsSale = new TreeMap<>();
 
         orderList.stream()
-                .filter(order -> order.getOrderState() == OrderState.FINISHED)
+                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
                 .forEach(order -> {
                     orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
                         Integer count = orderItem.getGoodsCount();
@@ -150,7 +147,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                     });
                 });
 
-        List<Map.Entry<String,Integer>> list = new ArrayList<>(goodsSale.entrySet());
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
         Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
         return list;
     }
