@@ -9,6 +9,9 @@
           <el-form-item label="跳转地址">
             <el-input v-model="formData.pagePath"></el-input>
           </el-form-item>
+          <el-form-item label="Index">
+            <el-input v-model.number="formData.index"></el-input>
+          </el-form-item>
           <el-form-item label="横幅主图">
             <el-upload
                 :action="$VUE_APP_BASE_API + '/api/admin/banner/uploadImg'"
@@ -50,7 +53,8 @@
         formData: {
           title: '',
           pagePath: '',
-          img: ''
+          img: '',
+          index: 0
         },
         rules: {
           title: [

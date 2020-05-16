@@ -55,6 +55,11 @@
           </template>
         </el-table-column>
         <el-table-column
+            align="center"
+            label="Index"
+            prop="index">
+        </el-table-column>
+        <el-table-column
           align="center"
           label="操作">
           <template v-slot="props">

@@ -6,6 +6,8 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.banner.entity.Banner;
+import net.novaborn.takeaway.banner.service.impl.BannerService;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
@@ -16,8 +18,10 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.web.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.user.web.dto.ServiceStateDto;
+import net.novaborn.takeaway.user.web.wrapper.BannerWrapper;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +44,18 @@ public class IndexController extends BaseController {
     private AddressService addressService;
 
     private SettingService settingService;
+
+    private BannerService bannerService;
+
+    @GetMapping("getBannersList")
+    public ResponseEntity getBannersList() {
+        List<Banner> activities = bannerService.list()
+                .stream()
+                .filter(Banner::getIsShow)
+                .sorted(Comparator.comparing(Banner::getIndex).reversed())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new BannerWrapper(activities).warp());
+    }
 
     @GetMapping("getSpecificFlagGoodsList")
     @ResponseBody
