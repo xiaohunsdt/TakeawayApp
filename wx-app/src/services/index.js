@@ -4,6 +4,10 @@
 import api from '@/utils/api'
 import indexUtil from '@/utils/index'
 
+export function getBannersList () {
+  return api.getBannersList()
+}
+
 export function getNewGoodsList () {
   return api.getSpecificFlagGoodsList('新品')
 }
@@ -53,6 +57,7 @@ export function formatAppointmentTime (deliveryType, appointment) {
 }
 
 export default {
+  getBannersList,
   getNewGoodsList,
   getHotGoodsList,
   getServiceState,

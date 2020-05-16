@@ -5,6 +5,8 @@ const api = {
   authLoginByWeixin: (code) => request.post('wx/auth', { code }),
   setUserInfo: (userInfo) => request.post('wx/setUserInfo', userInfo),
 
+  // 获取首页横幅图片
+  getBannersList: () => request.get('index/getBannersList'),
   // 获取指定flag的产品列表
   getSpecificFlagGoodsList: (flag) => request.get('index/getSpecificFlagGoodsList', { flag }),
   // 获取总服务状态

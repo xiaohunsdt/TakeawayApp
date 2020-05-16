@@ -11,15 +11,9 @@
             easing-function="easeInOutCubic"
             indicator-dots="true"
             style="height: 10rem">
-            <swiper-item>
-              <img class="itemImg" mode="widthFix" src="/static/images/banner/appointment.jpg">
+            <swiper-item :key="banner.id" v-for="banner in bannerList">
+              <img :src="banner.img" @click="gotoPage(banner.pagePath)" class="itemImg" mode="widthFix">
             </swiper-item>
-            <swiper-item>
-              <img class="itemImg" mode="widthFix" src="/static/images/banner/yiqing.png">
-            </swiper-item>
-<!--            <swiper-item>-->
-<!--              <img @click="gotoActivity" class="itemImg" mode="widthFix" src="/static/images/banner/yonsei.jpg">-->
-<!--            </swiper-item>-->
           </swiper>
         </div>
       </div>
@@ -47,6 +41,7 @@
     },
     data () {
       return {
+        bannerList: [],
         newGoodsList: [],
         hotGoodsList: []
       }
@@ -56,6 +51,9 @@
         'SET_FROM'
       ]),
       init () {
+        indexService.getBannersList().then(res => {
+          this.bannerList = res
+        })
         indexService.getNewGoodsList().then(res => {
           this.newGoodsList = res
         })
@@ -64,9 +62,13 @@
           this.hotGoodsList = res
         })
       },
-      gotoActivity () {
+      gotoPage (page) {
+        if (page === '') {
+          return
+        }
         mpvue.navigateTo({
-          url: '/pages/sub-packages/activity/index/main'
+          // url: '/pages/sub-packages/activity/index/main'
+          url: page
         })
       }
     },
