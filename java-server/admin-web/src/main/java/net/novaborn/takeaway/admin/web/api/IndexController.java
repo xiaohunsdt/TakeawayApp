@@ -103,6 +103,8 @@ public class IndexController extends BaseController {
 
         dashboardDto.getPerHourOrderCount().setHours(hours);
         dashboardDto.getPerHourOrderCount().setPreHourOrderCount(preHourOrderCount);
+
+        dashboardDto.setTopSaleGoodsList(orderService.getGoodsSales(orderList));
         return dashboardDto;
     }
 

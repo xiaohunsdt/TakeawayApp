@@ -41,6 +41,16 @@ public class DashboardDto {
 
     private PerHourOrderDto perHourOrderCount = new PerHourOrderDto();
 
+    private List<Map.Entry<String, Integer>> topSaleGoodsList;
+
+    public void setTopSaleGoodsList(List<Map.Entry<String, Integer>> topSaleGoodsList) {
+        if (topSaleGoodsList.size() > 14) {
+            this.topSaleGoodsList = topSaleGoodsList.subList(0, 14);
+        } else {
+            this.topSaleGoodsList = topSaleGoodsList;
+        }
+    }
+
     @Data
     public class PerHourOrderDto {
         private List hours;

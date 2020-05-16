@@ -18,6 +18,7 @@
         <module>wx-pay-web</module>
         <module>print-web</module>
         <module>mq</module>
+        <module>banner</module>
     </modules>
 
     <parent>

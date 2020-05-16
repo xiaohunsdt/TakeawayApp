@@ -57,19 +57,6 @@
         }
       }
     },
-    activated() {
-      const query = getQueryObject()
-      if (query.activityId) {
-        activityApi.getActivityById(query.activityId)
-          .then(res => {
-            this.formData = res
-            this.formData.formDate = [
-              new Date(this.formData.startDate),
-              new Date(this.formData.endDate)
-            ]
-          })
-      }
-    },
     data() {
       return {
         formData: {
@@ -88,9 +75,28 @@
         }
       }
     },
+    created() {
+      this.init()
+    },
+    activated() {
+      this.init()
+    },
     methods: {
+      init() {
+        const query = getQueryObject()
+        if (query.activityId) {
+          activityApi.getActivityById(query.activityId)
+              .then(res => {
+                this.formData = res
+                this.formData.formDate = [
+                  new Date(this.formData.startDate),
+                  new Date(this.formData.endDate)
+                ]
+              })
+        }
+      },
       onUploadImgSuccess(response, file, fileList) {
-        this.formData.mainImg = `/upload/images/activity/${ response.message }`
+        this.formData.mainImg = `/upload/images/activity/${response.message}`
       },
       saveActivity() {
         this.$refs.form.validate((valid) => {

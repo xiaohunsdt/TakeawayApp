@@ -214,6 +214,28 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/index',
+    meta: { title: '横幅管理', icon: 'example' },
+    children: [
+      {
+        path: 'edit',
+        name: 'EditBanner',
+        // props: true,
+        component: () => import('@/views/banner/edit'),
+        meta: { title: '创建/编辑', icon: 'example' }
+      },
+      {
+        path: 'index',
+        name: 'BannerManagement',
+        // props: true,
+        component: () => import('@/views/banner/index'),
+        meta: { title: '横幅列表', icon: 'example' }
+      }
+    ]
+  },
+  {
     path: '/sys',
     component: Layout,
     redirect: '/sys/index',

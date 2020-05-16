@@ -4,6 +4,7 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.DeliveryType;
@@ -162,4 +163,12 @@ public interface IOrderService extends IService<Order> {
      * @param orderItemList 预检查的订单商品项
      */
     void checkOrder(Order order, List<OrderItem> orderItemList);
+
+
+    /**
+     * 对指定订单列表的商品进行排名 从高到低
+     * @param orderList
+     * @return
+     */
+    List<Map.Entry<String,Integer>> getGoodsSales(List<Order> orderList);
 }

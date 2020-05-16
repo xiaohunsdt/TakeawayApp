@@ -1,6 +1,7 @@
 <template>
     <el-dialog
         :close-on-click-modal="false" :title="title"
+        :modal-append-to-body="false"
         :visible.sync="dialogFormVisible"
         class="simple-order-dialog"
         size="mini"
