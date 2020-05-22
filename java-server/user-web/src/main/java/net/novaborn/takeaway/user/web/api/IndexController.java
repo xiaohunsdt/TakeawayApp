@@ -88,9 +88,9 @@ public class IndexController extends BaseController {
         double distance = addressService.getDistanceWithStore(addressId);
 
         // 10000 以下不配送
-//        if (allPrice < 10000) {
-//            return new ServiceStateDto(-1,"今日85折,低于10000韩币无法配送!!");
-//        }
+        if (allPrice < 8000) {
+            return new ServiceStateDto(-1,"低于8000韩币无法配送!!");
+        }
 
         if (distance >= maxExpressDistance) {
             return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
