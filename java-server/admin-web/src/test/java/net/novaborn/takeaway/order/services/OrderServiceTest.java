@@ -51,6 +51,12 @@ public class OrderServiceTest {
     }
 
     @Test
+    public void getGoodsSaleTest() {
+        List<Order> orderList = orderService.list().stream().filter(order -> order.getOrderState() == OrderState.FINISHED).collect(Collectors.toList());
+        System.out.println(orderService.getGoodsSales(orderList));
+    }
+
+    @Test
     public void getOrderListByDateTest() {
         Date start = DateUtil.parseDateTime("2020-05-15 00:30:00");
         Date end = DateUtil.parseDateTime("2020-05-15 23:00:00");
