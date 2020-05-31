@@ -19,6 +19,7 @@
         <module>print-web</module>
         <module>mq</module>
         <module>banner</module>
+        <module>statistics</module>
     </modules>
 
     <parent>
