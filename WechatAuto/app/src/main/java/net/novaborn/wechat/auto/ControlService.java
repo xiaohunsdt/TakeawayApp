@@ -14,6 +14,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
+import net.novaborn.wechat.auto.entity.AutoMessage;
+import net.novaborn.wechat.auto.utils.ImageUtil;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,11 +26,12 @@ public class ControlService extends AccessibilityService {
 
     //微信首页
     public static final String WECHAT_CLASS_LAUNCHUI = "com.tencent.mm.ui.LauncherUI";
-    private static final String TAG = "ControlService";
-    //微信包名
-    private final static String WeChat_PNAME = "com.tencent.mm";
 
-    public static boolean isSend = false;
+    private static final String TAG = "ControlService";
+
+    public static AutoMessage autoMessage = null;
+
+    public Boolean isSending = false;
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -36,14 +40,14 @@ public class ControlService extends AccessibilityService {
         Log.i(TAG, "event >> ClassName:" + className);
 
         switch (event.getEventType()) {
-            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                if (WeChat_PNAME.equals(event.getPackageName().toString())) {
-                    sendNotifacationReply(event);
-                }
-                break;
+//            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+//                if (WeChat_PNAME.equals(event.getPackageName().toString())) {
+//                    sendNotifacationReply(event);
+//                }
+//                break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 if (WECHAT_CLASS_LAUNCHUI.equals(className)) {
-                    autoSendMoment();
+                    new Thread(this::autoSendMoment).start();
                 }
                 break;
         }
@@ -53,54 +57,21 @@ public class ControlService extends AccessibilityService {
     public void onInterrupt() {
     }
 
-    private void autoSendMoment(String message) {
-        if (!isSend) {
-            return;
-        }
-        try {
-            //调起微信之后，不管在什么页面，先查找返回键并点击：防止在其他页面查找不到搜索按钮
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dm");
-            Thread.sleep(100);
-
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cn_", 2);
-            Thread.sleep(100);
-
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/b3b", 0);
-            Thread.sleep(3000);
-
-            AccessibilityNodeInfo cameraBtn = WechatUtils.findViewId(this, "com.tencent.mm:id/cj", 0);
-//            if (cameraBtn == null) {
-//                return;
-//            }
-            WechatUtils.performAction(cameraBtn, AccessibilityNodeInfo.ACTION_LONG_CLICK);
-            Thread.sleep(3000);
-
-            AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/fms", 0);
-//            if (editInput == null) {
-//                return;
-//            }
-            WechatUtils.pastContent(this, editInput, message);
-            Thread.sleep(2000);
-
-            WechatUtils.findTextAndClick(this, "发表");
-            Thread.sleep(1000);
-
-            resetAndReturnApp();
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            isSend = false;
-        }
-    }
-
     private void autoSendMoment() {
-        if (!isSend) {
-            return;
+        synchronized (TAG) {
+            if (isSending || autoMessage == null) {
+                return;
+            }
+            isSending = true;
         }
+
         try {
+            //返回键并点击：防止在其他页面查找不到搜索按钮
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dm");
+            Thread.sleep(1000);
+
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cn_", 2);
-            Thread.sleep(100);
+            Thread.sleep(1000);
 
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dpa", 0);
             Thread.sleep(3000);
@@ -109,32 +80,47 @@ public class ControlService extends AccessibilityService {
 //            if (cameraBtn == null) {
 //                return;
 //            }
-            WechatUtils.performAction(cameraBtn, AccessibilityNodeInfo.ACTION_CLICK);
-            Thread.sleep(2000);
 
-            WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/f40", 1), AccessibilityNodeInfo.ACTION_CLICK);
-            Thread.sleep(3000);
+            if (autoMessage.getImgUrlList() != null && autoMessage.getImgUrlList().size() > 0) {
+                //先下载图片并保存
+                for (int i = autoMessage.getImgUrlList().size() - 1; i >= 0; i--) {
+                    String imgUrl = autoMessage.getImgUrlList().get(i);
+                    ImageUtil.savePictrueToGallery(this, ImageUtil.getPicture(imgUrl), ImageUtil.getFileNameInUrl(imgUrl));
+                }
 
-            WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/dm0", 0), AccessibilityNodeInfo.ACTION_CLICK);
-            Thread.sleep(1000);
+                //有图片
+                WechatUtils.performAction(cameraBtn, AccessibilityNodeInfo.ACTION_CLICK);
+                Thread.sleep(2000);
 
-            WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/dm0", 1), AccessibilityNodeInfo.ACTION_CLICK);
-            Thread.sleep(1000);
+                //选择图片按钮
+                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/f40", 1), AccessibilityNodeInfo.ACTION_CLICK);
+                Thread.sleep(3000);
 
-            WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/dm0", 2), AccessibilityNodeInfo.ACTION_CLICK);
-            Thread.sleep(1000);
+                //选择图片
+                for (int i = 0; i < autoMessage.getImgUrlList().size(); i++) {
+                    WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/dm0", i), AccessibilityNodeInfo.ACTION_CLICK);
+                    Thread.sleep(1000);
+                }
 
-            WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/ch", 0), AccessibilityNodeInfo.ACTION_CLICK);
-
-            Thread.sleep(2500);
+                //完成按钮
+                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/ch", 0), AccessibilityNodeInfo.ACTION_CLICK);
+                Thread.sleep(2500);
+            } else {
+                //没图片
+                WechatUtils.performAction(cameraBtn, AccessibilityNodeInfo.ACTION_LONG_CLICK);
+                Thread.sleep(3000);
+            }
 
             AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/fms", 0);
 //            if (editInput == null) {
 //                return;
 //            }
-            WechatUtils.pastContent(this, editInput, "messageaaaa");
-            Thread.sleep(2000);
+            if (autoMessage.getMessage() != null && !autoMessage.getMessage().equals("")) {
+                WechatUtils.pastContent(this, editInput, autoMessage.getMessage());
+                Thread.sleep(3000);
+            }
 
+            // 发布
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/ch");
             Thread.sleep(3000);
 
@@ -142,15 +128,23 @@ public class ControlService extends AccessibilityService {
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dm");
             Thread.sleep(1000);
 
+            //回主页
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cn_", 0);
             Thread.sleep(1000);
 
             resetAndReturnApp();
-            Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            isSend = false;
+            if (autoMessage != null && autoMessage.getImgUrlList() != null && autoMessage.getImgUrlList().size() > 0) {
+                //删除所有图片
+                for (int i = 0; i < autoMessage.getImgUrlList().size(); i++) {
+                    String imgUrl = autoMessage.getImgUrlList().get(i);
+                    ImageUtil.deleteImage(this, ImageUtil.getFileNameInUrl(imgUrl));
+                }
+            }
+            autoMessage = null;
+            isSending = false;
         }
     }
 

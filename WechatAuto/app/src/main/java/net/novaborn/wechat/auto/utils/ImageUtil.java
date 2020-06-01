@@ -129,6 +129,10 @@ public class ImageUtil {
         File file;
         String brand = Build.BRAND;
 
+        if (!imgName.contains(".jpg")) {
+            imgName += ".jpg";
+        }
+
         if (brand.equals("xiaomi")) { // 小米手机brand.equals("xiaomi")
             fileName = Environment.getExternalStorageDirectory().getPath() + "/DCIM/Camera/" + imgName;
         } else if (brand.equalsIgnoreCase("Huawei")) {
@@ -148,5 +152,9 @@ public class ImageUtil {
 //            intent.setData(uri);
 //            context.sendBroadcast(intent);
         }
+    }
+
+    public static String getFileNameInUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }
