@@ -22,6 +22,7 @@ services:
       - "443:443"
     volumes:
       - ~/server_data/mysql_data:/var/lib/mysql
+
   redis:
     image: redis
     command: redis-server --requirepass wy1996 --appendonly yes
