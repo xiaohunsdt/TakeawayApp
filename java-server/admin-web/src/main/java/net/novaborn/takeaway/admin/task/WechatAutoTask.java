@@ -146,6 +146,18 @@ public class WechatAutoTask {
     }
 
     public void appointmentShow() {
+        Date currentDate = DateUtil.date();
+        Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
+        store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+
+        if (!Boolean.parseBoolean(service_running.getValue())) {
+            return;
+        }
+
+        if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
+            return;
+        }
+
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage("今天正常营业哦～\r\n小伙伴们现在就可以下预约单!!\r\n优先配准时配送！！再也不用担心下课吃不到饭啦！！");
         autoMessage.setImgUrlList(Arrays.asList("https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg", "https://admin.cxy.novaborn.net/upload/images/activity/dfc4b68932ba4c9f907624bc424c48f4.png", "https://admin.cxy.novaborn.net/upload/images/activity/5ee1589cb6a1453cbf65d38c93c479bc.png"));
