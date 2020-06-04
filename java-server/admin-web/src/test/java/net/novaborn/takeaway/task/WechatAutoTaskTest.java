@@ -19,4 +19,9 @@ public class WechatAutoTaskTest {
     public void goodsShowTest(){
         wechatAutoTask.goodsShow();
     }
+
+    @Test
+    public void appointmentShowTest(){
+        wechatAutoTask.appointmentShow();
+    }
 }

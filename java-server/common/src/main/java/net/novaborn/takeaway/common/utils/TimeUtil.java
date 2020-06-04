@@ -1,11 +1,11 @@
 package net.novaborn.takeaway.common.utils;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class TimeUtil {
@@ -46,7 +46,7 @@ public class TimeUtil {
         return targetTime.isAfter(startTime) && targetTime.isBefore(endTime);
     }
 
-    public static boolean isBefore(Date date1, Date date2){
+    public static boolean isBefore(Date date1, Date date2) {
         LocalTime time1;
         LocalTime time2;
         time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
@@ -54,11 +54,25 @@ public class TimeUtil {
         return time1.isBefore(time2);
     }
 
-    public static boolean isAfter(Date date1, Date date2){
+    public static boolean isAfter(Date date1, Date date2) {
         LocalTime time1;
         LocalTime time2;
         time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         time2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
         return time1.isAfter(time2);
+    }
+
+    public static long between(Date date1, Date date2) {
+        LocalTime time1;
+        LocalTime time2;
+        time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        time2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        return Duration.between(time1, time2).toSeconds();
+    }
+
+    public static String toString(Date date1) {
+        LocalTime time1;
+        time1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+        return StrUtil.format("{}:{}", time1.getHour(), time1.getMinute());
     }
 }

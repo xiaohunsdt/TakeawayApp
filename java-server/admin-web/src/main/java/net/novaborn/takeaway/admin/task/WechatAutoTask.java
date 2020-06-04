@@ -14,6 +14,8 @@ import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.mq.dto.AutoMessage;
 import net.novaborn.takeaway.mq.sender.WechatAutoSender;
+import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.quartz.constant.ScheduleConstants;
 import net.novaborn.takeaway.quartz.entity.SysJob;
 import net.novaborn.takeaway.quartz.service.impl.SysJobServiceImpl;
@@ -24,29 +26,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class WechatAutoTask {
-    private final String jobGroup = "wechat-auto";
     @Autowired
     SysJobServiceImpl sysJobService;
+
     @Autowired
     GoodsService goodsService;
+
     @Autowired
     SettingService settingService;
+
+    @Autowired
+    OrderItemService orderItemService;
+
     @Autowired
     WechatAutoSender wechatAutoSender;
+
     @Autowired
     SystemProperties systemProperties;
+
     String store_open_date;
+
     DateTime storeOpenTime;
+
     DateTime storeCloseTime;
+
+    private final String jobGroup = "wechat-auto";
+
     private List<Goods> goodsList = new ArrayList<>();
 
     @SneakyThrows
@@ -60,8 +71,21 @@ public class WechatAutoTask {
         SysJob sysJob = new SysJob();
         sysJob.setJobId(1L);
         sysJob.setJobGroup(jobGroup);
-        sysJob.setCronExpression(StrUtil.format("0 0/8 {}-{} * * ?", storeOpenTime.getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setCronExpression(StrUtil.format("0 0/10 {}-{} * * ?", storeOpenTime.getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
         sysJob.setInvokeTarget("wechatAutoTask.goodsShow()");
+        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+        sysJob.setConcurrent(false);
+        sysJobService.insertJob(sysJob);
+
+
+        int startHours = storeOpenTime.getField(DateField.HOUR_OF_DAY) - 4;
+        startHours = Math.max(startHours, 0);
+
+        sysJob = new SysJob();
+        sysJob.setJobId(2L);
+        sysJob.setJobGroup(jobGroup);
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", startHours, storeOpenTime.getField(DateField.HOUR_OF_DAY)));
+        sysJob.setInvokeTarget("wechatAutoTask.appointmentShow()");
         sysJob.setStatus(ScheduleConstants.Status.NORMAL);
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
@@ -70,7 +94,7 @@ public class WechatAutoTask {
     public void goodsShow() {
         Date currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
-        String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+        store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
 
         if (!Boolean.parseBoolean(service_running.getValue())) {
             return;
@@ -104,23 +128,62 @@ public class WechatAutoTask {
         }
 
         if (selectedGoods.size() > 0) {
-            sendAutoMessage(selectedGoods);
+            sendAutoMessage(selectedGoods, false);
         }
     }
 
-    public void sendAutoMessage(List<Goods> selectedGoods) {
+    public void orderShow(Order order) {
+        if (order.getRealPrice() < 18000) {
+            return;
+        }
+
+        List<Goods> goodsList = orderItemService.selectByOrderId(order.getId()).stream()
+                .filter(orderItem -> !orderItem.getGoodsId().isBlank())
+                .map(orderItem -> goodsService.getById(orderItem.getGoodsId()))
+                .collect(Collectors.toList());
+
+        sendAutoMessage(goodsList, true);
+    }
+
+    public void appointmentShow() {
+        AutoMessage autoMessage = new AutoMessage();
+        autoMessage.setMessage("今天正常营业哦～\r\n小伙伴们现在就可以下预约单!!\r\n优先配准时配送！！再也不用担心下课吃不到饭啦！！");
+        autoMessage.setImgUrlList(Arrays.asList("https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg", "https://admin.cxy.novaborn.net/upload/images/activity/dfc4b68932ba4c9f907624bc424c48f4.png", "https://admin.cxy.novaborn.net/upload/images/activity/5ee1589cb6a1453cbf65d38c93c479bc.png"));
+        wechatAutoSender.send(autoMessage);
+
+        log.info("WechatAuto: 已发送给队列 {}", autoMessage);
+    }
+
+    public void sendAutoMessage(List<Goods> selectedGoods, boolean isOrderShow) {
         String names = selectedGoods.stream().map(Goods::getName).collect(Collectors.joining(", "));
         String desc = selectedGoods.stream()
-                .filter(goods -> StrUtil.isNotBlank(goods.getDesc()))
-                .map(goods -> StrUtil.format("{}, {}韩币, {}", goods.getName(), goods.getPrice(), goods.getDesc()))
+                .map(goods -> {
+                    if (StrUtil.isBlank(goods.getDesc())) {
+                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
+                    } else {
+                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
+                    }
+                })
                 .collect(Collectors.joining("\r\n"));
         List<String> imgs = selectedGoods.stream()
                 .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
                 .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
                 .collect(Collectors.toList());
 
+        String message;
+        if (!isOrderShow) {
+            message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "现在点餐30-40分钟送达[哇][哇][哇]");
+        } else {
+            message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n{}", names, desc, "同款\uD83C\uDE51安排哦, 现在点餐30-40分钟送达[哇][哇][哇]");
+        }
+
+        long offend = TimeUtil.between(new Date(), storeCloseTime);
+        if (offend < 60 * 60 && offend > 0) {
+            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
+        }
+
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage(StrUtil.format("{}\r\n\r\n{}\r\n{}", names, desc, "现在点餐30-40分钟送达"));
+        autoMessage.setMessage(message);
         autoMessage.setImgUrlList(imgs);
         wechatAutoSender.send(autoMessage);
 
