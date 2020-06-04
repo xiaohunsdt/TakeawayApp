@@ -1,6 +1,5 @@
 package net.novaborn.takeaway.quartz.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import net.novaborn.takeaway.quartz.constant.ScheduleConstants;
 import net.novaborn.takeaway.quartz.entity.SysJob;
 import net.novaborn.takeaway.quartz.exception.TaskException;
@@ -36,12 +35,12 @@ public class SysJobServiceImpl implements ISysJobService
     @PostConstruct
     public void init() throws SchedulerException, TaskException
     {
-        SysJob sysJob = new SysJob();
-        sysJob.setCronExpression("0/5 * * * * ?");
-        sysJob.setInvokeTarget("ryTask.ryParams('asdasd')");
-        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-        sysJob.setConcurrent(false);
-        ScheduleUtils.createScheduleJob(scheduler, sysJob);
+//        SysJob sysJob = new SysJob();
+//        sysJob.setCronExpression("0/5 * * * * ?");
+//        sysJob.setInvokeTarget("ryTask.ryParams('asdasd')");
+//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+//        sysJob.setConcurrent(false);
+//        ScheduleUtils.createScheduleJob(scheduler, sysJob);
     }
 
     /**

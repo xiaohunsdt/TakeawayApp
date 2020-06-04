@@ -87,15 +87,20 @@ public class RabbitMQService extends Service {
 //                    super.handleDelivery(consumerTag, envelope, properties, body);
                     AutoMessage autoMessage = JSON.parseObject(body, AutoMessage.class, null);
                     ControlService.autoMessage = autoMessage;
-                    WechatUtil.openWChart(context);
-                    int count = 10;
-                    while (ControlService.autoMessage != null && count-- > 0) {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                    if(WechatUtil.isAccessibilitySettingsOn(context)){
+                        WechatUtil.openWChart(context);
+                        int count = 10;
+                        while (ControlService.autoMessage != null && count-- > 0) {
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
+
+                    long deliveryTag = envelope.getDeliveryTag();
+                    finalChannel.basicAck(deliveryTag, false);
                     //从message池中获取msg对象更高效
 //                    Message uimsg = handler.obtainMessage();
 //                    Bundle bundle = new Bundle();
@@ -103,9 +108,6 @@ public class RabbitMQService extends Service {
 //                    bundle.putString("message", smsDto.getMessage());
 //                    uimsg.setData(bundle);
 //                    handler.sendMessage(uimsg);
-
-                    long deliveryTag = envelope.getDeliveryTag();
-                    finalChannel.basicAck(deliveryTag, false);
                 }
             });
         } catch (IOException | TimeoutException e) {

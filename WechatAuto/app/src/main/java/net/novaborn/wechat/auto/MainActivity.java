@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -14,7 +15,6 @@ import androidx.core.app.ActivityCompat;
 
 import net.novaborn.wechat.auto.entity.AutoMessage;
 import net.novaborn.wechat.auto.services.RabbitMQService;
-import net.novaborn.wechat.auto.utils.ImageUtil;
 import net.novaborn.wechat.auto.utils.WechatUtil;
 
 import java.util.Arrays;
@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         verifyStoragePermissions(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Button startBtn = findViewById(R.id.start);
         Button endBtn = findViewById(R.id.end);
