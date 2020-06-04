@@ -27,8 +27,8 @@ public class RabbitMQService extends Service {
 
     public RabbitMQService() {
         factory = new ConnectionFactory();
-//        factory.setHost("admin.cxy.novaborn.net");
-        factory.setHost("192.168.0.7");
+        factory.setHost("admin.cxy.novaborn.net");
+//        factory.setHost("192.168.0.7");
         factory.setPort(5672);
         factory.setUsername("xiaohun");
         factory.setPassword("wy1996");
@@ -59,8 +59,8 @@ public class RabbitMQService extends Service {
                 e.printStackTrace();
             }
         }).start();
-//        return super.onStartCommand(intent, flags, startId);
-        return START_REDELIVER_INTENT;
+        return super.onStartCommand(intent, flags, startId);
+//        return START_REDELIVER_INTENT;
     }
 
     @Override
