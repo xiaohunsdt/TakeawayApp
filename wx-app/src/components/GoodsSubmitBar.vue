@@ -15,7 +15,7 @@
     </view>
 
     <view class="bar-class goods-submit-bar__bar">
-      <slot/>
+      <slot />
       <view class="goods-submit-bar__text">
         <text>{{ label || '合计：' }}</text>
         <text class="goods-submit-bar__price">
@@ -107,13 +107,13 @@
     user-select: none;
     z-index: 100;
     background-color: #fff;
-    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
+    box-shadow: 0 .1rem .5rem 0 rgba(0, 0, 0, .13);
   }
 
   .goods-submit-bar__tip {
-    padding: 10px;
+    padding: .2rem;
     color: #f56723;
-    font-size: 12px;
+    font-size: .24rem;
     line-height: 1.5;
     background-color: #fff7cc;
   }
@@ -123,12 +123,12 @@
   }
 
   .goods-submit-bar__tip-icon {
-    width: 12px;
-    height: 12px;
-    margin-right: 4px;
+    width: .24rem;
+    height: .24rem;
+    margin-right: .04rem;
     vertical-align: middle;
-    font-size: 12px;
-    min-width: 18px;
+    font-size: .24rem;
+    min-width: .36rem;
   }
 
   .goods-submit-bar__tip-text {
@@ -140,9 +140,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
-    height: 50px;
-    font-size: 14px;
+    padding: 0 .32rem;
+    height: 1rem;
+    font-size: .28rem;
     background-color: #fff;
   }
 
@@ -151,12 +151,12 @@
     flex: 1;
     text-align: right;
     color: #323233;
-    padding-right: 12px;
+    padding-right: .48rem;
   }
 
   .goods-submit-bar__price {
     color: #ee0a24;
-    font-size: 12px;
+    font-size: .48rem;
     font-weight: bolder;
   }
 
@@ -165,23 +165,23 @@
   }
 
   .goods-submit-bar__price-integer {
-    font-size: 20px;
+    font-size: .4rem;
     font-family: Avenir-Heavy, PingFang SC, Helvetica Neue, Arial, sans-serif
   }
 
   .goods-submit-bar__currency {
-    font-size: 12px;
+    font-size: .24rem;
   }
 
   .goods-submit-bar__suffix-label {
-    margin-left: 5px
+    margin-left: .1rem;
   }
 
   .goods-submit-bar__button {
-    width: 110px;
+    width: 2.2rem;
     font-weight: 500;
-    --button-default-height: 40px !important;
-    --button-line-height: 40px !important;
+    --button-default-height: .8rem !important;
+    --button-line-height: .8rem !important;
   }
 
 </style>

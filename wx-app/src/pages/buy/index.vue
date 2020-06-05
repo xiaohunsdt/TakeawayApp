@@ -169,26 +169,22 @@
         </base-panel>
       </div>
       <div id="footer">
-        <van-submit-bar
+        <goods-submit-bar
           :decimal-length="0"
           :disabled="disableService"
           :loading="submitLoading"
           :price="realPrice"
-          :tip="true"
           @submit="onSubmitOrder"
-          button-class="submitBtn"
           button-text="立刻支付"
-          currency="₩"
-          custom-class="orderSubmitBar"
-          price-class="orderPrice">
+          currency="₩">
           <div id="order-bar-left-content">
-            <img alt="" src="/static/images/order/cart.png">
-            <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
+            <img src="/static/images/order/cart.png">
+            <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
               {{ cartAllCount }}
             </div>
           </div>
           <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>
-        </van-submit-bar>
+        </goods-submit-bar>
       </div>
     </div>
   </div>
@@ -198,6 +194,7 @@
   import { mapMutations } from 'vuex'
   import BasePanel from '@/components/BasePanel'
   import OrderItem from '@/components/OrderItem'
+  import GoodsSubmitBar from '@/components/GoodsSubmitBar'
   import indexService from '@/services/index'
   import orderService from '@/services/order'
   import payService from '@/services/pay'
@@ -209,7 +206,8 @@
   export default {
     components: {
       BasePanel,
-      OrderItem
+      OrderItem,
+      GoodsSubmitBar
     },
     watch: {
       address (newVal) {
