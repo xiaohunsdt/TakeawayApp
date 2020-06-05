@@ -123,7 +123,7 @@ public class WechatAutoTask {
         for (int i = 1; i <= RandomUtil.randomInt(2, 4); i++) {
             if (index + i < goodsList.size()) {
                 selectedGoods.add(goodsList.remove(index + i));
-            } else if (index - i < goodsList.size()) {
+            } else if (index - i >= 0 && index - i < goodsList.size()) {
                 selectedGoods.add(goodsList.remove(index - i));
             }
         }
