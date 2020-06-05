@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.admin.mq;
 
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.mq.config.CouponQueueConfig;
+import net.novaborn.takeaway.mq.sender.CouponExpiredSender;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -33,6 +35,7 @@ import java.util.Map;
 @Component
 @RabbitListener(queues = CouponQueueConfig.QUEUE_NAME)
 public class CouponExpiredReceiver {
+    private CouponExpiredSender couponExpiredSender;
 
     private CouponService couponService;
 
@@ -44,16 +47,30 @@ public class CouponExpiredReceiver {
         Coupon target = couponService.getById(coupon.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (target != null && target.getState() != CouponState.EXPIRED) {
-            try {
-                target.setState(CouponState.EXPIRED);
-                target.updateById();
-            } catch (Exception e) {
-                log.error("优惠卷ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
-                channel.basicReject(deliveryTag, true);
-                return;
+        if (target != null) {
+            Date current = new Date();
+            if (!target.getExpireDate().equals(coupon.getExpireDate()) && target.getExpireDate().after(current)) {
+                //今天内过期
+                if (DateUtil.isSameDay(current, target.getExpireDate())) {
+                    long offset = DateUtil.between(current, target.getExpireDate(), DateUnit.SECOND);
+                    if (offset > 0) {
+                        couponExpiredSender.send(target, (int) offset);
+                    }
+                }
+            } else {
+                if (target.getState() != CouponState.EXPIRED) {
+                    try {
+                        target.setState(CouponState.EXPIRED);
+                        target.updateById();
+                    } catch (Exception e) {
+                        log.error("优惠卷ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
+                        channel.basicReject(deliveryTag, true);
+                        return;
+                    }
+                }
             }
         }
+
         channel.basicAck(deliveryTag, false);
     }
 }

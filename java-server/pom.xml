@@ -19,6 +19,8 @@
         <module>print-web</module>
         <module>mq</module>
         <module>banner</module>
+        <module>statistics</module>
+        <module>quartz</module>
     </modules>
 
     <parent>

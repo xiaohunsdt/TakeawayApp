@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.task.WechatAutoTask;
 import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
@@ -49,6 +50,8 @@ public class OrderController extends BaseController {
 
     private OrderSmsUtil orderSmsUtil;
 
+    private WechatAutoTask wechatAutoTask;
+
     @ResponseBody
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
@@ -64,11 +67,11 @@ public class OrderController extends BaseController {
             }
         }
 
-        if (StrUtil.isNotBlank((String)args.get("paymentWay"))) {
+        if (StrUtil.isNotBlank((String) args.get("paymentWay"))) {
             args.put("paymentWay", (PaymentWay.valueOf((String) args.get("paymentWay"))).getCode());
         }
 
-        if (StrUtil.isNotBlank((String)args.get("orderState"))) {
+        if (StrUtil.isNotBlank((String) args.get("orderState"))) {
             args.put("orderState", (OrderState.valueOf((String) args.get("orderState"))).getCode());
         }
 
@@ -161,6 +164,7 @@ public class OrderController extends BaseController {
         }
 
         orderSmsUtil.pushMessage(order.get());
+        wechatAutoTask.orderShow(order.get());
         return new SuccessTip();
     }
 
