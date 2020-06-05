@@ -141,7 +141,7 @@
     color: gray;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: .6rem;
+    max-height: .7rem;
     margin-bottom: 0.1rem;
   }
 </style>

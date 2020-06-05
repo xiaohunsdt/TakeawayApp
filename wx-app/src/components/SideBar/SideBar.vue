@@ -1,6 +1,6 @@
 <template>
   <div class="container-side-bar">
-    <div class="nav">
+    <div class="nav" :class="{'has-padding':cartAllCount > 0}">
       <scroll-view class="nav-scroll" scroll-y="true" style="height: 100%;">
         <div
           :class="{'active':currentId === category.id}"
@@ -17,6 +17,7 @@
         :scroll-into-view="contentId"
         :scroll-y="contentId"
         class="content-scroll"
+        :class="{'has-padding':cartAllCount > 0}"
         scroll-with-animation="true"
         style="height: 100%;">
         <div class="content-container">
@@ -340,5 +341,10 @@
 
   .cart-content {
     padding: .2rem;
+  }
+
+  .has-padding{
+    box-sizing:border-box;
+    padding-bottom: 1rem;
   }
 </style>

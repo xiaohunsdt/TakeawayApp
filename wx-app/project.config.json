@@ -21,7 +21,8 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"bundle": false
+		"bundle": false,
+		"useCompilerModule": false
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
