@@ -119,44 +119,6 @@
     margin-left: 0.1rem;
     display: unset !important;
   }
-
-  .order-submit-bar {
-    box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
-  }
-
-  .submit-btn {
-    font-weight: bolder !important;
-    background-color: #FFD200 !important;
-    border-color: #FFD200 !important;
-  }
-
-  .order-price {
-    font-weight: bolder;
-  }
 </style>
 
-<style scoped>
-  /*.container, .container-contain, #goods-content {*/
-  /*  height: calc(100% - 76rpx);*/
-  /*}*/
-
-  /*#activityInfo {*/
-  /*  padding: 0 0.2rem;*/
-  /*  margin-top: 0.2rem;*/
-  /*}*/
-
-  /*#activityInfo > van-tag {*/
-  /*  margin-right: 0.1rem;*/
-  /*}*/
-
-  /*#order-content {*/
-  /*  min-height: 5rem;*/
-  /*  margin-top: 0.2rem;*/
-  /*  background-color: white;*/
-  /*}*/
-
-  /*.food-content {*/
-  /*  background-color: white;*/
-  /*  padding: 0.2rem;*/
-  /*}*/
-</style>
+<style scoped></style>

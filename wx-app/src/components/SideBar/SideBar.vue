@@ -64,24 +64,22 @@
       </view>
     </van-action-sheet>
     <div id="footer" v-if="cartAllCount > 0">
-      <van-submit-bar
+      <goods-submit-bar
         :decimal-length="0"
         :disabled="pageSettings.disableService"
         :price="cartAllPrice * 100"
         @submit="onSubmitOrder"
-        button-class="submit-btn"
         button-text="提交订单"
-        currency="₩"
-        custom-class="order-submit-bar"
-        price-class="order-price">
+        currency="₩">
         <div @click="onOpenCart" id="order-bar-left-content">
           <img alt="" src="/static/images/order/cart.png">
-          <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;">
+          <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
             {{ cartAllCount }}
           </div>
         </div>
         <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
-      </van-submit-bar>
+<!--        <view slot="tip">asdasdasasdsa</view>-->
+      </goods-submit-bar>
     </div>
   </div>
 </template>
@@ -89,6 +87,7 @@
 <script>
   import StandardGoodsCard from '@/components/GoodsCard/StandardGoodsCard'
   import SimpleGoodsCard from '@/components/GoodsCard/SimpleGoodsCard'
+  import GoodsSubmitBar from '@/components/GoodsSubmitBar'
 
   import orderService from '@/services/order'
 
@@ -106,7 +105,8 @@
     },
     components: {
       StandardGoodsCard,
-      SimpleGoodsCard
+      SimpleGoodsCard,
+      GoodsSubmitBar
     },
     watch: {
       categoryGoods () {
@@ -116,21 +116,6 @@
         }
       }
     },
-    // watch: {
-    //   categoryGoods: {
-    //     handler: function () {
-    //       if (this.categoryGoods && this.categoryGoods.length > 0) {
-    //         this.currentId = this.categoryGoods[0].id
-    //         this.contentId = `xh_${this.currentId}`
-    //       }
-    //       let this_ = this
-    //       setTimeout(function () {
-    //         this_.getDivInfo()
-    //       }, 3000)
-    //     },
-    //     deep: true
-    //   }
-    // },
     computed: {
       cartAllCount () {
         return this.$store.getters.cartAllCount
@@ -245,8 +230,6 @@
   .container-side-bar .nav {
     width: 1.6rem;
     background: #F2F2F2;
-    /*height: 100%;*/
-    /*border-right: solid .01rem rgba(0, 0, 0, .13);*/
   }
 
   .container-side-bar .nav .nav-scroll {
@@ -257,8 +240,6 @@
     text-align: center;
     width: 100%;
     display: block;
-    /*min-height: 100rpx;*/
-    /*line-height: 100rpx;*/
     color: #313131;
     padding: .32rem 0;
     font-size: .32rem;
@@ -324,9 +305,9 @@
     margin: 0 .16rem;
   }
 
-  .has-submit-bar {
-    padding-bottom: .7rem;
-  }
+  /*.has-submit-bar {*/
+  /*  padding-bottom: .7rem;*/
+  /*}*/
 
   #order-bar-left-content {
     padding-left: 0.2rem;
