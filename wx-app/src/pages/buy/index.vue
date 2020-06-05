@@ -171,7 +171,7 @@
       <div id="footer">
         <goods-submit-bar
           :decimal-length="0"
-          :disabled="disableService"
+          :disabled="submitLoading || disableService"
           :loading="submitLoading"
           :price="realPrice"
           @submit="onSubmitOrder"
@@ -179,7 +179,8 @@
           currency="₩">
           <div id="order-bar-left-content">
             <img src="/static/images/order/cart.png">
-            <div style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
+            <div
+              style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
               {{ cartAllCount }}
             </div>
           </div>
@@ -424,6 +425,9 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
+        if (this.submitLoading) {
+          return
+        }
         this.submitLoading = true
         orderService.createOrder(
           orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment), this.from),
@@ -431,11 +435,11 @@
           this.coupon,
           this.address
         ).then(res => {
-          this.submitLoading = false
           this.CLEAR_CART()
           this.CLEAR_COUPON()
           this.CLEAR_FROM()
           this.orderId = res.message
+          this.submitLoading = false
           payService.payOrder(this.orderId, this.payWay)
         }).catch(res => {
           this.submitLoading = false
