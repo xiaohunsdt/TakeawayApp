@@ -25,11 +25,26 @@
         </text>
         <text class="goods-submit-bar__suffix-label">{{ suffixLabel }}</text>
       </view>
+
       <van-button
+        v-if="userInfo"
         :disabled="disabled"
         :loading="loading"
         :type="buttonType"
         @click="onSubmit"
+        class="goods-submit-bar__button"
+        custom-class="submit-btn"
+        custom-style="width: 100%;"
+        round>
+        {{ loading ? '' : buttonText }}
+      </van-button>
+      <van-button
+        v-else
+        :disabled="disabled"
+        :loading="loading"
+        :type="buttonType"
+        open-type="getUserInfo"
+        @getuserinfo="getWxUserInfo"
         class="goods-submit-bar__button"
         custom-class="submit-btn"
         custom-style="width: 100%;"
@@ -41,6 +56,8 @@
 </template>
 
 <script>
+  import userService from '@/services/user'
+
   export default {
     name: 'GoodsSubmitBar',
     props: {
@@ -79,12 +96,32 @@
         return this.decimalLength && priceStrArr ? `.${priceStrArr[1]}` : ''
       }
     },
+    data () {
+      return {
+        userInfo: null
+      }
+    },
+    onLoad () {
+      // 获取用户信息
+      if (mpvue.getStorageSync('userInfo')) {
+        this.userInfo = mpvue.getStorageSync('userInfo')
+      }
+    },
     methods: {
-      updateTip () {
-        this.setData({ hasTip: typeof this.data.tip === 'string' })
-      },
       onSubmit (event) {
         this.$emit('submit', event.detail)
+      },
+      getWxUserInfo (event) {
+        if (event.mp.detail.userInfo) {
+          // 将用户信息保存到服务器，保存成功后将被存储到本地
+          userService.setUserInfo()
+            .then(() => {
+              this.userInfo = event.mp.detail.userInfo
+              this.onSubmit(event)
+            })
+        } else {
+          console.error('授权失败!!!')
+        }
       }
     }
   }
