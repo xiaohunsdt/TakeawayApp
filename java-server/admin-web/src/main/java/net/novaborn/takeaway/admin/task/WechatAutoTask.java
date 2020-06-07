@@ -162,9 +162,7 @@ public class WechatAutoTask {
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
         autoMessage.setImgUrlList(
-                Arrays.asList("https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg",
-                        "https://admin.cxy.novaborn.net/upload/images/activity/dfc4b68932ba4c9f907624bc424c48f4.png",
-                        "https://admin.cxy.novaborn.net/upload/images/activity/5ee1589cb6a1453cbf65d38c93c479bc.png")
+                Arrays.asList("https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg")
         );
         wechatAutoSender.send(autoMessage);
 
