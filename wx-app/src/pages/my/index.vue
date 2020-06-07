@@ -142,12 +142,6 @@
         }
       }
     },
-    onLoad () {
-      // 获取用户信息
-      if (mpvue.getStorageSync('userInfo')) {
-        this.userInfo = mpvue.getStorageSync('userInfo')
-      }
-    },
     onShow () {
       this.init()
     },
@@ -157,6 +151,10 @@
     },
     methods: {
       init () {
+        // 获取用户信息
+        if (!this.userInfo && mpvue.getStorageSync('userInfo')) {
+          this.userInfo = mpvue.getStorageSync('userInfo')
+        }
         orderService.getOrderCountByState('WAIT_PAY').then(res => {
           this.orderCount.waitPay = res
         })
@@ -175,7 +173,7 @@
           // 将用户信息保存到服务器，保存成功后将被存储到本地
           userService.setUserInfo()
             .then(() => {
-              this.userInfo = mpvue.getStorageSync('userInfo')
+              this.userInfo = event.mp.detail.userInfo
             })
         } else {
           console.error('授权失败!!!')
