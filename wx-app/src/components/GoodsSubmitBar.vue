@@ -8,14 +8,14 @@
         custom-class="goods-submit-bar__tip-icon"
         size="12px"
         v-if="tipIcon"/>
-      <view class="goods-submit-bar__tip-text" v-if="hasTip">
+      <view class="goods-submit-bar__tip-text" v-if="tip">
         {{ tip }}
       </view>
       <slot name="tip"/>
     </view>
 
     <view class="bar-class goods-submit-bar__bar">
-      <slot />
+      <slot/>
       <view class="goods-submit-bar__text">
         <text>{{ label || '合计：' }}</text>
         <text class="goods-submit-bar__price">
@@ -27,7 +27,6 @@
       </view>
 
       <van-button
-        v-if="userInfo"
         :disabled="disabled"
         :loading="loading"
         :type="buttonType"
@@ -35,20 +34,21 @@
         class="goods-submit-bar__button"
         custom-class="submit-btn"
         custom-style="width: 100%;"
-        round>
+        round
+        v-if="userInfo">
         {{ loading ? '' : buttonText }}
       </van-button>
       <van-button
-        v-else
         :disabled="disabled"
         :loading="loading"
         :type="buttonType"
-        open-type="getUserInfo"
         @getuserinfo="getWxUserInfo"
         class="goods-submit-bar__button"
         custom-class="submit-btn"
         custom-style="width: 100%;"
-        round>
+        open-type="getUserInfo"
+        round
+        v-else>
         {{ loading ? '' : buttonText }}
       </van-button>
     </view>
@@ -109,6 +109,9 @@
     },
     methods: {
       onSubmit (event) {
+        if (this.disabled) {
+          return
+        }
         this.$emit('submit', event.detail)
       },
       getWxUserInfo (event) {

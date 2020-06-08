@@ -174,6 +174,7 @@
           :disabled="submitLoading || disableService"
           :loading="submitLoading"
           :price="realPrice"
+          :tip="tipNotice"
           @submit="onSubmitOrder"
           button-text="立刻支付"
           currency="₩">
@@ -184,7 +185,7 @@
               {{ cartAllCount }}
             </div>
           </div>
-          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>
+<!--          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>-->
         </goods-submit-bar>
       </div>
     </div>
@@ -425,9 +426,6 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
-        if (this.submitLoading) {
-          return
-        }
         this.submitLoading = true
         orderService.createOrder(
           orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment), this.from),

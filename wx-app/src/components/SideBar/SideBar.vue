@@ -68,6 +68,7 @@
         :decimal-length="0"
         :disabled="pageSettings.disableService"
         :price="cartAllPrice * 100"
+        :tip="pageSettings.disableServiceNotice"
         @submit="onSubmitOrder"
         button-text="提交订单"
         currency="₩">
@@ -77,8 +78,7 @@
             {{ cartAllCount }}
           </div>
         </div>
-        <view slot="tip" v-if="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>
-<!--        <view slot="tip">asdasdasasdsa</view>-->
+<!--        <view slot="tip" v-show="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>-->
       </goods-submit-bar>
     </div>
   </div>
