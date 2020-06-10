@@ -56,10 +56,10 @@ services:
     restart: always
     network_mode: "service:mysql"
 
-    elastichd:
-      image: containerize/elastichd
-      restart: always
-      network_mode: "service:mysql"
+  elastichd:
+    image: containerize/elastichd
+    restart: always
+    network_mode: "service:mysql"
 
   admin-web:
     build:
