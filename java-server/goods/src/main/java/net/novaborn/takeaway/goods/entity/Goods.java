@@ -4,8 +4,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import net.novaborn.takeaway.goods.enums.GoodsState;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -16,10 +17,12 @@ import java.util.Date;
  */
 
 @Data
+@Document(indexName = "takeaway", type = "goods")
 @TableName("`goods`")
 public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;
 
+    @Id
     @TableId(type = IdType.ASSIGN_UUID)
     private String id;
 

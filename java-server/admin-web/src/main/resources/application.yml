@@ -17,7 +17,7 @@ server:
 
 spring:
   profiles:
-    active: test
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -48,6 +48,10 @@ spring:
         acknowledge-mode: manual
         concurrency: 5
         max-concurrency: 10
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
   quartz:
 #    job-store-type: jdbc
 #    initialize-schema: embedded
