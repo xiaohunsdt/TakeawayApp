@@ -31,7 +31,7 @@
 	"projectname": "wx-app",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
-	"libVersion": "2.10.4",
+	"libVersion": "2.11.1",
 	"condition": {
 		"search": {
 			"current": -1,

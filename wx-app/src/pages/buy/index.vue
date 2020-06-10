@@ -185,7 +185,7 @@
               {{ cartAllCount }}
             </div>
           </div>
-<!--          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>-->
+          <!--          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>-->
         </goods-submit-bar>
       </div>
     </div>
@@ -202,6 +202,7 @@
   import payService from '@/services/pay'
   import addressService from '@/services/address'
   import couponService from '@/services/coupon'
+  import util from '../../utils/util'
 
   let times = null
 
@@ -337,6 +338,9 @@
       } else if (this.address) {
         this.checkExpressState(this.address.id, this.cartAllPrice)
       }
+      if (util.checkVersion('7.0.7') === -1) {
+        this.tipNotice = '您的微信版本过低,建议您升级最新版本获取全部新特性服务'
+      }
     },
     methods: {
       ...mapMutations('cart', [
@@ -426,6 +430,67 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
+        const $this = this
+        const tmplIds = [
+          'chtooPomhx0JrFECp0ZzYLlRZHc6tA7UdN-l5lAV0A4',
+          '4tz6mHc6JK5tsCq6lT2IGh2Leo46QyeDWjLml__PNI0',
+          '-fscbMujX6HY1jkr-Sy1bjqv1p6FDq9vkhGw-4hL9Xk'
+        ]
+        if (util.checkVersion('7.0.7') >= 0) {
+          mpvue.requestSubscribeMessage({
+            tmplIds,
+            success (res) {
+              console.log(res)
+              let isReject = false
+              for (let i = 0; i < tmplIds.length; i++) {
+                if (res[tmplIds[i]] === 'reject') {
+                  isReject = true
+                  break
+                }
+              }
+
+              if (isReject) {
+                mpvue.showModal({
+                  title: '提示',
+                  content: `拒绝消息会导致您无法收到订单相关的消息通知\r\n请问是否继续下单?`,
+                  success (res) {
+                    if (res.confirm) {
+                      $this.createOrder()
+                    }
+                  }
+                })
+              } else {
+                $this.createOrder()
+              }
+            }
+          })
+        } else {
+          mpvue.requestSubscribeMessage({
+            tmplIds: [tmplIds[2]],
+            success (res) {
+              console.log(res)
+              let isReject = false
+              if (res[tmplIds[2]] === 'reject') {
+                isReject = true
+              }
+              if (isReject) {
+                mpvue.showModal({
+                  title: '提示',
+                  content: `拒绝消息会导致您无法收到订单相关的消息通知\r\n请问是否继续下单?`,
+                  success (res) {
+                    if (res.confirm) {
+                      $this.createOrder()
+                    }
+                  }
+                })
+              } else {
+                $this.createOrder()
+              }
+            }
+          })
+        }
+      },
+      createOrder () {
         this.submitLoading = true
         orderService.createOrder(
           orderService.generateOrder(this.payWay, this.psData, indexService.formatAppointmentTime(this.deliveryType, this.appointment), this.from),
@@ -439,16 +504,11 @@
           this.orderId = res.message
           this.submitLoading = false
           payService.payOrder(this.orderId, this.payWay)
-        }).catch(res => {
-          this.submitLoading = false
-          if (res) {
-            console.error(res)
-          }
         })
       },
       checkExpressState (addressId, allPrice) {
         this.disableService = false
-        this.tipNotice = null
+        // this.tipNotice = null
         indexService.getExpressServiceState(addressId, allPrice)
           .then(res => {
             if (res.state !== 0) {
