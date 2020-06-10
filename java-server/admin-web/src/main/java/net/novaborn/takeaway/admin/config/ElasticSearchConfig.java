@@ -9,8 +9,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 import javax.annotation.PostConstruct;
 
-@Configuration
-@EnableElasticsearchRepositories(basePackages = "net.novaborn.takeaway")
+//@Configuration
+//@EnableElasticsearchRepositories(basePackages = "net.novaborn.takeaway")
 public class ElasticSearchConfig {
     @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
