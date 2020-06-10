@@ -45,22 +45,6 @@ services:
     restart: always
     network_mode: "service:mysql"
 
-  elasticsearch:
-    # image: elasticsearch:7.7.1
-    build:
-      context: .
-      dockerfile: Dockerfile-elasticsearch-deloy
-    hostname: elasticsearch
-    environment:
-      discovery.type: single-node
-    restart: always
-    network_mode: "service:mysql"
-
-  elastichd:
-    image: containerize/elastichd
-    restart: always
-    network_mode: "service:mysql"
-
   admin-web:
     build:
       context: .
