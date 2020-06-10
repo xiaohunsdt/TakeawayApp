@@ -20,6 +20,9 @@ services:
 #      - "8082:8082"
       - "80:80"
       - "443:443"
+      - "9200:9200"
+      - "9300:9300"
+      - "9800:9800"
     volumes:
       - ~/server_data/mysql_data:/var/lib/mysql
 
@@ -51,16 +54,13 @@ services:
     hostname: elasticsearch
     environment:
       discovery.type: single-node
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     restart: always
+    network_mode: "service:mysql"
 
   elastichd:
     image: containerize/elastichd
-    ports:
-      - "9800:9800"
     restart: always
+    network_mode: "service:mysql"
 
   admin-web:
     build:
