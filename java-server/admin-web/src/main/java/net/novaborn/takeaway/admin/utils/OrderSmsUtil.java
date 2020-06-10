@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.mq.dto.SmsDto;
+import net.novaborn.takeaway.mq.sender.OrderSubscribeMessageSender;
 import net.novaborn.takeaway.mq.sender.SmsSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
@@ -31,12 +32,14 @@ public class OrderSmsUtil {
 
     private SmsSender smsSender;
 
+    private OrderSubscribeMessageSender orderSubscribeMessageSender;
+
     @Setter
     private DelayQueue<Message> queue;
 
     private static Map<OrderState, String> orderStateStringMap = new HashMap<>();
 
-    private final int DELAY_TIME = 15;
+    private final int DELAY_TIME = 8;
 
     static {
         orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n\n尊敬的顾客，您好！\n\n订单ID: %s\n\n已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
@@ -106,7 +109,10 @@ public class OrderSmsUtil {
                     Address address = addressService.getById(_order.getAddressId());
                     String msg = String.format(orderStateStringMap.get(_order.getOrderState()), _order.getId());
 
-                    smsSender.send(new SmsDto(address.getPhone(), msg));
+                    if (!_order.getOrderState().equals(OrderState.DELIVERING)) {
+                        smsSender.send(new SmsDto(address.getPhone(), msg));
+                    }
+                    orderSubscribeMessageSender.send(_order);
                 } catch (InterruptedException e) {
                     log.error(null, e);
                 }

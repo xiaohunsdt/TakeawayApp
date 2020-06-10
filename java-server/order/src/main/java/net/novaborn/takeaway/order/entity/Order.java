@@ -96,8 +96,8 @@ public class Order extends Model<Order> {
     @JSONField(serialize = false)
     private Integer version;
 
-    @JSONField(serialize = false)
     @TableLogic
+    @JSONField(serialize = false)
     private Integer deleted;
 
     @Override

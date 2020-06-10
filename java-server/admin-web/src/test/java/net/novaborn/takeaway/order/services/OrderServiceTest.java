@@ -74,8 +74,8 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByGoodsNameTest() {
-        Date start = DateUtil.parseDateTime("2020-05-31 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-06-01 00:00:00");
+        Date start = DateUtil.parseDateTime("2020-06-10 00:00:00");
+        Date end = DateUtil.parseDateTime("2020-06-11 00:00:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
@@ -85,7 +85,7 @@ public class OrderServiceTest {
                     List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
                     boolean isExist = false;
                     for (OrderItem orderItem : orderItems) {
-                        if (orderItem.getGoodsName().equals("干豆腐")) {
+                        if (orderItem.getGoodsName().contains("鸭脖") || orderItem.getGoodsName().contains("鸭锁骨")) {
                             isExist = true;
                             break;
                         }

@@ -12,6 +12,7 @@ package net.novaborn.takeaway.user.service;
 public interface IWxService {
     /**
      * 保存微信小程序登陆传过来的sessionKey
+     *
      * @param openId
      * @param sessionKey
      */
@@ -19,6 +20,7 @@ public interface IWxService {
 
     /**
      * 获取微信小程序登陆传过来的sessionKey
+     *
      * @param openId
      */
     String getSessionKey(String openId);

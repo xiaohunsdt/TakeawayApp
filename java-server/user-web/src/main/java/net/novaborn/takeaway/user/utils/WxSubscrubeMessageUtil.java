@@ -1,47 +1,32 @@
-package net.novaborn.takeaway.impl;
+package net.novaborn.takeaway.user.utils;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
-import lombok.SneakyThrows;
+import cn.hutool.core.date.DateUtil;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import net.novaborn.takeaway.user.UserApplication;
-import net.novaborn.takeaway.user.service.impl.WxService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.utils.OrderFormatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {UserApplication.class})
-public class WxServiceTest {
-    @Autowired
-    WxService wxService;
-
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
+@Component
+public class WxSubscrubeMessageUtil {
     @Autowired
     private WxMaService wxMaService;
 
-    @Test
-    public void setSessionKey() {
-        wxService.setSessionKey("asdadzxcxzc", "aaaaaaa");
-    }
-
-    @Test
-    public void getSessionKey() {
-        System.out.println(wxService.getSessionKey("asdadzxcxzc"));
-    }
-
-    @Test
-    @SneakyThrows
-    public void sendSubscribeMessageKey() {
-        List<WxMaSubscribeMessage.Data> dataList = new ArrayList();
-        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "#11"));
+    public void sendOrderReceiveMessage(Order order) {
+        List<WxMaSubscribeMessage.Data> dataList = new ArrayList<>();
+        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber().toString()));
         dataList.add(new WxMaSubscribeMessage.Data("phrase2", "制作中"));
-        dataList.add(new WxMaSubscribeMessage.Data("amount3", "₩26000"));
-        dataList.add(new WxMaSubscribeMessage.Data("phrase5", "一般订单"));
+        dataList.add(new WxMaSubscribeMessage.Data("amount3", "₩" + order.getRealPrice()));
+        dataList.add(new WxMaSubscribeMessage.Data("phrase5", OrderFormatUtil.formatOrderType(order)));
         dataList.add(new WxMaSubscribeMessage.Data("thing7", "已经确认收到您的订单,正在为您制作!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
@@ -51,15 +36,15 @@ public class WxServiceTest {
         subscribeMessage.setPage("/pages/order/main?state=WAIT_EAT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
-        } catch (WxErrorException e) { }
+        } catch (WxErrorException e) {
+            log.error("", e);
+        }
     }
 
-    @Test
-    @SneakyThrows
-    public void sendSubscribeMessage2Key() {
-        List<WxMaSubscribeMessage.Data> dataList = new ArrayList();
-        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "#56"));
-        dataList.add(new WxMaSubscribeMessage.Data("time2", "2020-05-05 12:23:10"));
+    public void sendOrderDeliveryMessage(Order order) {
+        List<WxMaSubscribeMessage.Data> dataList = new ArrayList<>();
+        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber()));
+        dataList.add(new WxMaSubscribeMessage.Data("time2", DateUtil.formatDateTime(order.getUpdateDate())));
         dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已经开始配送,请耐心等待!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
@@ -69,15 +54,15 @@ public class WxServiceTest {
         subscribeMessage.setPage("/pages/order/main?state=WAIT_EAT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
-        } catch (WxErrorException e) { }
+        } catch (WxErrorException e) {
+            log.error("", e);
+        }
     }
 
-    @Test
-    @SneakyThrows
-    public void sendSubscribeMessage3Key() {
-        List<WxMaSubscribeMessage.Data> dataList = new ArrayList();
-        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "#11"));
-        dataList.add(new WxMaSubscribeMessage.Data("time2", "2020-05-05 12:23:10"));
+    public void sendOrderFinishedMessage(Order order) {
+        List<WxMaSubscribeMessage.Data> dataList = new ArrayList<>();
+        dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber()));
+        dataList.add(new WxMaSubscribeMessage.Data("time2", DateUtil.formatDateTime(order.getUpdateDate())));
         dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您选择川香苑!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
@@ -87,6 +72,8 @@ public class WxServiceTest {
         subscribeMessage.setPage("/pages/order/main?state=WAIT_COMMENT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
-        } catch (WxErrorException e) { }
+        } catch (WxErrorException e) {
+            log.error("", e);
+        }
     }
 }

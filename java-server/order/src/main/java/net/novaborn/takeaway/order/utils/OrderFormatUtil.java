@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.order.utils;
 
+import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
@@ -48,5 +49,9 @@ public class OrderFormatUtil {
 
     public static String formatPaymentWay(PaymentWay paymentWay) {
         return paymentWayMap.get(paymentWay);
+    }
+
+    public static String formatOrderType(Order order) {
+        return order.getAppointmentDate() == null ? "一般订单" : "预约订单";
     }
 }

@@ -19,26 +19,43 @@ import java.util.Map;
  */
 @Configuration
 public class OrderQueueConfig {
-    public final static String QUEUE_NAME = "delayed.live.queue.order-pay-expired";
-    public final static String EXCHANGE_NAME = "delayed.live.exchange.order";
+    public final static String QUEUE_ORDER_PAY_EXPIRED = "delayed.queue.order.pay.expired";
+    public final static String QUEUE_ORDER_SUBSCRIBE_MESSAGE = "direct.queue.order.subscribe.message";
+    public final static String DELAYED_EXCHANGE = "delayed.exchange.order";
+    public final static String DIRECT_EXCHANGE = "direct.exchange.order";
 
     @Bean
     public Queue orderPayExpiredQueue() {
-        return new Queue(OrderQueueConfig.QUEUE_NAME);
+        return new Queue(OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED);
+    }
+
+    @Bean
+    public Queue orderSubscribeMessageQueue() {
+        return new Queue(OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE);
     }
 
     // 配置默认的交换机
     @Bean
-    CustomExchange orderExchange() {
+    CustomExchange orderDelayedExchange() {
         Map<String, Object> args = new HashMap<>();
         args.put("x-delayed-type", "direct");
         //参数二为类型：必须是x-delayed-message
-        return new CustomExchange(OrderQueueConfig.EXCHANGE_NAME, "x-delayed-message", true, false, args);
+        return new CustomExchange(OrderQueueConfig.DELAYED_EXCHANGE, "x-delayed-message", true, false, args);
+    }
+
+    @Bean
+    CustomExchange orderDirectExchange() {
+        return new CustomExchange(OrderQueueConfig.DIRECT_EXCHANGE, "direct", true, false);
     }
 
     // 绑定队列到交换器
     @Bean
-    Binding orderBinding(Queue orderPayExpiredQueue, CustomExchange orderExchange) {
-        return BindingBuilder.bind(orderPayExpiredQueue).to(orderExchange).with(OrderQueueConfig.QUEUE_NAME).noargs();
+    Binding orderBinding(Queue orderPayExpiredQueue, CustomExchange orderDelayedExchange) {
+        return BindingBuilder.bind(orderPayExpiredQueue).to(orderDelayedExchange).with(OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED).noargs();
+    }
+
+    @Bean
+    Binding orderBinding2(Queue orderSubscribeMessageQueue, CustomExchange orderDirectExchange) {
+        return BindingBuilder.bind(orderSubscribeMessageQueue).to(orderDirectExchange).with(OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE).noargs();
     }
 }

@@ -16,17 +16,11 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class OrderPayExpiredSender {
+public class OrderSubscribeMessageSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(Order order, int delaySeconds) {
-//        CorrelationData cd = new CorrelationData();
-//        cd.setId(order.getId());
-
-        rabbitTemplate.convertAndSend(OrderQueueConfig.DELAYED_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED, order, message -> {
-            message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
-            return message;
-        });
+    public void send(Order order) {
+        rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE, order);
     }
 }

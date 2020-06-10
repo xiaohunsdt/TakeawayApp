@@ -10,6 +10,7 @@ import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.user.utils.WxSubscrubeMessageUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -32,27 +33,34 @@ import java.util.Map;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Component
-@RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED)
-public class OrderPayExpiredReceiver {
+@RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE)
+public class OrderSubscribeMessageReceiver {
 
     private OrderService orderService;
+
+    private WxSubscrubeMessageUtil wxSubscrubeMessageUtil;
 
     @SneakyThrows
     @RabbitHandler
     public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
-        log.info("订单过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+        log.info("订单订阅消息队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
-            try {
-                target.setOrderState(OrderState.EXPIRED);
-                target.updateById();
-            } catch (Exception e) {
-                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
-                channel.basicReject(deliveryTag, true);
-                return;
+        if (target != null) {
+            switch (order.getOrderState()) {
+                case PRODUCING:
+                    wxSubscrubeMessageUtil.sendOrderReceiveMessage(target);
+                    break;
+                case DELIVERING:
+                    wxSubscrubeMessageUtil.sendOrderDeliveryMessage(target);
+                    break;
+                case FINISHED:
+                    wxSubscrubeMessageUtil.sendOrderFinishedMessage(target);
+                    break;
+                default:
+                    break;
             }
         }
 

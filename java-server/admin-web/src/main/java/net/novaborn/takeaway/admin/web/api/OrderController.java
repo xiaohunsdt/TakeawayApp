@@ -183,7 +183,7 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "操作失败!");
         }
 
-//        orderSmsUtil.pushMessage(order.get());
+        orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
 
