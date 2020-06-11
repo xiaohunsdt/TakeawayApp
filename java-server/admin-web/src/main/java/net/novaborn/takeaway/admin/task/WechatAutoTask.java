@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.sql.Time;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -160,12 +159,16 @@ public class WechatAutoTask {
         }
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+//        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n小伙伴们现在就可以下预约单!!\n卤豌豆上架！！新品试吃，点餐满24000韩币赠送一份卤豌豆哦！！！");
         autoMessage.setImgUrlList(
-                Arrays.asList("https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg")
+                Arrays.asList(
+                        "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/53166ae0a68b4bbd9f59c06ad8f641b2.jpeg"
+                )
         );
-        wechatAutoSender.send(autoMessage);
 
+        wechatAutoSender.send(autoMessage);
         log.info("WechatAuto: 已发送给队列 {}", autoMessage);
     }
 
