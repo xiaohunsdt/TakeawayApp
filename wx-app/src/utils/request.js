@@ -47,18 +47,28 @@ request.interceptors.response.use(
   },
   (err, promise) => {
     mpvue.hideNavigationBarLoading()
-    const response = err.response.data
-    if (response.code === 700) {
-      mpvue.navigateTo({
-        url: '/pages/my/auth/main'
-      })
+    if (err.response) {
+      const response = err.response.data
+      if (response.code === 700) {
+        mpvue.navigateTo({
+          url: '/pages/my/auth/main'
+        })
+      } else {
+        mpvue.showToast({
+          title: response.message,
+          icon: 'none',
+          duration: 2000
+        })
+      }
+      return promise.reject(response)
     } else {
       mpvue.showToast({
-        title: response.message,
-        icon: 'none'
+        title: err.message,
+        icon: 'none',
+        duration: 2000
       })
+      return promise.reject(null)
     }
-    return promise.reject(response)
   }
 )
 
