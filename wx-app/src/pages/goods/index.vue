@@ -93,7 +93,9 @@
         mpvue.createSelectorQuery().select('#header').boundingClientRect(function (headerRect) {
           mpvue.getSystemInfo({
             success: function (res, rect) {
-              _this.height = res.windowHeight - headerRect.height - 10
+              if (headerRect && headerRect.height) {
+                _this.height = res.windowHeight - headerRect.height - 10
+              }
             }
           })
         }).exec()
