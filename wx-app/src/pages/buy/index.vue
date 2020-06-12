@@ -111,7 +111,8 @@
               icon="alipay"
               round
               size="small"
-              type="primary">支付宝
+              type="primary"
+              v-if="address">支付宝支付
             </van-button>
             <van-button
               :color="payWay==='TRANSFER'?'#FFD200':null"
@@ -430,6 +431,12 @@
         this.payWay = payWay
       },
       onSubmitOrder () {
+        if (this.orderItems.size === 0) {
+          mpvue.showToast({
+            title: '请选择商品!!',
+            image: '/static/images/error.png'
+          })
+        }
         const $this = this
         const tmplIds = [
           'chtooPomhx0JrFECp0ZzYLlRZHc6tA7UdN-l5lAV0A4',
@@ -501,9 +508,12 @@
           this.CLEAR_CART()
           this.CLEAR_COUPON()
           this.CLEAR_FROM()
+          this.orderItems = []
           this.orderId = res.message
           this.submitLoading = false
           payService.payOrder(this.orderId, this.payWay)
+        }).catch(res => {
+          this.submitLoading = false
         })
       },
       checkExpressState (addressId, allPrice) {
