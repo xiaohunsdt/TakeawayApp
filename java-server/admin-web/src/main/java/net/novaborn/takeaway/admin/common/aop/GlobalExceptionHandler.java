@@ -8,6 +8,7 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,10 +45,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorTip handleBindException3(BindException e) {
+    public ErrorTip handleBindException(BindException e) {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 e.getFieldError().getDefaultMessage()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return new ErrorTip(
+                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
         );
     }
 

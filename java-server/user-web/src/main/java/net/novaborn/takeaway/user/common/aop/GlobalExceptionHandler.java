@@ -46,10 +46,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorTip handleBindException3(BindException e) {
+    public ErrorTip handleBindException(BindException e) {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 e.getFieldError().getDefaultMessage()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return new ErrorTip(
+                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
         );
     }
 
