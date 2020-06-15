@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorTip handleBindException1(MethodArgumentNotValidException e) {
+    public ErrorTip handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorTip handleBindException2(ConstraintViolationException e) {
+    public ErrorTip handleConstraintViolationException(ConstraintViolationException e) {
         return new ErrorTip(
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
                 SysExceptionEnum.ARGUMENT_VALID_ERROR.getMessage()
