@@ -56,6 +56,10 @@ export function formatAppointmentTime (deliveryType, appointment) {
   return appointmentDate ? indexUtil.formatDateTime(appointmentDate) : null
 }
 
+export function getFormerNotice (fromer) {
+  return api.getFormerNotice(fromer)
+}
+
 export default {
   getBannersList,
   getNewGoodsList,
@@ -63,5 +67,6 @@ export default {
   getServiceState,
   getExpressServiceState,
   getAppointmentTimes,
-  formatAppointmentTime
+  formatAppointmentTime,
+  getFormerNotice
 }

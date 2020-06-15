@@ -195,6 +195,13 @@
 					"pathName": "pages/index/main",
 					"query": "from=YONSEI",
 					"scene": 1011
+				},
+				{
+					"id": -1,
+					"name": "pages/index/main",
+					"pathName": "pages/index/main",
+					"query": "from=SOGANG",
+					"scene": 1011
 				}
 			]
 		}

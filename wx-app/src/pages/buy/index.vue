@@ -3,15 +3,14 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <div id="header">
-        <!--        <base-panel v-if="from">-->
-        <!--          <div>-->
-        <!--            <van-notice-bar-->
-        <!--              scrollable="true"-->
-        <!--              text="延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!下单即可享受学联专属88折扣,刷卡鸭货不支持哦!小伙伴们加油!"-->
-        <!--              v-if="from==='YONSEI'"-->
-        <!--              wrapable/>-->
-        <!--          </div>-->
-        <!--        </base-panel>-->
+        <base-panel v-if="fromNotice">
+          <div>
+            <van-notice-bar
+              scrollable="true"
+              :text="fromNotice"
+              wrapable/>
+          </div>
+        </base-panel>
         <base-panel>
           <div>
             <div v-if="address">
@@ -281,6 +280,7 @@
         showOrderTip: false,
         disableService: false,
         tipNotice: '',
+        fromNotice: null,
         orderId: '',
         order: {},
         orderItems: [],
@@ -341,6 +341,11 @@
       }
       if (util.checkVersion('7.0.7') === -1) {
         this.tipNotice = '您的微信版本过低,建议您升级最新版本获取全部新特性服务'
+      }
+      if (this.from) {
+        indexService.getFormerNotice(this.from).then(res => {
+          this.fromNotice = res.message
+        })
       }
     },
     methods: {
@@ -461,6 +466,13 @@
                   title: '提示',
                   content: `拒绝消息会导致您无法收到订单相关的消息通知\r\n请问是否继续下单?`,
                   success (res) {
+                    if (res.cancel) {
+                      mpvue.showModal({
+                        title: '提示',
+                        content: '请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
+                        showCancel: false
+                      })
+                    }
                     if (res.confirm) {
                       $this.createOrder()
                     }
@@ -468,6 +480,15 @@
                 })
               } else {
                 $this.createOrder()
+              }
+            },
+            fail (res) {
+              if (res.errCode === 20004) {
+                mpvue.showModal({
+                  title: '警告',
+                  content: '订阅消息权限被关闭! 请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
+                  showCancel: false
+                })
               }
             }
           })
@@ -485,6 +506,13 @@
                   title: '提示',
                   content: `拒绝消息会导致您无法收到订单相关的消息通知\r\n请问是否继续下单?`,
                   success (res) {
+                    if (res.cancel) {
+                      mpvue.showModal({
+                        title: '提示',
+                        content: '请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
+                        showCancel: false
+                      })
+                    }
                     if (res.confirm) {
                       $this.createOrder()
                     }
@@ -492,6 +520,15 @@
                 })
               } else {
                 $this.createOrder()
+              }
+            },
+            fail (res) {
+              if (res.errCode === 20004) {
+                mpvue.showModal({
+                  title: '警告',
+                  content: '订阅消息权限被关闭! 请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
+                  showCancel: false
+                })
               }
             }
           })
