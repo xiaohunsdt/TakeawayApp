@@ -8,6 +8,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.banner.entity.Banner;
 import net.novaborn.takeaway.banner.service.impl.BannerService;
+import net.novaborn.takeaway.common.enums.From;
+import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
@@ -46,6 +49,12 @@ public class IndexController extends BaseController {
     private SettingService settingService;
 
     private BannerService bannerService;
+
+    private static Map<From,String> fromerNotice = new HashMap<>();
+
+    static {
+        fromerNotice.put(From.YONSEI,"延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!小伙伴们加油!");
+    }
 
     @GetMapping("getBannersList")
     public ResponseEntity getBannersList() {
@@ -178,5 +187,11 @@ public class IndexController extends BaseController {
             timePairs.add(timePair);
         }
         return new AppointmentTimesDto(timePairs, TimeUtil.isBetween(store_open_time, store_close_time));
+    }
+
+    @GetMapping("getFormerNotice")
+    @ResponseBody
+    public Tip getFormerNotice(From from) {
+        return new SuccessTip(fromerNotice.get(from));
     }
 }
