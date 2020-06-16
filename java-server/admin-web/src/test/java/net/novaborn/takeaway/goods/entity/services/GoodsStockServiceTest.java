@@ -24,7 +24,7 @@ public class GoodsStockServiceTest {
     @Test
     public void goodsStockTest() {
         goodsService.list().parallelStream().forEach(goods -> {
-            Optional<GoodsStock> goodsStock = goodsStockService.getByGoodsId(goods.getId()).or(() -> {
+            goodsStockService.getByGoodsId(goods.getId()).or(() -> {
                 GoodsStock stockTemp = new GoodsStock();
                 stockTemp.setGoodsId(goods.getId());
                 stockTemp.setStock(-1);

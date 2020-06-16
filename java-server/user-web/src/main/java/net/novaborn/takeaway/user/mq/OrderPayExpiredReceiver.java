@@ -5,10 +5,14 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
+import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created with IntelliJ IDEA
@@ -37,6 +42,12 @@ public class OrderPayExpiredReceiver {
 
     private OrderService orderService;
 
+    private OrderItemService orderItemService;
+
+    private GoodsService goodsService;
+
+    private GoodsStockService goodsStockService;
+
     @SneakyThrows
     @RabbitHandler
     public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
@@ -49,6 +60,15 @@ public class OrderPayExpiredReceiver {
             try {
                 target.setOrderState(OrderState.EXPIRED);
                 target.updateById();
+
+                // 恢复库存
+                orderItemService.selectByOrderId(order.getId()).parallelStream().forEach(item -> {
+                    Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
+                    if (goods.isEmpty()) {
+                        return;
+                    }
+                    goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
+                });
             } catch (Exception e) {
                 log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
                 channel.basicReject(deliveryTag, true);

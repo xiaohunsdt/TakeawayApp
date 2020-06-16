@@ -29,6 +29,13 @@ export function getGoodsListByPage(page, args) {
   })
 }
 
+export function getStockByGoodsId(id) {
+  return request({
+    url: '/goods/getStockByGoodsId',
+    params: { id }
+  })
+}
+
 export function createNewGoods(data) {
   return request({
     url: '/goods/createNewGoods',
@@ -48,6 +55,19 @@ export function updateGoods(data) {
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data,
+    transformRequest: [function(data) {
+      data = Qs.stringify(data)
+      return data
+    }]
+  })
+}
+
+export function updateStock(goodsId, stock) {
+  return request({
+    url: '/goods/updateStock',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    data: { goodsId, stock },
     transformRequest: [function(data) {
       data = Qs.stringify(data)
       return data
@@ -90,8 +110,10 @@ export default {
   getByGoodsId,
   getAllGoods,
   getGoodsListByPage,
+  getStockByGoodsId,
   createNewGoods,
   updateGoods,
+  updateStock,
   updateGoodsThumb,
   deleteGoods
 }

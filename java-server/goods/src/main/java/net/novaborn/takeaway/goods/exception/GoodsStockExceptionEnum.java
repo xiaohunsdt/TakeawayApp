@@ -9,24 +9,23 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
  * @author xiaohun
  * @date 2016年11月12日 下午5:04:51
  */
-public enum GoodsExceptionEnum implements ServiceExceptionEnum {
+public enum GoodsStockExceptionEnum implements ServiceExceptionEnum {
+    /**
+     * 不存在
+     */
+    STOCK_NOT_FOUND(500, "库存不存在!"),
 
     /**
      * 不存在
      */
-    GOODS_NOT_FOUND(500, "商品不存在!"),
+    STOCK_HAD_NONE(500, "已经没有没有库存了!"),
 
     /**
-     * 更新商品失败
+     * 更新商品库存失败
      */
-    UPDATE_FAILED(499, "更新商品失败!"),
+    UPDATE_FAILED(499, "更新商品库存失败!");
 
-    /**
-     * 商品缺货
-     */
-    GOODS_IS_SHORTAGE(500, "商品缺货!");
-
-    GoodsExceptionEnum(int code, String message) {
+    GoodsStockExceptionEnum(int code, String message) {
         this.code = code;
         this.message = message;
     }

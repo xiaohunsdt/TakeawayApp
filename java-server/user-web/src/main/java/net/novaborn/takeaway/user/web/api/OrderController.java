@@ -15,6 +15,8 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
@@ -52,6 +54,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/user/order")
 public class OrderController extends BaseController {
     private UserService userService;
+
+    private GoodsService goodsService;
+
+    private GoodsStockService goodsStockService;
 
     private CouponService couponService;
 
@@ -115,7 +121,7 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("createOrder")
     public Tip createOrder(@RequestBody @Validated OrderDto orderDto) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
@@ -174,6 +180,9 @@ public class OrderController extends BaseController {
                 item.setOrderId(order.getId());
                 item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
                 item.insert();
+
+                // 减少库存
+                goodsStockService.reduceStock(goodsService.getById(item.getGoodsId()), item.getGoodsCount());
             });
 
             // 对优惠卷进行后续处理

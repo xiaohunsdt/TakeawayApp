@@ -15,6 +15,9 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -43,6 +46,10 @@ import java.util.stream.Collectors;
 public class OrderController extends BaseController {
 
     private UserService userService;
+
+    private GoodsService goodsService;
+
+    private GoodsStockService goodsStockService;
 
     private OrderService orderService;
 
@@ -222,6 +229,14 @@ public class OrderController extends BaseController {
 
         order.get().setOrderState(OrderState.REFUND);
         if (!order.get().updateById()) {
+            // 恢复库存
+            orderItemService.selectByOrderId(orderId).parallelStream().forEach(item -> {
+                Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
+                if (goods.isEmpty()) {
+                    return;
+                }
+                goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
+            });
             return new ErrorTip(-1, "操作失败!");
         }
         return new SuccessTip();

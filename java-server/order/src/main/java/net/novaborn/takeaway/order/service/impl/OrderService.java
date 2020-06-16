@@ -12,6 +12,7 @@ import net.novaborn.takeaway.common.utils.FromFormatUtil;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -37,6 +39,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     private OrderItemService orderItemService;
 
     private GoodsService goodsService;
+
+    private GoodsStockService goodsStockService;
 
     private CouponService couponService;
 
@@ -140,14 +144,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
             // 延世大学联活动
             if (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK) {
                 if (order.getRealPrice() >= 15000) {
-                    Goods gift;
-                    if (RandomUtil.randomBoolean()) {
-                        // 肉粽子
-                        gift = goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de");
-                    } else {
-                        // 枣粽子
-                        gift = goodsService.getById("f30d90927885aa5a19b339db8f08f910");
-                    }
+                    List<Goods> giftList = new ArrayList<>();
+                    giftList.add(goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de"));
+                    giftList.add(goodsService.getById("f30d90927885aa5a19b339db8f08f910"));
+                    giftList = giftList.stream().filter(goods -> goodsStockService.checkStock(goods, 1)).collect(Collectors.toList());
+                    Goods gift = giftList.get(RandomUtil.randomInt(giftList.size()));
+
                     OrderItem orderItem = new OrderItem();
                     orderItem.setGoodsId(gift.getId());
                     orderItem.setGoodsName(FromFormatUtil.formatOrderState(order.getFrom()) + "-" + gift.getName());

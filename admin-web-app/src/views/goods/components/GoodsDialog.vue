@@ -35,6 +35,9 @@
       <el-form-item label="价格" prop="price">
         <el-input autocomplete="off" type="number" v-model.number="formData.price"></el-input>
       </el-form-item>
+      <el-form-item label="库存">
+        <el-input autocomplete="off" type="stock" v-model.number="formData.stock"></el-input>
+      </el-form-item>
       <el-form-item label="月销">
         <el-input autocomplete="off" type="number" v-model.number="formData.monthSale"></el-input>
       </el-form-item>
@@ -44,8 +47,8 @@
       <el-form-item label="状态" prop="state">
         <el-select placeholder="选择分类" v-model="formData.state">
           <el-option
-            label="下架"
-            value="OFF">
+              label="下架"
+              value="OFF">
           </el-option>
           <el-option
             label="上架"
@@ -123,14 +126,14 @@
           if (this.goodsData != null) {
             this.sendLoading = true
             goodsApi.getByGoodsId(this.goodsData.id)
-              .then(response => {
-                this.sendLoading = false
-                this.formData = response
-                this.flagSelected = this.formData.flags.split(',')
-              })
-              .catch(() => {
-                this.sendLoading = false
-              })
+                .then(response => {
+                  this.sendLoading = false
+                  this.formData = response
+                  this.flagSelected = this.formData.flags.split(',')
+                })
+                .catch(() => {
+                  this.sendLoading = false
+                })
           }
         }
       }

@@ -8,6 +8,7 @@ import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.order.dao.IOrderItemDao;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.IOrderItemService;
@@ -29,8 +30,9 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> implements IOrderItemService {
-    @Autowired
-    GoodsService goodsService;
+    private GoodsService goodsService;
+
+    private GoodsStockService goodsStockService;
 
     @Override
     public List<OrderItem> selectByOrderId(String orderId) {
@@ -46,11 +48,15 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
     public void checkOrderItems(List<OrderItem> orderItemList) {
         orderItemList.parallelStream().forEach(item -> {
             Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
-            goods.orElseThrow(()->new SysException(GoodsExceptionEnum.GOODS_NOT_FOUND));
+            goods.orElseThrow(() -> new SysException(GoodsExceptionEnum.GOODS_NOT_FOUND));
 
-            if(goods.get().getState() == GoodsState.SHORTAGE){
+            if (goods.get().getState() == GoodsState.SHORTAGE) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
-                sysException.setMessage(goods.get().getName()+": 当前处于缺货中,无法下单!请下来刷新菜单!");
+                sysException.setMessage(goods.get().getName() + ": 当前处于缺货中,无法下单!请下来刷新菜单!");
+                throw sysException;
+            } else if (!goodsStockService.checkStock(goods.get(), item.getGoodsCount())) {
+                SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
+                sysException.setMessage(goods.get().getName() + ": 当前库存不足,请重试!");
                 throw sysException;
             }
 
