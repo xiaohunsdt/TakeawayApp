@@ -140,26 +140,13 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setRealPrice(allPrice);
 
         // 设置互联优惠
-        if (order.getFrom() != null) {
-            // 延世大学联活动
-            if (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK) {
-                if (order.getRealPrice() >= 15000) {
-                    List<Goods> giftList = new ArrayList<>();
-                    giftList.add(goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de"));
-                    giftList.add(goodsService.getById("f30d90927885aa5a19b339db8f08f910"));
-                    giftList = giftList.stream().filter(goods -> goodsStockService.checkStock(goods, 1)).collect(Collectors.toList());
-                    Goods gift = giftList.get(RandomUtil.randomInt(giftList.size()));
-
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.setGoodsId(gift.getId());
-                    orderItem.setGoodsName(FromFormatUtil.formatOrderState(order.getFrom()) + "-" + gift.getName());
-                    orderItem.setGoodsThumb(gift.getThumb());
-                    orderItem.setGoodsPrice(0);
-                    orderItem.setGoodsCount(1);
-                    orderItemList.add(orderItem);
-                }
-            }
-        }
+//        if (order.getRealPrice() >= 22000) {
+//            giveGift(order, orderItemList);
+//        } else if (order.getRealPrice() >= 15000) {
+//            if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK)) {
+//                giveGift(order, orderItemList);
+//            }
+//        }
 
         // 设置互联折扣
 //        if (order.getFrom() != null) {
@@ -171,6 +158,26 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
 //            }
 //        }
+    }
+
+    private void giveGift(Order order, List<OrderItem> orderItemList) {
+        List<Goods> giftList = new ArrayList<>();
+        giftList.add(goodsService.getById("f30d90927885aa5a19b339db8f08f910"));
+        giftList.add(goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de"));
+        giftList = giftList.stream().filter(goods -> goodsStockService.checkStock(goods, 1)).collect(Collectors.toList());
+        Goods gift = giftList.get(RandomUtil.randomInt(giftList.size()));
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setGoodsId(gift.getId());
+        if (order.getFrom() != null) {
+            orderItem.setGoodsName(FromFormatUtil.formatOrderState(order.getFrom()) + "-" + gift.getName());
+        } else {
+            orderItem.setGoodsName("端午福利-" + gift.getName());
+        }
+        orderItem.setGoodsThumb(gift.getThumb());
+        orderItem.setGoodsPrice(0);
+        orderItem.setGoodsCount(1);
+        orderItemList.add(orderItem);
     }
 
     @Override
