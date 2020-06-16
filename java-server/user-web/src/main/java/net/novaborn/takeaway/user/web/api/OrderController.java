@@ -157,17 +157,6 @@ public class OrderController extends BaseController {
             order.setPayState(PayState.UN_PAY);
         }
 
-        //设置互联折扣
-//        if (order.getFrom() != null) {
-//            // 延世大学联活动
-//            if (order.getFrom() == From.YONSEI) {
-//                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
-//                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
-//                }
-//                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
-//            }
-//        }
-
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
             orderService.setDiscount(order, orderDto.getOrderItems(), orderDto.getCouponId());

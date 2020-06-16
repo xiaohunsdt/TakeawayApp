@@ -1,10 +1,14 @@
 package net.novaborn.takeaway.order.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.enums.From;
+import net.novaborn.takeaway.common.utils.FromFormatUtil;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -105,6 +109,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
+                .filter(orderItem -> !StrUtil.isBlank(orderItem.getGoodsId()))
                 .map(orderItem -> {
                     Goods goods = goodsService.getById(orderItem.getGoodsId());
                     // 鸭货除外
@@ -129,6 +134,41 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setGoodsCount(allCount);
         order.setAllPrice(allPrice);
         order.setRealPrice(allPrice);
+
+        // 设置互联优惠
+        if (order.getFrom() != null) {
+            // 延世大学联活动
+            if (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK) {
+                if (order.getRealPrice() >= 15000) {
+                    Goods gift;
+                    if (RandomUtil.randomBoolean()) {
+                        // 肉粽子
+                        gift = goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de");
+                    } else {
+                        // 枣粽子
+                        gift = goodsService.getById("f30d90927885aa5a19b339db8f08f910");
+                    }
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setGoodsId(gift.getId());
+                    orderItem.setGoodsName(FromFormatUtil.formatOrderState(order.getFrom()) + "-" + gift.getName());
+                    orderItem.setGoodsThumb(gift.getThumb());
+                    orderItem.setGoodsPrice(0);
+                    orderItem.setGoodsCount(1);
+                    orderItemList.add(orderItem);
+                }
+            }
+        }
+
+        // 设置互联折扣
+//        if (order.getFrom() != null) {
+//            // 延世大学联活动
+//            if (order.getFrom() == From.YONSEI) {
+//                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
+//                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
+//                }
+//                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
+//            }
+//        }
     }
 
     @Override

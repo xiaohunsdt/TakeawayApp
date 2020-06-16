@@ -138,7 +138,6 @@ public class WechatAutoTask {
         }
 
         List<Goods> goodsList = orderItemService.selectByOrderId(order.getId()).stream()
-                .filter(orderItem -> !orderItem.getGoodsId().isBlank())
                 .map(orderItem -> goodsService.getById(orderItem.getGoodsId()))
                 .collect(Collectors.toList());
 

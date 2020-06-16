@@ -11,6 +11,7 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ import java.util.Optional;
 public class GoodsController extends BaseController {
 
     GoodsService goodsService;
+
+    GoodsStockService goodsStockService;
 
     @GetMapping("getByGoodsId")
     public ResponseEntity getByGoodsId(String id) {
@@ -58,7 +61,7 @@ public class GoodsController extends BaseController {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
-        if (goodsService.save(goods)) {
+        if (goodsService.save(goods) && goodsStockService.createGoodStock(goods, null)) {
             return new SuccessTip("创建成功!");
         } else {
             return new ErrorTip(-1, "创建失败!");

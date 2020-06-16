@@ -155,6 +155,9 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
 
         int needDisCountPrice = orderItems.parallelStream()
                 .filter(orderItem -> {
+                    if (StrUtil.isBlank(orderItem.getGoodsId())) {
+                        return false;
+                    }
                     Goods goods = goodsService.getById(orderItem.getGoodsId());
                     return CouponUtil.isDiscount(goods, couponRules);
                 })
