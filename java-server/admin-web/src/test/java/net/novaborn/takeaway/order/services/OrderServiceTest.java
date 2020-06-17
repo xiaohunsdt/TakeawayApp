@@ -56,15 +56,15 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByDateTest() {
-        Date start = DateUtil.parseDateTime("2020-06-12 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-06-12 23:00:00");
+        Date start = DateUtil.parseDateTime("2020-06-17 00:00:00");
+        Date end = DateUtil.parseDateTime("2020-06-17 23:00:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
                 .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
-                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 60)
+//                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 60)
                 .collect(Collectors.toList());
         orderList.forEach(order -> System.out.println(order.getUserId()));
         System.out.println(orderList.stream()

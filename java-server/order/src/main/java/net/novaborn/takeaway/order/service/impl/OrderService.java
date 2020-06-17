@@ -140,13 +140,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setRealPrice(allPrice);
 
         // 设置互联优惠
-//        if (order.getRealPrice() >= 22000) {
-//            giveGift(order, orderItemList);
-//        } else if (order.getRealPrice() >= 15000) {
-//            if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK)) {
-//                giveGift(order, orderItemList);
-//            }
-//        }
+        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
+            return;
+        }
+        if (order.getRealPrice() >= 22000) {
+            giveGift(order, orderItemList);
+        } else if (order.getRealPrice() >= 15000) {
+            if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK || order.getFrom() == From.SOGANG)) {
+                giveGift(order, orderItemList);
+            }
+        }
 
         // 设置互联折扣
 //        if (order.getFrom() != null) {

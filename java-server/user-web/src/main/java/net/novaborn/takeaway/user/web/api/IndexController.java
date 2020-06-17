@@ -56,6 +56,7 @@ public class IndexController extends BaseController {
         fromerNotice.put(From.YONSEI,"延世大学联提示您: 疫情期间请大家注意安全,出门佩戴口罩!小伙伴们期末加油！");
         fromerNotice.put(From.EWHA,"梨花大学联提示您: 疫情期间出门佩戴好口罩，与路人保持距离，勤洗手不可掉以轻心！大家加油～");
         fromerNotice.put(From.HONGIK,"弘益大学联提示您: 疫情期间请大家注意安全，川香苑美食予您享受！出门佩戴口罩！小伙伴们加油噢！");
+        fromerNotice.put(From.SOGANG,"西江大学联提示您: 疫情期间请大家注意安全，与路人保持距离！出门佩戴口罩！小伙伴们加油噢！");
     }
 
     @GetMapping("getBannersList")

@@ -158,11 +158,15 @@ public class WechatAutoTask {
         }
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
-//        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n小伙伴们现在就可以下预约单!!\n卤豌豆上架！！新品试吃，点餐满24000韩币赠送一份卤豌豆哦！！！");
+//        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n小伙伴们现在就可以下预约单!!\n端午节特别活动开始啦～22000韩币赠送粽子一枚哦！！！");
         autoMessage.setImgUrlList(
                 Arrays.asList(
-                        "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"
+                        "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/activity/a106a0d932c647e4875b9d2faa871dae.png",
+                        "https://admin.cxy.novaborn.net/upload/images/activity/c59fee8c3be64f8b89a63d13a15db4ce.png",
+                        "https://admin.cxy.novaborn.net/upload/images/cac232b8fb2f452898f40bd5ded1c3c2.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/719e17c77a024d8c9c033d063758bf0f.jpeg"
                 )
         );
 
