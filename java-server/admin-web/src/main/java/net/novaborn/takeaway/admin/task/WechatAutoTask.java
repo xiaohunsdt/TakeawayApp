@@ -202,6 +202,10 @@ public class WechatAutoTask {
             message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
         }
 
+        if (selectedGoods.contains(new Goods("f30d90927885aa5a19b339db8f08f910")) || selectedGoods.contains(new Goods("2f014dd8475feb73cd4d0f6f9b52a9de"))) {
+            imgs.add(0,"https://admin.cxy.novaborn.net/upload/images/activity/c59fee8c3be64f8b89a63d13a15db4ce.png");
+        }
+
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(message);
         autoMessage.setImgUrlList(imgs);

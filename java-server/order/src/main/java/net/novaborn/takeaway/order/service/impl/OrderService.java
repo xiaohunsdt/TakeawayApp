@@ -181,6 +181,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         orderItem.setGoodsPrice(0);
         orderItem.setGoodsCount(1);
         orderItemList.add(orderItem);
+
+        order.setGoodsCount(order.getGoodsCount() + 1);
     }
 
     @Override

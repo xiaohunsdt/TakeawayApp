@@ -4,21 +4,26 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaohun
  * @since 2019-09-20
  */
 
+
 @Data
-@Document(indexName = "takeaway", type = "goods")
 @TableName("`goods`")
+@Document(indexName = "takeaway", type = "goods")
+@NoArgsConstructor
 public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;
 
@@ -83,4 +88,21 @@ public class Goods extends Model<Goods> {
     @JSONField(serialize = false)
     @TableLogic
     private Integer deleted;
+
+    public Goods(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Goods goods = (Goods) o;
+        return Objects.equals(id, goods.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
