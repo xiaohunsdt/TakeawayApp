@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.order.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -131,7 +132,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void checkOrder(Order order, List<OrderItem> orderItemList) {
+    public void checkOrder(Order order, List<OrderItem> orderItemList, String couponId) {
         int allCount = orderItemList.parallelStream().mapToInt(OrderItem::getGoodsCount).sum();
         int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
 
@@ -139,16 +140,45 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         order.setAllPrice(allPrice);
         order.setRealPrice(allPrice);
 
-        // 设置互联优惠
-        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
-            return;
+        //设置 优惠卷折扣
+        if (!StrUtil.isBlank(couponId)) {
+            this.setDiscount(order, orderItemList, couponId);
         }
-        if (order.getRealPrice() >= 22000) {
-            giveGift(order, orderItemList);
-        } else if (order.getRealPrice() >= 15000) {
-            if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK || order.getFrom() == From.SOGANG)) {
+
+        // 设置互联优惠
+        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+            if (order.getRealPrice() >= 22000) {
                 giveGift(order, orderItemList);
+            } else if (order.getRealPrice() >= 15000) {
+                if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK || order.getFrom() == From.SOGANG)) {
+                    giveGift(order, orderItemList);
+                }
             }
+        }
+
+        //填写订单信息
+        int number;
+        if (order.getAppointmentDate() == null) {
+            // 一般订单
+            number = this.getOrderCount(new Date(), DeliveryType.NORMAL) + 1;
+        } else {
+            // 预约订单
+            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+        }
+        order.setNumber(number);
+
+        //设置订单的支付状态
+        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
+            //刷卡和现金支付设置为后付状态
+            order.setPayState(PayState.PAY_LATER);
+        } else {
+            order.setPayState(PayState.UN_PAY);
+        }
+
+        // 处理订单不需要支付的情况
+        if (order.getRealPrice() <= 0) {
+            order.setPaymentWay(PaymentWay.CASH);
+            order.setPayState(PayState.PAID);
         }
 
         // 设置互联折扣

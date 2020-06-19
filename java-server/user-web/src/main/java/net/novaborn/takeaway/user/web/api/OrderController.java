@@ -139,40 +139,11 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
         }
 
-        //检测订单商品项是否可以下单
-        orderItemService.checkOrderItems(orderItems);
-        orderService.checkOrder(order, orderItems);
-
-        //填写订单信息
-        int number;
-        if (order.getAppointmentDate() == null) {
-            // 一般订单
-            number = orderService.getOrderCount(new Date(), DeliveryType.NORMAL) + 1;
-        } else {
-            // 预约订单
-            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + orderService.getOrderCount(order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
-        }
-        order.setNumber(number);
         order.setUserId(user.get().getId());
 
-        //设置订单的支付状态
-        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
-            //刷卡和现金支付设置为后付状态
-            order.setPayState(PayState.PAY_LATER);
-        } else {
-            order.setPayState(PayState.UN_PAY);
-        }
-
-        //设置 优惠卷折扣
-        if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
-            orderService.setDiscount(order, orderDto.getOrderItems(), orderDto.getCouponId());
-        }
-
-        // 处理订单不需要支付的情况
-        if (order.getRealPrice() <= 0) {
-            order.setPaymentWay(PaymentWay.CASH);
-            order.setPayState(PayState.PAID);
-        }
+        //检测订单商品项是否可以下单
+        orderItemService.checkOrderItems(orderItems);
+        orderService.checkOrder(order, orderItems, orderDto.getCouponId());
 
         //先生成订单，再生成订单产品详情
         if (order.insert()) {

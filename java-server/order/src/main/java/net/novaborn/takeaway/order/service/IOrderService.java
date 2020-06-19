@@ -161,8 +161,9 @@ public interface IOrderService extends IService<Order> {
      * 检查此订单是否可以下单
      * @param order         预检查的订单
      * @param orderItemList 预检查的订单商品项
+     * @param couponId      优惠卷Id
      */
-    void checkOrder(Order order, List<OrderItem> orderItemList);
+    void checkOrder(Order order, List<OrderItem> orderItemList, String couponId);
 
 
     /**
