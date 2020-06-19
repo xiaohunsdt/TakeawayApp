@@ -159,7 +159,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
 //        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
-        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n厨师已回岗,小伙伴们现在就可以放心下单哦!!\n端午节特别活动开始啦～22000韩币赠送粽子一枚哦！！！");
+        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n端午节特别活动开始啦～22000韩币赠送粽子一枚哦！！！\n今天开始2位外卖员＋第三方配送公司为大家配送！请小伙伴们放心点餐！[社会社会][社会社会][社会社会][社会社会]");
         autoMessage.setImgUrlList(
                 Arrays.asList(
                         "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg",
@@ -192,9 +192,9 @@ public class WechatAutoTask {
 
         String message;
         if (!isOrderShow) {
-            message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "现在点餐30-40分钟送达[哇][哇][哇]");
+            message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n今天开始2位外卖员＋第三方配送公司为大家配送！请小伙伴们放心点餐[社会社会][社会社会],现在点餐30-40分钟送达[哇][哇][哇]");
         } else {
-            message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n{}", names, desc, "同款\uD83C\uDE51安排哦, 现在点餐30-40分钟送达[哇][哇][哇]");
+            message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n{}", names, desc, "同款\uD83C\uDE51安排哦, 今天开始2位外卖员＋第三方配送公司为大家配送！请小伙伴们放心点餐[社会社会][社会社会],现在点餐30-40分钟送达[哇][哇][哇]");
         }
 
         long offend = TimeUtil.between(new Date(), storeCloseTime);
