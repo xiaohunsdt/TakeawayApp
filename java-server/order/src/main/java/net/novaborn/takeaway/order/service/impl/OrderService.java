@@ -198,6 +198,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         giftList.add(goodsService.getById("f30d90927885aa5a19b339db8f08f910"));
         giftList.add(goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de"));
         giftList = giftList.stream().filter(goods -> goodsStockService.checkStock(goods, 1)).collect(Collectors.toList());
+
+        if (giftList.size() == 0) {
+            return;
+        }
+
         Goods gift = giftList.get(RandomUtil.randomInt(giftList.size()));
 
         OrderItem orderItem = new OrderItem();
