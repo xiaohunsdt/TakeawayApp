@@ -159,7 +159,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
 //        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
-        autoMessage.setMessage("今天正常营业哦～[社会社会][社会社会][社会社会]\n端午节特别活动开始啦～22000韩币赠送粽子一枚哦！！！\n今天开始2位外卖员＋第三方配送公司为大家配送！请小伙伴们放心点餐！[社会社会][社会社会][社会社会][社会社会]");
+        autoMessage.setMessage("祝大家端午节快乐！粽子可以安排，数量不多了，请大家提前预约！先到先得！！！");
         autoMessage.setImgUrlList(
                 Arrays.asList(
                         "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg",
