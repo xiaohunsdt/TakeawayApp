@@ -53,9 +53,10 @@ public class OrderSmsUtil {
     }
 
     public boolean pushMessage(Order order) {
+        orderSubscribeMessageSender.send(order);
+
         Message item = new Message(order, DELAY_TIME * 1000);
-        boolean result = !queue.contains(item) && queue.add(item);
-        return result;
+        return !queue.contains(item) && queue.add(item);
     }
 
     @Data
@@ -112,7 +113,7 @@ public class OrderSmsUtil {
                     if (!_order.getOrderState().equals(OrderState.DELIVERING)) {
                         smsSender.send(new SmsDto(address.getPhone(), msg));
                     }
-                    orderSubscribeMessageSender.send(_order);
+//                    orderSubscribeMessageSender.send(_order);
                 } catch (InterruptedException e) {
                     log.error(null, e);
                 }

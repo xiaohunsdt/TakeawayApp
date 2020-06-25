@@ -146,15 +146,27 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         // 设置互联优惠
-        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-            if (order.getRealPrice() >= 22000) {
-                giveGift(order, orderItemList);
-            } else if (order.getRealPrice() >= 15000) {
-                if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK || order.getFrom() == From.SOGANG)) {
-                    giveGift(order, orderItemList);
-                }
-            }
-        }
+//        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+//            if (order.getRealPrice() >= 22000) {
+//                giveGift(order, orderItemList);
+//            } else if (order.getRealPrice() >= 15000) {
+//                if (order.getFrom() != null && (order.getFrom() == From.YONSEI || order.getFrom() == From.EWHA || order.getFrom() == From.HONGIK || order.getFrom() == From.SOGANG)) {
+//                    giveGift(order, orderItemList);
+//                }
+//            }
+//        }
+
+
+        // 设置互联折扣
+//        if (order.getFrom() != null) {
+//            // 延世大学联活动
+//            if (order.getFrom() == From.YONSEI) {
+//                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
+//                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
+//                }
+//                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
+//            }
+//        }
 
         //填写订单信息
         int number;
@@ -180,44 +192,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
             order.setPaymentWay(PaymentWay.CASH);
             order.setPayState(PayState.PAID);
         }
-
-        // 设置互联折扣
-//        if (order.getFrom() != null) {
-//            // 延世大学联活动
-//            if (order.getFrom() == From.YONSEI) {
-//                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
-//                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
-//                }
-//                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
-//            }
-//        }
-    }
-
-    private void giveGift(Order order, List<OrderItem> orderItemList) {
-        List<Goods> giftList = new ArrayList<>();
-        giftList.add(goodsService.getById("f30d90927885aa5a19b339db8f08f910"));
-        giftList.add(goodsService.getById("2f014dd8475feb73cd4d0f6f9b52a9de"));
-        giftList = giftList.stream().filter(goods -> goodsStockService.checkStock(goods, 1)).collect(Collectors.toList());
-
-        if (giftList.size() == 0) {
-            return;
-        }
-
-        Goods gift = giftList.get(RandomUtil.randomInt(giftList.size()));
-
-        OrderItem orderItem = new OrderItem();
-        orderItem.setGoodsId(gift.getId());
-        if (order.getFrom() != null) {
-            orderItem.setGoodsName(FromFormatUtil.formatOrderState(order.getFrom()) + "-" + gift.getName());
-        } else {
-            orderItem.setGoodsName("端午福利-" + gift.getName());
-        }
-        orderItem.setGoodsThumb(gift.getThumb());
-        orderItem.setGoodsPrice(0);
-        orderItem.setGoodsCount(1);
-        orderItemList.add(orderItem);
-
-        order.setGoodsCount(order.getGoodsCount() + 1);
     }
 
     @Override
