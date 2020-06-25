@@ -22,6 +22,10 @@ public class SmsSender {
     private RabbitTemplate rabbitTemplate;
 
     public void send(SmsDto sms) {
-        rabbitTemplate.convertAndSend(SmsQueueConfig.EXCHANGE_NAME, SmsQueueConfig.QUEUE_NAME, JSON.toJSONBytes(sms));
+        try {
+            rabbitTemplate.convertAndSend(SmsQueueConfig.EXCHANGE_NAME, SmsQueueConfig.QUEUE_NAME, JSON.toJSONBytes(sms));
+        } catch (Exception e) {
+            log.error("投递队列失败！！", e);
+        }
     }
 }

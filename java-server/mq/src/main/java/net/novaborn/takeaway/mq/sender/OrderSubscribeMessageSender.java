@@ -21,6 +21,10 @@ public class OrderSubscribeMessageSender {
     private RabbitTemplate rabbitTemplate;
 
     public void send(Order order) {
-        rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE, order);
+        try {
+            rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_SUBSCRIBE_MESSAGE, order);
+        } catch (Exception e) {
+            log.error("投递队列失败！！", e);
+        }
     }
 }

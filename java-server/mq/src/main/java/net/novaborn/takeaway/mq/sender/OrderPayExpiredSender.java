@@ -23,10 +23,13 @@ public class OrderPayExpiredSender {
     public void send(Order order, int delaySeconds) {
 //        CorrelationData cd = new CorrelationData();
 //        cd.setId(order.getId());
-
-        rabbitTemplate.convertAndSend(OrderQueueConfig.DELAYED_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED, order, message -> {
-            message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
-            return message;
-        });
+        try {
+            rabbitTemplate.convertAndSend(OrderQueueConfig.DELAYED_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_PAY_EXPIRED, order, message -> {
+                message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
+                return message;
+            });
+        } catch (Exception e) {
+            log.error("投递队列失败！！", e);
+        }
     }
 }

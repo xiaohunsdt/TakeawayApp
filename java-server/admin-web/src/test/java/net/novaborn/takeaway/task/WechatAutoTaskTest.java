@@ -27,7 +27,7 @@ public class WechatAutoTaskTest {
 
     @Test
     public void orderShowTest() {
-        Order order = orderService.getById("933cf62f68042a9291f18a94c09041c9");
+        Order order = orderService.getById("f021181ea8cda9ea0892ff78e0d597fb");
         wechatAutoTask.orderShow(order);
     }
 

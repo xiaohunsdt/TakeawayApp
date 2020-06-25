@@ -23,10 +23,13 @@ public class CouponExpiredSender {
     public void send(Coupon coupon, int delaySeconds) {
 //        CorrelationData cd = new CorrelationData();
 //        cd.setId(order.getId());
-
-        rabbitTemplate.convertAndSend(CouponQueueConfig.EXCHANGE_NAME, CouponQueueConfig.QUEUE_NAME, coupon, message -> {
-            message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
-            return message;
-        });
+        try {
+            rabbitTemplate.convertAndSend(CouponQueueConfig.EXCHANGE_NAME, CouponQueueConfig.QUEUE_NAME, coupon, message -> {
+                message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);
+                return message;
+            });
+        } catch (Exception e) {
+            log.error("投递队列失败！！", e);
+        }
     }
 }

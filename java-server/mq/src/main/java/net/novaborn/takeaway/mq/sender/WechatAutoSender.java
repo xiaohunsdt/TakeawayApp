@@ -22,6 +22,10 @@ public class WechatAutoSender {
     private RabbitTemplate rabbitTemplate;
 
     public void send(AutoMessage autoMessage) {
-        rabbitTemplate.convertAndSend(WechatAutoQueueConfig.EXCHANGE_NAME, WechatAutoQueueConfig.QUEUE_NAME, JSON.toJSONBytes(autoMessage));
+        try {
+            rabbitTemplate.convertAndSend(WechatAutoQueueConfig.EXCHANGE_NAME, WechatAutoQueueConfig.QUEUE_NAME, JSON.toJSONBytes(autoMessage));
+        } catch (Exception e) {
+            log.error("投递队列失败！！", e);
+        }
     }
 }
