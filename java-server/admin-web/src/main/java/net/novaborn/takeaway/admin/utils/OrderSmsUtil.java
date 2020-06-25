@@ -39,7 +39,7 @@ public class OrderSmsUtil {
 
     private static Map<OrderState, String> orderStateStringMap = new HashMap<>();
 
-    private final int DELAY_TIME = 8;
+    private final int DELAY_TIME = 3;
 
     static {
         orderStateStringMap.put(OrderState.PRODUCING, "[川香苑系统消息]\n\n尊敬的顾客，您好！\n\n订单ID: %s\n\n已经受理！正在为您制作，请耐心等待！\n详情请到订单详细页面查看");
