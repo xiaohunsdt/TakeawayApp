@@ -1,10 +1,10 @@
-FROM elasticsearch:7.7.1
+FROM zhangguanzhang/docker.elastic.co.elasticsearch.elasticsearch:6.8.10
 
 VOLUME /tmp
 
 ENV TZ=Asia/Seoul
 
-RUN yum update -y && yum -y install wget unzip
+RUN apt-get update -y && apt-get -y install wget unzip
 
 RUN cd plugins && mkdir ik
 
