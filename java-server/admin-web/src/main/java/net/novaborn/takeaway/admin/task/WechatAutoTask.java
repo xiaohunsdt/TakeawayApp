@@ -104,7 +104,7 @@ public class WechatAutoTask {
             return;
         }
 
-        if (!TimeUtil.isBetween(currentDate, storeOpenTime, storeCloseTime)) {
+        if (!TimeUtil.isBetween(currentDate, DateUtil.offsetHour(storeOpenTime, -1), storeCloseTime)) {
             return;
         }
 
