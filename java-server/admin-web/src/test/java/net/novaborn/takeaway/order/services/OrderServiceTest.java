@@ -56,14 +56,17 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByDateTest() {
-        Date start = DateUtil.parseDateTime("2020-06-21 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-06-21 23:00:00");
+        Date start = DateUtil.parseDateTime("2020-06-26 00:00:00");
+        Date end = DateUtil.parseDateTime("2020-06-30 23:00:00");
+
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
+
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
                 .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
+//                .filter(order -> userIds.add(order.getUserId()))
                 .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 50)
                 .filter(order -> order.getAppointmentDate() == null)
                 .collect(Collectors.toList());
@@ -71,6 +74,15 @@ public class OrderServiceTest {
         System.out.println(orderList.stream()
                 .map(order -> addressService.getById(order.getAddressId()).getPhone())
                 .collect(Collectors.joining(",")));
+//        System.out.println(orderList.size());
+//        for (int i = 0; i < orderList.size(); i += 20) {
+//            int temp = Math.min(i + 20, orderList.size());
+//
+//            System.out.println(orderList.subList(i, temp).stream()
+//                    .map(order -> addressService.getById(order.getAddressId()).getPhone())
+//                    .collect(Collectors.joining(",")));
+//            System.out.println("a------------------------");
+//        }
     }
 
     @Test

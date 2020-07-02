@@ -70,10 +70,10 @@ public class ControlService extends AccessibilityService {
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dm");
             Thread.sleep(1000);
 
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cn_", 2);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cox", 2);
             Thread.sleep(1000);
 
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dpa", 0);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/drb", 0);
             Thread.sleep(3000);
 
             AccessibilityNodeInfo cameraBtn = WechatUtils.findViewId(this, "com.tencent.mm:id/cj", 0);
@@ -93,12 +93,12 @@ public class ControlService extends AccessibilityService {
                 Thread.sleep(2000);
 
                 //选择图片按钮
-                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/f40", 1), AccessibilityNodeInfo.ACTION_CLICK);
+                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/f6o", 1), AccessibilityNodeInfo.ACTION_CLICK);
                 Thread.sleep(3000);
 
                 //选择图片
                 for (int i = 0; i < autoMessage.getImgUrlList().size(); i++) {
-                    WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/dm0", i), AccessibilityNodeInfo.ACTION_CLICK);
+                    WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/do1", i), AccessibilityNodeInfo.ACTION_CLICK);
                     Thread.sleep(1000);
                 }
 
@@ -111,7 +111,7 @@ public class ControlService extends AccessibilityService {
                 Thread.sleep(3000);
             }
 
-            AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/fms", 0);
+            AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/fpn", 0);
 //            if (editInput == null) {
 //                return;
 //            }
@@ -125,11 +125,11 @@ public class ControlService extends AccessibilityService {
             Thread.sleep(3000);
 
             //返回键并点击：防止在其他页面查找不到搜索按钮
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dm");
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dn");
             Thread.sleep(1000);
 
             //回主页
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cn_", 0);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cox", 0);
             Thread.sleep(1000);
 
             resetAndReturnApp();
