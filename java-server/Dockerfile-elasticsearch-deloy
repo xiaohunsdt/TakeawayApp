@@ -1,4 +1,4 @@
-FROM zhangguanzhang/docker.elastic.co.elasticsearch.elasticsearch:6.8.10
+FROM elasticsearch:7.7.1
 
 VOLUME /tmp
 
