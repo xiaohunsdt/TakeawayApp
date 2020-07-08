@@ -22,6 +22,7 @@
 			"outputPath": ""
 		},
 		"bundle": false,
+		"useIsolateContext": true,
 		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
@@ -197,7 +198,7 @@
 					"scene": 1011
 				},
 				{
-					"id": -1,
+					"id": 20,
 					"name": "pages/index/main",
 					"pathName": "pages/index/main",
 					"query": "from=SOGANG",
