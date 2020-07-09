@@ -77,6 +77,8 @@ public class IndexController extends BaseController {
         } else {
             printService = PrinterOutputStream.getDefaultPrintService();
         }
+//        printService = PrinterOutputStream.getDefaultPrintService();
+
         EscPos escpos = new EscPos(new PrinterOutputStream(printService));
         escpos.setCharsetName("gbk");
         Style title = new Style()
@@ -97,6 +99,10 @@ public class IndexController extends BaseController {
                 .setJustification(EscPosConst.Justification.Center);
 
         Style bold = new Style(escpos.getStyle())
+                .setBold(true);
+
+        Style ps = new Style(escpos.getStyle())
+                .setFontSize(Style.FontSize._2, Style.FontSize._2)
                 .setBold(true);
 
         Bitonal algorithm = new BitonalThreshold(127);
@@ -135,8 +141,8 @@ public class IndexController extends BaseController {
                 .writeLF(" ");
         if (StrUtil.isNotBlank(order.getPs())) {
             escpos.writeLF(bold, "--------------------------------")
-                    .writeLF(bold, "备注:")
-                    .writeLF(order.getPs())
+                    .writeLF(ps, "备注:")
+                    .writeLF(ps, order.getPs())
                     .writeLF(" ");
         }
         escpos.write(imageWrapper, escposImage)
@@ -151,7 +157,7 @@ public class IndexController extends BaseController {
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "厨师", settingService.getSettingByName("temperature1", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "外卖员", settingService.getSettingByName("temperature2", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板", settingService.getSettingByName("temperature3", SettingScope.STORE).getValue()));
-        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "王老板的对象", settingService.getSettingByName("temperature4", SettingScope.STORE).getValue()));
+        escpos.writeLF(" ").writeLF(bold, String.format("%s\t   \t%s℃", "接单员", settingService.getSettingByName("temperature4", SettingScope.STORE).getValue()));
         escpos.writeLF(" ").writeLF(bold, "川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
 
 

@@ -1,5 +1,5 @@
 sys:
-  printer-name: xp-58
+  printer-name: XP-58
 
 
 server:
@@ -7,7 +7,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: test
   mvc:
     static-path-pattern: /res/**
     view:

@@ -30,11 +30,11 @@ public class WechatAutoTaskTest {
     @Test
     public void sendTest() {
         ArrayList<String> imgs = new ArrayList<>();
-        imgs.add("https://admin.cxy.novaborn.net/upload/images/13028d1a6e03465ba4ed7100e7b31613.jpg");
+        imgs.add("https://admin.cxy.novaborn.net/upload/images/6b982206490c463080cb0a3acdcd1914.jpg");
         imgs.add("https://admin.cxy.novaborn.net/upload/images/50f33b4172e84d45b477589770aec59d.jpeg");
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage("正宗周黑鸭可以安排了哦！！鸭头，鸭脖，鸭翅，鸭锁骨，猪蹄！！晚餐点个鸭货吃吃吧！！！");
+        autoMessage.setMessage("正宗周黑鸭豪横大礼包来啦~~包含鸭头/鸭翅/鸭锁骨/鸭脖/猪蹄，原价31000，礼包价只要26000!!数量不多,先到先得!!");
         autoMessage.setImgUrlList(imgs);
         wechatAutoSender.send(autoMessage);
     }
