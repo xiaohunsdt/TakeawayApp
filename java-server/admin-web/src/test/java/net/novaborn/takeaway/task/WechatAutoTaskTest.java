@@ -34,7 +34,7 @@ public class WechatAutoTaskTest {
         imgs.add("https://admin.cxy.novaborn.net/upload/images/50f33b4172e84d45b477589770aec59d.jpeg");
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage("正宗周黑鸭豪横大礼包来啦~~包含鸭头/鸭翅/鸭锁骨/鸭脖/猪蹄，原价31000，礼包价只要26000!!数量不多,先到先得!!");
+        autoMessage.setMessage("正宗周黑鸭豪横大礼包来啦~~包含鸭头/鸭翅/鸭锁骨/鸭脖/猪蹄，原价31000，礼包价只要26000!!鸭货口味调整完成!挑战全韩国最好吃的鸭货,你不来尝尝？!数量不多,先到先得!!");
         autoMessage.setImgUrlList(imgs);
         wechatAutoSender.send(autoMessage);
     }

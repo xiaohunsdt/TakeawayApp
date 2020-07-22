@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.mq.sender;
 
 import com.alibaba.fastjson.JSON;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.mq.config.WechatAutoQueueConfig;
 import net.novaborn.takeaway.mq.dto.AutoMessage;
@@ -17,8 +18,9 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@Setter(onMethod_ = {@Autowired})
 public class WechatAutoSender {
-    @Autowired
+
     private RabbitTemplate rabbitTemplate;
 
     public void send(AutoMessage autoMessage) {
