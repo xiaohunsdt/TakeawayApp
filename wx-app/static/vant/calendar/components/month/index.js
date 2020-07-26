@@ -44,11 +44,11 @@ VantComponent({
   },
   methods: {
     onClick(event) {
-      const { index } = event.currentTarget.dataset;
-      const item = this.data.days[index];
-      if (item.type !== 'disabled') {
-        this.$emit('click', item);
-      }
+      // const { index } = event.currentTarget.dataset;
+      // const item = this.data.days[index];
+      // if (item.type !== 'disabled') {
+      //   this.$emit('click', item);
+      // }
     },
     setDays() {
       const days = [];
