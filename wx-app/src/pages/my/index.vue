@@ -82,7 +82,7 @@
             :max-date="signInDays.endOfMonth"
             :min-date="signInDays.beginOfMonth"
             :poppable="false"
-            :row-height="32"
+            :row-height="26"
             :show-confirm="false"
             :show-subtitle="false"
             :show-title="false"
@@ -288,10 +288,16 @@
     left: .6rem;
   }
 
-  .van-calendar__month-title,.van-calendar__header {
+  .van-calendar__month-title, .van-calendar__header {
     display: none;
   }
+
+  .van-calendar__day {
+    margin-top: .05rem;
+    margin-bottom: .05rem;
+  }
 </style>
+
 <style scoped>
   .my-header {
     padding: 0.3rem 0.4rem;
