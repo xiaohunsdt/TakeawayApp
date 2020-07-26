@@ -18,6 +18,7 @@ import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.mq.sender.OrderSignInSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -58,6 +59,8 @@ public class OrderController extends BaseController {
     private OrderSmsUtil orderSmsUtil;
 
     private WechatAutoTask wechatAutoTask;
+
+    private OrderSignInSender orderSignInSender;
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
@@ -211,6 +214,7 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "操作失败!");
         }
 
+        orderSignInSender.send(order.get());
         orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
