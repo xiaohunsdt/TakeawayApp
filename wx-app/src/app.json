@@ -105,6 +105,7 @@
     "van-loading": "/static/vant/loading/index",
     "van-action-sheet": "/static/vant/action-sheet/index",
     "van-swipe-cell": "/static/vant/swipe-cell/index",
-    "van-dialog": "/static/vant/dialog/index"
+    "van-dialog": "/static/vant/dialog/index",
+    "van-calendar": "/static/vant/calendar/index"
   }
 }

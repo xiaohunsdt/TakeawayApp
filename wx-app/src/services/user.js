@@ -72,8 +72,13 @@ function checkLogin () {
   })
 }
 
+function getSignInDays () {
+  return api.getSignInDays()
+}
+
 export default {
   loginByWx,
   checkLogin,
-  setUserInfo
+  setUserInfo,
+  getSignInDays
 }

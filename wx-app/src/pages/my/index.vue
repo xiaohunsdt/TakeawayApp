@@ -74,6 +74,25 @@
           </van-row>
         </base-panel>
       </div>
+      <div class="my-sign-in">
+        <base-panel v-if="signInDays">
+          <div class="title">我的签到</div>
+          <van-calendar
+            :default-date="signInDays.signInedDay"
+            :max-date="signInDays.endOfMonth"
+            :min-date="signInDays.beginOfMonth"
+            :poppable="false"
+            :row-height="32"
+            :show-confirm="false"
+            :show-subtitle="false"
+            :show-title="false"
+            class="calendar"
+            color="#FFD200"
+            type="multiple"
+          />
+        </base-panel>
+      </div>
+
       <div class="my-profile">
         <van-cell clickable custom-class="profile-cell" is-link>
           <view class="profile-title" slot="title">
@@ -139,7 +158,8 @@
           waitEat: 0,
           waitComment: 0,
           refund: 0
-        }
+        },
+        signInDays: null
       }
     },
     onShow () {
@@ -167,6 +187,18 @@
         orderService.getOrderCountByState('REFUND').then(res => {
           this.orderCount.refund = res
         })
+        userService.getSignInDays().then(res => {
+          let signInedDay = []
+          res.signInedDay.forEach(item => {
+            signInedDay.push(parseInt(item))
+          })
+
+          res.beginOfMonth = parseInt(res.beginOfMonth)
+          res.endOfMonth = parseInt(res.endOfMonth)
+          res.signInedDay = signInedDay
+          this.signInDays = res
+        })
+        console.log(new Date().getTime())
       },
       getWxUserInfo (event) {
         if (event.mp.detail.userInfo) {
@@ -194,6 +226,12 @@
 </script>
 
 <style>
+  .my-sign-in .title {
+    margin-left: .2rem;
+    /*margin-bottom: .2rem;*/
+    font-size: .35rem;
+  }
+
   .my-profile {
     margin-top: .4rem;
   }
@@ -248,6 +286,10 @@
     right: unset;
     top: .1rem;
     left: .6rem;
+  }
+
+  .van-calendar__month-title,.van-calendar__header {
+    display: none;
   }
 </style>
 <style scoped>

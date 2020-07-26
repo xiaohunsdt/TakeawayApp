@@ -23,7 +23,7 @@ import java.util.List;
  * @author xiaohun
  * @date 2017-05-23 22:56
  */
-@Configuration()
+@Configuration
 @ConditionalOnClass(com.alibaba.fastjson.JSON.class)
 @ConditionalOnMissingBean(FastJsonHttpMessageConverter.class)
 @ConditionalOnWebApplication

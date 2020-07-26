@@ -2,6 +2,8 @@ package net.novaborn.takeaway.activity.signin.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class SignIn {
     String userId;
@@ -36,4 +38,6 @@ public class SignIn {
      * 第4周是否已兑换
      */
     Boolean week4IsExchanged;
+
+    Date createDate;
 }

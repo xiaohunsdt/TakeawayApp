@@ -75,10 +75,10 @@ public interface ISignInService {
 
     /**
      * 遍历一个签到实例,返回一个签过到的天数集
-     * @param signIn
+     * @param record
      * @return
      */
-    int[] getAllSignInedDays(SignIn signIn);
+    int[] getAllSignInedDays(int record);
 
     default String getKeyStr(String userId, Date date) {
         return String.format("signin:%d%d:%s", DateUtil.year(date), DateUtil.month(date), userId);

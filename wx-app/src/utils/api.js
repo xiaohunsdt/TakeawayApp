@@ -4,7 +4,8 @@ const api = {
   // 微信接口
   authLoginByWeixin: (code) => request.post('wx/auth', { code }),
   setUserInfo: (userInfo) => request.post('wx/setUserInfo', userInfo),
-
+  // 获取签到天数
+ getSignInDays: () => request.get('user/getSignInDays'),
   // 获取首页横幅图片
   getBannersList: () => request.get('index/getBannersList'),
   // 获取指定flag的产品列表

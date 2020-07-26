@@ -28,7 +28,7 @@ public class WeeklyTest {
 
     @Test
     public void signInTest() {
-        signInService.signIn("bbb", DateUtil.parseDate("2020-07-21"));
+        signInService.signIn("4a6bb5a539ec498e2bf5117910af08e4", DateUtil.parseDate("2020-07-27"));
     }
 
     @Test
@@ -62,6 +62,7 @@ public class WeeklyTest {
 
     @Test
     public void signTest() {
+        System.out.println(DateUtil.beginOfMonth(DateUtil.parseDate("2020-07-07")));;
         Date date = DateUtil.parseDate("2020-07-07");
 
         SignIn signIn = new SignIn();

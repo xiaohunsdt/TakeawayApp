@@ -39,6 +39,7 @@ public class SignInService implements ISignInService {
             SignIn temp = new SignIn();
             temp.setUserId(userId);
             temp.setRecord(0);
+            temp.setCreateDate(new Date());
             return Optional.of(temp);
         });
 
@@ -168,8 +169,7 @@ public class SignInService implements ISignInService {
     }
 
     @Override
-    public int[] getAllSignInedDays(SignIn signIn) {
-        int record = signIn.getRecord();
+    public int[] getAllSignInedDays(int record) {
         int[] recordArr = new int[31];
 
         for (int i = 0; i < 31; i++) {
