@@ -214,7 +214,11 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "操作失败!");
         }
 
-        orderSignInSender.send(order.get());
+        // 签到
+        if (order.get().getPaymentWay() != PaymentWay.CREDIT_CARD && order.get().getRealPrice() >= 12000) {
+            orderSignInSender.send(order.get());
+        }
+
         orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }

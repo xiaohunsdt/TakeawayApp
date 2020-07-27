@@ -3,6 +3,7 @@ package net.novaborn.takeaway.mq.sender;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.PaymentWay;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,7 @@ public class OrderSignInSender {
 
     public void send(Order order) {
         try {
-            if (order.getRealPrice() >= 12000) {
-                rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_SIGN_IN, order);
-            }
+            rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_SIGN_IN, order);
         } catch (Exception e) {
             log.error("投递队列失败！！", e);
         }
