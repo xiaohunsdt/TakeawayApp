@@ -76,9 +76,14 @@ function getSignInDays () {
   return api.getSignInDays()
 }
 
+function getSignInedCount () {
+  return api.getSignInedCount()
+}
+
 export default {
   loginByWx,
   checkLogin,
   setUserInfo,
-  getSignInDays
+  getSignInDays,
+  getSignInedCount
 }

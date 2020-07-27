@@ -5,7 +5,9 @@ const api = {
   authLoginByWeixin: (code) => request.post('wx/auth', { code }),
   setUserInfo: (userInfo) => request.post('wx/setUserInfo', userInfo),
   // 获取签到天数
- getSignInDays: () => request.get('user/getSignInDays'),
+  getSignInDays: () => request.get('user/getSignInDays'),
+  getSignInedCount: () => request.get('user/getSignInedCount'),
+
   // 获取首页横幅图片
   getBannersList: () => request.get('index/getBannersList'),
   // 获取指定flag的产品列表

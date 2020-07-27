@@ -6,8 +6,16 @@
         <base-panel v-if="fromNotice">
           <div>
             <van-notice-bar
-              scrollable="true"
               :text="fromNotice"
+              scrollable="true"
+              wrapable/>
+          </div>
+        </base-panel>
+        <base-panel v-if="signNotice">
+          <div>
+            <van-notice-bar
+              :text="signNotice"
+              scrollable="true"
               wrapable/>
           </div>
         </base-panel>
@@ -198,6 +206,7 @@
   import OrderItem from '@/components/OrderItem'
   import GoodsSubmitBar from '@/components/GoodsSubmitBar'
   import indexService from '@/services/index'
+  import userService from '@/services/user'
   import orderService from '@/services/order'
   import payService from '@/services/pay'
   import addressService from '@/services/address'
@@ -281,6 +290,7 @@
         disableService: false,
         tipNotice: '',
         fromNotice: null,
+        signNotice: null,
         orderId: '',
         order: {},
         orderItems: [],
@@ -347,6 +357,14 @@
           this.fromNotice = res.message
         })
       }
+
+      userService.getSignInedCount().then(res => {
+        if (res === 7) {
+          this.signNotice = `本周您已获得7000现金优惠卷(无门槛), 下周继续努力哦!`
+        } else {
+          this.signNotice = `本周您已经签到${res}次, 再签到${7 - res}次即可获得7000现金优惠卷(无门槛)`
+        }
+      })
     },
     methods: {
       ...mapMutations('cart', [
