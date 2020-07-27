@@ -81,6 +81,6 @@ public interface ISignInService {
     int[] getAllSignInedDays(int record);
 
     default String getKeyStr(String userId, Date date) {
-        return String.format("signin:%d%d:%s", DateUtil.year(date), DateUtil.month(date), userId);
+        return String.format("signin:%d-%d:%s", DateUtil.year(date), DateUtil.month(date), userId);
     }
 }
