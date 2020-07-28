@@ -36,10 +36,7 @@ public class SignInService implements ISignInService {
     @Override
     public void signIn(String userId, Date date) {
         Optional<SignIn> signIn = getSignIn(userId, date).or(() -> {
-            SignIn temp = new SignIn();
-            temp.setUserId(userId);
-            temp.setRecord(0);
-            temp.setCreateDate(new Date());
+            SignIn temp = new SignIn(userId);
             return Optional.of(temp);
         });
 

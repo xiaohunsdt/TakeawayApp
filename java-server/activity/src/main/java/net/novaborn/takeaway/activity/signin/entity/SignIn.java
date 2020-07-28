@@ -1,11 +1,16 @@
 package net.novaborn.takeaway.activity.signin.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class SignIn {
+
     String userId;
 
     /**
@@ -20,24 +25,16 @@ public class SignIn {
     Boolean monthIsExchanged;
 
     /**
-     * 第1周是否已兑换
+     * 已经兑换周列表
      */
-    Boolean week1IsExchanged;
-
-    /**
-     * 第2周是否已兑换
-     */
-    Boolean week2IsExchanged;
-
-    /**
-     * 第3周是否已兑换
-     */
-    Boolean week3IsExchanged;
-
-    /**
-     * 第4周是否已兑换
-     */
-    Boolean week4IsExchanged;
+    List<Integer> weekExchangedList;
 
     Date createDate;
+
+    public SignIn(String userId) {
+        this.userId = userId;
+        this.setRecord(0);
+        this.setCreateDate(new Date());
+        this.setWeekExchangedList(new ArrayList<>());
+    }
 }

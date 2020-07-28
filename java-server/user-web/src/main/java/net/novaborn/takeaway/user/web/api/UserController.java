@@ -44,8 +44,7 @@ public class UserController extends BaseController {
 
         SignIn signIn = signInService.getSignIn(user.get().getId(), new Date()).orElse(null);
         if (signIn == null) {
-            signIn = new SignIn();
-            signIn.setCreateDate(new Date());
+            signIn = new SignIn(user.get().getId());
         }
         return new SignInWrapper(signIn).warp();
     }
