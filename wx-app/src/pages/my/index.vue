@@ -189,9 +189,11 @@
         })
         userService.getSignInDays().then(res => {
           let signInedDay = []
-          res.signInedDay.forEach(item => {
-            signInedDay.push(parseInt(item))
-          })
+          if (res.signInedDay) {
+            res.signInedDay.forEach(item => {
+              signInedDay.push(parseInt(item))
+            })
+          }
 
           res.beginOfMonth = parseInt(res.beginOfMonth)
           res.endOfMonth = parseInt(res.endOfMonth)

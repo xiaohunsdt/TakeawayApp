@@ -77,6 +77,12 @@ public class AddressController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("searchAddress")
+    public List<String> searchAddress(String address) {
+        return NaverMapUtil.searchAddress(address);
+    }
+
+    @ResponseBody
     @PostMapping("createNewAddress")
     public Tip createNewAddress(@ModelAttribute Address address) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);

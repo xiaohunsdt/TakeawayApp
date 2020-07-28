@@ -203,6 +203,13 @@
 					"pathName": "pages/index/main",
 					"query": "from=SOGANG",
 					"scene": 1011
+				},
+				{
+					"id": -1,
+					"name": "pages/my/address/edit/search/main",
+					"pathName": "pages/my/address/edit/search/main",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

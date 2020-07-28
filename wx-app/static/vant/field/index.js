@@ -62,6 +62,7 @@ VantComponent({
       this.emitChange();
     },
     onFocus(event) {
+      console.log(this.focused)
       this.focused = true;
       this.setShowClear();
       this.$emit('focus', event.detail);

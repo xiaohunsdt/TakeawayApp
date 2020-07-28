@@ -4,39 +4,36 @@
     <div class="container-contain">
       <base-panel>
         <van-cell-group>
-          <van-field
-            :value="address.address"
-            @change="regionInput"
-            autosize
-            clearable
-            label="地址"
-            placeholder="请输入地址,不要带门牌号"
-            required
-            type="textarea">
-            <van-icon @click="clickRightIcon" name="question-o" size="1rem" slot="right-icon"/>
-          </van-field>
+          <van-cell is-link>
+            <view slot="title" style="display: flex;">
+              <view style="width: 3.8em">地址</view>
+              <view @click="onSearchAddress" style="width: calc(100% - 3.8em)">{{address.address?address.address:'请点击输入地址'}}</view>
+            </view>
+          </van-cell>
           <van-field
             :border="false"
             :value="address.detail"
             @change="detailInput"
             label="详细"
-            placeholder="门牌号,楼下密码,送餐提示等详细信息"/>
+            placeholder="门牌号,楼下密码,送餐提示等详细信息"
+            title-width="3em"/>
           <van-field
             :border="false"
             :value="address.phone"
             @change="phoneInput"
             label="手机号"
             placeholder="请输入手机号,手机格式为:01056511996"
-            required/>
+            required
+            title-width="3em"/>
         </van-cell-group>
       </base-panel>
       <van-button
         :disable="editLoading"
         :loading="editLoading"
-        loading-type="spinner"
         @click="editBtnClick"
         color="#FFD200"
         custom-class="add-address-btn"
+        loading-type="spinner"
         round
         size="large">
         <div v-if="addressId">修改地址</div>
@@ -94,6 +91,21 @@
       },
       phoneInput (value) {
         this.address.phone = value.mp.detail
+      },
+      onSearchAddress (event) {
+        console.log(event)
+
+        var $this = this
+        mpvue.navigateTo({
+            url: 'search/main',
+            events: {
+              setSelectedAddress (data) {
+                console.log(data)
+                $this.address.address = data.address
+              }
+            }
+          }
+        )
       },
       editBtnClick () {
         if (this.addressId) {

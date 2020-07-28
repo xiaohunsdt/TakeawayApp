@@ -21,6 +21,10 @@ export function getDefaultAddress () {
   return api.getDefaultAddress()
 }
 
+export function searchAddress (address) {
+  return api.searchAddress(address)
+}
+
 /**
  * 新建一个地址
  */
@@ -47,6 +51,7 @@ export default {
   getAddressById,
   getMyAddressList,
   getDefaultAddress,
+  searchAddress,
   createNewAddress,
   updateAddress,
   setDefault,

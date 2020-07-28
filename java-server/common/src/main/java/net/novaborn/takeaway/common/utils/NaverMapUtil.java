@@ -11,7 +11,9 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.utils.entity.Coordinate;
 import net.novaborn.takeaway.common.utils.exception.MapExceptionEnum;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,17 +30,10 @@ public class NaverMapUtil {
 
     @SneakyThrows
     public static Coordinate getGeocode(String address) {
-        HttpRequest request = HttpUtil.createGet(GEOCODE_API + address);
-        request.setEncodeUrlParams(true);
-        generateRequest(request);
-        HttpResponse response = request.execute();
-        if (response.getStatus() != 200) {
-            throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
-        }
-
-        String result = response.body();
+        String result = requestApi(address);
         JSONObject jsonObject = JSON.parseObject(result);
         String status = jsonObject.getString("status");
+
         if ("OK".equals(status)) {
             JSONArray addresses = jsonObject.getJSONArray("addresses");
             if (addresses.size() == 0) {
@@ -60,6 +55,41 @@ public class NaverMapUtil {
         } else {
             throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
         }
+    }
+
+    public static List<String> searchAddress(String address) {
+        List<String> addresses = new ArrayList<>();
+
+        String result = requestApi(address);
+        JSONObject jsonObject = JSON.parseObject(result);
+        String status = jsonObject.getString("status");
+
+        if ("OK".equals(status)) {
+            JSONArray addresseArr = jsonObject.getJSONArray("addresses");
+            if (addresseArr.size() == 0) {
+                throw new SysException(MapExceptionEnum.NO_ADDRESS_ERROR);
+            }
+
+            addresseArr.forEach(item -> {
+                String roadAddress = ((JSONObject)item).getString("roadAddress");
+                addresses.add(roadAddress);
+            });
+        } else {
+            throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
+        }
+
+        return addresses;
+    }
+
+    private static String requestApi(String address) {
+        HttpRequest request = HttpUtil.createGet(GEOCODE_API + address);
+        generateRequest(request);
+        HttpResponse response = request.execute();
+        if (response.getStatus() != 200) {
+            throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
+        }
+
+        return response.body();
     }
 
     private static void generateRequest(HttpRequest request) {

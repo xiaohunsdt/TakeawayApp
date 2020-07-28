@@ -43,6 +43,10 @@ public class UserController extends BaseController {
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         SignIn signIn = signInService.getSignIn(user.get().getId(), new Date()).orElse(null);
+        if (signIn == null) {
+            signIn = new SignIn();
+            signIn.setCreateDate(new Date());
+        }
         return new SignInWrapper(signIn).warp();
     }
 

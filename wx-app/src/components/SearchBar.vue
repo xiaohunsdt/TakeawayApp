@@ -30,7 +30,7 @@
         this.searchValue = event.mp.detail
       },
       onSearch () {
-        console.log(this.searchValue)
+        this.$emit('search', this.searchValue)
       }
     }
   }

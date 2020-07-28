@@ -1,193 +1,198 @@
 <template>
-    <div>
-        <naver-maps :height="height" :initLayers="initLayers" :mapOptions="mapOptions" @load="onLoad">
-            <map-info-window
+    <naver-maps :height="height" :initLayers="initLayers" :mapOptions="mapOptions" @load="onLoad">
+        <map-info-window
                 :isOpen="isOpen"
                 :marker="marker"
                 @load="onWindowLoad"
                 class="info-window"
                 ref="info-window">
-                <div class="info-window-container">
-                    <base-card v-if="selectedOrder">
-                        <div>
-                            {{selectedOrder.address.address}} {{selectedOrder.address.detail}}
-                            <br/>
-                            {{selectedOrder.address.phone}}
-                        </div>
-                        <div style="margin-top: 8px">
-                            <el-button-group>
-                                <el-button
-                                    size="mini"
-                                    type="primary"
-                                    v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"
-                                    v-clipboard:error="onCopyError"
-                                    v-clipboard:success="onCopySuccess">
-                                    复制地址
-                                </el-button>
-                                <el-button size="mini" type="primary"><a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
-                                </el-button>
-                                <el-button @click="onFinishOrder(selectedOrder)" size="mini" type="success">完成订单
-                                </el-button>
-                            </el-button-group>
-                        </div>
-                    </base-card>
-                </div>
-            </map-info-window>
-            <map-marker :lat="mapOptions.lat" :lng="mapOptions.lng" @click="onMarkerClicked" @load="onMarkerLoaded"/>
-            <map-marker
+            <div class="info-window-container" v-if="selectedOrder">
+                <base-card>
+                    <div>
+                        {{selectedOrder.address.address}} {{selectedOrder.address.detail}}
+                        <br/>
+                        {{selectedOrder.address.phone}}
+                    </div>
+                    <div style="margin-top: 8px">
+                        <el-button-group>
+                            <!--                                <el-button-->
+                            <!--                                    size="mini"-->
+                            <!--                                    type="primary"-->
+                            <!--                                    v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"-->
+                            <!--                                    v-clipboard:error="onCopyError"-->
+                            <!--                                    v-clipboard:success="onCopySuccess">-->
+                            <!--                                    复制地址-->
+                            <!--                                </el-button>-->
+                            <el-button size="mini" type="primary">
+                                <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${selectedOrder.address.address} ${selectedOrder.address.detail}`">打开地图</a>
+                            </el-button>
+                            <el-button size="mini" type="primary">
+                                <a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
+                            </el-button>
+                            <el-button @click="onFinishOrder(selectedOrder)" size="mini" type="success">
+                                完成订单
+                            </el-button>
+                        </el-button-group>
+                    </div>
+                </base-card>
+            </div>
+        </map-info-window>
+        <map-marker :lat="mapOptions.lat" :lng="mapOptions.lng" @click="onMarkerClicked" @load="onMarkerLoaded"/>
+        <map-marker
                 :icon="{content:`<div class='pin-number'>${order.number}</div><div class='pin ${order.orderState}'></div><div class='pulse'></div>`}"
+                :key="order.id"
                 :lat="order.address.y"
                 :lng="order.address.x"
                 :order="order"
                 @click="onMarkerClicked"
                 @load="onMarkerLoaded"
-                :key="order.id"
                 v-for="order in orderList"/>
-            <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="800"/>
-            <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>
-            <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>
-            <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>
-            <!--      <naver-rectangle :south="36" :north="38" :west="126" :east="128"/>-->
-            <!--      <naver-ellipse :bounds="{south:36,north:38,west:126,east:128}"/>-->
-            <!--      <naver-polygon :paths="[[{lat:mapOptions.lat,lng:mapOptions.lng},{lat:38,lng:mapOptions.lng},{lat:38,lng:129},{lat:mapOptions.lat,lng:128}]]"/>-->
-            <!--      <naver-polyline :path="[{lat:mapOptions.lat,lng:mapOptions.lng},{lat:38,lng:129}]"/>-->
-            <!--      <naver-ground-overlay :url="'//logoproject.naver.com/img/img_about.gif'" :bounds="{south:36.7,north:36.9,west:126.5,east:127.5}"/>-->
-        </naver-maps>
-    </div>
+        <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="800"/>
+        <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>
+        <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>
+        <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>
+        <!--      <naver-rectangle :south="36" :north="38" :west="126" :east="128"/>-->
+        <!--      <naver-ellipse :bounds="{south:36,north:38,west:126,east:128}"/>-->
+        <!--      <naver-polygon :paths="[[{lat:mapOptions.lat,lng:mapOptions.lng},{lat:38,lng:mapOptions.lng},{lat:38,lng:129},{lat:mapOptions.lat,lng:128}]]"/>-->
+        <!--      <naver-polyline :path="[{lat:mapOptions.lat,lng:mapOptions.lng},{lat:38,lng:129}]"/>-->
+        <!--      <naver-ground-overlay :url="'//logoproject.naver.com/img/img_about.gif'" :bounds="{south:36.7,north:36.9,west:126.5,east:127.5}"/>-->
+    </naver-maps>
 </template>
 
 <script>
-  import { Message } from 'element-ui'
-  import BaseCard from '@/components/BaseCard'
-  import MapInfoWindow from './naver-map/MapInfoWindow'
-  import MapMarker from './naver-map/MapMarker'
+    import {Message} from 'element-ui'
+    import BaseCard from '@/components/BaseCard'
+    import MapInfoWindow from './naver-map/MapInfoWindow'
+    import MapMarker from './naver-map/MapMarker'
 
-  import orderApi from '@/api/order'
+    import orderApi from '@/api/order'
 
-  export default {
-	name: 'NaverMap',
-	props: {
-	  height: {
-		type: Number,
-		default: 1000
-	  },
-	  allOrder: {
-		type: Boolean,
-		default: false
-	  }
-	},
-	components: {
-	  BaseCard,
-	  MapInfoWindow,
-	  MapMarker
-	},
-	data() {
-	  return {
-		selectedOrder: null,
-		isOpen: false,
-		marker: null,
-		map: null,
-		mapOptions: {
-		  lat: 37.5586305,
-		  lng: 126.9357696,
-		  zoom: 14,
-		  zoomControl: true,
-		  zoomControlOptions: { position: 'CENTER' },
-		  mapTypeControl: true
-		},
-		initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN', 'TRANSIT', 'CHINESE'],
-		orderList: [],
-		timer: null
-	  }
-	},
-	mounted() {
-	  if (!this.allOrder) {
-		this.getWaitEatOrderList()
-		this.timer = setInterval(this.getWaitEatOrderList, 1000 * 60)
-	  } else {
-		this.getAllTodayOrderList()
-	  }
-	},
-	methods: {
-	  onLoad(vue) {
-		this.map = vue
-	  },
-	  onWindowLoad(event) {
-		console.log(event)
-		event.infoWindow.borderWidth = 0
-	  },
-	  onMarkerClicked(event) {
-		if (event.order) {
-		  this.selectedOrder = event.order
-		} else {
-		  this.selectedOrder = null
-		}
-		// this.info = '1111111111111111111111111111111'
+    export default {
+        name: 'NaverMap',
+        props: {
+            height: {
+                type: Number,
+                default: 1000
+            },
+            allOrder: {
+                type: Boolean,
+                default: false
+            }
+        },
+        components: {
+            BaseCard,
+            MapInfoWindow,
+            MapMarker
+        },
+        data() {
+            return {
+                selectedOrder: null,
+                isOpen: false,
+                marker: null,
+                map: null,
+                mapOptions: {
+                    lat: 37.5586305,
+                    lng: 126.9357696,
+                    zoom: 14,
+                    zoomControl: true,
+                    zoomControlOptions: {position: 'CENTER'},
+                    mapTypeControl: true
+                },
+                initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN', 'TRANSIT', 'CHINESE'],
+                orderList: [],
+                timer: null
+            }
+        },
+        mounted() {
+            if (!this.allOrder) {
+                this.getWaitEatOrderList()
+                this.timer = setInterval(this.getWaitEatOrderList, 1000 * 60)
+            } else {
+                this.getAllTodayOrderList()
+            }
+        },
+        methods: {
+            onLoad(vue) {
+                this.map = vue
+            },
+            onWindowLoad(event) {
+                console.log(event)
+                event.infoWindow.borderWidth = 0
+            },
+            onMarkerClicked(event) {
+                console.log(this.$refs)
 
-		if (this.marker !== event.event.overlay) {
-		  this.$refs['info-window'].close()
-		  this.$refs['info-window'].open(event.event.overlay)
-		  this.marker = event.event.overlay
-		  this.isOpen = true
+                if (event.order) {
+                    this.selectedOrder = event.order
+                } else {
+                    this.selectedOrder = null
+                }
+                // this.info = '1111111111111111111111111111111'
 
-		} else {
-		  this.marker = event.event.overlay
-		  this.isOpen = !this.isOpen
-		}
-	  },
-	  onMarkerLoaded(event) {
-		this.marker = event.marker
-	  },
-	  getWaitEatOrderList() {
-		orderApi.getTodayOrderListByState('WAIT_EAT').then(res => {
-		  this.orderList = res
-		})
-	  },
-	  getAllTodayOrderList() {
-		orderApi.getTodayOrderList().then(res => {
-		  this.orderList = res
-		})
-	  },
-	  onCopySuccess() {
-		Message({
-		  message: '复制成功',
-		  type: 'success',
-		  duration: 2 * 1000
-		})
-	  },
-	  onCopyError() {
-		Message({
-		  message: '复制失败',
-		  type: 'error',
-		  duration: 2 * 1000
-		})
-	  },
-	  onFinishOrder(order) {
-		this.$confirm('确定当前订单已完成?', '提示', {
-		  confirmButtonText: '确定',
-		  cancelButtonText: '取消',
-		  type: 'warning'
-		}).then(() => {
-		  orderApi.finishOrder(order.id)
-			.then(res => {
-			  this.$message({
-				message: res.message,
-				type: 'success'
-			  })
-			  this.isOpen = false
-			  if (!this.allOrder) {
-				this.getWaitEatOrderList()
-			  } else {
-				this.getAllTodayOrderList()
-			  }
-			})
-		})
-	  }
-	},
-	beforeDestroy() {
-	  clearInterval(this.timer)
-	}
-  }
+                if (this.marker !== event.event.overlay) {
+                    this.$refs['info-window'].close()
+                    this.$refs['info-window'].open(event.event.overlay)
+                    this.marker = event.event.overlay
+                    this.isOpen = true
+
+                } else {
+                    this.marker = event.event.overlay
+                    this.isOpen = !this.isOpen
+                }
+            },
+            onMarkerLoaded(event) {
+                this.marker = event.marker
+            },
+            getWaitEatOrderList() {
+                orderApi.getTodayOrderListByState('WAIT_EAT').then(res => {
+                    this.orderList = res
+                })
+            },
+            getAllTodayOrderList() {
+                orderApi.getTodayOrderList().then(res => {
+                    this.orderList = res
+                })
+            },
+            onCopySuccess() {
+                Message({
+                    message: '复制成功',
+                    type: 'success',
+                    duration: 2 * 1000
+                })
+            },
+            onCopyError() {
+                Message({
+                    message: '复制失败',
+                    type: 'error',
+                    duration: 2 * 1000
+                })
+            },
+            onFinishOrder(order) {
+                this.$confirm('确定当前订单已完成?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    orderApi.finishOrder(order.id)
+                        .then(res => {
+                            this.$message({
+                                message: res.message,
+                                type: 'success'
+                            })
+                            this.isOpen = false
+                            if (!this.allOrder) {
+                                this.getWaitEatOrderList()
+                            } else {
+                                this.getAllTodayOrderList()
+                            }
+                        })
+                })
+            }
+        },
+        beforeDestroy() {
+            clearInterval(this.timer)
+        }
+    }
 </script>
 <style>
     .info-window-container {

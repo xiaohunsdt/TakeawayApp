@@ -1,37 +1,39 @@
 <template>
     <el-dialog
-        :close-on-click-modal="false" :title="title"
-        :modal-append-to-body="false"
-        :visible.sync="dialogFormVisible"
-        class="simple-order-dialog"
-        size="mini"
-        width="800px">
+            :lock-scroll="false"
+            :close-on-click-modal="false"
+            :modal-append-to-body="false"
+            :title="title"
+            :visible.sync="dialogFormVisible"
+            class="simple-order-dialog"
+            size="mini"
+            width="800px">
         <el-table
-            :data="tableData"
-            @expand-change="getOrderDetail"
-            class="tb-edit"
-            element-loading-text="正在加载中..."
-            highlight-current-row
-            stripe
-            style="width: 100%"
-            v-loading="listLoading">
+                :data="tableData"
+                @expand-change="getOrderDetail"
+                class="tb-edit"
+                element-loading-text="正在加载中..."
+                highlight-current-row
+                stripe
+                style="width: 100%"
+                v-loading="listLoading">
             <el-table-column type="expand">
                 <template v-slot="props">
                     <div class="order-expand" v-if="props.row.detail.hasOwnProperty('address')">
                         <el-table
-                            :data="props.row.detail.orderItemList"
-                            :show-header="false"
-                            stripe
-                            style="width: 100%">
+                                :data="props.row.detail.orderItemList"
+                                :show-header="false"
+                                stripe
+                                style="width: 100%">
                             <el-table-column
-                                prop="goodsName">
+                                    prop="goodsName">
                             </el-table-column>
                             <el-table-column>
                                 <template v-slot="scope">
                                     <img
-                                        :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
-                                        style="height: 30px;width: auto;"
-                                        v-if="scope.row.goodsThumb!==''"/>
+                                            :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
+                                            style="height: 30px;width: auto;"
+                                            v-if="scope.row.goodsThumb!==''"/>
                                 </template>
                             </el-table-column>
                             <el-table-column>
@@ -82,42 +84,42 @@
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="单号"
-                prop="number"
-                width="60">
+                    align="center"
+                    label="单号"
+                    prop="number"
+                    width="60">
             </el-table-column>
             <el-table-column
-                align="center"
-                label="用户">
+                    align="center"
+                    label="用户">
                 <template v-slot="props">
                     <div>{{ props.row.userName }}</div>
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="商品数量"
-                prop="goodsCount"
-                width="80">
+                    align="center"
+                    label="商品数量"
+                    prop="goodsCount"
+                    width="80">
             </el-table-column>
             <el-table-column
-                align="center"
-                label="总金额"
-                prop="allPrice">
+                    align="center"
+                    label="总金额"
+                    prop="allPrice">
                 <template v-slot="scope">
                     <div>₩ {{ scope.row.allPrice.toLocaleString() }}</div>
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="实际金额">
+                    align="center"
+                    label="实际金额">
                 <template v-slot="scope">
                     <div>₩ {{ scope.row.realPrice.toLocaleString() }}</div>
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="支付状态">
+                    align="center"
+                    label="支付状态">
                 <template v-slot="scope">
                     <el-tag type="success" v-if="scope.row.payState === 'PAID'">
                         {{ scope.row.payState | payStateFormat }}
@@ -131,8 +133,8 @@
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="订单状态">
+                    align="center"
+                    label="订单状态">
                 <template v-slot="scope">
                     <el-tag type="success" v-if="scope.row.orderState === 'FINISHED'">
                         {{ scope.row.orderState | orderStateFormat }}
@@ -152,122 +154,122 @@
                 </template>
             </el-table-column>
             <el-table-column
-                align="center"
-                label="创建时间"
-                prop="createDate">
+                    align="center"
+                    label="创建时间"
+                    prop="createDate">
             </el-table-column>
         </el-table>
         <el-pagination
-            :current-page="page.current"
-            :page-size="page.size"
-            :page-sizes="[10, 50, 100]"
-            :total="page.total"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            style="margin-top: 15px">
+                :current-page="page.current"
+                :page-size="page.size"
+                :page-sizes="[10, 50, 100]"
+                :total="page.total"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                style="margin-top: 15px">
         </el-pagination>
     </el-dialog>
 </template>
 
 <script>
-  import orderApi from '@/api/order'
-  import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
+    import orderApi from '@/api/order'
+    import {formatOrderState, formatPaymentWay, formatPayState, parseTime} from '@/utils/index'
 
-  export default {
-	name: 'SimpleOrderDialog',
-	filters: {
-	  orderStateFormat: function(value) {
-		return formatOrderState(value)
-	  },
-	  payStateFormat: function(value) {
-		return formatPayState(value)
-	  }
-	},
-	watch: {
-	  dialogFormVisible() {
-		if (this.dialogFormVisible) {
-		  this.page.current = 1
-		  this.getList()
-		}
-	  }
-	},
-	computed: {
-	  title() {
-		let temp = ''
-		if (this.formData.orderState) {
-		  temp = formatOrderState(this.formData.orderState)
-		} else if (this.formData.paymentWay) {
-		  temp = formatPaymentWay(this.formData.paymentWay)
-		} else {
-		  temp = '全部'
-		}
-		return temp + '的订单'
-	  }
-	},
-	data() {
-	  return {
-		dialogFormVisible: false,
-		page: {
-		  current: 1,
-		  size: 10,
-		  total: 0
-		},
-		formData: {
-		  orderState: null,
-		  paymentWay: null,
-		  showDelete: 0
-		},
-		listLoading: false,
-		tableData: []
-	  }
-	},
-	methods: {
-	  getList() {
-		const nowStr = parseTime(new Date(), '{y}-{m}-{d}')
-		const params = Object.assign({}, this.formData)
-		params.startDate = nowStr
-		params.endDate = nowStr
+    export default {
+        name: 'SimpleOrderDialog',
+        filters: {
+            orderStateFormat: function (value) {
+                return formatOrderState(value)
+            },
+            payStateFormat: function (value) {
+                return formatPayState(value)
+            }
+        },
+        watch: {
+            dialogFormVisible() {
+                if (this.dialogFormVisible) {
+                    this.page.current = 1
+                    this.getList()
+                }
+            }
+        },
+        computed: {
+            title() {
+                let temp = ''
+                if (this.formData.orderState) {
+                    temp = formatOrderState(this.formData.orderState)
+                } else if (this.formData.paymentWay) {
+                    temp = formatPaymentWay(this.formData.paymentWay)
+                } else {
+                    temp = '全部'
+                }
+                return temp + '的订单'
+            }
+        },
+        data() {
+            return {
+                dialogFormVisible: false,
+                page: {
+                    current: 1,
+                    size: 10,
+                    total: 0
+                },
+                formData: {
+                    orderState: null,
+                    paymentWay: null,
+                    showDelete: 0
+                },
+                listLoading: false,
+                tableData: []
+            }
+        },
+        methods: {
+            getList() {
+                const nowStr = parseTime(new Date(), '{y}-{m}-{d}')
+                const params = Object.assign({}, this.formData)
+                params.startDate = nowStr
+                params.endDate = nowStr
 
-		orderApi.getOrderListByPage(this.page, params)
-		  .then(response => {
-			const datas = response.records
-			datas.forEach(item => {
-			  item.detail = {}
-			})
-			this.tableData = datas
-			this.page.total = parseInt(response.total)
-			this.listLoading = false
-		  }).catch(() => {
-		  this.listLoading = false
-		})
-	  },
-	  async getOrderDetail(row, expandedRows) {
-		const currentRow = expandedRows.find(item => item.id === row.id)
-		// if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-		if (currentRow !== undefined) {
-		  await orderApi.getOrderDetail(row.id)
-			.then(response => {
-			  this.$set(currentRow, 'detail', response)
-			})
-		}
-	  },
-	  openDialog(orderState, paymentWay) {
-		this.formData.orderState = orderState
-		this.formData.paymentWay = paymentWay
-		this.dialogFormVisible = true
-	  },
-	  handleSizeChange(val) {
-		this.page.size = val
-		this.getList()
-	  },
-	  handleCurrentChange(val) {
-		this.page.current = val
-		this.getList()
-	  }
-	}
-  }
+                orderApi.getOrderListByPage(this.page, params)
+                    .then(response => {
+                        const datas = response.records
+                        datas.forEach(item => {
+                            item.detail = {}
+                        })
+                        this.tableData = datas
+                        this.page.total = parseInt(response.total)
+                        this.listLoading = false
+                    }).catch(() => {
+                    this.listLoading = false
+                })
+            },
+            async getOrderDetail(row, expandedRows) {
+                const currentRow = expandedRows.find(item => item.id === row.id)
+                // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
+                if (currentRow !== undefined) {
+                    await orderApi.getOrderDetail(row.id)
+                        .then(response => {
+                            this.$set(currentRow, 'detail', response)
+                        })
+                }
+            },
+            openDialog(orderState, paymentWay) {
+                this.formData.orderState = orderState
+                this.formData.paymentWay = paymentWay
+                this.dialogFormVisible = true
+            },
+            handleSizeChange(val) {
+                this.page.size = val
+                this.getList()
+            },
+            handleCurrentChange(val) {
+                this.page.current = val
+                this.getList()
+            }
+        }
+    }
 </script>
 
 <style>
