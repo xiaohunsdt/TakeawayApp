@@ -100,7 +100,8 @@ public class AddressController extends BaseController {
         }
 
         // 填入经纬度
-        if (address.getX() == null || address.getY() == null) {
+        if (StrUtil.isNotBlank(address.getAddress())
+                && (address.getX() == null || address.getY() == null)) {
             Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
             address.setX(coordinate.getX());
             address.setY(coordinate.getY());
