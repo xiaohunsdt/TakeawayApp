@@ -7,7 +7,9 @@
           <van-cell is-link>
             <view slot="title" style="display: flex;">
               <view style="width: 3.8em">地址</view>
-              <view @click="onSearchAddress" style="width: calc(100% - 3.8em)">{{address.address?address.address:'请点击输入地址'}}</view>
+              <view @click="onSearchAddress" style="width: calc(100% - 3.8em)">
+                {{address.address?address.address:'请点击输入地址'}}
+              </view>
             </view>
           </van-cell>
           <van-field
@@ -61,7 +63,9 @@
         address: {
           address: '',
           detail: '',
-          phone: ''
+          phone: '',
+          x: 0,
+          y: 0
         }
       }
     },
@@ -102,6 +106,8 @@
               setSelectedAddress (data) {
                 console.log(data)
                 $this.address.address = data.address
+                $this.address.x = data.x
+                $this.address.y = data.y
               }
             }
           }

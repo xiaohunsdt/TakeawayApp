@@ -1,7 +1,10 @@
-package net.novaborn.takeaway.common.utils.entity;
+package net.novaborn.takeaway.user.entity;
 
 import lombok.Data;
 
+/**
+ * 表示地址的经纬度
+ */
 @Data
 public class Coordinate {
     /**

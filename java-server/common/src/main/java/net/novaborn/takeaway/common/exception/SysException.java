@@ -17,6 +17,11 @@ public class SysException extends RuntimeException {
         this.message = serviceExceptionEnum.getMessage();
     }
 
+    public SysException(ServiceExceptionEnum serviceExceptionEnum, Object... objects) {
+        this.code = serviceExceptionEnum.getCode();
+        this.message = String.format(serviceExceptionEnum.getMessage(), objects);
+    }
+
     public Integer getCode() {
         return code;
     }

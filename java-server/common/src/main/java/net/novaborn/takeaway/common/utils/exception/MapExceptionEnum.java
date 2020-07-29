@@ -12,8 +12,9 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 public enum MapExceptionEnum implements ServiceExceptionEnum {
 
     ADDRESS_ERROR(500, "地址错误!"),
-    REQUEST_API_ERROR(500, "请求数据失败!"),
-    NO_ADDRESS_ERROR(500, "没有这个地址!");
+    REQUEST_API_ERROR(500, "请求API数据失败!"),
+    REQUEST_ERROR(500, "请求数据失败!"),
+    NO_ADDRESS_ERROR(500, "没有这个地址! %s");
 
     MapExceptionEnum(int code, String message) {
         this.code = code;

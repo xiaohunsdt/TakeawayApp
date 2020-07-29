@@ -2,23 +2,20 @@ package net.novaborn.takeaway.user.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
 import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.common.utils.MapDistanceUtil;
-import net.novaborn.takeaway.common.utils.NaverMapUtil;
 import net.novaborn.takeaway.common.utils.PhoneUtil;
-import net.novaborn.takeaway.common.utils.entity.Coordinate;
-import net.novaborn.takeaway.system.entity.Setting;
-import net.novaborn.takeaway.system.enums.SettingScope;
-import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.Address;
+import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
 import net.novaborn.takeaway.user.service.impl.AddressService;
+import net.novaborn.takeaway.user.service.impl.NaverMapService;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.wrapper.AddressWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +37,8 @@ public class AddressController extends BaseController {
     private UserService userService;
 
     private AddressService addressService;
+
+    private NaverMapService naverMapService;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -78,8 +77,8 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @PostMapping("searchAddress")
-    public List<String> searchAddress(String address) {
-        return NaverMapUtil.searchAddress(address);
+    public List<Address> searchAddress(String address) {
+        return naverMapService.searchAddress(address);
     }
 
     @ResponseBody
@@ -94,17 +93,20 @@ public class AddressController extends BaseController {
         address.setDetail(address.getDetail().trim());
         address.setPhone(address.getPhone().trim());
 
+        address.setUserId(user.get().getId());
+
         if (!PhoneUtil.validate(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 
         // 填入经纬度
-        Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
-        address.setX(coordinate.getX());
-        address.setY(coordinate.getY());
-        address.setUserId(user.get().getId());
+        if (address.getX() == null || address.getY() == null) {
+            Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
+            address.setX(coordinate.getX());
+            address.setY(coordinate.getY());
+        }
 
-        if (!defaultAddress.isPresent()) {
+        if (defaultAddress.isEmpty()) {
             address.setIsDefault(true);
         }
 
@@ -119,7 +121,6 @@ public class AddressController extends BaseController {
     @PostMapping("updateAddress")
     @Transactional(rollbackFor = RuntimeException.class)
     public Tip updateAddress(@ModelAttribute Address address) {
-        String openId = jwtTokenUtil.getUsernameFromToken(request);
         Address target = addressService.getById(address.getId());
 
         if (address.getPhone() != null && !PhoneUtil.validate(address.getPhone())) {
@@ -132,8 +133,9 @@ public class AddressController extends BaseController {
         }
 
         // 地址发生变化，填入经纬度
-        if (address.getAddress() != null && !target.getAddress().equals(address.getAddress())) {
-            Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
+        if (StrUtil.isNotBlank(address.getAddress())
+                && (address.getX() == null || address.getY() == null)) {
+            Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
             address.setX(coordinate.getX());
             address.setY(coordinate.getY());
         }

@@ -5,12 +5,12 @@
       <search-bar @search="onSearch"/>
       <base-panel v-if="addressList.length > 0">
         <van-cell
-          :title="address"
+          :key="address"
+          :title="address.address"
+          @click="onSelect(address)"
           icon="location-o"
           is-link
-          @click="onSelect(address)"
           v-for="address in addressList"
-          :key="address"
         />
       </base-panel>
     </div>
@@ -43,13 +43,17 @@
         Object.assign(this.$data, this.$options.data())
       },
       onSearch (event) {
-        addressService.searchAddress(event).then(res => {
-          this.addressList = res
-        })
+        addressService.searchAddress(event)
+          .then(res => {
+            this.addressList = res
+          })
+          .catch(() => {
+            this.addressList = []
+          })
       },
       onSelect (address) {
         let eventChannel = this.$mp.page.getOpenerEventChannel()
-        eventChannel.emit('setSelectedAddress', { address })
+        eventChannel.emit('setSelectedAddress', address)
         global.mpvue.navigateBack()
       }
     }
