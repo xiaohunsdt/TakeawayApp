@@ -93,7 +93,7 @@ public class WechatAutoTask {
         sysJob = new SysJob();
         sysJob.setJobId(3L);
         sysJob.setJobGroup(jobGroup);
-        sysJob.setCronExpression(StrUtil.format("0 0/10 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
         sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
         sysJob.setStatus(ScheduleConstants.Status.NORMAL);
         sysJob.setConcurrent(false);
