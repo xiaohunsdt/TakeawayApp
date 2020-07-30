@@ -9,13 +9,13 @@ import net.novaborn.takeaway.admin.web.wrapper.AddressWrapper;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.user.service.NaverMapUtil;
 import net.novaborn.takeaway.common.utils.PhoneUtil;
 import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
 import net.novaborn.takeaway.user.service.impl.AddressService;
+import net.novaborn.takeaway.user.service.impl.NaverMapService;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +37,8 @@ public class AddressController extends BaseController {
     private UserService userService;
 
     private AddressService addressService;
+
+    private NaverMapService naverMapService;
 
     @PostMapping("getAddressListByPage")
     public ResponseEntity<Page> getAddressListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
@@ -61,6 +63,12 @@ public class AddressController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("searchAddress")
+    public List<Address> searchAddress(String address) {
+        return naverMapService.searchAddress(address);
+    }
+
+    @ResponseBody
     @PostMapping("updateAddress")
     @Transactional(rollbackFor = RuntimeException.class)
     public Tip updateAddress(@ModelAttribute Address address) {
@@ -72,7 +80,7 @@ public class AddressController extends BaseController {
 
         // 地址发生变化，填入经纬度
         if (address.getAddress() != null && !target.getAddress().equals(address.getAddress())) {
-            Coordinate coordinate = NaverMapUtil.getGeocode(address.getAddress());
+            Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
             address.setX(coordinate.getX());
             address.setY(coordinate.getY());
         }

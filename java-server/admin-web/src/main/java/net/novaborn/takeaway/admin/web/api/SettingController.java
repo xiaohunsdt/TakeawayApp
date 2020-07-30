@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.user.service.NaverMapUtil;
 import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.exception.SettingExceptionEnum;
 import net.novaborn.takeaway.system.service.impl.SettingService;
+import net.novaborn.takeaway.user.service.impl.NaverMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +32,8 @@ import java.util.TimeZone;
 @RequestMapping("/api/admin/setting")
 public class SettingController extends BaseController {
     private SettingService settingService;
+
+    private NaverMapService naverMapService;
 
     @GetMapping("getAllSetting")
     @ResponseBody
@@ -73,7 +75,7 @@ public class SettingController extends BaseController {
                 Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
 
                 if (coordinate_x == null || coordinate_y == null || !setting.getValue().equals(value)) {
-                    Coordinate coordinate = NaverMapUtil.getGeocode((String) value);
+                    Coordinate coordinate = naverMapService.getGeocode((String) value);
                     coordinate_x = new Setting();
                     coordinate_x.setKey("store_address_x");
                     coordinate_x.setScope(settingScope);

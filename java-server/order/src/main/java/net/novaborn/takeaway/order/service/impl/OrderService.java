@@ -20,6 +20,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -33,7 +34,7 @@ import java.util.*;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Service
-public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService, InitializingBean {
+public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
     private OrderItemService orderItemService;
 
     private GoodsService goodsService;
@@ -45,8 +46,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Setter
     protected Map<String, Goods> gifts;
 
-    @Override
-    public void afterPropertiesSet() {
+    @PostConstruct
+    public void init() {
         gifts = new HashMap<>();
         gifts.put("鸭脖", goodsService.getById("c14ebb430a2a13a06a0c46257da111e9"));
         gifts.put("鸭锁骨", goodsService.getById("acdb4768dcdb262017994e5b4194d6dd"));
