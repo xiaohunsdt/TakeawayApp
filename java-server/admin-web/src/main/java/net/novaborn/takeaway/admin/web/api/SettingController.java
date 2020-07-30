@@ -69,26 +69,26 @@ public class SettingController extends BaseController {
             }
 
             //如果是设置店的地址，那么店地址的坐标也要设置
-            if ("store_address".equals(key)) {
-                // 没有坐标/地址更新的情况，需要设置坐标
-                Setting coordinate_x = settingService.getSettingByName("store_address_x", settingScope);
-                Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
-
-                if (coordinate_x == null || coordinate_y == null || !setting.getValue().equals(value)) {
-                    Coordinate coordinate = naverMapService.getGeocode((String) value);
-                    coordinate_x = new Setting();
-                    coordinate_x.setKey("store_address_x");
-                    coordinate_x.setScope(settingScope);
-                    coordinate_x.setValue(coordinate.getX().toString());
-                    coordinate_x.insertOrUpdate();
-
-                    coordinate_y = new Setting();
-                    coordinate_y.setKey("store_address_y");
-                    coordinate_y.setScope(settingScope);
-                    coordinate_y.setValue(coordinate.getY().toString());
-                    coordinate_y.insertOrUpdate();
-                }
-            }
+//            if ("store_address".equals(key)) {
+//                // 没有坐标/地址更新的情况，需要设置坐标
+//                Setting coordinate_x = settingService.getSettingByName("store_address_x", settingScope);
+//                Setting coordinate_y = settingService.getSettingByName("store_address_y", settingScope);
+//
+//                if (coordinate_x == null || coordinate_y == null || !setting.getValue().equals(value)) {
+//                    Coordinate coordinate = naverMapService.getGeocode((String) value);
+//                    coordinate_x = new Setting();
+//                    coordinate_x.setKey("store_address_x");
+//                    coordinate_x.setScope(settingScope);
+//                    coordinate_x.setValue(coordinate.getX().toString());
+//                    coordinate_x.insertOrUpdate();
+//
+//                    coordinate_y = new Setting();
+//                    coordinate_y.setKey("store_address_y");
+//                    coordinate_y.setScope(settingScope);
+//                    coordinate_y.setValue(coordinate.getY().toString());
+//                    coordinate_y.insertOrUpdate();
+//                }
+//            }
 
             if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
                 // 转义从前端传来的日期字符串

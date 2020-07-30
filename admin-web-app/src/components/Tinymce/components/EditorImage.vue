@@ -118,7 +118,7 @@
   .editor-slide-upload {
     margin-bottom: 20px;
 
-    /deep/ .el-upload--picture-card {
+   ::v-deep .el-upload--picture-card {
       width: 100%;
     }
   }

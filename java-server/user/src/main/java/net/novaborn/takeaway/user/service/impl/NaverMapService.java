@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 调用韩国 NAVER MAP 提供的 OPEN API
@@ -112,6 +113,10 @@ public class NaverMapService implements INaverMapService {
         }
 
         addressesArr.forEach(item -> {
+
+        });
+
+        for(Object item : addressesArr.stream().toArray()){
             String name = ((JSONObject) item).getString("name");
             String roadAddress = ((JSONObject) item).getString("roadAddress");
             Double x = ((JSONObject) item).getDouble("x");
@@ -121,7 +126,10 @@ public class NaverMapService implements INaverMapService {
             temp.setX(x);
             temp.setY(y);
             addressList.add(temp);
-        });
+        }
+
+        //过滤掉重复的地址
+        addressList = addressList.stream().distinct().collect(Collectors.toList());
         return addressList;
     }
 }

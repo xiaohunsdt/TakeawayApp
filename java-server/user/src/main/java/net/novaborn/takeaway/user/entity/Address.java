@@ -10,6 +10,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaohun
@@ -55,4 +56,21 @@ public class Address extends Model<Address> {
     @JSONField(serialize = false)
     @TableLogic
     private Integer deleted;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address1 = (Address) o;
+        return Objects.equals(id, address1.id) &&
+                Objects.equals(userId, address1.userId) &&
+                Objects.equals(address, address1.address) &&
+                Objects.equals(detail, address1.detail) &&
+                Objects.equals(phone, address1.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, address, detail, phone);
+    }
 }

@@ -15,14 +15,14 @@
                     </div>
                     <div style="margin-top: 8px">
                         <el-button-group>
-                            <!--                                <el-button-->
-                            <!--                                    size="mini"-->
-                            <!--                                    type="primary"-->
-                            <!--                                    v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"-->
-                            <!--                                    v-clipboard:error="onCopyError"-->
-                            <!--                                    v-clipboard:success="onCopySuccess">-->
-                            <!--                                    复制地址-->
-                            <!--                                </el-button>-->
+<!--                                <el-button-->
+<!--                                    size="mini"-->
+<!--                                    type="primary"-->
+<!--                                    v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"-->
+<!--                                    v-clipboard:error="onCopyError"-->
+<!--                                    v-clipboard:success="onCopySuccess">-->
+<!--                                    复制地址-->
+<!--                                </el-button>-->
                             <el-button size="mini" type="primary">
                                 <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${selectedOrder.address.address} ${selectedOrder.address.detail}`">打开地图</a>
                             </el-button>
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-    import {Message} from 'element-ui'
+    import { Message } from 'element-ui'
     import BaseCard from '@/components/BaseCard'
     import MapInfoWindow from './naver-map/MapInfoWindow'
     import MapMarker from './naver-map/MapMarker'
@@ -95,7 +95,7 @@
                     lng: 126.9357696,
                     zoom: 14,
                     zoomControl: true,
-                    zoomControlOptions: {position: 'CENTER'},
+                    zoomControlOptions: { position: 'CENTER' },
                     mapTypeControl: true
                 },
                 initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN', 'TRANSIT', 'CHINESE'],
@@ -174,18 +174,18 @@
                     type: 'warning'
                 }).then(() => {
                     orderApi.finishOrder(order.id)
-                        .then(res => {
-                            this.$message({
-                                message: res.message,
-                                type: 'success'
-                            })
-                            this.isOpen = false
-                            if (!this.allOrder) {
-                                this.getWaitEatOrderList()
-                            } else {
-                                this.getAllTodayOrderList()
-                            }
-                        })
+                      .then(res => {
+                          this.$message({
+                              message: res.message,
+                              type: 'success'
+                          })
+                          this.isOpen = false
+                          if (!this.allOrder) {
+                              this.getWaitEatOrderList()
+                          } else {
+                              this.getAllTodayOrderList()
+                          }
+                      })
                 })
             }
         },

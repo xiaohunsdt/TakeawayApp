@@ -50,7 +50,29 @@
                 v-model="timePickValue"/>
             </el-form-item>
             <el-form-item label="店铺地址">
-              <el-input v-model="storeSetting.store_address"></el-input>
+              <el-select
+                  :loading="searchLoading"
+                  :remote-method="onSearch"
+                  @change="onSelect"
+                  filterable
+                  placeholder="请输入关键词"
+                  remote
+                  reserve-keyword
+                  style="display: block;"
+                  v-model="storeSetting.store_address">
+                <el-option
+                    :key="item.address"
+                    :label="item.address"
+                    :value="item.address"
+                    v-for="item in addressList">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="地址经度">
+              <el-input v-model="storeSetting.store_address_x"></el-input>
+            </el-form-item>
+            <el-form-item label="地址纬度">
+              <el-input v-model="storeSetting.store_address_y"></el-input>
             </el-form-item>
             <el-form-item label="厨师体温">
               <el-input v-model="storeSetting.temperature1"></el-input>
@@ -103,6 +125,7 @@
 <script>
   import BaseCard from '@/components/BaseCard'
   import settingApi from '@/api/sys-setting'
+  import addressApi from '@/api/address'
 
   export default {
     name: 'SysManagement',
@@ -127,6 +150,8 @@
           store_open_time: null,
           store_close_time: null,
           store_address: '',
+          store_address_x: null,
+          store_address_y: null,
           temperature1: null,
           temperature2: null,
           temperature3: null,
@@ -137,7 +162,9 @@
           average_express_time: 0,
           deliverier_count: 0,
           max_express_distance: 0
-        }
+        },
+        searchLoading: false,
+        addressList: []
       }
     },
     methods: {
@@ -201,6 +228,28 @@
           .catch(res => {
             this.saveLoading = false
           })
+      },
+      onSearch(query) {
+        if (query !== '') {
+          this.searchLoading = true
+          addressApi.searchAddress(query)
+              .then(res => {
+                this.addressList = res
+                this.searchLoading = false
+              })
+              .catch(() => {
+                this.addressList = []
+                this.searchLoading = false
+              })
+        } else {
+          this.addressList = []
+        }
+      },
+      onSelect(address) {
+        const temp = this.addressList.find(item => item.address === address)
+        this.storeSetting.store_address = temp.address
+        this.storeSetting.store_address_x = temp.x
+        this.storeSetting.store_address_y = temp.y
       }
     }
   }
