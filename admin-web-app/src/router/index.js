@@ -78,14 +78,14 @@ export const constantRoutes = [
                 // props: true,
                 component: () => import('@/views/user/index'),
                 meta: {title: '用户列表', icon: 'example'}
-            },
-            {
-                path: 'address',
-                name: 'AddressManagement',
-                // props: true,
-                component: () => import('@/views/user/address/index'),
-                meta: {title: '地址管理', icon: 'example'}
             }
+            // {
+            //     path: 'address',
+            //     name: 'AddressManagement',
+            //     // props: true,
+            //     component: () => import('@/views/user/address/index'),
+            //     meta: {title: '地址管理', icon: 'example'}
+            // }
         ]
     },
     {
