@@ -162,7 +162,7 @@ public class WechatAutoTask {
         autoMessage.setMessage(
                 "暑假活动来了哦！！\n" +
                         "首次鸭货活动哦！\n" +
-                        "签到，满赠！下周一活动开始!一定要看活动说明哦！\n" +
+                        "签到，满赠！一定要看活动说明哦！\n" +
                         "现在将海报和活动说明发到朋友圈，可以找客服领优惠卷哦！"
         );
         autoMessage.setImgUrlList(
