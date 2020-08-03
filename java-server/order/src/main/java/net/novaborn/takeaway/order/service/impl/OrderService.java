@@ -157,39 +157,39 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         // 设置优惠
-//        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-//            Goods gift = null;
-//            if (order.getRealPrice() >= 40000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
-//                    gift = gifts.get("鸭脖");
-//                }
-//            } else if (order.getRealPrice() >= 30000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
-//                    gift = gifts.get("鸭锁骨");
-//                }
-//            } else if (order.getRealPrice() >= 25000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
-//                    gift = gifts.get("鸭翅");
-//                }
-//            } else if (order.getRealPrice() >= 20000) {
-//                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
-//                    gift = gifts.get("饮料");
-//                }
-//            } else if (order.getRealPrice() >= 15000) {
-//                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
-//                    gift = gifts.get("川香卤蛋");
-//                }
-//            }
-//            if (gift != null) {
-//                OrderItem orderItem = new OrderItem();
-//                orderItem.setGoodsId(gift.getId());
-//                orderItem.setGoodsName("暑假特惠-" + gift.getName());
-//                orderItem.setGoodsThumb(gift.getThumb());
-//                orderItem.setGoodsPrice(0);
-//                orderItem.setGoodsCount(1);
-//                orderItemList.add(orderItem);
-//            }
-//        }
+        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+            Goods gift = null;
+            if (order.getRealPrice() >= 40000) {
+                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
+                    gift = gifts.get("鸭脖");
+                }
+            } else if (order.getRealPrice() >= 30000) {
+                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
+                    gift = gifts.get("鸭锁骨");
+                }
+            } else if (order.getRealPrice() >= 25000) {
+                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
+                    gift = gifts.get("鸭翅");
+                }
+            } else if (order.getRealPrice() >= 20000) {
+                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
+                    gift = gifts.get("饮料");
+                }
+            } else if (order.getRealPrice() >= 15000) {
+                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
+                    gift = gifts.get("川香卤蛋");
+                }
+            }
+            if (gift != null) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setGoodsId(gift.getId());
+                orderItem.setGoodsName("暑假特惠-" + gift.getName());
+                orderItem.setGoodsThumb(gift.getThumb());
+                orderItem.setGoodsPrice(0);
+                orderItem.setGoodsCount(1);
+                orderItemList.add(orderItem);
+            }
+        }
 
         // 设置互联折扣
 //        if (order.getFrom() != null) {

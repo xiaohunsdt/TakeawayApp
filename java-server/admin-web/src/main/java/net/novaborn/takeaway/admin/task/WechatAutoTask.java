@@ -241,6 +241,10 @@ public class WechatAutoTask {
             message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
         }
 
+        if (names.contains("暑假特惠")) {
+            imgs.add(0, "https://admin.cxy.novaborn.net/upload/images/activity/083f0f4e9e244601b740620f933cb061.png");
+        }
+
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(message);
         autoMessage.setImgUrlList(imgs);
