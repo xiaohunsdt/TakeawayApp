@@ -15,6 +15,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.mq.dto.AutoMessage;
 import net.novaborn.takeaway.mq.sender.WechatAutoSender;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.quartz.constant.ScheduleConstants;
 import net.novaborn.takeaway.quartz.entity.SysJob;
@@ -137,8 +138,16 @@ public class WechatAutoTask {
         }
 
         if (selectedGoods.size() > 0) {
-            sendAutoMessage(selectedGoods, false);
+            sendAutoMessage(selectedGoods);
         }
+    }
+
+    public void orderShow(Order order) {
+        if (order.getRealPrice() < 18000) {
+            return;
+        }
+
+        sendOrderMessage(orderItemService.selectByOrderId(order.getId()));
     }
 
     public void activityShow() {
@@ -176,18 +185,6 @@ public class WechatAutoTask {
         log.info("WechatAuto: 已发送给队列 {}", autoMessage);
     }
 
-    public void orderShow(Order order) {
-        if (order.getRealPrice() < 18000) {
-            return;
-        }
-
-        List<Goods> goodsList = orderItemService.selectByOrderId(order.getId()).stream()
-                .map(orderItem -> goodsService.getById(orderItem.getGoodsId()))
-                .collect(Collectors.toList());
-
-        sendAutoMessage(goodsList, true);
-    }
-
     public void appointmentShow() {
         Date currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
@@ -213,7 +210,43 @@ public class WechatAutoTask {
         log.info("WechatAuto: 已发送给队列 {}", autoMessage);
     }
 
-    public void sendAutoMessage(List<Goods> selectedGoods, boolean isOrderShow) {
+    public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
+        String names = selectedOrderItems.stream().map(OrderItem::getGoodsName).collect(Collectors.joining(", "));
+        String desc = selectedOrderItems.stream()
+                .map(orderItem -> {
+                    Goods goods = goodsService.getById(orderItem.getGoodsId());
+                    if (StrUtil.isBlank(goods.getDesc())) {
+                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
+                    } else {
+                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
+                    }
+                })
+                .collect(Collectors.joining("\r\n"));
+        List<String> imgs = selectedOrderItems.stream()
+                .filter(item -> StrUtil.isNotBlank(item.getGoodsThumb()))
+                .map(item -> systemProperties.getUploadServerUrl() + item.getGoodsThumb())
+                .collect(Collectors.toList());
+
+        String message;
+        message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n同款\uD83C\uDE51安排哦,现在点餐30-40分钟送达[哇][哇][哇]", names, desc);
+        long offend = TimeUtil.between(new Date(), storeCloseTime);
+        if (offend < 60 * 60 && offend > 0) {
+            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
+        }
+
+        if (names.contains("暑假特惠")) {
+            imgs.add(0, "https://admin.cxy.novaborn.net/upload/images/activity/083f0f4e9e244601b740620f933cb061.png");
+        }
+
+        AutoMessage autoMessage = new AutoMessage();
+        autoMessage.setMessage(message);
+        autoMessage.setImgUrlList(imgs);
+        wechatAutoSender.send(autoMessage);
+
+        log.info("WechatAuto: 已发送给队列 {}", autoMessage);
+    }
+
+    public void sendAutoMessage(List<Goods> selectedGoods) {
         String names = selectedGoods.stream().map(Goods::getName).collect(Collectors.joining(", "));
         String desc = selectedGoods.stream()
                 .map(goods -> {
@@ -230,11 +263,7 @@ public class WechatAutoTask {
                 .collect(Collectors.toList());
 
         String message;
-        if (!isOrderShow) {
-            message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n现在点餐30-40分钟送达[哇][哇][哇]");
-        } else {
-            message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n同款\uD83C\uDE51安排哦,现在点餐30-40分钟送达[哇][哇][哇]", names, desc);
-        }
+        message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n现在点餐30-40分钟送达[哇][哇][哇]");
 
         long offend = TimeUtil.between(new Date(), storeCloseTime);
         if (offend < 60 * 60 && offend > 0) {
