@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.user.web.api;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
@@ -21,7 +22,9 @@ import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.*;
+import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
+import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
@@ -149,7 +152,9 @@ public class OrderController extends BaseController {
         if (order.insert()) {
             orderItems.parallelStream().forEach(item -> {
                 item.setOrderId(order.getId());
-                item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
+                if (StrUtil.isNotBlank(item.getGoodsThumb())) {
+                    item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
+                }
                 item.insert();
 
                 // 减少库存
