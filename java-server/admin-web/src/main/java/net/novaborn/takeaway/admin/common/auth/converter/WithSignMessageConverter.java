@@ -3,12 +3,13 @@ package net.novaborn.takeaway.admin.common.auth.converter;
 import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
 import net.novaborn.takeaway.admin.common.auth.util.HttpKit;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
-import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,6 +24,7 @@ import java.lang.reflect.Type;
  * @author xiaohun
  * @date 2017-08-25 15:42
  */
+@Slf4j
 public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
 
     @Autowired
@@ -52,9 +54,9 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
         String encrypt = SecureUtil.md5(object + md5KeyFromToken);
 
         if (encrypt.equals(baseTransferEntity.getSign())) {
-            System.out.println("签名校验成功!");
+            log.debug("签名校验成功!");
         } else {
-            System.out.println("签名校验失败,数据被改动过!");
+            log.debug("签名校验失败,数据被改动过!");
             throw new SysException(SysExceptionEnum.SIGN_ERROR);
         }
 

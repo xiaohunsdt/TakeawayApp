@@ -40,9 +40,12 @@ public class JwtTokenUtil {
     @Autowired
     private JwtProperties jwtProperties;
 
+    public String getToken(HttpServletRequest request){
+        return request.getHeader(jwtProperties.getHeader()).replace("Bearer ", "");
+    }
+
     public String getUsernameFromToken(HttpServletRequest request) {
-        String userName = this.getUsernameFromToken(request.getHeader(jwtProperties.getHeader()).replace("Bearer ", ""));
-        return userName;
+        return this.getUsernameFromToken(getToken(request));
     }
 
     /**
@@ -117,6 +120,13 @@ public class JwtTokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put(jwtProperties.getMd5Key(), randomKey);
         return doGenerateToken(claims, userName);
+    }
+
+    public String reGenerateToken(String token) {
+        Claims claims = this.getClaimFromToken(token);
+        final Date expirationDate = new Date(System.currentTimeMillis() + jwtProperties.getExpiration() * 1000);
+        claims.setExpiration(expirationDate);
+        return doGenerateToken(claims, claims.getSubject());
     }
 
     /**

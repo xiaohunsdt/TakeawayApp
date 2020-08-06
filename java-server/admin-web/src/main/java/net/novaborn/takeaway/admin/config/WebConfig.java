@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -51,6 +52,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtProperties jwtProperties;
 
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/", "/index.html");
@@ -75,6 +79,7 @@ public class WebConfig implements WebMvcConfigurer {
         AuthFilter authFilter = new AuthFilter();
         authFilter.setJwtProperties(this.jwtProperties);
         authFilter.setJwtTokenUtil(this.jwtTokenUtil);
+        authFilter.setRedisTemplate(redisTemplate);
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(authFilter);
 
         //添加不需要忽略的格式信息.

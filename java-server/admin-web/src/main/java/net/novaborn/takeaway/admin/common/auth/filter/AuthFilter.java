@@ -4,9 +4,10 @@ import io.jsonwebtoken.JwtException;
 import lombok.Data;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
-import net.novaborn.takeaway.admin.config.properties.JwtProperties;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -29,6 +30,8 @@ public class AuthFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     private JwtProperties jwtProperties;
+
+    private RedisTemplate<String, Object> redisTemplate;
 
     private Set<String> excludesPattern;
 
@@ -53,7 +56,9 @@ public class AuthFilter extends OncePerRequestFilter {
             //验证token是否过期,包含了验证jwt是否正确
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
-                if (flag) {
+                String redisKey = String.format("jwt:%s:%s", jwtTokenUtil.getUsernameFromToken(request), jwtTokenUtil.getToken(request));
+
+                if (flag || !redisTemplate.hasKey(redisKey)) {
                     RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     return;
                 }

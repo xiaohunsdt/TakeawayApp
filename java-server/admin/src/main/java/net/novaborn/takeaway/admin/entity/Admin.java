@@ -3,6 +3,7 @@ package net.novaborn.takeaway.admin.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import net.novaborn.takeaway.admin.enums.Level;
 
 import java.util.Date;
 
@@ -21,6 +22,8 @@ public class Admin extends Model<Admin> {
     private String userName;
 
     private String password;
+
+    private Level level;
 
     private Date loginDate;
 
