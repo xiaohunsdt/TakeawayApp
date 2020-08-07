@@ -50,7 +50,7 @@
   position: absolute;
   top: 0rpx;
   right: 0rpx;
-  font-size: 35rpx;
+  font-size: 33rpx;
   font-weight: bolder;
   color: #FFD200 !important;
 }
