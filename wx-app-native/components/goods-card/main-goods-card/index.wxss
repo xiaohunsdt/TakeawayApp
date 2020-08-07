@@ -57,7 +57,7 @@
 
 .goods-card .card-content .card-price .currency{
   display: inline-block;
-  font-size: 25rpx;
+  font-size: 23rpx;
 }
 
 
