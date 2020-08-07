@@ -1,0 +1,84 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/goods/index",
+    "pages/activity/index",
+    "pages/my/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFD200",
+    "navigationStyle": "default",
+    "navigationBarTitleText": "川香苑中餐厅",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFD200"
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wxdd0eeefb8c1c5ceb"
+  ],
+  "tabBar": {
+    "color": "#ccc",
+    "selectedColor": "#FFD200",
+    "borderStyle": "white",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home_active.png"
+      },
+      {
+        "text": "点餐",
+        "pagePath": "pages/goods/index",
+        "iconPath": "static/tabs/order.png",
+        "selectedIconPath": "static/tabs/order_active.png"
+      },
+      {
+        "text": "活动",
+        "pagePath": "pages/activity/index",
+        "iconPath": "static/tabs/activity.png",
+        "selectedIconPath": "static/tabs/activity_active.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/my/index",
+        "iconPath": "static/tabs/my.png",
+        "selectedIconPath": "static/tabs/my_active.png"
+      }
+    ],
+    "position": "bottom"
+  },
+  "usingComponents": {
+    "base-panel": "/components/base-panel/index",
+    "van-search": "@vant/weapp/search/index",
+    "van-panel": "@vant/weapp/panel/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-card": "@vant/weapp/card/index",
+    "van-stepper": "@vant/weapp/stepper/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-submit-bar": "@vant/weapp/submit-bar/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-toast": "@vant/weapp/toast/index",
+    "van-radio": "@vant/weapp/radio/index",
+    "van-radio-group": "@vant/weapp/radio-group/index",
+    "van-info": "@vant/weapp/info/index",
+    "van-count-down": "@vant/weapp/count-down/index",
+    "van-rate": "@vant/weapp/rate/index",
+    "van-image": "@vant/weapp/image/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-action-sheet": "@vant/weapp/action-sheet/index",
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-calendar": "@vant/weapp/calendar/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}
