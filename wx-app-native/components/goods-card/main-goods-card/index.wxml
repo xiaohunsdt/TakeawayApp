@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view class="card-price">
-			₩ {{food.price}}
+			<view class="currency">₩</view> {{food.price}}
 		</view>
 		<view class="card-order-btn">
 			<van-stepper async-change model:value="currentFoodCount" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount>0}}" />

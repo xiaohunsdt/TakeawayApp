@@ -15,6 +15,17 @@ Page({
     }
     this.init()
   },
+  onPullDownRefresh () {
+    this.init()
+    wx.stopPullDownRefresh()
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '川香苑',
+      desc: '川香苑品牌中餐厅',
+      path: '/pages/index/index'
+    }
+  },
   init() {
     indexService.getBannersList().then(res => {
       this.setData({

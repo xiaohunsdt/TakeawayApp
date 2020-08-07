@@ -21,7 +21,7 @@
 }
 
 .goods-card .card-content .title {
-  margin-top: 10rpx;
+  margin-top: 5rpx;
   font-size: 35rpx;
   font-weight: 800;
   margin-bottom: 20rpx;
@@ -29,7 +29,7 @@
 
 .goods-card .card-content .card-desc {
   font-size: 24rpx;
-  margin-top: 15rpx;
+  margin-top: 10rpx;
   color: gray;
 }
 
@@ -49,10 +49,15 @@
 .goods-card .card-content .card-price{
   position: absolute;
   top: 0rpx;
-  right: 20rpx;
-  font-size: 30rpx;
+  right: 0rpx;
+  font-size: 35rpx;
   font-weight: bolder;
   color: #FFD200 !important;
+}
+
+.goods-card .card-content .card-price .currency{
+  display: inline-block;
+  font-size: 25rpx;
 }
 
 
@@ -60,8 +65,8 @@
   height: 0rpx;
   text-align: right;
   position: absolute;
-  top: 110rpx;
-  right: 20rpx;
+  bottom: 70rpx;
+  right: 0rpx;
 }
 
 .order-btn {
