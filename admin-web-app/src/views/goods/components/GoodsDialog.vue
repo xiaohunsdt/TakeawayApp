@@ -44,6 +44,9 @@
       <el-form-item label="评分" prop="rate">
         <el-input autocomplete="off" type="number" v-model.number="formData.rate"></el-input>
       </el-form-item>
+      <el-form-item label="优先级" prop="rate">
+        <el-input autocomplete="off" type="number" v-model.number="formData.index"></el-input>
+      </el-form-item>
       <el-form-item label="状态" prop="state">
         <el-select placeholder="选择分类" v-model="formData.state">
           <el-option

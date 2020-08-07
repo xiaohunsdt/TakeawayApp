@@ -96,10 +96,15 @@
           align="center">
         </el-table-column>
         <el-table-column
-          label="评分"
-          prop="rate"
-          align="center">
+            label="优先级"
+            prop="index"
+            align="center">
         </el-table-column>
+<!--        <el-table-column-->
+<!--          label="评分"-->
+<!--          prop="rate"-->
+<!--          align="center">-->
+<!--        </el-table-column>-->
         <el-table-column
           label="状态"
           prop="state"

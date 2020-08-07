@@ -70,6 +70,12 @@ public class Goods extends Model<Goods> {
     private Integer rate;
 
     /**
+     * 排序
+     */
+    @TableField(value = "`index`")
+    private Integer index;
+
+    /**
      * 状态
      */
     private GoodsState state;
