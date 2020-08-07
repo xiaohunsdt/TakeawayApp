@@ -1,6 +1,6 @@
 /* pages/index/components/food-panel/index.wxss */
 .foodView {
-  margin-bottom: 0.2rem;
+  margin-bottom: 20rpx;
   width: 100%;
   background-color: white;
   overflow: hidden;
@@ -12,10 +12,10 @@
 }
 
 .food-panel-header {
-  padding: 0.2rem;
-  padding-bottom: 0rem;
+  padding: 20rpx;
+  padding-bottom: 0rpx;
 }
 
 .food-item-content {
-  padding: 0.3rem 0.2rem;
+  padding: 30rpx 20rpx;
 }
