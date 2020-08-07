@@ -1,4 +1,4 @@
-import api from '@/utils/api'
+import api from '../utils/api'
 
 /**
  * 获取用户的地址列表

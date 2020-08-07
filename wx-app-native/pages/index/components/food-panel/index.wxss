@@ -1,0 +1,21 @@
+/* pages/index/components/food-panel/index.wxss */
+.foodView {
+  margin-bottom: 0.2rem;
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  border: none !important;
+}
+
+.food-panel-header, .food-item-panel, .food-item-panel:after {
+  border: none !important;
+}
+
+.food-panel-header {
+  padding: 0.2rem;
+  padding-bottom: 0rem;
+}
+
+.food-item-content {
+  padding: 0.3rem 0.2rem;
+}

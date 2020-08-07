@@ -1,8 +1,8 @@
 /**
  * 用户相关服务
  */
-import api from '@/utils/api'
-import util from '@/utils/util'
+import api from '../utils/api'
+import util from '../utils/util'
 
 /**
  * 调用微信登录
@@ -15,7 +15,7 @@ function loginByWx () {
         .then(res => {
           if (res.hasOwnProperty('token')) {
             // 存储用户信息
-            mpvue.setStorageSync('token', res)
+            wx.setStorageSync('token', res)
             resolve(res)
           } else {
             reject(res)
@@ -36,7 +36,7 @@ function setUserInfo () {
         api.setUserInfo(userInfo)
           .then((response) => {
             if (response.code === 0) {
-              mpvue.setStorageSync('userInfo', userInfo)
+              wx.setStorageSync('userInfo', userInfo)
               resolve(response)
             } else {
               reject(response)
@@ -57,8 +57,8 @@ function setUserInfo () {
  */
 function checkLogin () {
   return new Promise(function (resolve, reject) {
-    // if (mpvue.getStorageSync('userInfo') && mpvue.getStorageSync('token')) {
-    if (mpvue.getStorageSync('token')) {
+    // if (wx.getStorageSync('userInfo') && wx.getStorageSync('token')) {
+    if (wx.getStorageSync('token')) {
       util.checkSession().then(() => {
         resolve(true)
       }).catch(() => {

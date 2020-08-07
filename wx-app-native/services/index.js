@@ -1,8 +1,8 @@
 /**
  * 首页相关服务
  */
-import api from '@/utils/api'
-import indexUtil from '@/utils/index'
+import api from '../utils/api'
+import indexUtil from '../utils/index'
 
 export function getBannersList () {
   return api.getBannersList()

@@ -1,0 +1,12 @@
+<view class="foodView">
+	<view class="food-panel-header" slot="header">
+		<van-tag type="{{title==='热门'?'danger':'success'}}" mark size="large">
+			{{ title }}
+		</van-tag>
+	</view>
+	<view class="food-item-panel">
+		<view class="food-item-content">
+			<main-goods-card food="{{food}}" wx:key="id" wx:for="{{foodList}}" wx:for-item="food" />
+		</view>
+	</view>
+</view>

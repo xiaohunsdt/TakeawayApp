@@ -3,7 +3,7 @@
  */
 function checkSession () {
   return new Promise(function (resolve, reject) {
-    mpvue.checkSession({
+    wx.checkSession({
       success: function () {
         resolve(true)
       },
@@ -20,7 +20,7 @@ function checkSession () {
  */
 function login () {
   return new Promise(function (resolve, reject) {
-    mpvue.login({
+    wx.login({
       success: function (res) {
         if (res.code) {
           console.log(res)
@@ -41,11 +41,11 @@ function login () {
  */
 function getUserInfo () {
   return new Promise(function (resolve, reject) {
-    mpvue.getSetting({
+    wx.getSetting({
       success: function (res) {
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          mpvue.getUserInfo({
+          wx.getUserInfo({
             withCredentials: true,
             success: function (res) {
               // console.log('获取用户信息成功', res);
@@ -66,7 +66,7 @@ function getUserInfo () {
 }
 
 function checkVersion (version) {
-  const tempVer = mpvue.getSystemInfoSync().version
+  const tempVer = wx.getSystemInfoSync().version
   const paltsfrom = wx.getSystemInfoSync().platform
   console.log('微信版本号')
   console.log(tempVer)
@@ -107,7 +107,7 @@ export function getPages () {
 }
 
 function showErrorToast (msg) {
-  mpvue.showToast({
+  wx.showToast({
     title: msg,
     image: '/static/images/icon_error.png'
   })

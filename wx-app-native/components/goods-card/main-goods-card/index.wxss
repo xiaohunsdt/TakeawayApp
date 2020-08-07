@@ -1,0 +1,109 @@
+.goods-card-root {
+  padding: unset !important;
+  overflow: hidden;
+}
+
+.goods-card-root .van-card__thumb {
+  width: 220rpx;
+  height: 170rpx;
+}
+
+.goods-card-root {
+  margin-bottom: 35rpx;
+  background-color: transparent !important;
+}
+
+.goods-card-thumb {
+  border-radius: 20rpx;
+  overflow: hidden;
+  height: inherit;
+}
+
+.goods-card-title {
+  margin-top: 10rpx;
+  font-size: 35rpx;
+  font-weight: 800;
+  margin-bottom: 20rpx;
+}
+
+.van-card__bottom {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+}
+
+.goods-card-price {
+  font-size: 30rpx;
+  color: #FFD200 !important;
+}
+
+.goods-card-desc .desc {
+  color: gray;
+}
+
+.goods-card-desc .comment {
+  color: gray;
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.goods-card-desc .comment .dividLine {
+  border-right: #F3F3F3 1rpx solid;
+  width: 1rpx;
+  margin: 0 10rpx;
+}
+
+.order-btn {
+  background-color: #FFD200 !important;
+  border: none !important;
+  display: block;
+  position: relative;
+  top: -70rpx;
+  right: 0;
+}
+
+.order-stepper-root {
+  position: relative;
+  top: -70rpx;
+  right: 0;
+}
+
+
+.order-stepper-input {
+  background-color: transparent !important;
+  width: 40rpx !important;
+  font-weight: 600 !important;
+}
+
+.order-stepper-input.van-stepper__input--disabled {
+  color: black;
+}
+
+.order-stepper-plus, .order-stepper-minus {
+  background-color: #FFD200 !important;
+  font-weight: 800 !important;
+  border-radius: 50% !important;
+  width: 50rpx !important;
+  height: 50rpx !important;
+}
+
+.order-stepper-plus:active, .order-stepper-minus:active {
+  background-color: #ffb105 !important;
+}
+
+.order-stepper-plus:before,
+.order-stepper-plus:after,
+.order-stepper-minus:before, .order-stepper-minus:after {
+  background-color: white !important;
+}
+
+.order-stepper-minus:before, .order-stepper-plus:before {
+  height: 5rpx !important;
+  width: 24rpx !important;
+}
+
+.order-stepper-minus:after, .order-stepper-plus:after {
+  width: 5rpx !important;
+  height: 24rpx !important;
+}

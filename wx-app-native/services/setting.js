@@ -1,7 +1,7 @@
 /**
  * 设置项相关服务
  */
-import api from '@/utils/api'
+import api from '../utils/api'
 
 export function getSystemSettings () {
   return new Promise((resolve, reject) => {

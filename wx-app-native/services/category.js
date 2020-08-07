@@ -1,7 +1,7 @@
 /**
  * 分类相关服务
  */
-import api from '@/utils/api'
+import api from '../utils/api'
 
 /**
  * 获取所有分类

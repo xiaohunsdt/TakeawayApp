@@ -1,8 +1,8 @@
 {
   "name": "wx-app",
   "version": "1.0.0",
-  "mpvueTemplateProjectVersion": "0.1.0",
-  "description": "A Mpvue project",
+  "wxTemplateProjectVersion": "0.1.0",
+  "description": "A wx project",
   "author": "hun's pc <825292796@qq.com>",
   "private": true,
   "dependencies": {

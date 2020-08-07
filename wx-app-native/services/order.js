@@ -1,7 +1,7 @@
 /**
  * 订单相关服务
  */
-import api from '@/utils/api'
+import api from '../utils/api'
 
 /**
  * 生成一个标准的订单
@@ -30,7 +30,7 @@ export function generateOrder (paymentWay, ps, appointmentDate, from) {
 export function createOrder (order, orderItems, coupon, address) {
   return new Promise(function (resolve, reject) {
     if (!address) {
-      mpvue.showToast({
+      wx.showToast({
         title: '请设置地址!!',
         image: '/static/images/error.png'
       })

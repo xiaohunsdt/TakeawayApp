@@ -1,0 +1,11 @@
+<div id="search">
+    <van-search
+      placeholder="请输入搜索关键词"
+      use-action-slot
+      shape="round"
+      input-align="center"
+      background="{{background}}"
+      bind:change="searchChanged">
+      <view slot="action" bind:tap="onSearch" style="font-weight: 700">搜索</view>
+    </van-search>
+  </div>

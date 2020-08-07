@@ -1,52 +1,51 @@
-//index.js
-//获取应用实例
+
 const app = getApp()
+import indexService from '../../services/index'
 
 Page({
   data: {
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    bannerList: [],
+    newGoodsList: [],
+    hotGoodsList: []
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
+  onLoad: function (option) {
+    console.log(option)
+    if (option.from) {
+      app.globalData.form = option.from
+    }
+    this.init()
+  },
+  init() {
+    indexService.getBannersList().then(res => {
+      this.setData({
+        bannerList: res
+      })
+    })
+    indexService.getNewGoodsList().then(res => {
+      this.setData({
+        newGoodsList: res
+      })
+    })
+    indexService.getHotGoodsList().then(res => {
+      this.setData({
+        hotGoodsList: res
+      })
     })
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
+  gotoPage(event) {
+    let page = event.currentTarget.dataset.pagePath
+    
+    if (page === '') {
+      return
     }
+    
+    wx.navigateTo({
+      url: page
+    })
   },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+  onSearch(event) {
+    wx.navigateTo({
+      url: `./search/index?keyword=${event.detail}`
     })
   }
 })

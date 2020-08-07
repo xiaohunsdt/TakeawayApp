@@ -2,19 +2,20 @@ import md5 from 'js-md5'
 
 let Base64 = require('js-base64').Base64
 
-var Fly = require('flyio/dist/npm/wx')
+var Fly = require('flyio/index')
 const request = new Fly()
 
 // 设置请求基地址
-request.config.baseURL = process.env.BASE_URL
+// request.config.baseURL = 'http://192.168.0.203:8081/api/user'
+request.config.baseURL = 'https://cxy.novaborn.net/api/user'
 
 request.interceptors.request.use((request) => {
   // 给所有请求添加自定义header，带上token信息让服务器验证用户登陆
-  request.headers['Authorization'] = 'Bearer ' + mpvue.getStorageSync('token').token
+  request.headers['Authorization'] = 'Bearer ' + wx.getStorageSync('token').token
   // console.log(request)
   if (request.headers['Content-Type'] === 'application/json') {
     // 数据加密
-    const randomKey = mpvue.getStorageSync('token').randomKey
+    const randomKey = wx.getStorageSync('token').randomKey
     const jsonStr = Base64.encode(JSON.stringify(request.body))
     // const jsonStr = JSON.stringify(request.body)
     const encrypt = md5(jsonStr + randomKey)
@@ -27,16 +28,16 @@ request.interceptors.request.use((request) => {
     request.headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
   // console.log('flyio发请求,request为', request);
-  mpvue.showNavigationBarLoading()
+  wx.showNavigationBarLoading()
   return request
 })
 
 request.interceptors.response.use(
   (response, promise) => {
-    mpvue.hideNavigationBarLoading()
+    wx.hideNavigationBarLoading()
 
     if (response.data.hasOwnProperty('code') && response.data.code !== 0) {
-      mpvue.showToast({
+      wx.showToast({
         title: response.data.message,
         image: '/static/images/error.png',
         duration: 2000
@@ -46,15 +47,15 @@ request.interceptors.response.use(
     return promise.resolve(response.data)
   },
   (err, promise) => {
-    mpvue.hideNavigationBarLoading()
+    wx.hideNavigationBarLoading()
     if (err.response) {
       const response = err.response.data
       if (response.code === 700) {
-        mpvue.navigateTo({
+        wx.navigateTo({
           url: '/pages/my/auth/main'
         })
       } else {
-        mpvue.showToast({
+        wx.showToast({
           title: response.message,
           icon: 'none',
           duration: 2000
@@ -62,7 +63,7 @@ request.interceptors.response.use(
       }
       return promise.reject(response)
     } else {
-      mpvue.showToast({
+      wx.showToast({
         title: err.message,
         icon: 'none',
         duration: 2000

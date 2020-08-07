@@ -1,7 +1,7 @@
 /**
  * 商品相关服务
  */
-import api from '@/utils/api'
+import api from '../utils/api'
 
 /**
  * 根据分类id获取商品

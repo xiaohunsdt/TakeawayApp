@@ -1,0 +1,8 @@
+.van-search__action--hover {
+  background-color: transparent !important;
+}
+
+#search{
+  position: relative;
+  z-index: 100;
+}

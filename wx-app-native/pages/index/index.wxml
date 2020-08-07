@@ -1,6 +1,18 @@
 <!--index.wxml-->
 <view class="container">
-  <base-panel>
-    test
-  </base-panel>
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<view id="banner">
+			<search-bar bind:search="onSearch" background="#FFD200"></search-bar>
+			<view id="scrollImg">
+				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true" style="height: 10rem">
+					<swiper-item wx:key="id" wx:for="{{bannerList}}" wx:for-item="banner">
+						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg" mode="widthFix" />
+					</swiper-item>
+				</swiper>
+			</view>
+		</view>
+		<food-panel foodList="{{newGoodsList}}" title="新品" />
+		<food-panel foodList="{{hotGoodsList}}" title="热门" />
+	</view>
 </view>
