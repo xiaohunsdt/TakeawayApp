@@ -44,6 +44,10 @@ public class JwtTokenUtil {
         return request.getHeader(jwtProperties.getHeader()).replace("Bearer ", "");
     }
 
+    public String getRedisKey(String token){
+        return String.format("jwt:%s:%s", getUsernameFromToken(token), token);
+    }
+
     public String getUsernameFromToken(HttpServletRequest request) {
         return this.getUsernameFromToken(getToken(request));
     }

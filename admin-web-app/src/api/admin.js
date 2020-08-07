@@ -13,10 +13,17 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/getUserInfo',
+    url: '/getAdminInfo',
     method: 'get'
+  })
+}
+
+export function refreshToken() {
+  return request({
+    url: '/auth/refresh',
+    method: 'post'
   })
 }
 

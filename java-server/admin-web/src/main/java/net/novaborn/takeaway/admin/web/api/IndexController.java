@@ -8,8 +8,10 @@ import cn.hutool.core.util.IdUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
+import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import net.novaborn.takeaway.admin.entity.Admin;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
+import net.novaborn.takeaway.admin.web.dto.AuthResponse;
 import net.novaborn.takeaway.admin.web.dto.DashboardDto;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
@@ -21,6 +23,7 @@ import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -41,11 +46,7 @@ import java.util.stream.Collectors;
 @Controller
 public class IndexController extends BaseController {
 
-    private AdminService adminService;
-
     private OrderService orderService;
-
-    private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("index")
     @ResponseBody
@@ -106,16 +107,6 @@ public class IndexController extends BaseController {
 
         dashboardDto.setTopSaleGoodsList(orderService.getGoodsSales(orderList));
         return dashboardDto;
-    }
-
-    @GetMapping("getUserInfo")
-    @ResponseBody
-    public Admin getUserInfo(HttpServletRequest request) {
-        String userName = jwtTokenUtil.getUsernameFromToken(request);
-        Optional<Admin> admin = adminService.getBaseMapper().selectByName(userName);
-        admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
-
-        return admin.get();
     }
 
     @RequestMapping("/uploadImg")

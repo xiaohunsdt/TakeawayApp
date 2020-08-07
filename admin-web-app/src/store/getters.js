@@ -3,7 +3,7 @@ const getters = {
   device: state => state.app.device,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
-  token: state => state.user.token,
-  userData: state => state.user.userData
+  token: state => state.admin.token,
+  userData: state => state.admin.userData
 }
 export default getters

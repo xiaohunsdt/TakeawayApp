@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,9 +45,9 @@ public class AuthController extends BaseController {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
 
-            // 保存rediskey
-            String redisKey = String.format("jwt:%s:%s", jwtTokenUtil.getUsernameFromToken(token), token);
-            redisTemplate.opsForValue().set(redisKey, request.getRemoteHost(), jwtProperties.getExpiration(), TimeUnit.DAYS);
+            // 保存到redis
+            String redisKey = jwtTokenUtil.getRedisKey(token);
+            redisTemplate.opsForValue().set(redisKey, request.getRemoteHost(), jwtProperties.getExpiration(), TimeUnit.SECONDS);
 
             return ResponseEntity.ok(new AuthResponse(token, randomKey));
         } else {
@@ -54,9 +55,14 @@ public class AuthController extends BaseController {
         }
     }
 
-
+    @ResponseBody
     @PostMapping(value = "${jwt.auth-path}/refresh")
-    public String refresh() {
-        return jwtTokenUtil.reGenerateToken(jwtTokenUtil.getToken(request));
+    public AuthResponse refresh() {
+        String newToken = jwtTokenUtil.reGenerateToken(jwtTokenUtil.getToken(request));
+
+        //删除旧的token
+        redisTemplate.delete(jwtTokenUtil.getRedisKey(jwtTokenUtil.getToken(request)));
+        redisTemplate.opsForValue().set(jwtTokenUtil.getRedisKey(newToken), request.getRemoteHost(), jwtProperties.getExpiration(), TimeUnit.SECONDS);
+        return new AuthResponse(newToken, null);
     }
 }

@@ -66,7 +66,7 @@ service.interceptors.response.use(
         cancelButtonText: 'Cancel',
         type: 'warning'
       }).then(() => {
-        store.dispatch('user/resetToken').then(() => {
+        store.dispatch('admin/resetToken').then(() => {
           location.reload()
         })
       })
