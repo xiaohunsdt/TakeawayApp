@@ -51,7 +51,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity getAllGoodsList() {
         List<Goods> goodsList = goodsService.list().stream()
                 .filter(item -> !item.getState().equals(GoodsState.OFF))
-                .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getIndex).reversed())
+                .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName).thenComparing(Goods::getIndex).reversed())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new GoodsListDto(goodsList));
     }
