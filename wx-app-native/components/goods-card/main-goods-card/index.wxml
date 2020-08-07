@@ -1,30 +1,36 @@
-<van-card price="{{food.price}}" title="{{food.name}}" currency="₩" custom-class="goods-card-root" lazy-load price-class="goods-card-price" title-class="goods-card-title">
-	<view class="goods-card-thumb" slot="thumb">
-		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" />
+<view class="goods-card">
+	<view class="card-thumb">
+		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 	</view>
-	<view class="goods-card-desc" slot="desc">
-		<view class="desc">
-			<van-icon name="label" />
-			{{ food.desc }}
-		</view>
-		<view class="comment">
-			<view>
-				月销 {{ food.monthSale }}
+	<view class="card-content">
+		<view class="title">{{food.name}}</view>
+		<view class="card-desc">
+			<view class="desc">
+				<van-icon name="label" />
+				{{ food.desc }}
 			</view>
-			<view class="viewidLine"></view>
-			<view>评分 </view>
-			<view style="color: #FFD200">{{ food.rate }}</view>
+			<view class="comment">
+				<view>
+					月销 {{ food.monthSale }}
+				</view>
+				<view class="viewidLine"></view>
+				<view>评分 </view>
+				<view style="color: #FFD200">{{ food.rate }}</view>
+			</view>
+		</view>
+		<view class="card-price">
+			₩ {{food.price}}
+		</view>
+		<view class="card-order-btn">
+			<van-stepper async-change model:value="currentFoodCount" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount>0}}" />
+			<van-button :disabled="food.state!=='ON'" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" v-else>
+				<span wx:if="{{food.state==='ON'}}">
+					下单
+				</span>
+				<span wx:elif="{{food.state==='SHORTAGE'}}">
+					缺货
+				</span>
+			</van-button>
 		</view>
 	</view>
-	<view slot="footer" style="height: 0.4rem">
-		<van-stepper async-change model:value="currentFoodCount" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount>0}}" />
-		<van-button :disabled="food.state!=='ON'" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" v-else>
-			<span wx:if="{{food.state==='ON'}}">
-				下单
-			</span>
-			<span wx:elif="{{food.state==='SHORTAGE'}}">
-				缺货
-			</span>
-		</van-button>
-	</view>
-</van-card>
+</view>
