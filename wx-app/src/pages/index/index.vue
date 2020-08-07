@@ -3,7 +3,7 @@
     <div class="gradientDiv"></div>
     <div class="container-contain">
       <div id="banner">
-        <search-bar background="#FFD200"></search-bar>
+        <search-bar @search="onSearch" background="#FFD200"></search-bar>
         <div id="scrollImg">
           <swiper
             autoplay="true"
@@ -29,78 +29,83 @@
 </template>
 
 <script>
-  import indexService from '@/services/index'
-  import SearchBar from '@/components/SearchBar'
-  import FoodPanel from './components/FoodPanel'
-  import { mapMutations } from 'vuex'
+import indexService from '@/services/index'
+import SearchBar from '@/components/SearchBar'
+import FoodPanel from './components/FoodPanel'
+import { mapMutations } from 'vuex'
 
-  export default {
-    components: {
-      SearchBar,
-      FoodPanel
-    },
-    data () {
-      return {
-        bannerList: [],
-        newGoodsList: [],
-        hotGoodsList: []
-      }
-    },
-    methods: {
-      ...mapMutations('from', [
-        'SET_FROM'
-      ]),
-      init () {
-        indexService.getBannersList().then(res => {
-          this.bannerList = res
-        })
-        indexService.getNewGoodsList().then(res => {
-          this.newGoodsList = res
-        })
+export default {
+  components: {
+    SearchBar,
+    FoodPanel
+  },
+  data () {
+    return {
+      bannerList: [],
+      newGoodsList: [],
+      hotGoodsList: []
+    }
+  },
+  methods: {
+    ...mapMutations('from', [
+      'SET_FROM'
+    ]),
+    init () {
+      indexService.getBannersList().then(res => {
+        this.bannerList = res
+      })
+      indexService.getNewGoodsList().then(res => {
+        this.newGoodsList = res
+      })
 
-        indexService.getHotGoodsList().then(res => {
-          this.hotGoodsList = res
-        })
-      },
-      gotoPage (page) {
-        if (page === '') {
-          return
-        }
-        mpvue.navigateTo({
-          // url: '/pages/sub-packages/activity/index/main'
-          url: page
-        })
-      }
+      indexService.getHotGoodsList().then(res => {
+        this.hotGoodsList = res
+      })
     },
-    onLoad (option) {
-      console.log(option)
-      if (option.from) {
-        this.SET_FROM(option.from)
-        console.log(option.from)
+    gotoPage (page) {
+      if (page === '') {
+        return
       }
-      this.init()
+      mpvue.navigateTo({
+        // url: '/pages/sub-packages/activity/index/main'
+        url: page
+      })
     },
-    onPullDownRefresh () {
-      this.init()
-      mpvue.stopPullDownRefresh()
-    },
-    onShareAppMessage: function () {
-      return {
-        title: '川香苑',
-        desc: '川香苑品牌中餐厅',
-        path: '/pages/index/main'
-      }
+    onSearch (val) {
+      mpvue.navigateTo({
+        url: `/pages/index/search/main?keyword=${val}`
+      })
+    }
+  },
+  onLoad (option) {
+    console.log(option)
+    if (option.from) {
+      this.SET_FROM(option.from)
+      console.log(option.from)
+    }
+    this.init()
+  },
+  onPullDownRefresh () {
+    this.init()
+    mpvue.stopPullDownRefresh()
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '川香苑',
+      desc: '川香苑品牌中餐厅',
+      path: '/pages/index/main'
     }
   }
+}
 </script>
 
 <style scoped>
-  .itemImg {
-    width: 100%;
-  }
+.itemImg {
+  width: 100%;
+}
 
-  #newUserCoupon {
-    padding: 0.20rem;
-    background-color: white;
-  }
+#newUserCoupon {
+  padding: 0.20rem;
+  background-color: white;
+}
 </style>

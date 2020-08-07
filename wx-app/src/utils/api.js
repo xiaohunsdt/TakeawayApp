@@ -8,6 +8,9 @@ const api = {
   getSignInDays: () => request.get('user/getSignInDays'),
   getSignInedCount: () => request.get('user/getSignInedCount'),
 
+  // 搜索商品
+  searchGoods: (keyword) => request.post('search/searchGoods', { keyword }),
+
   // 获取首页横幅图片
   getBannersList: () => request.get('index/getBannersList'),
   // 获取指定flag的产品列表
@@ -32,7 +35,7 @@ const api = {
   // 获取用户默认的地址
   getDefaultAddress: () => request.get('address/getDefaultAddress'),
   // 搜索一个地址
-  searchAddress: (address) => request.post('address/searchAddress', {address}),
+  searchAddress: (address) => request.post('address/searchAddress', { address }),
   // 新建一个地址
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
