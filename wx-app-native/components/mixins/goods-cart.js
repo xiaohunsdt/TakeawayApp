@@ -1,18 +1,18 @@
 export default Behavior({
   methods: {
     getCurrentFoodCount() {
-      const existData = getApp().globalData.cart.cartList.find(item => item.goodsId === this.properties.food.id)
+      const existData = getApp().globalData.cart.cartList.find(item => item.goodsId === this.data.food.id)
       return existData !== undefined ? existData.count : 0
     },
     addCart() {
       const cartData = {
-        goodsId: this.properties.food.id,
-        goods: this.properties.food,
+        goodsId: this.data.food.id,
+        goods: this.data.food,
         count: 1
       }
       getApp().globalData.cart.cartList.push(cartData)
       getApp().globalData.cart.cartAllCount++
-      getApp().globalData.cart.cartAllPrice += this.properties.food.price
+      getApp().globalData.cart.cartAllPrice += this.data.food.price
 
       this.setData({
         currentFoodCount: this.data.currentFoodCount + 1
@@ -21,19 +21,19 @@ export default Behavior({
       this.triggerEvent('cart-change',this.data.currentFoodCount)
     },
     addGoods() {
-      const existData = getApp().globalData.cart.cartList.find(item => item.goodsId === this.properties.food.id)
+      const existData = getApp().globalData.cart.cartList.find(item => item.goodsId === this.data.food.id)
       if (existData !== undefined) {
         existData.count++
       } else {
         const cartData = {
-          goodsId: this.properties.food.id,
-          goods: this.properties.food,
+          goodsId: this.data.food.id,
+          goods: this.data.food,
           count: 1
         }
         getApp().globalData.cart.cartList.push(cartData)
       }
       getApp().globalData.cart.cartAllCount++
-      getApp().globalData.cart.cartAllPrice += this.properties.food.price
+      getApp().globalData.cart.cartAllPrice += this.data.food.price
 
       this.setData({
         currentFoodCount: this.data.currentFoodCount + 1
@@ -41,7 +41,7 @@ export default Behavior({
       this.triggerEvent('cart-change',this.data.currentFoodCount)
     },
     reduceGoods() {
-      const index = getApp().globalData.cart.cartList.findIndex(item => item.goodsId === this.properties.food.id)
+      const index = getApp().globalData.cart.cartList.findIndex(item => item.goodsId === this.data.food.id)
       if (index < 0) {
         return
       }
@@ -53,7 +53,7 @@ export default Behavior({
         }
 
         getApp().globalData.cart.cartAllCount--
-        getApp().globalData.cart.cartAllPrice -= this.properties.food.price
+        getApp().globalData.cart.cartAllPrice -= this.data.food.price
       }
 
       this.setData({
@@ -63,7 +63,7 @@ export default Behavior({
     },
     onChange(event) {
       const currentVal = event.detail
-      // console.log(this.properties.food.name, '---', currentVal, '---', this.data.currentFoodCount)
+      // console.log(this.data.food.name, '---', currentVal, '---', this.data.currentFoodCount)
       if (currentVal > this.data.currentFoodCount) {
         this.addGoods()
       } else if(currentVal < this.data.currentFoodCount) {

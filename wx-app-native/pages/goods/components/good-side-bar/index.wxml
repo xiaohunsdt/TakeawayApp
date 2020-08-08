@@ -80,7 +80,6 @@
             {{ cartAllCount }}
           </view>
         </view>
-<!--        <view slot="tip" v-show="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>-->
       </goods-submit-bar>
     </view>
   </view>

@@ -31,11 +31,9 @@ Component({
   methods: {
     init(){
       let tempVal = this.getCurrentFoodCount()
-      if(tempVal > 0){
-        this.setData({
-          currentFoodCount: tempVal
-        })
-      }
+      this.setData({
+        currentFoodCount: tempVal
+      })
     }
   }
 })
