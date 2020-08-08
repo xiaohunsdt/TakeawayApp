@@ -6,7 +6,11 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    food: Object
+    food: Object,
+    cartList: {
+      type: Array,
+      observer: "init"
+    }
   },
   behaviors: [myBehavior],
   /**
@@ -15,13 +19,13 @@ Component({
   data: {
     currentFoodCount: 0
   },
-  lifetimes:{
-    attached: function() {
+  lifetimes: {
+    attached: function () {
       this.init()
     },
   },
-  pageLifetimes:{
-    show(){
+  pageLifetimes: {
+    show() {
       this.init()
     }
   },
@@ -29,7 +33,7 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    init(){
+    init() {
       let tempVal = this.getCurrentFoodCount()
       this.setData({
         currentFoodCount: tempVal

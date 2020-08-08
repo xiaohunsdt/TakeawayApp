@@ -6,7 +6,12 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    food: Object
+    food: Object,
+    cartList: {
+      type: Array,
+      value: null,
+      observer: "init"
+    }
   },
   behaviors: [myBehavior],
   /**
@@ -22,6 +27,7 @@ Component({
   },
   pageLifetimes:{
     show(){
+      console.log("aaa")
       this.init()
     }
   },

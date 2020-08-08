@@ -6,7 +6,11 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    food: Object
+    food: Object,
+    cartList: {
+      type: Array,
+      observer: "init"
+    }
   },
   behaviors: [myBehavior],
   /**

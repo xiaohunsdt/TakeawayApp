@@ -16,15 +16,6 @@ Component({
           contentId: `xh_${categoryGoods[0].id}`
         })
       }
-    },
-    "showCart": function (showCart) {
-      if (showCart) {
-        this.setData({
-          cartList: getApp().globalData.cart.cartList
-        })
-      } else {
-        this.initCartData()
-      }
     }
   },
   data: {
@@ -44,6 +35,7 @@ Component({
   methods: {
     initCartData() {
       this.setData({
+        cartList: getApp().globalData.cart.cartList,
         cartAllCount: getApp().globalData.cart.cartAllCount,
         cartAllPrice: getApp().globalData.cart.cartAllPrice
       })
