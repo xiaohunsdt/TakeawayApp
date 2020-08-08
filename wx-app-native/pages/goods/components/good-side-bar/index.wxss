@@ -94,7 +94,7 @@
   display: flex;
 }
 
-#order-bar-left-content img {
+#order-bar-left-content image {
   width: 60rpx;
   height: 50rpx;
 }

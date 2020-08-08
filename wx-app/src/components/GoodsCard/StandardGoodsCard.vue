@@ -95,6 +95,7 @@ export default {
 .order-stepper-root {
   position: absolute !important;
   bottom: .1rem;
+  top:unset;
   right: 0;
 }
 </style>

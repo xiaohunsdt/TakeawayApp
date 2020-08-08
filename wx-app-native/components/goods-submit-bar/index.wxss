@@ -1,0 +1,90 @@
+.submit-btn {
+  font-weight: bolder !important;
+  background-color: #FFD200 !important;
+  border-color: #FFD200 !important;
+}
+
+.goods-submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  user-select: none;
+  z-index: 100;
+  background-color: #fff;
+  box-shadow: 0 10rpx 50rpx 0 rgba(0, 0, 0, .13);
+}
+
+.goods-submit-bar__tip {
+  padding: 20rpx;
+  color: #f56723;
+  font-size: 24rpx;
+  line-height: 1.5;
+  background-color: #fff7cc;
+}
+
+.goods-submit-bar__tip:empty {
+  display: none
+}
+
+.goods-submit-bar__tip-icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 4rpx;
+  vertical-align: middle;
+  font-size: 24rpx;
+  min-width: 36rpx;
+}
+
+.goods-submit-bar__tip-text {
+  display: inline;
+  vertical-align: middle
+}
+
+.goods-submit-bar__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+  height: 100rpx;
+  font-size: 28rpx;
+  background-color: #fff;
+}
+
+.goods-submit-bar__text {
+  -webkit-flex: 1;
+  flex: 1;
+  text-align: right;
+  color: #323233;
+  padding-right: 48rpx;
+}
+
+.goods-submit-bar__price {
+  color: #ee0a24;
+  font-size: 48rpx;
+  font-weight: bolder;
+}
+
+.goods-submit-bar__price, .goods-submit-bar__text {
+  font-weight: 500;
+}
+
+.goods-submit-bar__price-integer {
+  font-size: 40rpx;
+  font-family: Avenir-Heavy, PingFang SC, Helvetica Neue, Arial, sans-serif
+}
+
+.goods-submit-bar__currency {
+  font-size: 24rpx;
+}
+
+.goods-submit-bar__suffix-label {
+  margin-left: 10rpx;
+}
+
+.goods-submit-bar__button {
+  width: 220rpx;
+  font-weight: 500;
+  --button-default-height: 80rpx !important;
+  --button-line-height: 80rpx !important;
+}

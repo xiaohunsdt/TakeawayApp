@@ -1,0 +1,54 @@
+<view class="goods-submit-bar">
+    <slot name="top"/>
+
+    <view class="goods-submit-bar__tip">
+      <van-icon
+        name="{{tipIcon}}"
+        custom-class="goods-submit-bar__tip-icon"
+        size="12px"
+        wx:if="{{tipIcon}}"/>
+      <view class="goods-submit-bar__tip-text" wx:if="{{tip}}">
+        {{ tip }}
+      </view>
+      <slot name="tip"/>
+    </view>
+
+    <view class="bar-class goods-submit-bar__bar">
+      <slot/>
+      <view class="goods-submit-bar__text">
+        <text>{{ label || '合计：' }}</text>
+        <text class="goods-submit-bar__price">
+          <text class="goods-submit-bar__currency">{{ currency }}</text>
+          <text class="goods-submit-bar__price-integer">{{ integerStr }}</text>
+          <text>{{decimalStr}}</text>
+        </text>
+        <text class="goods-submit-bar__suffix-label">{{ suffixLabel }}</text>
+      </view>
+
+      <van-button
+        disabled="{{disabled}}"
+        loading="{{loading}}"
+        type="{{buttonType}}"
+        bind:click="onSubmit"
+        class="goods-submit-bar__button"
+        custom-class="submit-btn"
+        custom-style="width: 100%;"
+        round
+        wx:if="{{userInfo}}">
+        {{ loading ? '' : buttonText }}
+      </van-button>
+      <van-button
+        disabled="{{disabled}}"
+        loading="{{loading}}"
+        type="{{buttonType}}"
+        bind:getuserinfo="getWxUserInfo"
+        class="goods-submit-bar__button"
+        custom-class="submit-btn"
+        custom-style="width: 100%;"
+        open-type="getUserInfo"
+        round
+        wx:else>
+        {{ loading ? '' : buttonText }}
+      </van-button>
+    </view>
+  </view>
