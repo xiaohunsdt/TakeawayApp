@@ -9,7 +9,7 @@ Page({
     hotGoodsList: []
   },
   onLoad: function (option) {
-    console.log(option)
+    // console.log(option)
     if (option.from) {
       app.globalData.form = option.from
     }

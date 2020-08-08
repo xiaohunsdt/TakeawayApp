@@ -1,0 +1,27 @@
+<view class="goods-card-root">
+	<view class="goods-card-thumb">
+		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load style="height: 100%;width: 100%" />
+	</view>
+	<view class="goods-card-content">
+		<view class="goods-card-title">
+			{{food.name}}
+		</view>
+		<view class="goods-card-desc">
+			<van-icon name="label" />
+			{{ food.desc }}
+		</view>
+		<!--      <view class="goods-card-origin-price">₩ {{ food.price }}</view>-->
+		<span class="goods-card-price">₩ {{ food.price }}</span>
+		<view style="height: 0">
+			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount>0}}" />
+			<van-button disabled="{{food.state!=='ON'}}" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" wx:else>
+				<span wx:if="{{food.state==='ON'}}">
+					下单
+				</span>
+				<span wx:elif="{{food.state==='SHORTAGE'}}">
+					缺货
+				</span>
+			</van-button>
+		</view>
+	</view>
+</view>

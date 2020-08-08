@@ -1,16 +1,16 @@
 .base-panel {
-  padding: 0 .2rem;
+  padding: 0 20rpx;
   position: relative;
   z-index: 1;
   background-color: transparent;
-  margin-bottom: 0.2rem;
+  margin-bottom: 20rpx;
 }
 
 .panel-content {
   position: relative;
-  padding: 0.25rem;
+  padding: 25rpx;
   background-color: white;
-  border-radius: 0.2rem;
+  border-radius: 20rpx;
   overflow: hidden;
   box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
 }

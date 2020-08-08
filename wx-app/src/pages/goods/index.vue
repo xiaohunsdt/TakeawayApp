@@ -46,7 +46,6 @@
     },
     onLoad () {
       this.init()
-
       // 初始化购物车数量
       this.INIT_CRET()
     },

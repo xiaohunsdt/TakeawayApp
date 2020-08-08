@@ -1,0 +1,86 @@
+<view class="container-side-bar">
+    <view class="nav {{cartAllCount > 0 && 'has-padding'}}">
+      <scroll-view class="nav-scroll" scroll-y="true" style="height: 100%;">
+        <view
+          class="nav-item {{currentId === category.id && 'active'}}"
+          wx:key="category.id"
+          data-category-id = "{{category.id}}"
+          bind:tap="chooseType"
+          wx:for="{{categoryGoods}}"
+          wx:for-item="category">
+          {{category.name}}
+        </view>
+      </scroll-view>
+    </view>
+    <view class="content">
+      <scroll-view
+        scroll-into-view="{{contentId}}"
+        scroll-y="{{contentId}}"
+        class="content-scroll {{cartAllCount > 0 && 'has-padding'}}"
+        scroll-with-animation="true"
+        style="height: 100%;">
+        <view class="content-container">
+          <view
+            id="xh_{{category.id}}"
+            wx:key="category.id"
+            class="pesticide"
+            wx:for="{{categoryGoods}}"
+            wx:for-item="category"
+            wx:if="{{category.goodsList.length > 0 && ('xh_' + category.id) === contentId}}">
+            <view class="type-name">
+              <view class="line"></view>
+              <view class="name">{{category.name}}</view>
+              <view class="line"></view>
+            </view>
+            <view class="pesticide-container">
+              <standard-goods-card
+                food="{{food}}"
+                wx:key="food.id"
+                wx:for="{{category.goodsList}}"
+                wx:for-item="food"
+                bind:cart-change="onCartChange"/>
+            </view>
+          </view>
+        </view>
+        <view class="has-no-more">
+          <view class="line"></view>
+          <view class="name">没有更多</view>
+          <view class="line"></view>
+        </view>
+      </scroll-view>
+    </view>
+    <van-action-sheet
+      wx:if="{{showCart}}"
+      z-index="99999"
+      bind:cancel="setData({showCart:false})"
+      bind:click-overlay="setData({showCart:false})"
+      bind:close="setData({showCart:false})"
+      close-on-click-overlay
+      overlay
+      title="购物车">
+      <view class="cart-content">
+        <simple-goods-card
+          food="{{item}}"
+          wx:key="item.id"
+          v-for="orderItems"/>
+      </view>
+    </van-action-sheet>
+    <view id="footer" wx:if="{{cartAllCount > 0}}">
+      <goods-submit-bar
+        decimal-length="{{0}}"
+        disabled="{{pageSettings.disableService}}"
+        price="{{cartAllPrice * 100}}"
+        tip="{{pageSettings.disableServiceNotice}}"
+        bind:submit="onSubmitOrder"
+        button-text="提交订单"
+        currency="₩">
+        <view bind:tap="onOpenCart" id="order-bar-left-content">
+          <image src="/static/images/order/cart.png" />
+          <view style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
+            {{ cartAllCount }}
+          </view>
+        </view>
+<!--        <view slot="tip" v-show="pageSettings.disableService">{{pageSettings.disableServiceNotice}}</view>-->
+      </goods-submit-bar>
+    </view>
+  </view>

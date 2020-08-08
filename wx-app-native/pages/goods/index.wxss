@@ -1,1 +1,16 @@
-/* pages/goods/index.wxss */
+.van-notice-bar {
+  height: auto !important;
+}
+
+.van-submit-bar__bar--safe {
+  padding-bottom: unset !important;
+}
+
+.nav-class .van-tabs__line {
+  background-color: #FFD200;
+}
+
+#activity-info .van-tag {
+  margin-left: 10rpx;
+  display: unset !important;
+}

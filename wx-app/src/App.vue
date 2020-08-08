@@ -56,7 +56,7 @@
     z-index: 100;
   }
 
-  .gradientDiv {
+  .gradient-div {
     position: absolute;
     background: linear-gradient(#FFD200, white, #F0F0F0);
     width: 100%;

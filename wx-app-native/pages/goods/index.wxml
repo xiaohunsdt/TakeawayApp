@@ -1,2 +1,16 @@
-<!--pages/goods/index.wxml-->
-<text>pages/goods/index.wxml</text>
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<view id="header">
+			<base-panel>
+				<van-notice-bar text="{{pageSettings.goodsPageNotice}}" left-icon="volume-o" scrollable="false" wrapable />
+				<view id="activity-info">
+					<van-tag wx:key="tag" type="success" wx:for="{{pageSettings.goodsPageTags}}" wx:for-item="tag">{{ tag }}</van-tag>
+				</view>
+			</base-panel>
+		</view>
+		<view style="height:{{height}}px" id="goods-content">
+			<goods-side-bar categoryGoods="{{categories}}" pageSettings="{{pageSettings}}" />
+		</view>
+	</view>
+</view>

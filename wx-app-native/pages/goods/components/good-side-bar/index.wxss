@@ -1,0 +1,109 @@
+.container-side-bar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: scroll;
+  color: #3a3a3a;
+}
+
+.container-side-bar .nav {
+  width: 160rpx;
+  background: #F2F2F2;
+}
+
+.container-side-bar .nav .nav-scroll {
+  overflow: scroll;
+}
+
+.container-side-bar .nav .nav-item {
+  text-align: center;
+  width: 100%;
+  display: block;
+  color: #313131;
+  padding: 32rpx 0;
+  font-size: 32rpx;
+}
+
+.container-side-bar .nav .active {
+  background: #ffffff;
+  width: calc(100% - 6rpx);
+  border-right: solid 6rpx #FFD200;
+  font-weight: bold;
+}
+
+.container-side-bar .content {
+  flex: 1;
+  background: #fff;
+  height: 100%;
+}
+
+.container-side-bar .content .content-container {
+  display: unset;
+}
+
+.container-side-bar .content .content-scroll {
+  overflow: hidden;
+}
+
+.container-side-bar .pesticide .type-name {
+  display: flex;
+  justify-content: center;
+  height: 72rpx;
+  align-items: center;
+}
+
+.container-side-bar .pesticide .type-name .line {
+  width: 40rpx;
+  height: 2rpx;
+  border-bottom: solid 1rpx #ddd;
+}
+
+.container-side-bar .pesticide .type-name .name {
+  margin: 0 16rpx;
+}
+
+.pesticide .pesticide-container {
+  padding: 0 24rpx;
+}
+
+.content .has-no-more {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx 0;
+  color: #ccc;
+  align-items: center;
+}
+
+.content .has-no-more .line {
+  width: 40rpx;
+  height: 2rpx;
+  border-bottom: solid 1rpx #ddd;
+}
+
+.content .has-no-more .name {
+  margin: 0 16rpx;
+}
+
+/*.has-submit-bar {*/
+/*  padding-bottom: .7rem;*/
+/*}*/
+
+#order-bar-left-content {
+  padding-left: 20rpx;
+  padding-top: 20rpx;
+  display: flex;
+}
+
+#order-bar-left-content img {
+  width: 60rpx;
+  height: 50rpx;
+}
+
+.cart-content {
+  padding: 20rpx;
+}
+
+.has-padding{
+  box-sizing:border-box;
+  padding-bottom: 100rpx;
+}

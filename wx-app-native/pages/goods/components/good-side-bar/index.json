@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "standard-goods-card": "/components/goods-card/standard-goods-card/index"
+  }
+}

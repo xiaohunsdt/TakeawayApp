@@ -32,6 +32,13 @@ App({
       })
   },
   globalData: {
-    userInfo: null
+    cart:{
+      cartList: [],
+      cartAllCount: 0,
+      cartAllPrice: 0
+    },
+    currentAddress: null,
+    currentCoupon: null,
+    from: null
   }
 })

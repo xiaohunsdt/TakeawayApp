@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "点餐",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "goods-side-bar": "./components/good-side-bar/index"
+  }
 }

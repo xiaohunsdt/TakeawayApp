@@ -4,13 +4,13 @@
     :title="food.name"
     currency="₩"
     custom-class="goods-card-root"
-    lazy-load
     price-class="goods-card-price"
     thumb-mode="aspectFill"
     title-class="goods-card-title">
     <view class="goods-card-thumb" slot="thumb">
-      <img
+      <image
         :src="food.thumb?food.thumb:'/static/images/no_image.gif'"
+        lazy-load
         mode="aspectFill"
         style="height: 100%;width: 100%"/>
     </view>
@@ -94,6 +94,23 @@
   }
 </script>
 <style>
+.order-btn {
+  background-color: #FFD200 !important;
+  border: none !important;
+  display: block;
+  position: relative;
+  top: -.7rem;
+  right: 0;
+}
+
+.order-stepper-root {
+  position: relative;
+  top: -.7rem;
+  right: 0;
+}
+</style>
+
+<style>
   .goods-card-root {
     padding: unset !important;
     overflow: hidden;
@@ -148,21 +165,6 @@
     border-right: #F3F3F3 0.01rem solid;
     width: 0.01rem;
     margin: 0 0.1rem;
-  }
-
-  .order-btn {
-    background-color: #FFD200 !important;
-    border: none !important;
-    display: block;
-    position: relative;
-    top: -.7rem;
-    right: 0;
-  }
-
-  .order-stepper-root {
-    position: relative;
-    top: -.7rem;
-    right: 0;
   }
 </style>
 <style>
