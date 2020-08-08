@@ -1,2 +1,12 @@
-<!--pages/activity/index.wxml-->
-<text>pages/activity/index.wxml</text>
+<view style="display: unset">
+	<view class="container" wx:if="{{activityList.length > 0}}">
+		<view class="gradientview"></view>
+		<view class="container-contain">
+			<image wx:for="{{activityList}}" wx:for-item="activity" wx:key="id" class="activityImg" src="{{activity.mainImg}}" data-activity-id="{{activity.id}}" bind:tap="onActivityClick" />
+		</view>
+	</view>
+	<view class="none-content-view" wx:if="{{activityList.length === 0}}">
+		<image mode="aspectFit" src="/static/images/none/no_news.png" style="width: 10rem" />
+		<view style="margin-top: 50rpx">暂无活动</view>
+	</view>
+</view>
