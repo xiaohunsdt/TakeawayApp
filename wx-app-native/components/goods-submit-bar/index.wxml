@@ -14,7 +14,7 @@
     </view>
 
     <view class="bar-class goods-submit-bar__bar">
-      <slot/>
+      <slot></slot>
       <view class="goods-submit-bar__text">
         <text>{{ label || '合计：' }}</text>
         <text class="goods-submit-bar__price">

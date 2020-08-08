@@ -16,14 +16,23 @@ Component({
           contentId: `xh_${categoryGoods[0].id}`
         })
       }
+    },
+    "showCart": function (showCart) {
+      if (showCart) {
+        this.setData({
+          cartList: getApp().globalData.cart.cartList
+        })
+      } else {
+        this.initCartData()
+      }
     }
   },
   data: {
     currentId: '',
     contentId: '',
-    heightArr: [],
     containerH: 0,
     showCart: false,
+    cartList: [],
     cartAllCount: 0,
     cartAllPrice: 0
   },
@@ -33,7 +42,7 @@ Component({
     }
   },
   methods: {
-    initCartData(){
+    initCartData() {
       this.setData({
         cartAllCount: getApp().globalData.cart.cartAllCount,
         cartAllPrice: getApp().globalData.cart.cartAllPrice
@@ -73,6 +82,11 @@ Component({
     onOpenCart() {
       this.setData({
         showCart: true
+      })
+    },
+    onCloseCart() {
+      this.setData({
+        showCart: false
       })
     }
   }

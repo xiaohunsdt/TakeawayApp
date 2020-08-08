@@ -88,13 +88,13 @@
 /*  padding-bottom: .7rem;*/
 /*}*/
 
-#order-bar-left-content {
+.order-bar-left-content {
   padding-left: 20rpx;
   padding-top: 20rpx;
   display: flex;
 }
 
-#order-bar-left-content image {
+.order-bar-left-content image {
   width: 60rpx;
   height: 50rpx;
 }

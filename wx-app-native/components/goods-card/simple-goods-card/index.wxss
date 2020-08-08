@@ -1,0 +1,75 @@
+.simple-goods-card {
+  height: 100rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  width: 40%;
+  overflow: hidden;
+}
+
+.name, .price, .action {
+  font-weight: bolder;
+  line-height: 70rpx;
+  display: table-column;
+}
+
+.action {
+  width: 180rpx;
+  text-align: right;
+}
+
+.price {
+  min-width: 150rpx;
+  margin-right: 20rpx;
+}
+
+.order-btn {
+  background-color: #FFD200 !important;
+  border: none !important;
+  display: block;
+}
+
+.action .order-stepper-root {
+  bottom: unset !important;
+  right: unset !important;
+}
+
+.order-stepper-input {
+  background-color: transparent !important;
+  width: 40rpx !important;
+  font-weight: 600 !important;
+}
+
+.order-stepper-input.van-stepper__input--disabled {
+  color: black;
+}
+
+.order-stepper-plus, .order-stepper-minus {
+  background-color: #FFD200 !important;
+  font-weight: 800 !important;
+  border-radius: 50% !important;
+  width: 50rpx !important;
+  height: 50rpx !important;
+}
+
+.order-stepper-plus:active, .order-stepper-minus:active {
+  background-color: #ffb105 !important;
+}
+
+.order-stepper-plus:before,
+.order-stepper-plus:after,
+.order-stepper-minus:before, .order-stepper-minus:after {
+  background-color: white !important;
+}
+
+.order-stepper-minus:before, .order-stepper-plus:before {
+  height: 5rpx !important;
+  width: 24rpx !important;
+}
+
+.order-stepper-minus:after, .order-stepper-plus:after {
+  width: 5rpx !important;
+  height: 24rpx !important;
+}

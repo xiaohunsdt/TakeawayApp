@@ -1,9 +1,6 @@
 import userService from '../../services/user'
 
 Component({
-  options: {
-    multipleSlots: true // 在组件定义时的选项中启用多slot支持
-  },
   properties: {
     tip: String,
     tipIcon: String,
@@ -61,7 +58,7 @@ Component({
       this.triggerEvent('submit', event.detail)
     },
     getWxUserInfo(event) {
-      if (event.mp.detail.userInfo) {
+      if (event.detail.userInfo) {
         // 将用户信息保存到服务器，保存成功后将被存储到本地
         userService.setUserInfo()
           .then(() => {

@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "standard-goods-card": "/components/goods-card/standard-goods-card/index",
+    "simple-goods-card": "/components/goods-card/simple-goods-card/index",
     "goods-submit-bar": "/components/goods-submit-bar/index"
   }
 }
