@@ -5,7 +5,11 @@
     "pages/activity/index",
     "pages/my/index",
     "pages/index/search/index",
-    "pages/activity/detail/index"
+    "pages/activity/detail/index",
+    "pages/my/auth/index",
+    "pages/my/address/index",
+    "pages/my/address/edit/index",
+    "pages/my/address/edit/search/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

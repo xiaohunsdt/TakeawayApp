@@ -52,7 +52,7 @@ request.interceptors.response.use(
       const response = err.response.data
       if (response.code === 700) {
         wx.navigateTo({
-          url: '/pages/my/auth/main'
+          url: '/pages/my/auth/index'
         })
       } else {
         wx.showToast({

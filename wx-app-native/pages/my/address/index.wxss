@@ -1,0 +1,33 @@
+.container-contain {
+  padding: 30rpx 10rpx;
+}
+
+.address-card {
+  position: relative;
+}
+
+.address-default-icon {
+  position: absolute;
+  z-index: 1000;
+  top: 10rpx;
+  right: 30rpx;
+}
+
+.address-delete-icon {
+  position: absolute;
+  z-index: 1000;
+  top: 10rpx;
+  left: 30rpx;
+}
+
+.add-address-btn {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 70% !important;
+  margin-top: 20rpx;
+  color: black !important;
+  font-weight: bolder !important;
+  height: 80rpx !important;
+  line-height: 80rpx !important;
+}

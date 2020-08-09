@@ -83,6 +83,27 @@
 					"id": -1,
 					"name": "pages/my/index",
 					"pathName": "pages/my/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/auth/index",
+					"pathName": "pages/my/auth/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/address/index",
+					"pathName": "pages/my/address/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/address/edit/search/index",
+					"pathName": "pages/my/address/edit/search/index",
 					"scene": null
 				}
 			]

@@ -41,11 +41,11 @@ component_1.VantComponent({
   },
   methods: {
     onClick: function (event) {
-      var index = event.currentTarget.dataset.index;
-      var item = this.data.days[index];
-      if (item.type !== 'disabled') {
-        this.$emit('click', item);
-      }
+      // var index = event.currentTarget.dataset.index;
+      // var item = this.data.days[index];
+      // if (item.type !== 'disabled') {
+      //   this.$emit('click', item);
+      // }
     },
     setDays: function () {
       var days = [];

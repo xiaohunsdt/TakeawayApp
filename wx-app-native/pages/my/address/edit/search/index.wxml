@@ -1,0 +1,17 @@
+<view class="container">
+    <view class="gradientview"></view>
+    <view class="container-contain">
+      <search-bar bind:search="onSearch"/>
+      <base-panel wx:if="{{addressList.length > 0}}">
+        <van-cell
+          wx:key="address"
+          title="{{item.address}}"
+          bind:click="onSelect"
+          data-address="{{item}}"
+          icon="location-o"
+          is-link
+          wx:for="{{addressList}}"
+        />
+      </base-panel>
+    </view>
+  </view>
