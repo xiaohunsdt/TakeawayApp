@@ -9,7 +9,8 @@
     "pages/my/auth/index",
     "pages/my/address/index",
     "pages/my/address/edit/index",
-    "pages/my/address/edit/search/index"
+    "pages/my/address/edit/search/index",
+    "pages/coupon/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

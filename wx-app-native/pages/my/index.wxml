@@ -86,7 +86,7 @@
 					</view>
 				</view>
 			</van-cell>
-			<van-cell clickable custom-class="profile-cell" is-link url="/pages/sub-packages/coupon/index/index">
+			<van-cell clickable custom-class="profile-cell" is-link url="/pages/coupon/index">
 				<view class="profile-title" slot="title">
 					<image class="title-image" src="/static/images/profile/coupon.png" />
 					<view>

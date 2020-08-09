@@ -104,6 +104,13 @@
 					"id": -1,
 					"name": "pages/my/address/edit/search/index",
 					"pathName": "pages/my/address/edit/search/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/coupon/index",
+					"pathName": "pages/coupon/index",
 					"scene": null
 				}
 			]

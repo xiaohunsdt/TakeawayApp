@@ -99,13 +99,6 @@ function compareVersion (v1, v2) {
   return 0
 }
 
-export function getPages () {
-  /* 获取当前路由栈数组 */
-  // eslint-disable-next-line no-undef
-  const pages = getCurrentPages()
-  return pages
-}
-
 function showErrorToast (msg) {
   wx.showToast({
     title: msg,
@@ -118,7 +111,6 @@ const util = {
   checkSession,
   login,
   getUserInfo,
-  getPages,
   checkVersion
 }
 
