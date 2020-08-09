@@ -1,2 +1,117 @@
-<!--pages/my/index.wxml-->
-<text>pages/my/index.wxml</text>
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<view class="my-header">
+			<van-row>
+				<van-col span="5">
+					<image wx:if="userInfo" src="{{userInfo.avatarUrl}}" class="myThumb" mode="aspectFill" />
+					<image wx:else class="myThumb" mode="aspectFill" src="/static/images/profile/un-avatar.png" />
+				</van-col>
+				<van-col span="19">
+					<view class="myName">
+						<span wx:if="userInfo">{{userInfo.nickName}}</span>
+						<button bind:getuserinfo="getWxUserInfo" class="login-button" open-type="getUserInfo" wx:else>
+							点击授权个人信息 >
+						</button>
+					</view>
+					<view class="memberType">
+						<van-icon name="diamond-o" />
+						<span style="margin-left:0.3rem;position: relative;top:-0.1rem">一般会员</span>
+					</view>
+				</van-col>
+			</van-row>
+		</view>
+		<view class="my-order-bar">
+			<base-panel>
+				<van-row>
+					<view class="my-order-header">
+						<view class="title">我的订单</view>
+						<view bind:tap="gotoOrderPage" class="view-all">
+							查看所有订单
+							<van-icon name="arrow"></van-icon>
+						</view>
+					</view>
+					<van-col offset="1" span="4">
+						<view bind:tap="gotoOrderPage" data-order-type="WAIT_PAY" class="order-type-item">
+							<van-info info="{{orderCount.waitPay}}" wx:if="{{orderCount.waitPay > 0}}"></van-info>
+							<image class="item-image" mode="widthFix" src="/static/images/order/payment.png" />
+							<view class="item-title">待付款</view>
+						</view>
+					</van-col>
+					<van-col offset="2" span="4">
+						<view bind:tap="gotoOrderPage" data-order-type="WAIT_EAT" class="order-type-item">
+							<van-info info="{{orderCount.waitEat}}" wx:if="{{orderCount.waitEat > 0}}"></van-info>
+							<image class="item-image" mode="widthFix" src="/static/images/order/take_food.png" />
+							<view class="item-title">待就餐</view>
+						</view>
+					</van-col>
+					<van-col offset="2" span="4">
+						<view bind:tap="gotoOrderPage" data-order-type="WAIT_COMMENT" class="order-type-item">
+							<van-info info="{{orderCount.waitComment}}" wx:if="{{orderCount.waitComment > 0}}"></van-info>
+							<image class="item-image" mode="widthFix" src="/static/images/order/evaluate.png" />
+							<view class="item-title">待评价</view>
+						</view>
+					</van-col>
+					<van-col offset="2" span="4">
+						<view bind:tap="gotoOrderPage" data-order-type="REFUND" class="order-type-item">
+							<van-info info="{{orderCount.refund}}" wx:if="{{orderCount.refund > 0}}"></van-info>
+							<image class="item-image" mode="widthFix" src="/static/images/order/refund.png" />
+							<view class="item-title">退款</view>
+						</view>
+					</van-col>
+				</van-row>
+			</base-panel>
+		</view>
+		<view class="my-sign-in">
+			<base-panel wx:if="{{signInDays}}">
+				<view class="title">我的签到</view>
+				<van-calendar default-date="{{signInDays.signInedDay}}" max-date="{{signInDays.endOfMonth}}" min-date="{{signInDays.beginOfMonth}}" poppable="{{false}}" row-height="{{26}}" show-confirm="{{false}}" show-subtitle="{{false}}" show-title="{{false}}" class="calendar" color="#FFD200" type="multiple" />
+			</base-panel>
+		</view>
+
+		<view class="my-profile">
+			<van-cell clickable custom-class="profile-cell" is-link>
+				<view class="profile-title" slot="title">
+					<image class="title-image" src="/static/images/profile/edit.png" />
+					<view>
+						个人资料
+					</view>
+				</view>
+			</van-cell>
+			<van-cell clickable custom-class="profile-cell" is-link url="/pages/my/address/main">
+				<view class="profile-title" slot="title">
+					<image class="title-image" src="/static/images/address/icon-location.png" />
+					<view>
+						我的地址
+					</view>
+				</view>
+			</van-cell>
+			<van-cell clickable custom-class="profile-cell" is-link url="/pages/sub-packages/coupon/index/main">
+				<view class="profile-title" slot="title">
+					<image class="title-image" src="/static/images/profile/coupon.png" />
+					<view>
+						优惠卷
+					</view>
+				</view>
+			</van-cell>
+			<van-cell bind:click="callCSPhone" clickable custom-class="profile-cell" is-link>
+				<view class="profile-title" slot="title">
+					<image class="title-image" src="/static/images/profile/phone.png" />
+					<view>
+						电话客服
+					</view>
+				</view>
+			</van-cell>
+			<van-cell clickable custom-class="profile-cell" is-link>
+				<view class="profile-title contact-cell" slot="title">
+					<button class="contact-btn" open-type="contact" plain>
+						<image class="title-image" src="/static/images/profile/onlineservice.png" />
+						<view style="display: inline">
+							在线客服
+						</view>
+					</button>
+				</view>
+			</van-cell>
+		</view>
+	</view>
+</view>

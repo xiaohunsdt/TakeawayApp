@@ -1,1 +1,139 @@
-/* pages/my/index.wxss */
+
+.my-header {
+  padding: 30rpx 40rpx;
+}
+
+.login-button {
+  display: unset;
+  background: transparent;
+  border: unset;
+  font-size: 28rpx;
+  color: white;
+  line-height: unset;
+  padding-left: unset;
+}
+
+.login-button:after {
+  content: unset;
+}
+
+.myName, .memberType {
+  font-weight: bolder;
+  color: white;
+}
+
+.myName {
+  margin-top: 10rpx;
+}
+
+.memberType {
+  margin-top: 10rpx;
+  font-size: 28rpx;
+}
+
+.myThumb {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}
+
+.my-order-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 35rpx;
+  margin-bottom: 30rpx;
+}
+
+.my-order-header .title {
+  margin-left: 20rpx;
+}
+
+.my-order-header .view-all {
+  font-size: 30rpx;
+  color: #999999;
+}
+
+.order-type-item .item-image {
+  width: 100%;
+}
+
+.order-type-item .item-title {
+  width: 100%;
+  font-size: 25rpx;
+  font-weight: lighter;
+  text-align: center;
+}
+
+
+
+.my-sign-in .title {
+  margin-left: 20rpx;
+  /*margin-bottom: .2rem;*/
+  font-size: 35rpx;
+}
+
+.my-profile {
+  margin-top: 40rpx;
+}
+
+.my-profile .profile-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.my-profile .profile-title .title-image {
+  height: 55rpx;
+  width: 55rpx;
+  margin-right: 10rpx;
+}
+
+.my-profile .profile-cell {
+  background-color: transparent !important;
+}
+
+.my-profile .profile-cell:active {
+  background-color: rgba(200, 200, 200, 0.2) !important;
+}
+
+.my-profile .contact-cell van-button {
+  width: 100% !important;
+}
+
+.contact-btn {
+  width: 100%;
+  font-size: unset !important;
+  font-weight: normal !important;
+  line-height: unset !important;
+  background: transparent;
+  border: unset !important;
+  padding: unset !important;
+  display: flex !important;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  color: black !important;
+}
+
+.contact-btn:after {
+  content: unset !important;
+}
+
+.order-type-item {
+  position: relative;
+}
+
+.order-type-item .van-info {
+  right: unset;
+  top: 10rpx;
+  left: 60rpx;
+}
+
+.van-calendar__month-title, .van-calendar__header {
+  display: none;
+}
+
+.van-calendar__day {
+  margin-top: 5rpx;
+  margin-bottom: 5rpx;
+}

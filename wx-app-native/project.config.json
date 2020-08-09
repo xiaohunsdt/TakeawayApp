@@ -76,6 +76,13 @@
 					"id": -1,
 					"name": "pages/activity/index",
 					"pathName": "pages/activity/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/index",
+					"pathName": "pages/my/index",
 					"scene": null
 				}
 			]
