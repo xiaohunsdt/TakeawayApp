@@ -27,7 +27,7 @@ Component({
       })
     },
     onSearch () {
-      this.triggerEvent('search', this.searchValue)
+      this.triggerEvent('search', this.data.searchValue)
     }
   }
 })

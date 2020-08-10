@@ -30,6 +30,7 @@ Page({
   },
   clickRightIcon() {
     wx.showToast({
+      icon: 'none',
       title: '请输入街道名,小区名,道路名\r\n例如: 서울 마포구 신촌로 150'
     })
   },

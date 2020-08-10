@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +29,11 @@ public class SearchController extends BaseController {
 
     @PostMapping("searchGoods")
     @ResponseBody
-    public List<Goods> searchGoods(String keyword) {
+    public List searchGoods(String keyword) {
         QueryWrapper<Goods> queryWrapper = new QueryWrapper<Goods>().like("name", keyword);
-        return goodsService.list(queryWrapper).stream().filter(item -> !item.getState().equals(GoodsState.OFF))
+        List<Goods> goodsList = goodsService.list(queryWrapper).stream().filter(item -> !item.getState().equals(GoodsState.OFF))
                 .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName).thenComparing(Goods::getIndex).reversed())
                 .collect(Collectors.toList());
+        return (List) new GoodsWrapper(goodsList).warp();
     }
 }

@@ -72,8 +72,7 @@
 .order-btn {
   background-color: #FFD200 !important;
   border: none !important;
-  display: block;
- 
+  /* display: block; */
 }
 
 /* .order-stepper-root {

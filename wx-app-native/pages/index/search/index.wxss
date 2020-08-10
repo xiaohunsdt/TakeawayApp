@@ -1,1 +1,11 @@
-/* pages/index/search/index.wxss */
+.container-contain {
+  padding: 30rpx 30rpx;
+}
+
+.none-content-view {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}

@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "main-goods-card":"/components/goods-card/main-goods-card/index",
+    "search-bar":"/components/search-bar/index"
+  }
 }
