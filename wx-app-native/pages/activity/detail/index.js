@@ -1,4 +1,5 @@
 import activityService from '../../../services/activity'
+var WxParse = require('../../../wxParse/wxParse.js')
 
 Page({
 
@@ -7,7 +8,8 @@ Page({
    */
   data: {
     activityId: null,
-    activity: null
+    activity: null,
+    article: null,
   },
 
   /**
@@ -28,11 +30,13 @@ Page({
       path: `/pages/activity/detail/index?activityId=${this.data.activityId}`
     }
   },
-  init () {
+  init() {
+    let that = this;
     activityService.getActivityById(this.data.activityId).then(res => {
       this.setData({
         activity: res
       })
+      WxParse.wxParse('article', 'html', res.content, that);
     })
   }
 })

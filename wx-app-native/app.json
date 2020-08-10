@@ -15,7 +15,8 @@
     "pages/order/comment/index",
     "pages/order/detail/index",
     "pages/buy/index",
-    "pages/buy/remark/index"
+    "pages/buy/remark/index",
+    "pages/pay/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
