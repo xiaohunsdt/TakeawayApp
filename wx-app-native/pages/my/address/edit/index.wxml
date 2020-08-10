@@ -37,7 +37,7 @@
         loading-type="spinner"
         round
         size="large">
-        <view wx:if="addressId">修改地址</view>
+        <view wx:if="{{addressId}}">修改地址</view>
         <view wx:else>添加新地址</view>
       </van-button>
     </view>
