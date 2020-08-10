@@ -36,7 +36,7 @@ Page({
     getApp().globalData.currentCoupon = event.currentTarget.dataset.coupon
     
     const pages = getCurrentPages()
-      if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/main') {
+      if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/index') {
         wx.navigateBack()
       } else {
         wx.switchTab({

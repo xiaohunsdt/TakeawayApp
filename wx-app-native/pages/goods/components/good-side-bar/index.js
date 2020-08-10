@@ -59,14 +59,14 @@ Component({
               success(res) {
                 if (res.confirm) {
                   wx.navigateTo({
-                    url: `/pages/buy/main`
+                    url: `/pages/buy/index`
                   })
                 }
               }
             })
           } else {
             wx.navigateTo({
-              url: `/pages/buy/main`
+              url: `/pages/buy/index`
             })
           }
         })

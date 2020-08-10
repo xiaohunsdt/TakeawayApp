@@ -1,0 +1,64 @@
+.pay-way-btns {
+  margin-top: 10rpx;
+  text-align: center;
+}
+
+.pay-way-btns .pay-way-btn {
+  margin: 8rpx;
+  width: 45%;
+}
+
+#buy-content {
+  padding-bottom: 160rpx;
+}
+
+#buy-content.show-order-tip {
+  padding-bottom: 250rpx;
+}
+
+#order-amount {
+  font-weight: bolder;
+  padding-top: 20rpx;
+  font-size: 25rpx;
+  text-align: right;
+}
+
+.order-bar-left-content {
+  padding-left: 20rpx;
+  padding-top: 20rpx;
+  display: flex;
+}
+
+.order-bar-left-content image {
+  width: 60rpx;
+  height: 50rpx;
+}
+
+.coupon-panel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.coupon-discounted-prices {
+  color: red;
+  text-align: right;
+  font-weight: bold;
+  font-size: 27rpx;
+}
+
+.coupon-detail-info {
+  color: #999999;
+  margin-top: 20rpx;
+  font-size: 25rpx;
+}
+
+.coupon-delete-btn {
+  position: relative;
+  top: 5rpx;
+}
+
+.time-picker-content {
+  height: 400rpx;
+  padding: 0 80rpx;
+  text-align: center
+}

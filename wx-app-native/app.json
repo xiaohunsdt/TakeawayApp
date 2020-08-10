@@ -13,7 +13,9 @@
     "pages/coupon/index",
     "pages/order/index",
     "pages/order/comment/index",
-    "pages/order/detail/index"
+    "pages/order/detail/index",
+    "pages/buy/index",
+    "pages/buy/remerk/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

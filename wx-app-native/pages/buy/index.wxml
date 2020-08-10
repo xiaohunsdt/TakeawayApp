@@ -1,0 +1,121 @@
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<view id="header">
+			<base-panel wx:if="{{fromNotice}}">
+				<view>
+					<van-notice-bar text="{{fromNotice}}" scrollable="true" wrapable />
+				</view>
+			</base-panel>
+			<base-panel wx:if="signNotice">
+				<view>
+					<van-notice-bar text="{{signNotice}}" scrollable="true" wrapable />
+				</view>
+			</base-panel>
+			<base-panel>
+				<view>
+					<view wx:if="address">
+						<van-cell title="{{address.address + ' ' + address.detail}}" is-link url="/pages/my/address/index">
+							<view slot="icon" style="margin-right: 0.2rem">
+								<van-icon color="#FFD200" name="location" size="1.2rem" />
+							</view>
+						</van-cell>
+						<van-cell title="{{address.phone}}" is-link url="/pages/my/address/index">
+							<view slot="icon" style="margin-right: 0.2rem">
+								<van-icon color="#FFD200" name="phone" size="1.2rem" />
+							</view>
+						</van-cell>
+					</view>
+					<view wx:else>
+						<van-cell is-link title="选择地址" url="/pages/my/address/index" />
+					</view>
+				</view>
+				<van-cell title="{{deliveryType}}" value="{{deliveryArriveTime}}" bind:click="onShowTimePicker">
+					<view slot="icon" style="margin-right: 0.2rem">
+						<van-icon color="#FFD200" name="clock" size="1.2rem" />
+					</view>
+				</van-cell>
+			</base-panel>
+		</view>
+		<van-action-sheet show="{{showTimePicker}}" :z-index="99999" bind:cancel="onCloseTimePicker" bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
+			<view class="time-picker-content">
+				<picker-view value="{{appointmentIndex}}" bind:change="onTimePickerChange" indicator-style="height: 50px" style="width: 100%;height: 100%;">
+					<picker-view-column>
+						<view style="line-height: 50px" wx:for="appointmentTimes[0]">{{item}}</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view style="line-height: 50px" wx:for="appointmentTimes[1]">
+							<view wx:if="{{item!=='尽快配送'}}">{{item}}点</view>
+							<view wx:else>{{item}}</view>
+						</view>
+					</picker-view-column>
+					<picker-view-column>
+						<view style="line-height: 50px" wx:for="appointmentTimes[2]">{{item}}分</view>
+					</picker-view-column>
+				</picker-view>
+			</view>
+		</van-action-sheet>
+		<view class="{{showOrderTip?'show-order-tip':''}}" id="buy-content">
+			<base-panel>
+				<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
+				<view id="order-amount">
+					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
+					小计 <span style="color: #FFD200">₩ {{ cartAllPrice }}</span>
+				</view>
+			</base-panel>
+			<base-panel>
+				<view>支付方式</view>
+				<view class="pay-way-btns">
+					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary">微信支付
+					</van-button>
+					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付
+					</van-button>
+					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" v-if="address">支付宝支付
+					</van-button>
+					<van-button color="{{payWay==='TRANSFER'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
+					</van-button>
+					<van-button color="{{payWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
+					</van-button>
+					<van-button color="{{payWay==='CASH'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
+					</van-button>
+				</view>
+			</base-panel>
+			<base-panel>
+				<view catchtap="setCoupon" class="coupon-panel">
+					<view>优惠卷</view>
+					<view wx:if="{{coupon}}">{{coupon.couponName}}
+						<van-icon catchclick="deleteCoupon" class="coupon-delete-btn" color="red" name="close" />
+					</view>
+				</view>
+				<view class="coupon-discounted-prices" wx:if="{{couponDiscountPrice > 0}}">
+					- ₩{{ couponDiscountPrice }}
+				</view>
+				<view class="coupon-discounted-prices" wx:if="{{couponInfoTip}}">
+					{{ couponInfoTip }}
+				</view>
+				<view bind:tap="setCoupon" class="coupon-detail-info" wx:if="{{coupon}}">
+					{{ couponInfoDetail }}
+				</view>
+			</base-panel>
+			<base-panel>
+				<view catch:tap="setPs">
+					<view>备注</view>
+					<view wx:if="{{psData!==''}}">
+						<van-cell title="{{psData}}" />
+					</view>
+				</view>
+			</base-panel>
+		</view>
+		<view id="footer">
+			<goods-submit-bar decimal-length="{{0}}" disabled="{{submitLoading || disableService}}" loading="{{submitLoading}}" price="{{realPrice}}" tip="{{tipNotice}}" bind:submit="onSubmitOrder" button-text="立刻支付" currency="₩">
+				<view class="order-bar-left-content">
+					<image src="/static/images/order/cart.png" />
+					<view style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
+						{{ cartAllCount }}
+					</view>
+				</view>
+				<!--          <view slot="tip" v-if="disableService || showOrderTip">{{tipNotice}}</view>-->
+			</goods-submit-bar>
+		</view>
+	</view>
+</view>
