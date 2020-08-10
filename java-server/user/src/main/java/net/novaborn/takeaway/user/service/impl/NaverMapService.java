@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 public class NaverMapService implements INaverMapService {
 
+    @Override
     @SneakyThrows
     public Coordinate getGeocode(String address) {
         String result = requestApi(address);
@@ -40,13 +41,13 @@ public class NaverMapService implements INaverMapService {
             }
 
             JSONObject addressObject = addresses.getJSONObject(0);
-            String roadAddress = addressObject.getString("roadAddress");
+//            String roadAddress = addressObject.getString("roadAddress");
             Double x = addressObject.getDouble("x");
             Double y = addressObject.getDouble("y");
 
-            if (!roadAddress.contains("서울")) {
-                throw new SysException(MapExceptionEnum.ADDRESS_ERROR);
-            }
+//            if (!roadAddress.contains("서울")) {
+//                throw new SysException(MapExceptionEnum.ADDRESS_ERROR);
+//            }
             Coordinate coordinate = new Coordinate();
             coordinate.setX(x);
             coordinate.setY(y);
@@ -56,6 +57,7 @@ public class NaverMapService implements INaverMapService {
         }
     }
 
+    @Override
     public List<Address> searchAddress(String address) {
         List<Address> addresses = new ArrayList<>();
 
@@ -72,6 +74,9 @@ public class NaverMapService implements INaverMapService {
 
             addressesArr.forEach(item -> {
                 String roadAddress = ((JSONObject) item).getString("roadAddress");
+                if (StrUtil.isBlank(roadAddress)) {
+                    roadAddress = ((JSONObject) item).getString("jibunAddress");
+                }
                 Double x = ((JSONObject) item).getDouble("x");
                 Double y = ((JSONObject) item).getDouble("y");
                 Address temp = new Address();
@@ -116,9 +121,12 @@ public class NaverMapService implements INaverMapService {
 
         });
 
-        for(Object item : addressesArr.stream().toArray()){
+        for (Object item : addressesArr.stream().toArray()) {
             String name = ((JSONObject) item).getString("name");
             String roadAddress = ((JSONObject) item).getString("roadAddress");
+            if (StrUtil.isBlank(roadAddress)) {
+                roadAddress = ((JSONObject) item).getString("jibunAddress");
+            }
             Double x = ((JSONObject) item).getDouble("x");
             Double y = ((JSONObject) item).getDouble("y");
             Address temp = new Address();

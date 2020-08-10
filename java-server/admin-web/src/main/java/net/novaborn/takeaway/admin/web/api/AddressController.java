@@ -79,11 +79,11 @@ public class AddressController extends BaseController {
         }
 
         // 地址发生变化，填入经纬度
-        if (address.getAddress() != null && !target.getAddress().equals(address.getAddress())) {
-            Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
-            address.setX(coordinate.getX());
-            address.setY(coordinate.getY());
-        }
+//        if (address.getAddress() != null && !target.getAddress().equals(address.getAddress())) {
+//            Coordinate coordinate = naverMapService.getGeocode(address.getAddress());
+//            address.setX(coordinate.getX());
+//            address.setY(coordinate.getY());
+//        }
         BeanUtil.copyProperties(address, target, CopyOptions.create().setIgnoreNullValue(true));
         target.updateById();
         return new SuccessTip();
