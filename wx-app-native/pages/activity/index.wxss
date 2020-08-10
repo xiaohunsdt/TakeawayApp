@@ -9,7 +9,7 @@
   border-radius: 25rpx;
 }
 
-.none-content-div {
+.none-content-view {
   position: relative;
   z-index: 100;
   width: 100%;

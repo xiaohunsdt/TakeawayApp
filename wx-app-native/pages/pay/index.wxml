@@ -1,2 +1,66 @@
-<!--pages/pay/index.wxml-->
-<text>pages/pay/index.wxml</text>
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<base-panel>
+			<view class="order-header" wx:if="{{order}}">
+				<view class="order-number">
+					<view class="number"># <span style="font-size: 1.8rem">{{order.number}}</span></view>
+					<view class="text">
+						<image class="text-img" src="/static/images/order/yellow_num.png" />
+						订餐号
+					</view>
+				</view>
+				<view class="estimated-arrival-time">
+					<view class="time" style="margin-top: .5rem">
+						<view wx:if="{{order.paymentWay==='ALI_PAY'}}">
+							¥ <span style="font-size: 2rem">{{order.realPrice * 6 / 1000}}</span>
+						</view>
+						<view wx:if="{{order.paymentWay==='TRANSFER'}}">
+							₩ <span style="font-size: 2rem">{{order.realPrice}}</span>
+						</view>
+					</view>
+				</view>
+			</view>
+		</base-panel>
+		<order-card order="{{order}}" show-operation="{{false}}" wx:if="{{order}}" />
+
+		<base-panel>
+			<button open-type="contact" style="margin-top: .5rem" type="primary">联系客服</button>
+		</base-panel>
+
+		<base-panel wx:if="{{order && order.paymentWay==='ALI_PAY'}}">
+			<view class="pay-way-title">
+				支付宝
+			</view>
+			<view class="pay-way-detail">
+				第一步: 进入支付宝首页,并点击更多
+				<image mode="aspectFit" src="/static/images/payment/alipay/1.jpg" />
+				第二步: 点击红包,再点击普通红包
+				<image mode="aspectFit" src="/static/images/payment/alipay/2.png" />
+				<image mode="aspectFit" src="/static/images/payment/alipay/3.png" />
+				第三步: 输入金额和数量(数量为1)
+				<image mode="aspectFit" src="/static/images/payment/alipay/4.png" />
+				第四步: 复制口令,返回微信,联系客服!将口令和订餐号告诉客服
+				<image mode="aspectFit" src="/static/images/payment/alipay/5.png" />
+			</view>
+		</base-panel>
+
+		<base-panel wx:if="{{order && order.paymentWay==='TRANSFER'}}">
+			<view class="pay-way-title">
+				通帐转账
+			</view>
+			<view class="pay-way-detail">
+				账号: 645-910961-66007
+			</view>
+			<view class="pay-way-detail">
+				银行: 하나은행
+			</view>
+			<view class="pay-way-detail">
+				户名: 왕잔용
+			</view>
+			<view class="pay-way-detail">
+				转账成功后,请联系客服!将转账截图和订餐号告诉客服
+			</view>
+		</base-panel>
+	</view>
+</view>

@@ -23,17 +23,17 @@ export function payOrder (orderId, payWay) {
           break
         case 'ALI_PAY':
           wx.navigateTo({
-            url: `/pages/pay/main?orderId=${orderId}`
+            url: `/pages/pay/index?orderId=${orderId}`
           })
           break
         case 'TRANSFER':
           wx.navigateTo({
-            url: `/pages/pay/main?orderId=${orderId}`
+            url: `/pages/pay/index?orderId=${orderId}`
           })
           break
         default:
           wx.redirectTo({
-            url: '/pages/order/main?state=WAIT_EAT'
+            url: '/pages/order/index?state=WAIT_EAT'
           })
       }
     })

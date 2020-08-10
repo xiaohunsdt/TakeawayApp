@@ -35,7 +35,7 @@
 		</view>
 	</view>
 
-	<view v-if="showOperation" class="action-btns">
+	<view wx:if="{{showOperation}}" class="action-btns">
 		<van-button catch:click="payNow" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'}}">
 			立刻付款
 		</van-button>

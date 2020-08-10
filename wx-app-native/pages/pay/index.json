@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "支付",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "order-card":"/pages/order/components/order-card/index"
+  }
 }
