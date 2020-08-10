@@ -37,20 +37,20 @@
 				</van-cell>
 			</base-panel>
 		</view>
-		<van-action-sheet show="{{showTimePicker}}" :z-index="99999" bind:cancel="onCloseTimePicker" bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
+		<van-action-sheet show="{{showTimePicker}}" z-index="{{9999999}}" bind:cancel="onCloseTimePicker" bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
 			<view class="time-picker-content">
 				<picker-view value="{{appointmentIndex}}" bind:change="onTimePickerChange" indicator-style="height: 50px" style="width: 100%;height: 100%;">
 					<picker-view-column>
-						<view style="line-height: 50px" wx:for="appointmentTimes[0]">{{item}}</view>
+						<view style="line-height: 50px" wx:for="{{appointmentTimes[0]}}">{{item}}</view>
 					</picker-view-column>
 					<picker-view-column>
-						<view style="line-height: 50px" wx:for="appointmentTimes[1]">
+						<view style="line-height: 50px" wx:for="{{appointmentTimes[1]}}">
 							<view wx:if="{{item!=='尽快配送'}}">{{item}}点</view>
 							<view wx:else>{{item}}</view>
 						</view>
 					</picker-view-column>
 					<picker-view-column>
-						<view style="line-height: 50px" wx:for="appointmentTimes[2]">{{item}}分</view>
+						<view style="line-height: 50px" wx:for="{{appointmentTimes[2]}}">{{item}}分</view>
 					</picker-view-column>
 				</picker-view>
 			</view>

@@ -7,12 +7,14 @@ import couponService from '../../services/coupon'
 import util from '../../utils/util'
 const watch = require("../../utils/watch.js")
 
+let times = null
+
 Page({
-  watch:{
-    address(newVal){
+  watch: {
+    address(newVal) {
       this.checkExpressState(newVal.id, this.data.cartAllPrice)
     },
-    coupon (newVal) {
+    coupon(newVal) {
       if (newVal) {
         this.checkCouponDiscountPrice()
       } else {
@@ -23,21 +25,48 @@ Page({
         })
       }
     },
-    cartAllPrice(newVal){
+    cartAllPrice(newVal) {
       const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    couponDiscountPrice(newVal){
+    couponDiscountPrice(newVal) {
       const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    payWay(newVal){
+    payWay(newVal) {
       if (newVal && this.data.coupon) {
         this.checkCouponDiscountPrice()
+      }
+    },
+    showTimePicker(newVal) {
+      if (!newVal && times) {
+        const day = this.data.appointment[0]
+        const hour = this.data.appointment[1]
+        const minute = this.data.appointment[2]
+        if (day === '今天' && hour === '尽快配送') {
+          this.setData({
+            deliveryType: '尽快配送'
+          })
+        } else {
+          this.setData({
+            deliveryType: '预约点餐',
+            deliveryArriveTime: `${day} ${hour}:${minute}`
+          })
+        }
+      }
+    },
+    deliveryType(newVal) {
+      if (newVal === '尽快配送') {
+        orderService.getDeliveryArriveTime()
+          .then(res => {
+            this.setData({
+              deliveryArriveTime: `大约 ${res.date} ${res.time}`
+            })
+          })
       }
     }
   },
@@ -181,7 +210,7 @@ Page({
     // 获取预约时间项
     indexService.getAppointmentTimes()
       .then(res => {
-        let times = res.appointmentTimes
+        times = res.appointmentTimes
         const canDeliveryNow = res.canDeliveryNow
         if (canDeliveryNow && !Object.keys(times).includes('今天')) {
           times = Object.assign({}, {
@@ -427,7 +456,7 @@ Page({
   onTimePickerChange(event) {
     const {
       value
-    } = event.mp.detail
+    } = event.detail
     console.log(value)
 
     const days = Object.keys(times)
@@ -441,14 +470,14 @@ Page({
     const minutes = times[day][hour]
 
     // const minute = times[day][hour][value[2]]
-    if (this.appointment[0] !== days[value[0]]) {
+    if (this.data.appointment[0] !== days[value[0]]) {
       this.setData({
         'appointmentTimes[1]': hours,
         'appointmentTimes[2]': minutes
       })
     }
 
-    if (this.appointment[1] !== hours[value[1]]) {
+    if (this.data.appointment[1] !== hours[value[1]]) {
       this.setData({
         'appointmentTimes[2]': minutes
       })
@@ -459,7 +488,9 @@ Page({
 
     if (this.data.showTimePicker) {
       if (value[0] < days.length && value[1] < hours.length && value[2] < minutes.length) {
-        this.appointment = [days[value[0]], hours[value[1]], minutes[value[2]]]
+        this.setData({
+          appointment: [days[value[0]], hours[value[1]], minutes[value[2]]]
+        })
       } else {
         let minute = null
         if (minutes && minutes.length > 0) {
