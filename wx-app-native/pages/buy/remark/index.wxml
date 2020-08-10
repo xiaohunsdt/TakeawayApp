@@ -1,0 +1,34 @@
+<view class="container">
+    <view class="gradientview"></view>
+    <view class="container-contain">
+      <base-panel>
+        <textarea
+          auto-height
+          maxlength="128"
+          name="textarea"
+          placeholder="请填写备注信息"
+          style="min-height: 6rem"
+          model:value="{{inputVal}}"/>
+      </base-panel>
+
+      <base-panel>
+        <view class="shortcut-text">
+          快捷标签
+        </view>
+        <view class="shortcut-tag">
+          <van-button bind:click="addPs" data-ps="加麻" round size="small" type="primary">加麻</van-button>
+          <van-button bind:click="addPs" data-ps="加辣" round size="small" type="primary">加辣</van-button>
+          <van-button bind:click="addPs" data-ps="加酸" round size="small" type="primary">加酸</van-button>
+          <van-button bind:click="addPs" data-ps="少麻" round size="small" type="primary">少麻</van-button>
+          <van-button bind:click="addPs" data-ps="少辣" round size="small" type="primary">少辣</van-button>
+          <van-button bind:click="addPs" data-ps="少酸" round size="small" type="primary">少酸</van-button>
+          <van-button bind:click="addPs" data-ps="不要葱" round size="small" type="primary">不要葱</van-button>
+          <van-button bind:click="addPs" data-ps="不要香菜" round size="small" type="primary">不要香菜</van-button>
+        </view>
+      </base-panel>
+
+      <van-button bind:click="setPs" color="#FFD200" custom-class="finish-btn" round size="large">
+        完成
+      </van-button>
+    </view>
+  </view>

@@ -25,24 +25,31 @@ Page({
     wx.stopPullDownRefresh()
   },
   init() {
+    wx.showLoading({
+      title: '正在加载中...'
+    })
     couponService.getCouponListU()
       .then(res => {
         this.setData({
           couponList: res
         })
+        wx.hideLoading()
+      })
+      .catch(() => {
+        wx.hideLoading()
       })
   },
-  onUseCoupon(event){
+  onUseCoupon(event) {
     getApp().globalData.currentCoupon = event.currentTarget.dataset.coupon
-    
+
     const pages = getCurrentPages()
-      if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/index') {
-        wx.navigateBack()
-      } else {
-        wx.switchTab({
-          url: '/pages/goods/index'
-        })
-      }
+    if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/index') {
+      wx.navigateBack()
+    } else {
+      wx.switchTab({
+        url: '/pages/goods/index'
+      })
+    }
   },
   onExchangeCouponIdChange(event) {
     this.setData({

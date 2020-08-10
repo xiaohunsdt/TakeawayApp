@@ -81,10 +81,13 @@
 				</view>
 			</base-panel>
 			<base-panel>
-				<view catchtap="setCoupon" class="coupon-panel">
+				<view catch:tap="setCoupon" class="coupon-panel">
 					<view>优惠卷</view>
-					<view wx:if="{{coupon}}">{{coupon.couponName}}
-						<van-icon catchclick="deleteCoupon" class="coupon-delete-btn" color="red" name="close" />
+					<view wx:if="{{coupon}}">
+						{{coupon.couponName}}
+						<view catch:tap="deleteCoupon" style="display:inline-block">
+							<van-icon class="coupon-delete-btn" color="red" name="close" />
+						</view>
 					</view>
 				</view>
 				<view class="coupon-discounted-prices" wx:if="{{couponDiscountPrice > 0}}">

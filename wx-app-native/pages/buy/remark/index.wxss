@@ -1,0 +1,31 @@
+.finish-btn {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 70% !important;
+  margin-top: 20rem;
+  color: black !important;
+  font-weight: bolder !important;
+  height: 80rpx !important;
+  line-height: 80rpx !important;
+}
+
+.container-contain {
+  padding: 30rpx 10rpx;
+}
+
+.shortcut-text {
+  font-size: 25rpx;
+  color: #999999;
+  margin-bottom: 30rpx;
+}
+
+.shortcut-tag {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shortcut-tag van-button {
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+}
