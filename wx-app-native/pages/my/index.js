@@ -82,7 +82,7 @@ Page({
   gotoOrderPage(event) {
     let state = event.currentTarget.dataset.orderType
     wx.navigateTo({
-      url: `/pages/order/main?state=${state}`
+      url: `/pages/order/index?state=${state}`
     })
   }
 })

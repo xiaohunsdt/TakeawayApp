@@ -1,15 +1,14 @@
 import userApi from '../../../services/user'
-import util from '../../../utils/util'
 
 Page({
   login () {
-    mpvue.showLoading({
+    wx.showLoading({
       title: '正在登陆中...'
     })
     userApi.loginByWx()
       .then(() => {
-        mpvue.hideLoading()
-        const pages = util.getPages()
+        wx.hideLoading()
+        const pages = getCurrentPages()
         let pre = null
         let index = 2
         do {

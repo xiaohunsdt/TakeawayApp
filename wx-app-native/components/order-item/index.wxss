@@ -1,0 +1,23 @@
+.goods-thumb {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 10rpx;
+}
+
+.goods-name, .goods-count, .goods-price {
+  font-weight: bolder;
+  padding-left: 20rpx;
+  display: inline-block;
+  line-height: 70rpx;
+}
+
+.goods-thumb, .goods-name {
+  float: left;
+}
+
+.goods-count, .goods-price {
+  float: right;
+}
+.goods-price{
+  margin-left: 30rpx;
+}

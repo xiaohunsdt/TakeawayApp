@@ -1,0 +1,85 @@
+.none-content-view {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.exchange-btn {
+  margin-top: 20rpx;
+  padding-left: 14px;
+  padding-right: 14px;
+  font-size: 16px;
+  background: #FFD200;
+  border: none;
+  color: black;
+}
+
+.container-contain .exchange-btn{
+  background: white;
+  color: #FFD200;
+  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
+}
+
+.use-btn {
+  margin-top: 20rpx;
+  background-color: #FFD200 !important;
+  padding: 0 30rpx !important;
+  font-weight: bolder;
+  border: none !important;
+}
+
+van-icon {
+  display: flex;
+  align-items: center;
+}
+
+.background-icon {
+  display: inline-flex;
+  align-content: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 150rpx;
+  height: 150rpx;
+  background-color: #FFD200;
+  opacity: 0.6;
+  position: absolute;
+  left: 300rpx;
+  bottom: 70rpx;
+  z-index: 0;
+}
+
+.coupon-item {
+  display: flex;
+}
+
+.info {
+  width: 70%;
+}
+
+.priceInfo {
+  border-left: gainsboro 1rpx solid;
+  width: 30%;
+  text-align: right;
+}
+
+.info .description {
+  font-weight: bolder;
+}
+
+.info .endDate {
+  margin-top: 20rpx;
+  color: #999999;
+  font-size: 20rpx;
+}
+
+.priceInfo .price {
+  font-size: 30rpx;
+}
+
+.priceInfo .price .price-number {
+  font-size: 50rpx;
+  font-weight: bolder;
+  display: inline-block;
+}

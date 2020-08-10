@@ -10,7 +10,10 @@
     "pages/my/address/index",
     "pages/my/address/edit/index",
     "pages/my/address/edit/search/index",
-    "pages/coupon/index"
+    "pages/coupon/index",
+    "pages/order/index",
+    "pages/order/comment/index",
+    "pages/order/detail/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

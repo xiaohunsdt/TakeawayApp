@@ -1,0 +1,58 @@
+.action-btn {
+  color: black !important;
+  margin-left: 10rpx;
+}
+
+.container-contain {
+  padding: 30rpx 10rpx;
+}
+
+.order-amount {
+  font-weight: bolder;
+  padding-top: 20rpx;
+  font-size: 25rpx;
+  text-align: right;
+}
+
+.action-btns {
+  margin-top: 35rpx;
+  text-align: right;
+}
+
+.order-row {
+  display: flex;
+  font-size: 25rpx;
+  margin: 20rpx 0;
+}
+
+.order-row .title {
+  color: gray;
+  width: 150rpx;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-number, .estimated-arrival-time {
+  text-align: center;
+  padding: 10rpx 30rpx;
+}
+
+.order-number .number, .estimated-arrival-time .time {
+  font-weight: bolder;
+}
+
+.order-number .text, .estimated-arrival-time .text {
+  font-size: 28rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.order-number .text .text-img, .estimated-arrival-time .text .text-img {
+  margin-right: 10rpx;
+  margin-top: 5rpx;
+  width: 30rpx;
+  height: 30rpx;
+}

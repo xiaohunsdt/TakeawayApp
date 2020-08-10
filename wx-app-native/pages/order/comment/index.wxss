@@ -1,0 +1,19 @@
+.container-contain {
+  padding: 30rpx 10rpx;
+}
+
+.rate-class {
+  display: flex;
+  justify-items: left;
+}
+
+.rate-class .rate-title {
+  margin-right: 10rpx;
+}
+
+.comment-textarea {
+  min-height: 200rpx;
+  width: auto;
+  background-color: rgba(0, 0, 0, .1);
+  border-radius: 10rpx
+}

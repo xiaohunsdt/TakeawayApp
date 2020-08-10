@@ -22,7 +22,9 @@ Component({
    */
   methods: {
     searchChanged (event) {
-      this.searchValue = event.detail
+      this.setData({
+        searchValue: event.detail
+      })
     },
     onSearch () {
       this.triggerEvent('search', this.searchValue)

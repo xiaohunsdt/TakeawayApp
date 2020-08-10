@@ -1,0 +1,114 @@
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<base-panel>
+			<view class="order-header">
+				<view class="order-number">
+					<view class="number"># <span style="font-size: 1.8rem">{{order.number}}</span></view>
+					<view class="text">
+						<image class="text-img" src="/static/images/order/yellow_num.png" />
+						订餐号
+					</view>
+				</view>
+				<view class="estimated-arrival-time" wx:if="{{order.payState !== 'UN_PAY' && (order.orderState === 'PRODUCING' || order.orderState === 'DELIVERING')}}">
+					<view class="time">
+						{{deliveryArriveTime.date}}
+						<span style="font-size: 2rem">{{deliveryArriveTime.time}}</span>
+					</view>
+					<view class="text">
+						<image class="text-img" src="/static/images/order/yellow_time.png" />
+						预计到达
+					</view>
+				</view>
+				<view class="estimated-arrival-time" wx:if="{{order.payState === 'UN_PAY' || order.orderState === 'WAITING_RECEIVE'}}">
+					<view class="time" style="margin-top: .5rem">
+						<span style="font-size: 2rem">未知</span>
+					</view>
+				</view>
+				<view class="estimated-arrival-time" wx:if="{{order.orderState === 'FINISHED'}}">
+					<view class="time" style="margin-top: .5rem">
+						<span style="font-size: 2rem">已完成</span>
+					</view>
+				</view>
+				<view class="estimated-arrival-time" wx:if="{{order.orderState === 'REFUND'}}">
+					<view class="time" style="margin-top: .5rem">
+						<span style="font-size: 2rem">已退款</span>
+					</view>
+				</view>
+			</view>
+		</base-panel>
+
+		<base-panel>
+			<view class="order-items">
+				<order-item itemDetail="{{itemDetial}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetial"/>
+			</view>
+			<view class="order-amount">
+				<span style="font-size: .7rem;margin-right: .2rem">{{ payStateStr }}</span>
+				实付 <span style="color: #FFD200">₩ {{ order.realPrice }}</span>
+			</view>
+
+			<view class="action-btns">
+				<van-button catch:click="payNow" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'}}">
+					立刻付款
+				</van-button>
+				<!--          <van-button-->
+				<!--            @click.stop="confirmGetFood"-->
+				<!--            color="#FFD200" custom-class="action-btn" round size="small"-->
+				<!--            v-if="order.payState !== 'UN_PAY' && (order.orderState=== 'WAITING_RECEIVE' || order.orderState=== 'PRODUCING' || order.orderState=== 'DELIVERING')">-->
+				<!--            确认取餐-->
+				<!--          </van-button>-->
+				<van-button catch:click="comment" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState !== 'UN_PAY' && order.orderState=== 'FINISHED' && !order.isCommented}}">
+					评价
+				</van-button>
+				<!--          <van-button-->
+				<!--            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"-->
+				<!--            round size="small"-->
+				<!--            v-if="order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'">-->
+				<!--            分享领红包-->
+				<!--          </van-button>-->
+				<!--          <van-button-->
+				<!--            @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"-->
+				<!--            round size="small"-->
+				<!--            v-if="order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'">-->
+				<!--            删除-->
+				<!--          </van-button>-->
+			</view>
+		</base-panel>
+
+		<base-panel>
+			<view class="order-row">
+				<view class="title">订单号</view>
+				<view class="content">{{order.id}}</view>
+			</view>
+			<view class="order-row">
+				<view class="title">订单类型</view>
+				<view class="content" wx:if="{{order.appointmentDate===''}}">一般订单</view>
+				<view class="content" wx:else>预约订单</view>
+			</view>
+			<view class="order-row" wx:if="{{order.appointmentDate!==''}}">
+				<view class="title">预约时间</view>
+				<view class="content">{{order.appointmentDate}}</view>
+			</view>
+			<view class="order-row">
+				<view class="title">下单时间</view>
+				<view class="content">{{order.createDate}}</view>
+			</view>
+			<view class="order-row">
+				<view class="title">支付方式</view>
+				<view class="content">{{paymentWayStr}}</view>
+			</view>
+			<view class="order-row" wx:if="{{couponName}}">
+				<view class="title">优惠卷</view>
+				<view class="content">{{couponName}}</view>
+			</view>
+			<view class="order-row" wx:if="{{order.discount > 0}}">
+				<view class="title">优惠折扣</view>
+				<view class="content">{{order.discount}}折</view>
+			</view>
+			<view class="order-row" wx:if="{{order.discountedPrices > 0}}">
+				<view class="title">优惠金额</view>
+				<view class="content">{{order.discountedPrices}}</view>
+			</view>
+		</base-panel>
+	</view>
+</view>

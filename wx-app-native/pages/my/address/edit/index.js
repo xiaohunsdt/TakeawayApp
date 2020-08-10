@@ -34,16 +34,19 @@ Page({
     })
   },
   regionInput(value) {
-    console.log(value.detail)
-    this.data.address.address = value.detail
+    this.setData({
+      "address.address":value.detail
+    })
   },
   detailInput(value) {
-    console.log(value.detail)
-    this.data.address.detail = value.detail
+    this.setData({
+      "address.detail":value.detail
+    })
   },
   phoneInput(value) {
-    console.log(value.detail)
-    this.data.address.phone = value.detail
+    this.setData({
+      "address.phone":value.detail
+    })
   },
   onSearchAddress(event) {
     var $this = this

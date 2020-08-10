@@ -1,0 +1,39 @@
+.action-btn {
+  color: black !important;
+  margin-left: 10rpx;
+}
+
+.order-amount {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20rpx;
+  font-size: 25rpx;
+}
+
+.order-amount .left {
+  margin-left: 20rpx;
+}
+
+.order-amount .right {
+  font-weight: bolder;
+  text-align: right;
+}
+
+.action-btns {
+  margin-top: 35rpx;
+  text-align: right;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-header .header-left {
+  font-size: 25rpx;
+}
+
+.order-header .header-right {
+  color: gray;
+  font-size: 25rpx;
+}

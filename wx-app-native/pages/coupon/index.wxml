@@ -1,0 +1,50 @@
+<view style="display: unset">
+	<view class="container" wx:if="{{couponList.length > 0}}">
+		<view class="gradientview"></view>
+		<view class="container-contain">
+			<view style="text-align: right;padding: 0 .7rem .5rem 0">
+				<button bind:tap="onOpenDialog" class="exchange-btn" size="mini">兑换优惠卷</button>
+			</view>
+			<base-panel wx:key="id" wx:for="{{couponList}}" wx:for-item="coupon">
+				<view class="coupon-item">
+					<view class="info">
+						<view class="description">{{coupon.couponName}}</view>
+						<van-tag color="#FFD200">{{couponType}}</van-tag>
+						<view class="endDate">
+							有限期至
+							<span wx:if="{{coupon.expireDate!==''}}">{{coupon.expireDate}}</span>
+							<span wx:else>无限制</span>
+						</view>
+					</view>
+					<view class="priceInfo">
+						<view class="price">
+							<view wx:if="{{coupon.couponMoney > 0}}">
+								₩
+								<view class="price-number">{{coupon.couponMoney}}</view>
+							</view>
+							<view wx:if="{{coupon.couponDiscount > 0}}">
+								<view class="price-number">{{coupon.couponDiscount}}</view>
+								折
+							</view>
+						</view>
+						<van-button bind:click="onUseCoupon" data-coupon="{{coupon}}" custom-class="use-btn" round size="small">
+							立刻使用
+						</van-button>
+					</view>
+				</view>
+				<view class="background-icon">
+					<van-icon color="white" name="point-gift" size="4rem" />
+				</view>
+			</base-panel>
+		</view>
+	</view>
+	<view class="none-content-view" wx:if="{{couponList.length === 0}}">
+		<image mode="aspectFit" src="/static/images/none/no_coupon.png" style="width: 10rem" />
+		<view style="margin-top: .5rem">暂无优惠卷信息</view>
+		<button bind:tap="onOpenDialog" class="exchange-btn" size="mini">兑换优惠卷</button>
+	</view>
+
+	<van-dialog async-close="{{true}}" show="{{isShowDialog}}" bind:cancel="onCloseDialog" bind:confirm="exchangeCoupon" cancel-button-text="关闭" confirm-button-color="#FFD200" confirm-button-text="兑换" show-cancel-button title="兑换优惠卷" use-slot>
+		<textarea class="comment-textarea" maxlength="32" name="textarea" placeholder="请输入优惠卷ID" placeholder-style="color:gray" style="height: 3rem;padding: .5rem;font-size: 14px" model:value="{{exchangeCouponId}}" />
+		</van-dialog>
+  </view>

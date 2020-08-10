@@ -27,7 +27,6 @@ Component({
   },
   pageLifetimes:{
     show(){
-      console.log("aaa")
       this.init()
     }
   },

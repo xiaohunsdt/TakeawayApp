@@ -1,0 +1,14 @@
+<van-cell>
+	<view slot="title">
+		<image src="{{itemDetail.goodsThumb}}" mode="aspectFill" class="goods-thumb" lazy-load/>
+		<view class="goods-name">
+			{{itemDetail.goodsName}}
+		</view>
+		<view class="goods-price">
+			₩ {{itemDetail.goodsPrice}}
+		</view>
+		<view class="goods-count">
+			x {{itemDetail.goodsCount}}
+		</view>
+	</view>
+</van-cell>

@@ -9,6 +9,7 @@ Component({
     food: Object,
     cartList: {
       type: Array,
+      value: null,
       observer: "init"
     }
   },

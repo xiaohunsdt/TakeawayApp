@@ -1,0 +1,36 @@
+<view class="container">
+	<view class="gradientview"></view>
+	<view class="container-contain">
+		<base-panel>
+			<order-item itemDetail="{{itemDetail}}" wx:key="itemDetail.goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetail" />
+		</base-panel>
+
+		<base-panel>
+			<view class="rate-class">
+				<view class="rate-title">菜品口味:</view>
+				<van-rate bind:change="onDeliciousChange" />
+			</view>
+			<view class="rate-class">
+				<view class="rate-title">配送速度:</view>
+				<van-rate bind:change="onExpressChange" />
+			</view>
+			<view class="rate-class">
+				<view class="rate-title">服务态度:</view>
+				<van-rate bind:change="onServiceChange" />
+			</view>
+		</base-panel>
+
+		<base-panel>
+			<textarea auto-height class="comment-textarea" maxlength="100" name="textarea" placeholder="请输入评价(不超过100字),评价内容我们会密切关注!一经采纳,我们将会通知您,并给予一定的奖励!" style="padding: .5rem" bind:input="onCommentChange" />
+			<van-button
+          disabled="{{submitLoad}}"
+          load="{{submitLoad}}"
+          bind:click="onSubmit"
+          round
+          size="small"
+          style="float: right;margin-top: .6rem" type="primary">
+          提交
+        </van-button>
+      </base-panel>
+  </view>
+</view>
