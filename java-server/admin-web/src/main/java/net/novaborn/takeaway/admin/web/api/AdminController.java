@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class AdminController extends BaseController {
         return admin.get();
     }
 
-    @GetMapping("logout")
+    @PostMapping("logout")
     public ResponseEntity logout() {
         redisTemplate.delete(jwtTokenUtil.getRedisKey(jwtTokenUtil.getToken(request)));
         return ResponseEntity.ok(0);

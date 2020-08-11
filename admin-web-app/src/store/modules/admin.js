@@ -5,7 +5,8 @@ import { resetRouter } from '@/router'
 const state = {
     token: authUtil.getToken(),
     randomKey: null,
-    userData: null
+    userData: null,
+    roles: []
 }
 
 const mutations = {
@@ -17,6 +18,7 @@ const mutations = {
     },
     SET_USER_DATA: (state, userData) => {
         state.userData = userData
+        state.roles = [userData.level]
     }
 }
 
