@@ -54,8 +54,10 @@ export const constantRoutes = [
         path: '/404',
         component: () => import('@/views/404'),
         hidden: true
-    },
+    }
+]
 
+export const asyncRoutes = [
     {
         path: '/',
         component: Layout,
@@ -66,6 +68,33 @@ export const constantRoutes = [
             component: () => import('@/views/dashboard/index'),
             meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
         }]
+    },
+    {
+        path: '/user',
+        component: Layout,
+        redirect: '/user/index',
+        meta: {
+            title: '用户管理',
+            icon: 'example',
+            affix: true,
+            roles: ['SUPER_MANAGER']
+        },
+        children: [
+            {
+                path: 'index',
+                name: 'UserManagement',
+                // props: true,
+                component: () => import('@/views/user/index'),
+                meta: { title: '用户列表', icon: 'example' }
+            },
+            {
+                path: 'address',
+                name: 'AddressManagement',
+                // props: true,
+                component: () => import('@/views/user/address/index'),
+                meta: { title: '地址管理', icon: 'example' }
+            }
+        ]
     },
     {
         path: '/order',
@@ -226,36 +255,6 @@ export const constantRoutes = [
             component: () => import('@/views/sys/index'),
             meta: { title: '系统设置', icon: 'setting' }
         }]
-    }
-]
-
-export const asyncRoutes = [
-    {
-        path: '/user',
-        component: Layout,
-        redirect: '/user/index',
-        meta: {
-            title: '用户管理',
-            icon: 'example',
-            affix: true,
-            roles: ['SUPER_MANAGER']
-        },
-        children: [
-            {
-                path: 'index',
-                name: 'UserManagement',
-                // props: true,
-                component: () => import('@/views/user/index'),
-                meta: { title: '用户列表', icon: 'example' }
-            },
-            {
-                path: 'address',
-                name: 'AddressManagement',
-                // props: true,
-                component: () => import('@/views/user/address/index'),
-                meta: { title: '地址管理', icon: 'example' }
-            }
-        ]
     },
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
