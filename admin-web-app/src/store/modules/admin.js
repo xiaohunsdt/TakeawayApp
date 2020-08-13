@@ -18,7 +18,11 @@ const mutations = {
     },
     SET_USER_DATA: (state, userData) => {
         state.userData = userData
-        state.roles = [userData.level]
+        if (userData !== null) {
+            state.roles = [userData.level]
+        } else {
+            state.roles = []
+        }
     }
 }
 
@@ -73,7 +77,9 @@ const actions = {
     logout({ commit, state }) {
         return new Promise((resolve, reject) => {
             logout(state.token).then(() => {
-                commit('SET_TOKEN', '')
+                commit('SET_TOKEN', null)
+                commit('SET_RANDOM_KEY', null)
+                commit('SET_USER_DATA', null)
                 authUtil.removeToken()
                 authUtil.removeRandomKey()
                 resetRouter()

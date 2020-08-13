@@ -22,8 +22,14 @@
     <select id="getAddressListByPage" resultType="Address">
         SELECT * FROM `address`
         <where>
-            <if test="args.userId != '' and args.userId != null">
-                `user_id` = #{args.userId}
+            <if test="args.userId != null and args.userId != ''">
+                AND `user_id` = #{args.userId}
+            </if>
+            <if test="args.userIds != null and args.userIds != ''">
+                AND `user_id` IN
+                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
             </if>
             AND deleted = 0
         </where>

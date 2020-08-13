@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.validator.impl.DbValidator;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
+import net.novaborn.takeaway.admin.entity.Admin;
+import net.novaborn.takeaway.admin.service.impl.AdminService;
 import net.novaborn.takeaway.admin.web.dto.AuthRequest;
 import net.novaborn.takeaway.admin.web.dto.AuthResponse;
 import net.novaborn.takeaway.common.exception.SysException;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 @Setter(onMethod_ = {@Autowired})
 @Controller
 public class AuthController extends BaseController {
+    private AdminService adminService;
+
     private JwtProperties jwtProperties;
 
     private JwtTokenUtil jwtTokenUtil;
@@ -42,8 +47,10 @@ public class AuthController extends BaseController {
         boolean validate = dbValidator.validate(authRequest);
 
         if (validate) {
+            Admin admin = adminService.getBaseMapper().selectByName(authRequest.getUserName()).get();
+
             final String randomKey = jwtTokenUtil.getRandomKey();
-            final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
+            final String token = jwtTokenUtil.generateToken(admin.getId().toString(), randomKey);
 
             // 保存到redis
             String redisKey = jwtTokenUtil.getRedisKey(token);

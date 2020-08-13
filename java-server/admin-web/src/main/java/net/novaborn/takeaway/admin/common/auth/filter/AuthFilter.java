@@ -56,7 +56,7 @@ public class AuthFilter extends OncePerRequestFilter {
             //验证token是否过期,包含了验证jwt是否正确
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
-                String redisKey = String.format("jwt:%s:%s", jwtTokenUtil.getUsernameFromToken(request), jwtTokenUtil.getToken(request));
+                String redisKey = jwtTokenUtil.getRedisKey(authToken);
 
                 if (flag || !redisTemplate.hasKey(redisKey)) {
                     RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()));

@@ -21,16 +21,15 @@ public class AdminTest {
     @Test
     public void createAdminTest() {
         Admin admin = new Admin();
-        admin.setUserName("admin");
-        admin.setPassword("admin");
+        admin.setUserName("test1aaa");
+        admin.setPassword("123456");
         admin.insert();
     }
 
     @Test
     public void updateAdminTest() {
-        Admin admin = adminService.getById("8b99e2780bf8c3c43d8f95bf9e2492a0");
-        admin.setPassword("admin");
-        admin.updateById();
+        Admin admin = adminService.getById(1293623861681692671L);
+        System.out.println(admin);
     }
 
     @Test

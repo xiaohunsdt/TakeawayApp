@@ -10,25 +10,25 @@ public enum Level {
      */
     SUPER_MANAGER(0),
 
-    /**
-     * 公司管理员
-     */
-    BUSINESS_MANAGER(1),
+//    /**
+//     * 公司管理员
+//     */
+//    BUSINESS_MANAGER(1),
 
     /**
      * 店管理员
      */
-    SHOP_MANAGER(2),
+    SHOP_MANAGER(20),
 
     /**
      * 接单员
      */
-    RECEIVER(3),
+    RECEIVER(30),
 
     /**
      * 外卖员
      */
-    DELIVERER(4);
+    DELIVERER(40);
 
     Level(int code) {
         this.code = code;

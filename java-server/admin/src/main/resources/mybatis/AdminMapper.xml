@@ -3,6 +3,25 @@
 <mapper namespace="net.novaborn.takeaway.admin.dao.IAdminDao">
 
     <select id="selectByName" resultType="Admin">
-        select * from `admin` where user_name = #{name}
+        select *
+        from `admin`
+        where user_name = #{name}
+    </select>
+
+    <select id="getSubAdminListByPage" resultType="Admin">
+        select * from `admin`
+        <where>
+            LOCATE(#{args.parentId},`parent_ids`)
+
+            <if test="args.level != null and args.level != ''">
+                AND `level` = #{args.level}
+            </if>
+
+            <if test="args.state != null  and args.state != ''">
+                AND `state` = #{args.state}
+            </if>
+            AND `deleted` = 0
+        </where>
+
     </select>
 </mapper>
