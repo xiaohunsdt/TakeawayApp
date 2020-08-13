@@ -10,7 +10,7 @@
         <el-input disabled v-model="formData.id"></el-input>
       </el-form-item>
       <el-form-item label="用户名" label-width="120">
-        <el-input disabled v-model="formData.userName"></el-input>
+        <el-input :disabled="adminId!==null && adminId!==undefined" v-model="formData.userName"></el-input>
       </el-form-item>
       <el-form-item label="密码" label-width="120">
         <el-input v-model="formData.password"></el-input>
