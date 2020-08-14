@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.entity.Admin;
+import net.novaborn.takeaway.admin.enums.State;
 import net.novaborn.takeaway.admin.exception.AdminExceptionEnum;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
 import net.novaborn.takeaway.admin.web.wrapper.AdminWrapper;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
@@ -114,6 +116,11 @@ public class AdminController extends BaseController {
                     throw new SysException(AdminExceptionEnum.LEVEL_ERROR_SETTING);
                 }
             }
+        }
+
+        if (admin.getState().equals(State.STOP)) {
+            Set<String> keyList = redisTemplate.keys(String.format("jwt:%s:*", admin.getId()));
+            keyList.parallelStream().forEach(key -> redisTemplate.delete(key));
         }
 
         BeanUtil.copyProperties(admin, target, CopyOptions.create().setIgnoreNullValue(true));
