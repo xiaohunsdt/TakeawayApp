@@ -245,6 +245,23 @@ export const asyncRoutes = [
         ]
     },
     {
+        path: '/admin',
+        component: Layout,
+        redirect: '/admin/index',
+        meta: {
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
+        },
+        children: [
+            {
+                path: 'index',
+                name: 'AdminManagement',
+                // props: true,
+                component: () => import('@/views/admin/index'),
+                meta: { title: '账号管理', icon: 'setting' }
+            }
+        ]
+    },
+    {
         path: '/sys',
         component: Layout,
         redirect: '/sys/index',

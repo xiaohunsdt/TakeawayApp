@@ -45,17 +45,17 @@ public class JwtTokenUtil {
     }
 
     public String getRedisKey(String token){
-        return String.format("jwt:%s:%s", getUsernameFromToken(token), token);
+        return String.format("jwt:%s:%s", getUserIdFromToken(token), token);
     }
 
-    public String getUsernameFromToken(HttpServletRequest request) {
-        return this.getUsernameFromToken(getToken(request));
+    public String getUserIdFromToken(HttpServletRequest request) {
+        return this.getUserIdFromToken(getToken(request));
     }
 
     /**
      * 获取用户名从token中
      */
-    public String getUsernameFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         return getClaimFromToken(token).getSubject();
     }
 

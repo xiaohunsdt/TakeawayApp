@@ -10,7 +10,6 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.PhoneUtil;
-import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaohun
@@ -42,12 +41,12 @@ public class AddressController extends BaseController {
 
     @PostMapping("getAddressListByPage")
     public ResponseEntity<Page> getAddressListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        if (StrUtil.isNotBlank((String) args.get("name"))) {
-            Optional<User> user = userService.selectByName((String) args.get("name"));
-            if (user.isPresent()) {
-                args.put("userId", user.get().getId());
+        if (StrUtil.isNotBlank((String) args.get("nickName"))) {
+            List<User> userList = userService.getByNickName((String) args.get("nickName"));
+            if (userList.size() > 0) {
+                args.put("userIds", userList.stream().map(User::getId).collect(Collectors.toList()));
             } else {
-                args.put("userId", "-1");
+                args.put("userIds", "");
             }
         }
         page = (Page) addressService.getAddressListByPage(page, args);
