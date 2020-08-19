@@ -106,7 +106,8 @@
                         <span>{{ props.row.userId }}</span>
                       </el-form-item>
                       <el-form-item label="总金额">
-                        <span>₩ {{ props.row.allPrice.toLocaleString() }}</span>
+                        <span>₩ {{ props.row.allPrice.toLocaleString() }}</span>&nbsp;
+                        <span v-if="props.row.deliveryPrice > 0">(配送费:₩ {{ props.row.deliveryPrice.toLocaleString() }})</span>
                       </el-form-item>
                       <el-form-item label="优惠">
                         <span>₩ {{ props.row.discountedPrices.toLocaleString() }}</span>

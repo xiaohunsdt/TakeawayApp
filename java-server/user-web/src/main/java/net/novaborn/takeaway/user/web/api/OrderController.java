@@ -146,7 +146,8 @@ public class OrderController extends BaseController {
 
         //检测订单商品项是否可以下单
         orderItemService.checkOrderItems(orderItems);
-        orderService.checkOrder(order, orderItems, orderDto.getCouponId());
+        orderService.checkOrder(order, orderItems);
+        orderService.postCheckOrder(order, orderItems, orderDto.getCouponId());
 
         //先生成订单，再生成订单产品详情
         if (order.insert()) {

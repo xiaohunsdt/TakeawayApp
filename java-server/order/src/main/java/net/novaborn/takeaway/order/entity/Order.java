@@ -59,6 +59,11 @@ public class Order extends Model<Order> {
      */
     private Integer realPrice;
 
+    /*
+     *  配送费
+     */
+    private Integer deliveryPrice;
+
     @NotNull(message = "支付方式不能为空")
     private PaymentWay paymentWay;
 

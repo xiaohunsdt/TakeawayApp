@@ -10,6 +10,7 @@ import net.novaborn.takeaway.coupon.entity.CouponLog;
 import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
@@ -33,6 +34,8 @@ import java.util.Optional;
 @RequestMapping("/api/user/coupon")
 public class CouponController extends BaseController {
     private UserService userService;
+
+    private OrderService orderService;
 
     private CouponService couponService;
 
@@ -65,14 +68,16 @@ public class CouponController extends BaseController {
         if (couponService.bindCoupon(user.get().getId(), couponId.trim())) {
             return new SuccessTip();
         } else {
-            return new ErrorTip(-1,"兑换失败!请联系客服!");
+            return new ErrorTip(-1, "兑换失败!请联系客服!");
         }
     }
 
     @ResponseBody
     @PostMapping("checkCouponDiscountPrice")
     public Tip checkCouponDiscountPrice(@RequestBody OrderDto orderDto) {
-        Order order = couponService.getDiscountMoney(orderDto.getOrder(), orderDto.getOrderItems(), orderDto.getCouponId());
+        Order order = orderDto.getOrder();
+        orderService.checkOrder(order, orderDto.getOrderItems());
+        order = couponService.getDiscountMoney(order, orderDto.getOrderItems(), orderDto.getCouponId());
         return new SuccessTip(String.valueOf(order.getDiscountedPrices()));
     }
 }

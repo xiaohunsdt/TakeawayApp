@@ -87,12 +87,13 @@ public class IndexController extends BaseController {
     @GetMapping("getExpressServiceState")
     @ResponseBody
     public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
-        int maxExpressDistance = Integer.parseInt(settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValue());
+        int lowestOrderPrice = settingService.getSettingByName("lowest_order_price",SettingScope.EXPRESS).getValueAsInt();
+        int maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValueAsInt();
         double distance = addressService.getDistanceWithStore(addressId);
 
-        // 10000 以下不配送
-        if (allPrice < 9000) {
-            return new ServiceStateDto(-1,"低于9000韩币无法配送!!");
+        // 最低配送价格
+        if (allPrice < lowestOrderPrice) {
+            return new ServiceStateDto(-1, String.format("低于%d韩币无法配送!!", lowestOrderPrice));
         }
 
         if (distance >= maxExpressDistance) {
@@ -115,6 +116,12 @@ public class IndexController extends BaseController {
         }
 
         return new ServiceStateDto();
+    }
+
+    @GetMapping("getDeliveryPrice")
+    @ResponseBody
+    public Integer getDeliveryPrice() {
+        return settingService.getSettingByName("delivery_price",SettingScope.EXPRESS).getValueAsInt();
     }
 
     @GetMapping("getAppointmentTimes")

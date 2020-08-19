@@ -40,7 +40,15 @@
 
 		<base-panel>
 			<view class="order-items">
-				<order-item itemDetail="{{itemDetial}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetial"/>
+				<order-item itemDetail="{{itemDetial}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetial" />
+			</view>
+			<view class="delivery-price-view" wx:if="{{order.deliveryPrice > 0}}">
+				<view class="delivery-str">
+					配送费：
+				</view>
+				<view class="delivery-price">
+					₩ {{order.deliveryPrice}}
+				</view>
 			</view>
 			<view class="order-amount">
 				<span style="font-size: .7rem;margin-right: .2rem">{{ payStateStr }}</span>

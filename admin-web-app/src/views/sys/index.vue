@@ -69,10 +69,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="地址经度">
-              <el-input v-model="storeSetting.store_address_x"></el-input>
+              <el-input v-model="storeSetting.store_address_x" disabled></el-input>
             </el-form-item>
             <el-form-item label="地址纬度">
-              <el-input v-model="storeSetting.store_address_y"></el-input>
+              <el-input v-model="storeSetting.store_address_y" disabled></el-input>
             </el-form-item>
             <el-form-item label="厨师体温">
               <el-input v-model="storeSetting.temperature1"></el-input>
@@ -93,9 +93,14 @@
         </el-tab-pane>
         <el-tab-pane label="配送设置">
           <el-form :model="expressSetting" label-width="120px" ref="form" style="max-width: 660px">
-            <el-form-item label="配送基本时间">
-              <el-tooltip content="在最快的情况下配送所花的时间" placement="right">
-                <el-input v-model="expressSetting.base_express_time"></el-input>
+            <el-form-item label="起送价格">
+              <el-tooltip content="最低起送价格" placement="right">
+                <el-input v-model="expressSetting.lowest_order_price"></el-input>
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="配送费">
+              <el-tooltip content="每单收取的配送费" placement="right">
+                <el-input v-model="expressSetting.delivery_price"></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="配送平均时间">
@@ -158,6 +163,8 @@
           temperature4: null
         },
         expressSetting: {
+          lowest_order_price: 0,
+          express_price: 0,
           base_express_time: 0,
           average_express_time: 0,
           deliverier_count: 0,

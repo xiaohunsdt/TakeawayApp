@@ -24,6 +24,10 @@ export function getExpressServiceState (addressId, allPrice) {
   return api.getExpressServiceState(addressId, allPrice)
 }
 
+export function getDeliveryPrice () {
+  return api.getDeliveryPrice()
+}
+
 export function getAppointmentTimes () {
   return api.getAppointmentTimes()
 }
@@ -66,6 +70,7 @@ export default {
   getHotGoodsList,
   getServiceState,
   getExpressServiceState,
+  getDeliveryPrice,
   getAppointmentTimes,
   formatAppointmentTime,
   getFormerNotice

@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.system.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,4 +33,9 @@ public class Setting extends Model<Setting> {
 
     @NotEmpty(message = "设置值不能为空")
     private String value;
+
+    @JSONField(serialize = false)
+    public int getValueAsInt() {
+        return this.getValue() != null ? Integer.parseInt(this.getValue()) : 0;
+    }
 }

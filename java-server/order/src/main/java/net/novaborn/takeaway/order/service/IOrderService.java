@@ -4,14 +4,12 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.PaymentWay;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -68,7 +66,7 @@ public interface IOrderService extends IService<Order> {
      *             startDate endDate 范围时间
      * @return 订单列表
      */
-    List<Order> getOrderList( Map args);
+    List<Order> getOrderList(Map args);
 
     /**
      * 分页获取订单列表
@@ -87,8 +85,8 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 获取等待接单的订单数量
-     * @param deliveryType 配送类型
      *
+     * @param deliveryType 配送类型
      * @return 等待接单的订单数量
      */
     int getWaitingReceiveOrderCount(DeliveryType deliveryType);
@@ -132,9 +130,9 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 获取订单数量
-     * @param day           指定的日期
-     * @param deliveryType  配送类型
      *
+     * @param day          指定的日期
+     * @param deliveryType 配送类型
      * @return 订单数量
      */
     int getOrderCount(Date day, DeliveryType deliveryType);
@@ -159,17 +157,26 @@ public interface IOrderService extends IService<Order> {
 
     /**
      * 检查此订单是否可以下单
+     *
+     * @param order         预检查的订单
+     * @param orderItemList 预检查的订单商品项
+     */
+    void checkOrder(Order order, List<OrderItem> orderItemList);
+
+    /**
+     * 检查完订单后的后续操作
+     *
      * @param order         预检查的订单
      * @param orderItemList 预检查的订单商品项
      * @param couponId      优惠卷Id
      */
-    void checkOrder(Order order, List<OrderItem> orderItemList, String couponId);
-
+    void postCheckOrder(Order order, List<OrderItem> orderItemList, String couponId);
 
     /**
      * 对指定订单列表的商品进行排名 从高到低
+     *
      * @param orderList
      * @return
      */
-    List<Map.Entry<String,Integer>> getGoodsSales(List<Order> orderList);
+    List<Map.Entry<String, Integer>> getGoodsSales(List<Order> orderList);
 }
