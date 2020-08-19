@@ -164,7 +164,7 @@
         },
         expressSetting: {
           lowest_order_price: 0,
-          express_price: 0,
+          delivery_price: 0,
           base_express_time: 0,
           average_express_time: 0,
           deliverier_count: 0,
