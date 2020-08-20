@@ -16,7 +16,8 @@ import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.service.IOrderService;
-import org.springframework.beans.factory.InitializingBean;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     private GoodsStockService goodsStockService;
 
     private CouponService couponService;
+
+    private SettingService settingService;
 
     @Setter
     protected Map<String, Goods> gifts;
@@ -143,19 +146,19 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void checkOrder(Order order, List<OrderItem> orderItemList, String couponId) {
+    public void checkOrder(Order order, List<OrderItem> orderItemList) {
         int allCount = orderItemList.parallelStream().mapToInt(OrderItem::getGoodsCount).sum();
         int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
+        int deliveryPrice = settingService.getSettingByName("delivery_price", SettingScope.EXPRESS).getValueAsInt();
 
         order.setGoodsCount(allCount);
-        order.setAllPrice(allPrice);
-        order.setRealPrice(allPrice);
+        order.setAllPrice(allPrice + deliveryPrice);
+        order.setRealPrice(allPrice + deliveryPrice);
+        order.setDeliveryPrice(deliveryPrice);
+    }
 
-        //设置 优惠卷折扣
-        if (!StrUtil.isBlank(couponId)) {
-            this.setDiscount(order, orderItemList, couponId);
-        }
-
+    @Override
+    public void postCheckOrder(Order order, List<OrderItem> orderItemList, String couponId) {
         // 设置优惠
         if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
@@ -188,19 +191,14 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 orderItem.setGoodsPrice(0);
                 orderItem.setGoodsCount(1);
                 orderItemList.add(orderItem);
+                order.setGoodsCount(order.getGoodsCount() + 1);
             }
         }
 
-        // 设置互联折扣
-//        if (order.getFrom() != null) {
-//            // 延世大学联活动
-//            if (order.getFrom() == From.YONSEI) {
-//                if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
-//                    throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_BE_DISCOUNTED_BECAUSE_COUPON);
-//                }
-//                orderService.setDiscount(order, orderDto.getOrderItems(), 88);
-//            }
-//        }
+        //设置 优惠卷折扣
+        if (!StrUtil.isBlank(couponId)) {
+            this.setDiscount(order, orderItemList, couponId);
+        }
 
         //填写订单信息
         int number;

@@ -26,13 +26,19 @@ Page({
       }
     },
     cartAllPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
     couponDiscountPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+      this.setData({
+        realPrice: _realPrice > 0 ? _realPrice * 100 : 0
+      })
+    },
+    deliveryPrice(newVal){
+      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
@@ -96,7 +102,8 @@ Page({
     appointmentIndex: [],
     appointmentTimes: [],
     deliveryType: '',
-    deliveryArriveTime: null
+    deliveryArriveTime: null,
+    deliveryPrice: 2000
   },
 
   /**
@@ -205,6 +212,13 @@ Page({
           signNotice: `本周您已经签到${res}次, 再签到${7 - res}次即可获得7000现金优惠卷(无门槛)`
         })
       }
+    })
+
+    indexService.getDeliveryPrice()
+    .then(res => {
+      this.setData({
+        deliveryPrice: res
+      })
     })
 
     // 获取预约时间项

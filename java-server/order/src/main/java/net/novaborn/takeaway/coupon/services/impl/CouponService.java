@@ -149,13 +149,10 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         }
 
         Map<String, List<String>> couponRules = CouponUtil.getCouponRule(coupon.get());
-        int allPrice = orderItems.parallelStream()
-                .map(orderItem -> orderItem.getGoodsPrice() * orderItem.getGoodsCount())
-                .reduce(0, (x, y) -> x + y);
-
+        int allPrice = order.getAllPrice();
         int needDisCountPrice = orderItems.parallelStream()
                 .filter(orderItem -> {
-                    if (StrUtil.isBlank(orderItem.getGoodsId())) {
+                    if (StrUtil.isBlank(orderItem.getGoodsId()) || orderItem.getGoodsPrice() <= 0) {
                         return false;
                     }
                     Goods goods = goodsService.getById(orderItem.getGoodsId());

@@ -24,6 +24,14 @@
 		<view class="order-items">
 			<order-item itemDetail="{{itemDetail}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetail" />
 		</view>
+		<view class="delivery-price-view" wx:if="{{order.deliveryPrice > 0}}">
+			<view class="delivery-str">
+			配送费：
+			</view>
+			<view class="delivery-price">
+				₩ {{order.deliveryPrice}}
+			</view>
+		</view>
 		<view class="order-amount">
 			<view class="left">
 				{{order.createDate}}

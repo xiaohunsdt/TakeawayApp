@@ -118,6 +118,13 @@
 					"id": -1,
 					"name": "pages/order/index",
 					"pathName": "pages/order/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/buy/index",
+					"pathName": "pages/buy/index",
 					"scene": null
 				}
 			]

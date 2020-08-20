@@ -57,10 +57,25 @@
 		</van-action-sheet>
 		<view class="{{showOrderTip?'show-order-tip':''}}" id="buy-content">
 			<base-panel>
-				<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
+				<view class="order-items">
+					<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
+				</view>
+				<view class="delivery-price-view">
+					<view class="delivery-str">
+						<view wx:if="{{deliveryPrice > 0}}">
+							配送费：
+						</view>
+						<view wx:else>
+							免费配送
+						</view>
+					</view>
+					<view class="delivery-price" wx:if="{{deliveryPrice > 0}}">
+						₩ {{deliveryPrice}}
+					</view>
+				</view>
 				<view id="order-amount">
 					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
-					小计 <span style="color: #FFD200">₩ {{ cartAllPrice }}</span>
+					小计 <span style="color: #FFD200">₩ {{ cartAllPrice + deliveryPrice }}</span>
 				</view>
 			</base-panel>
 			<base-panel>

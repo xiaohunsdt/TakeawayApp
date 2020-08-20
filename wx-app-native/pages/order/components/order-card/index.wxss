@@ -3,10 +3,30 @@
   margin-left: 10rpx;
 }
 
+.order-items{
+  margin-bottom: 22rpx;
+}
+
+.delivery-price-view{
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 16rpx;
+  font-weight: bolder;
+  font-size: 25rpx;
+}
+
+.delivery-price-view .delivery-str,.delivery-price-view .delivery-price{
+  display:inline-block;
+  line-height: 20rpx;
+}
+
+.delivery-price-view .delivery-price{
+  color: #FFD200
+}
+
 .order-amount {
   display: flex;
   justify-content: space-between;
-  padding-top: 20rpx;
   font-size: 25rpx;
 }
 
