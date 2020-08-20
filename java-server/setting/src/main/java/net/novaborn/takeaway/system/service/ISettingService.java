@@ -2,6 +2,7 @@ package net.novaborn.takeaway.system.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import net.novaborn.takeaway.common.entity.BaseKVO;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 
@@ -18,7 +19,8 @@ import java.util.List;
 public interface ISettingService extends IService<Setting> {
     /**
      * 获取指定的设置项
-     * @param key 设置项的名称
+     *
+     * @param key   设置项的名称
      * @param scope 设置项的域
      * @return
      */
@@ -26,8 +28,15 @@ public interface ISettingService extends IService<Setting> {
 
     /**
      * 获取指定设置域中的所有设置项
+     *
      * @param scope
      * @return
      */
     List<Setting> getSettingsByScope(SettingScope scope);
+
+    /**
+     * 返回系统设置中的的距离对应价格的设置
+     * @return
+     */
+    List<BaseKVO<Integer, Integer>> getDistancePriceArr();
 }

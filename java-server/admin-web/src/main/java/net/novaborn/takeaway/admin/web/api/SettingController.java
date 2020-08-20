@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.exception.SettingExceptionEnum;
@@ -33,17 +32,15 @@ import java.util.TimeZone;
 public class SettingController extends BaseController {
     private SettingService settingService;
 
-    private NaverMapService naverMapService;
-
     @GetMapping("getAllSetting")
     @ResponseBody
     public List<Setting> getAllSetting() {
         return settingService.list();
     }
 
-    @PostMapping("getSettingByName")
+    @PostMapping("getSettingByKey")
     @ResponseBody
-    public Setting getSettingByName(@RequestParam String key, @RequestParam SettingScope scope) {
+    public Setting getSettingByKey(@RequestParam String key, @RequestParam SettingScope scope) {
         return settingService.getSettingByName(key, scope);
     }
 

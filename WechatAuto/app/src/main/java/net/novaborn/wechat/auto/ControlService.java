@@ -115,9 +115,13 @@ public class ControlService extends AccessibilityService {
 //            if (editInput == null) {
 //                return;
 //            }
-            if (autoMessage.getMessage() != null && !autoMessage.getMessage().equals("")) {
-                WechatUtils.pastContent(this, editInput, autoMessage.getMessage());
-                Thread.sleep(3000);
+            try {
+                if (autoMessage.getMessage() != null && !autoMessage.getMessage().equals("")) {
+                    WechatUtils.pastContent(this, editInput, autoMessage.getMessage());
+                    Thread.sleep(3000);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             // 发布
@@ -131,8 +135,6 @@ public class ControlService extends AccessibilityService {
             //回主页
             WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cuq", 0);
             Thread.sleep(1000);
-
-            resetAndReturnApp();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -145,6 +147,7 @@ public class ControlService extends AccessibilityService {
             }
             autoMessage = null;
             isSending = false;
+            resetAndReturnApp();
         }
     }
 

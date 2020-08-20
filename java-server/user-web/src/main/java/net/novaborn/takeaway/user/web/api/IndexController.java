@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.banner.entity.Banner;
 import net.novaborn.takeaway.banner.service.impl.BannerService;
+import net.novaborn.takeaway.common.entity.BaseKVO;
 import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -87,8 +88,9 @@ public class IndexController extends BaseController {
     @GetMapping("getExpressServiceState")
     @ResponseBody
     public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
-        int lowestOrderPrice = settingService.getSettingByName("lowest_order_price",SettingScope.EXPRESS).getValueAsInt();
+        int lowestOrderPrice = settingService.getSettingByName("lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
         int maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValueAsInt();
+        List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr();
         double distance = addressService.getDistanceWithStore(addressId);
 
         // 最低配送价格
@@ -100,20 +102,27 @@ public class IndexController extends BaseController {
             return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
         }
 
-        // 大于3公里，价格小于30000
-        if (distance >= 2400 && allPrice < 30000) {
-            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 30000));
-        }
 
-        // 大于2公里，价格小于18000
-        if (distance > 1800 && allPrice < 18000) {
-            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 18000));
+        // 距离对应价格设置
+        for (BaseKVO<Integer,Integer> item:distancePriceArr){
+            if(distance >= item.getKey() && allPrice < item.getValue()){
+                return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, item.getValue()));
+            }
         }
-
-        // 大于1公里，价格小于10000
-        if (distance > 1000 && allPrice < 10000) {
-            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
-        }
+//        // 大于3公里，价格小于30000
+//        if (distance >= 2400 && allPrice < 30000) {
+//            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 30000));
+//        }
+//
+//        // 大于2公里，价格小于18000
+//        if (distance > 1800 && allPrice < 18000) {
+//            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 18000));
+//        }
+//
+//        // 大于1公里，价格小于10000
+//        if (distance > 1000 && allPrice < 10000) {
+//            return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, 10000));
+//        }
 
         return new ServiceStateDto();
     }
@@ -121,7 +130,7 @@ public class IndexController extends BaseController {
     @GetMapping("getDeliveryPrice")
     @ResponseBody
     public Integer getDeliveryPrice() {
-        return settingService.getSettingByName("delivery_price",SettingScope.EXPRESS).getValueAsInt();
+        return settingService.getSettingByName("delivery_price", SettingScope.EXPRESS).getValueAsInt();
     }
 
     @GetMapping("getAppointmentTimes")
