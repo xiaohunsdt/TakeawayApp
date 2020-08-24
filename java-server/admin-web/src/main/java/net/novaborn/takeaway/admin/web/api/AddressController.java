@@ -9,7 +9,7 @@ import net.novaborn.takeaway.admin.web.wrapper.AddressWrapper;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.common.utils.PhoneUtil;
+import net.novaborn.takeaway.common.utils.CommonUtil;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,10 +71,10 @@ public class AddressController extends BaseController {
     @ResponseBody
     @PostMapping("updateAddress")
     @Transactional(rollbackFor = RuntimeException.class)
-    public Tip updateAddress(@ModelAttribute Address address) {
+    public Tip updateAddress(@ModelAttribute @Validated Address address) {
         Address target = addressService.getById(address.getId());
 
-        if (address.getPhone() != null && !PhoneUtil.validate(address.getPhone())) {
+        if (address.getPhone() != null && !CommonUtil.validatePhone(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 

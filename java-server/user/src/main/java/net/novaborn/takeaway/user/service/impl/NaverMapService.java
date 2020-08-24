@@ -72,19 +72,29 @@ public class NaverMapService implements INaverMapService {
                 return this.searchAddressEx(address);
             }
 
-            addressesArr.forEach(item -> {
-                String roadAddress = ((JSONObject) item).getString("roadAddress");
-                if (StrUtil.isBlank(roadAddress)) {
-                    roadAddress = ((JSONObject) item).getString("jibunAddress");
-                }
-                Double x = ((JSONObject) item).getDouble("x");
-                Double y = ((JSONObject) item).getDouble("y");
-                Address temp = new Address();
-                temp.setAddress(roadAddress);
-                temp.setX(x);
-                temp.setY(y);
-                addresses.add(temp);
-            });
+            addressesArr.stream()
+                    .filter(item -> {
+                        for (Object temp : ((JSONObject) item).getJSONArray("addressElements")) {
+                            JSONObject tempItem = (JSONObject) temp;
+                            if (tempItem.getString("types") != null && tempItem.getString("types").contains("POSTAL_CODE")) {
+                                return StrUtil.isNotBlank(tempItem.getString("shortName")) || StrUtil.isNotBlank(tempItem.getString("longName"));
+                            }
+                        }
+                        return false;
+                    })
+                    .forEach(item -> {
+                        String roadAddress = ((JSONObject) item).getString("roadAddress");
+                        if (StrUtil.isBlank(roadAddress)) {
+                            roadAddress = ((JSONObject) item).getString("jibunAddress");
+                        }
+                        Double x = ((JSONObject) item).getDouble("x");
+                        Double y = ((JSONObject) item).getDouble("y");
+                        Address temp = new Address();
+                        temp.setAddress(roadAddress);
+                        temp.setX(x);
+                        temp.setY(y);
+                        addresses.add(temp);
+                    });
         } else {
             throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
         }
