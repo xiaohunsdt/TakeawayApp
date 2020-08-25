@@ -128,7 +128,7 @@ Page({
           this.setData({
             order: res
           })
-          if (this.order.payState === 'PAID') {
+          if (this.data.order.payState === 'PAID') {
             // mpvue.redirectTo({
             //   url: '/pages/order/main?state=waitEat'
             // })
@@ -304,6 +304,7 @@ Page({
         title: '请选择商品!!',
         image: '/static/images/error.png'
       })
+      return 
     }
     const $this = this
     const tmplIds = [
