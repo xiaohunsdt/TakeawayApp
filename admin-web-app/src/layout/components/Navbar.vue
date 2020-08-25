@@ -7,10 +7,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img
-              class="user-avatar"
-              src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
-          >
+          <img class="user-avatar" src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80" />
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -30,6 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Howl, Howler } from 'howler'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import orderApi from '@/api/order'
@@ -53,23 +51,23 @@ export default {
   },
   mounted() {
     // init normal order audio
-    this.normalOrderAudio = new Audio()
-    this.normalOrderAudio.muted = false
-    this.normalOrderAudio.autoplay = false
-    this.normalOrderAudio.loop = false
-    this.normalOrderAudio.id = 'audio'
-    this.normalOrderAudio.volume = 0.2
-    this.normalOrderAudio.src = require('@/assets/voice/order.mp3')
+    this.normalOrderAudio = new Howl({
+      src: [require('@/assets/voice/order.mp3')],
+      volume: 0.2,
+      onplayerror: function() {
+        alert('有新的订单,请及时处理!')
+      }
+    })
     this.timer1 = setInterval(this.getWaitingReceiveNormalOrderCount, 1000 * 10)
 
     // init appointment order audio
-    this.appointmentOrderAudio = new Audio()
-    this.appointmentOrderAudio.muted = false
-    this.appointmentOrderAudio.autoplay = false
-    this.appointmentOrderAudio.loop = false
-    this.appointmentOrderAudio.id = 'audio'
-    this.normalOrderAudio.volume = 0.2
-    this.appointmentOrderAudio.src = require('@/assets/voice/order-appointment.mp3')
+    this.appointmentOrderAudio = new Howl({
+      src: [require('@/assets/voice/order-appointment.mp3')],
+      volume: 0.2,
+      onplayerror: function() {
+        alert('有新的预约订单,请及时处理!')
+      }
+    })
     setTimeout(() => {
       this.timer2 = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
     }, 4000)
@@ -92,10 +90,11 @@ export default {
       orderApi.getWaitingReceiveOrderCount('NORMAL')
           .then(res => {
             if (res > 0) {
-              this.normalOrderAudio.play().catch(error => {
-                console.log(error.toString())
+              if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
+                this.normalOrderAudio.play()
+              } else {
                 alert('有新的订单,请及时处理!')
-              })
+              }
             }
           })
     },
@@ -103,10 +102,11 @@ export default {
       orderApi.getWaitingReceiveOrderCount('APPOINTMENT')
           .then(res => {
             if (res > 0) {
-              this.appointmentOrderAudio.play().catch(error => {
-                console.log(error.toString())
+              if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
+                this.appointmentOrderAudio.play()
+              } else {
                 alert('有新的预约订单,请及时处理!')
-              })
+              }
             }
           })
     }
