@@ -2,6 +2,7 @@ package net.novaborn.takeaway.user.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import lombok.Setter;
 import net.novaborn.takeaway.common.exception.SysException;
@@ -80,6 +81,12 @@ public class AddressController extends BaseController {
     @PostMapping("searchAddress")
     public List<Address> searchAddress(String address) {
         return naverMapService.searchAddress(address);
+    }
+
+    @ResponseBody
+    @GetMapping("getAddressStaticMap")
+    public Tip getAddressStaticMap(Address address) {
+        return new SuccessTip(Base64.encode(naverMapService.getAddressStaticMap(address)));
     }
 
     @ResponseBody

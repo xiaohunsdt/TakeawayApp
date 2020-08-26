@@ -150,4 +150,14 @@ public class NaverMapService implements INaverMapService {
         addressList = addressList.stream().distinct().collect(Collectors.toList());
         return addressList;
     }
+
+    public byte[] getAddressStaticMap(Address address) {
+        HttpRequest request = HttpUtil.createGet(STATIC_MAP_API + String.format("%f %f", address.getX(), address.getY()));
+        generateRequest(request);
+        HttpResponse response = request.execute();
+        if (response.getStatus() != 200) {
+            throw new SysException(MapExceptionEnum.REQUEST_API_ERROR);
+        }
+        return response.bodyBytes();
+    }
 }

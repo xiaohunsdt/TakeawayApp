@@ -27,6 +27,11 @@ public interface INaverMapService {
     String HTML_API = "https://m.map.naver.com/search2/searchMore.nhn?sm=clk&style=v5&page=1&displayCount=75&type=SITE_1&query=";
 
     /**
+     * 静态地图
+     */
+    String STATIC_MAP_API = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=300&h=300&format=png&scale=2&markers=type:d|size:mid|color:0xFFD200|pos:";
+
+    /**
      * 获取经纬度
      * @param address 被指定的地址
      * @return

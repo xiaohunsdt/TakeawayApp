@@ -54,6 +54,8 @@ const api = {
   searchAddress: (address) => request.post('address/searchAddress', {
     address
   }),
+  // 获取一个地址所在位置的静态地图
+  getAddressStaticMap: (address) => request.get('address/getAddressStaticMap', address),
   // 新建一个地址
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
@@ -61,7 +63,6 @@ const api = {
   deleteAddress: (addressId) => request.post('address/deleteAddress', {
     addressId
   }),
-
   selectOrderById: (orderId) => request.post('order/selectOrderById', {
     orderId
   }),
