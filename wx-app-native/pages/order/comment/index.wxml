@@ -2,7 +2,7 @@
 	<view class="gradientview"></view>
 	<view class="container-contain">
 		<base-panel>
-			<order-item itemDetail="{{itemDetail}}" wx:key="itemDetail.goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetail" />
+			<order-item itemDetail="{{itemDetail}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetail" />
 		</base-panel>
 
 		<base-panel>

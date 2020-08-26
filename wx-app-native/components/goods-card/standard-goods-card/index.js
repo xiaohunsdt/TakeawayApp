@@ -18,7 +18,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-    currentFoodCount: 0
+    currentFoodCount: 0,
+    showThumbDialog: false
   },
   lifetimes: {
     attached: function () {
@@ -39,6 +40,12 @@ Component({
       this.setData({
         currentFoodCount: tempVal
       })
+    },
+    onOpenThumbDialog() {
+      this.triggerEvent('openThumbDialog', this.data.food)
+      // this.setData({
+      //   showThumbDialog: true
+      // })
     }
   }
 })

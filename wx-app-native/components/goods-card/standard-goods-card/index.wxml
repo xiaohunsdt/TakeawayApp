@@ -1,5 +1,5 @@
 <view class="goods-card-root">
-	<view class="goods-card-thumb">
+	<view class="goods-card-thumb" bind:tap="onOpenThumbDialog">
 		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load style="height: 100%;width: 100%" />
 	</view>
 	<view class="goods-card-content">

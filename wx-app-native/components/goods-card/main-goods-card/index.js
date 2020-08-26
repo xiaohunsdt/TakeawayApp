@@ -18,15 +18,16 @@ Component({
    * 组件的初始数据
    */
   data: {
-    currentFoodCount: 0
+    currentFoodCount: 0,
+    showThumbDialog: false
   },
-  lifetimes:{
-    attached: function() {
+  lifetimes: {
+    attached: function () {
       this.init()
     },
   },
-  pageLifetimes:{
-    show(){
+  pageLifetimes: {
+    show() {
       this.init()
     }
   },
@@ -34,10 +35,15 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    init(){
+    init() {
       let tempVal = this.getCurrentFoodCount()
       this.setData({
         currentFoodCount: tempVal
+      })
+    },
+    onOpenThumbDialog() {
+      this.setData({
+        showThumbDialog: true
       })
     }
   }
