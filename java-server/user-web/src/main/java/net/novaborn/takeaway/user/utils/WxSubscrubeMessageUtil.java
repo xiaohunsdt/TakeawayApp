@@ -40,7 +40,7 @@ public class WxSubscrubeMessageUtil {
         subscribeMessage.setToUser(user.getOpenId());
         subscribeMessage.setTemplateId("chtooPomhx0JrFECp0ZzYLlRZHc6tA7UdN-l5lAV0A4");
         subscribeMessage.setData(dataList);
-        subscribeMessage.setPage("/pages/order/main?state=WAIT_EAT");
+        subscribeMessage.setPage("/pages/order/index?state=WAIT_EAT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
         } catch (WxErrorException e) {
@@ -60,7 +60,7 @@ public class WxSubscrubeMessageUtil {
         subscribeMessage.setToUser(user.getOpenId());
         subscribeMessage.setTemplateId("4tz6mHc6JK5tsCq6lT2IGh2Leo46QyeDWjLml__PNI0");
         subscribeMessage.setData(dataList);
-        subscribeMessage.setPage("/pages/order/main?state=WAIT_EAT");
+        subscribeMessage.setPage("/pages/order/index?state=WAIT_EAT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
         } catch (WxErrorException e) {
@@ -80,7 +80,7 @@ public class WxSubscrubeMessageUtil {
         subscribeMessage.setToUser(user.getOpenId());
         subscribeMessage.setTemplateId("-fscbMujX6HY1jkr-Sy1bjqv1p6FDq9vkhGw-4hL9Xk");
         subscribeMessage.setData(dataList);
-        subscribeMessage.setPage("/pages/order/main?state=WAIT_COMMENT");
+        subscribeMessage.setPage("/pages/order/index?state=WAIT_COMMENT");
         try {
             wxMaService.getMsgService().sendSubscribeMsg(subscribeMessage);
         } catch (WxErrorException e) {

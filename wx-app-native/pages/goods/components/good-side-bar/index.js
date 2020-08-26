@@ -25,7 +25,9 @@ Component({
     showCart: false,
     cartList: [],
     cartAllCount: 0,
-    cartAllPrice: 0
+    cartAllPrice: 0,
+    selectedFood: null,
+    showThumbDialog: false
   },
   pageLifetimes: {
     show: function () {
@@ -79,6 +81,13 @@ Component({
     onCloseCart() {
       this.setData({
         showCart: false
+      })
+    },
+    onOpenThumbDialog(event){
+      const food = event.detail
+      this.setData({
+        selectedFood: food,
+        showThumbDialog: true
       })
     }
   }

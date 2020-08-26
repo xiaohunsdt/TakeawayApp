@@ -35,6 +35,7 @@
 						<van-icon color="#FFD200" name="clock" size="1.2rem" />
 					</view>
 				</van-cell>
+				<van-notice-bar wx:if="address" color="#ad0000" background="#ffe1e1" left-icon="info-o" text="请确认地址是否正确! 送错外卖概不负责!" />
 			</base-panel>
 		</view>
 		<van-action-sheet show="{{showTimePicker}}" z-index="{{9999999}}" bind:cancel="onCloseTimePicker" bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
@@ -83,8 +84,7 @@
 				<view class="pay-way-btns">
 					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary">微信支付
 					</van-button>
-					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付
-					</van-button>
+					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付</van-button>
 					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" v-if="address">支付宝支付
 					</van-button>
 					<van-button color="{{payWay==='TRANSFER'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐

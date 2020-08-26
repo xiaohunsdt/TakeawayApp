@@ -22,7 +22,11 @@ public class NaverMapServiceTest {
 
     @Test
     public void searchAddressTest() {
-        System.out.println(naverMapService.searchAddress("신촌로 150"));
+        System.out.println(naverMapService.searchAddress("서울특별시 마포구 노고산동 1-3"));
     }
 
+    @Test
+    public void searchAddressExTest() {
+        System.out.println(naverMapService.searchAddressEx("신촌포스빌"));
+    }
 }

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Objects;
 
@@ -29,6 +30,7 @@ public class Address extends Model<Address> {
     /**
      * 具体地址
      */
+    @NotBlank(message = "地址不能为空!!")
     private String address;
 
     /**
@@ -46,6 +48,7 @@ public class Address extends Model<Address> {
      */
     private Double y;
 
+    @NotBlank(message = "手机号不能为空!!")
     private String phone;
 
     private Boolean isDefault;

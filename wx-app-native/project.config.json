@@ -31,7 +31,7 @@
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.12.0",
+	"libVersion": "2.12.1",
 	"appid": "wx3c0bde366c72ea19",
 	"projectname": "wx-app-native",
 	"debugOptions": {

@@ -38,7 +38,8 @@
 }
 
 .container-side-bar .content .content-container {
-  display: unset;
+  /* display: unset; */
+  height: inherit;
 }
 
 .container-side-bar .content .content-scroll {
@@ -103,7 +104,7 @@
   padding: 20rpx;
 }
 
-.has-padding{
-  box-sizing:border-box;
+.has-padding {
+  box-sizing: border-box;
   padding-bottom: 100rpx;
 }
