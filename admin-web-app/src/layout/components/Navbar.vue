@@ -46,7 +46,9 @@ export default {
   data() {
     return {
       timer1: null,
-      timer2: null
+      timer2: null,
+      normalOrderAudio: null,
+      appointmentOrderAudio: null
     }
   },
   mounted() {
@@ -68,6 +70,7 @@ export default {
         alert('有新的预约订单,请及时处理!')
       }
     })
+    Howler.autoUnlock = true
     setTimeout(() => {
       this.timer2 = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
     }, 4000)
