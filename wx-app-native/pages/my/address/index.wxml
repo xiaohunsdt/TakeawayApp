@@ -6,7 +6,9 @@
 				<van-icon class="address-default-icon" color="#FFD200" name="checked" size="1.3rem"></van-icon>
 			</view>
 			<view wx:else>
-				<van-icon bind:click="onSetDefault" data-address-id="{{address.id}}" class="address-default-icon" color="gray" name="checked" size="1.3rem" />
+				<van-button bind:click="onSetDefault" data-address-id="{{address.id}}" class="address-default-icon" icon="checked" color="gray" round size="mini">
+				选择
+				</van-button>
 				<van-icon bind:click="onDeleteAddress" data-address-id="{{address.id}}" class="address-delete-icon" color="red" name="clear" size="1.3rem" />
 			</view>
 			<view bind:tap="editAddress" data-address-id="{{address.id}}">

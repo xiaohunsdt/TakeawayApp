@@ -44,7 +44,7 @@ export function updateAddress (address) {
 }
 
 export function setDefault (addressId) {
-  return api.updateAddress({id: addressId, isDefault: true})
+  return api.setDefaultAddress(addressId)
 }
 
 export function deleteAddress (addressId) {

@@ -159,6 +159,14 @@ public class AddressController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("setDefaultAddress")
+    public Tip setDefaultAddress(String id) {
+        Address target = addressService.getById(id);
+        return addressService.setDefaultAddress(id, target.getUserId())
+                ? new SuccessTip() : new ErrorTip(-1, "设置失败!");
+    }
+
+    @ResponseBody
     @PostMapping("deleteAddress")
     public Tip deleteAddress(@RequestParam String addressId) {
         addressService.removeById(addressId);

@@ -60,6 +60,8 @@ const api = {
   createNewAddress: (address) => request.post('address/createNewAddress', address),
   // 更新一个地址
   updateAddress: (address) => request.post('address/updateAddress', address),
+  // 设置默认地址
+  setDefaultAddress: (addressId) => request.post('address/setDefaultAddress', {id: addressId}),
   deleteAddress: (addressId) => request.post('address/deleteAddress', {
     addressId
   }),
