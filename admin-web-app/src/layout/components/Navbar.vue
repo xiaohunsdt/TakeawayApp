@@ -1,23 +1,26 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" @toggleClick="toggleSideBar" class="hamburger-container"/>
+    <audio ref="normal-order" src="@/assets/voice/order.mp3"/>
+    <audio ref="appointment-order" src="@/assets/voice/order-appointment.mp3"/>
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar"/>
 
     <breadcrumb class="breadcrumb-container"/>
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80" />
+          <img class="user-avatar"
+               src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"/>
           <i class="el-icon-caret-bottom"/>
         </div>
-        <el-dropdown-menu class="user-dropdown" slot="dropdown">
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
               Home
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">Log Out</span>
+            <span style="display:block;" @click="logout">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -27,7 +30,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Howl, Howler } from 'howler'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import orderApi from '@/api/order'
@@ -52,25 +54,9 @@ export default {
     }
   },
   mounted() {
-    // init normal order audio
-    this.normalOrderAudio = new Howl({
-      src: [require('@/assets/voice/order.mp3')],
-      volume: 0.2,
-      onplayerror: function() {
-        alert('有新的订单,请及时处理!')
-      }
-    })
+    this.$refs['normal-order'].volume = 0.3
+    this.$refs['appointment-order'].volume = 0.3
     this.timer1 = setInterval(this.getWaitingReceiveNormalOrderCount, 1000 * 10)
-
-    // init appointment order audio
-    this.appointmentOrderAudio = new Howl({
-      src: [require('@/assets/voice/order-appointment.mp3')],
-      volume: 0.2,
-      onplayerror: function() {
-        alert('有新的预约订单,请及时处理!')
-      }
-    })
-    Howler.autoUnlock = true
     setTimeout(() => {
       this.timer2 = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
     }, 4000)
@@ -93,9 +79,9 @@ export default {
       orderApi.getWaitingReceiveOrderCount('NORMAL')
           .then(res => {
             if (res > 0) {
-              if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
-                this.normalOrderAudio.play()
-              } else {
+              try {
+                this.$refs['normal-order'].play()
+              } catch (e) {
                 alert('有新的订单,请及时处理!')
               }
             }
@@ -105,9 +91,9 @@ export default {
       orderApi.getWaitingReceiveOrderCount('APPOINTMENT')
           .then(res => {
             if (res > 0) {
-              if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
-                this.appointmentOrderAudio.play()
-              } else {
+              try {
+                this.$refs['appointment-order'].play()
+              } catch (e) {
                 alert('有新的预约订单,请及时处理!')
               }
             }
