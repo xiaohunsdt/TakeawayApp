@@ -35,7 +35,7 @@ public interface ICouponLogService extends IService<CouponLog> {
      * @param couponId
      * @return
      */
-    List<CouponLog> getLogListByCouponId(String couponId);
+    List<CouponLog> getLogListByCouponId(Long couponId);
 
     /**
      * 根据 订单ID 获取优惠卷记录
@@ -43,7 +43,7 @@ public interface ICouponLogService extends IService<CouponLog> {
      * @param orderId 订单ID
      * @return 优惠卷记录列表
      */
-    List<CouponLog> getLogListByOrderId(String orderId);
+    List<CouponLog> getLogListByOrderId(Long orderId);
 
     /**
      * 分页获取优惠卷使用列表

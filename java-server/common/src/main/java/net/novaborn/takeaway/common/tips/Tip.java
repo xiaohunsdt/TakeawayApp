@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public abstract class Tip {
     protected int code;
-    protected String message;
+    protected Object message;
 }

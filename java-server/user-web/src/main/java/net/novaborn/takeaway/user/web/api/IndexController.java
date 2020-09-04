@@ -87,7 +87,7 @@ public class IndexController extends BaseController {
 
     @GetMapping("getExpressServiceState")
     @ResponseBody
-    public Object getExpressServiceState(@RequestParam String addressId, @RequestParam Integer allPrice) {
+    public Object getExpressServiceState(@RequestParam Long addressId, @RequestParam Integer allPrice) {
         int lowestOrderPrice = settingService.getSettingByName("lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
         int maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValueAsInt();
         List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr();

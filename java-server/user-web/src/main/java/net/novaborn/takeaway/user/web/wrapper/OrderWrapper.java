@@ -25,7 +25,7 @@ public class OrderWrapper extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         UserService userService = SpringContextHolder.getBean(UserService.class);
-        this.user = userService.getById((String) map.get("userId"));
+        this.user = userService.getById((Long) map.get("userId"));
 
         Date createDate = (Date) map.get("createDate");
 

@@ -49,7 +49,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     private GoodsService goodsService;
 
     @Override
-    public List<Coupon> getCouponListByUserId(String userId, boolean onlyShowUseAble) {
+    public List<Coupon> getCouponListByUserId(Long userId, boolean onlyShowUseAble) {
         return this.baseMapper.getCouponListByUserId(userId, onlyShowUseAble);
     }
 
@@ -59,37 +59,37 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<String> userIds) {
+    public void generateCoupon(CouponTemplate template, List<Long> userIds) {
         this.generateCoupon(template, userIds, 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<String> userIds, Integer count) {
+    public void generateCoupon(CouponTemplate template, List<Long> userIds, Integer count) {
         userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, count));
     }
 
     @Override
     public void generateCoupon(CouponTemplate template, Integer expireDays, Integer count) {
-        this.generateCoupon(template, "", expireDays, count);
+        this.generateCoupon(template, -1L, expireDays, count);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<String> userIds, Integer expireDays, Integer count) {
+    public void generateCoupon(CouponTemplate template, List<Long> userIds, Integer expireDays, Integer count) {
         userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, expireDays, count));
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, String userId) {
+    public void generateCoupon(CouponTemplate template, Long userId) {
         this.generateCoupon(template, userId, 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, String userId, Integer count) {
+    public void generateCoupon(CouponTemplate template, Long userId, Integer count) {
         this.generateCoupon(template, userId, template.getExpireDays(), 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, String userId, Integer expireDays, Integer count) {
+    public void generateCoupon(CouponTemplate template, Long userId, Integer expireDays, Integer count) {
         for (int i = 0; i < count; i++) {
             Coupon target = new Coupon();
             BeanUtil.copyProperties(template, target, CopyOptions.create().setIgnoreNullValue(true));
@@ -97,11 +97,9 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             target.setId(null);
             target.setCreateDate(null);
             target.setDeleted(null);
-
-            if (!userId.isBlank()) {
+            if(userId != -1L){
                 target.setUserId(userId);
             }
-
             if (expireDays != null && expireDays > 0) {
                 target.setExpireDate(DateUtil.date().offset(DateField.DAY_OF_MONTH, expireDays));
             }
@@ -110,7 +108,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public boolean bindCoupon(String userId, String couponId) {
+    public boolean bindCoupon(Long userId, Long couponId) {
         Optional<Coupon> coupon = Optional.ofNullable(this.baseMapper.selectById(couponId));
         coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
 
@@ -118,7 +116,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             throw new SysException(CouponExceptionEnum.HAD_BOUND);
         }
 
-        if (StrUtil.isBlank(userId)) {
+        if (userId == null) {
             throw new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER);
         }
 
@@ -131,7 +129,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public Order getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId) {
+    public Order getDiscountMoney(Order order, List<OrderItem> orderItems, Long couponId) {
         // 刷卡除外
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
             SysException sysException = new SysException(CouponExceptionEnum.UNSUPPORT_PAYMENT_WAY);
@@ -152,7 +150,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         int allPrice = order.getAllPrice();
         int needDisCountPrice = orderItems.parallelStream()
                 .filter(orderItem -> {
-                    if (StrUtil.isBlank(orderItem.getGoodsId()) || orderItem.getGoodsPrice() <= 0) {
+                    if (orderItem.getGoodsId() == null || orderItem.getGoodsPrice() <= 0) {
                         return false;
                     }
                     Goods goods = goodsService.getById(orderItem.getGoodsId());

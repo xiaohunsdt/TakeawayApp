@@ -21,7 +21,7 @@ public class CommentWrapper extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         UserService userService = SpringContextHolder.getBean(UserService.class);
-        User user = userService.getById((String) map.get("userId"));
+        User user = userService.getById((Long) map.get("userId"));
 
         if (user.getOpenId() != null) {
             map.put("userName", user.getNickName());
@@ -29,6 +29,6 @@ public class CommentWrapper extends BaseControllerWrapper {
             map.put("userName", user.getName());
         }
 
-        map.put("userName", userService.getById((String) map.get("userId")).getNickName());
+        map.put("userName", userService.getById((Long) map.get("userId")).getNickName());
     }
 }

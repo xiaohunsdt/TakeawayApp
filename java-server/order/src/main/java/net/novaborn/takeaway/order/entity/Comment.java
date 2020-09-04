@@ -23,12 +23,12 @@ import java.util.Date;
 public class Comment extends Model<Comment> {
     private static final long serialVersionUID = 8975431669565356354L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
-    private String userId;
+    private Long userId;
 
-    private String orderId;
+    private Long orderId;
 
     /**
      * 菜品口味

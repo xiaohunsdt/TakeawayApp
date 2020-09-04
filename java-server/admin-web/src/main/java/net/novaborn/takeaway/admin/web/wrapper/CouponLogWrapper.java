@@ -22,7 +22,7 @@ public class CouponLogWrapper extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         UserService userService = SpringContextHolder.getBean(UserService.class);
-        User user = userService.getById((String) map.get("userId"));
+        User user = userService.getById((Long) map.get("userId"));
 
         map.put("nickName", user.getNickName());
     }

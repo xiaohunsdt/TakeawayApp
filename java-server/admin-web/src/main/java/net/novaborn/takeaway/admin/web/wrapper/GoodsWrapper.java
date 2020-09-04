@@ -20,7 +20,7 @@ public class GoodsWrapper extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         CategoryService categoryService = SpringContextHolder.getBean(CategoryService.class);
-        Category category = categoryService.getById((String) map.get("categoryId"));
+        Category category = categoryService.getById((Long) map.get("categoryId"));
         map.put("category", category.getName());
 
         map.remove("categoryId");

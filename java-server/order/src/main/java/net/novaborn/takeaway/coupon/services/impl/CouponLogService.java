@@ -36,12 +36,12 @@ public class CouponLogService extends ServiceImpl<ICouponLogDao, CouponLog> impl
     }
 
     @Override
-    public List<CouponLog> getLogListByCouponId(String couponId) {
+    public List<CouponLog> getLogListByCouponId(Long couponId) {
         return this.baseMapper.getLogListByCouponId(couponId);
     }
 
     @Override
-    public List<CouponLog> getLogListByOrderId(String orderId) {
+    public List<CouponLog> getLogListByOrderId(Long orderId) {
         return this.baseMapper.getLogListByOrderId(orderId);
     }
 

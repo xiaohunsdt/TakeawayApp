@@ -24,7 +24,7 @@ public interface IGoodsStockService extends IService<GoodsStock> {
      * @param goodsId 产品ID
      * @return 查询到的产品库存
      */
-    Optional<GoodsStock> getByGoodsId(String goodsId);
+    Optional<GoodsStock> getByGoodsId(Long goodsId);
 
     /**
      * 创建一个商品库存

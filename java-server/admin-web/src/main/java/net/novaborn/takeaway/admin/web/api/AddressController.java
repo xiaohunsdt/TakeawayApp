@@ -57,7 +57,7 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @RequestMapping("getAddressById")
-    public Object getAddressById(@RequestParam String addressId) {
+    public Object getAddressById(@RequestParam Long addressId) {
         Address address = addressService.getById(addressId);
         return ResponseEntity.ok(new AddressWrapper(address).warp());
     }

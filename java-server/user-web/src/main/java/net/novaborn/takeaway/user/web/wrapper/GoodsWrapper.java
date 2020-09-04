@@ -24,7 +24,7 @@ public class GoodsWrapper extends BaseControllerWrapper {
         CategoryService categoryService = SpringContextHolder.getBean(CategoryService.class);
         SystemProperties systemProperties = SpringContextHolder.getBean(SystemProperties.class);
 
-        Category category = categoryService.getById((String) map.get("categoryId"));
+        Category category = categoryService.getById((Long) map.get("categoryId"));
 
         map.put("category", category.getName());
         if (map.get("thumb") != null){

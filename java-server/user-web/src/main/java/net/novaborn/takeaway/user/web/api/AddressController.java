@@ -46,7 +46,7 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @GetMapping("getAddressById")
-    public Object getAddressById(@RequestParam String addressId) {
+    public Object getAddressById(@RequestParam Long addressId) {
         Address address = addressService.getById(addressId);
         return ResponseEntity.ok(new AddressWrapper(address).warp());
     }
@@ -160,7 +160,7 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @PostMapping("setDefaultAddress")
-    public Tip setDefaultAddress(String id) {
+    public Tip setDefaultAddress(Long id) {
         Address target = addressService.getById(id);
         return addressService.setDefaultAddress(id, target.getUserId())
                 ? new SuccessTip() : new ErrorTip(-1, "设置失败!");
@@ -168,7 +168,7 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @PostMapping("deleteAddress")
-    public Tip deleteAddress(@RequestParam String addressId) {
+    public Tip deleteAddress(@RequestParam Long addressId) {
         addressService.removeById(addressId);
         return new SuccessTip();
     }

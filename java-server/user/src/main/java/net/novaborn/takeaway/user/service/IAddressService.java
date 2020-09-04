@@ -26,7 +26,7 @@ public interface IAddressService extends IService<Address> {
      * @param userId 用户ID
      * @return 查询到的地址列表
      */
-    List<Address> selectByUserId(String userId);
+    List<Address> selectByUserId(Long userId);
 
     /**
      * 获取指定用户的默认地址
@@ -34,7 +34,7 @@ public interface IAddressService extends IService<Address> {
      * @param userId 用户ID
      * @return 查询到的默认地址
      */
-    Optional<Address> selectDefaultAddressByUserId(String userId);
+    Optional<Address> selectDefaultAddressByUserId(Long userId);
 
     /**
      * 分页获取地址列表
@@ -52,12 +52,12 @@ public interface IAddressService extends IService<Address> {
      * @param userId    要设置的地址的用户Id
      * @return 是否成功
      */
-    Boolean setDefaultAddress(String addressId, String userId);
+    Boolean setDefaultAddress(Long addressId, Long userId);
 
     /**
      * 获取指定地址与店的直线距离
      * @param addressId
      * @return
      */
-    Double getDistanceWithStore(String addressId);
+    Double getDistanceWithStore(Long addressId);
 }

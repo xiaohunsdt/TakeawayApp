@@ -30,31 +30,31 @@ public class PayController extends BaseController {
 
     @PostMapping("createPayInfo")
     @ResponseBody
-    public WxPayMpOrderResult createPayInfo(@RequestParam String orderId) throws WxPayException {
+    public WxPayMpOrderResult createPayInfo(@RequestParam Long orderId) throws WxPayException {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
 
         WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
         log.info("订单:{},创建微信支付预信息成功!!", orderId);
 
-        orderPayStatusSender.send(orderId, 30);
+        orderPayStatusSender.send(orderId, 8);
         return result;
     }
 
-    @PostMapping("closeOrder")
-    @ResponseBody
-    public WxPayMpOrderResult closeOrder(@RequestParam String orderId) throws WxPayException {
-        String openId = jwtTokenUtil.getUsernameFromToken(request);
-
-        WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
-        log.info("订单:{},创建微信支付预信息成功!!", orderId);
-
-        orderPayStatusSender.send(orderId, 30);
-        return result;
-    }
+//    @PostMapping("closeOrder")
+//    @ResponseBody
+//    public WxPayMpOrderResult closeOrder(@RequestParam Long orderId) throws WxPayException {
+//        String openId = jwtTokenUtil.getUsernameFromToken(request);
+//
+//        WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
+//        log.info("订单:{},创建微信支付预信息成功!!", orderId);
+//
+//        orderPayStatusSender.send(orderId, 30);
+//        return result;
+//    }
 
     @RequestMapping("confirmOrder")
     @ResponseBody
-    public SuccessTip confirmOrder(@RequestParam String orderId) {
+    public SuccessTip confirmOrder(@RequestParam Long orderId) {
         payService.confirmPay(orderId);
 
         log.info("订单:{},支付验证成功!!", orderId);

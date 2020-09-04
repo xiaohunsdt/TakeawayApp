@@ -30,7 +30,7 @@ public interface IOrderService extends IService<Order> {
      * @param isShowDeleted 是否显示被删除的订单
      * @return
      */
-    Optional<Order> getById(String orderId, boolean isShowDeleted);
+    Optional<Order> getById(Long orderId, boolean isShowDeleted);
 
     /**
      * 获取指定用户的订单
@@ -38,7 +38,7 @@ public interface IOrderService extends IService<Order> {
      * @param userId 用户ID
      * @return 用户的订单列表
      */
-    List<Order> getOrderListByUserId(String userId);
+    List<Order> getOrderListByUserId(Long userId);
 
     /**
      * 获取指定用户的订单
@@ -49,7 +49,7 @@ public interface IOrderService extends IService<Order> {
      * @param isShowDeleted 是否显示已被删除的账户
      * @return 筛选后的指定用户订单列表
      */
-    List<Order> getOrderListByUserId(String userId,
+    List<Order> getOrderListByUserId(Long userId,
                                      PaymentWay paymentWay,
                                      OrderState orderState,
                                      boolean isShowDeleted);
@@ -99,7 +99,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderState 订单状态
      * @return 订单列表
      */
-    IPage<Order> getOrderListByPageU(Page page, String userId, OrderStateEx orderState);
+    IPage<Order> getOrderListByPageU(Page page, Long userId, OrderStateEx orderState);
 
     /**
      * 用户端获取指定订单类型的数量
@@ -108,7 +108,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    int getOrderCountByStateU(String userId, OrderStateEx orderState);
+    int getOrderCountByStateU(Long userId, OrderStateEx orderState);
 
     /**
      * 用户端获取今日指定类型的订单
@@ -117,7 +117,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    List<Order> getTodayOrderByStateU(String userId, OrderStateEx orderState);
+    List<Order> getTodayOrderByStateU(Long userId, OrderStateEx orderState);
 
     /**
      * 用户端获取今日指定类型的数量
@@ -126,7 +126,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    int getTodayOrderCountByStateU(String userId, OrderStateEx orderState);
+    int getTodayOrderCountByStateU(Long userId, OrderStateEx orderState);
 
     /**
      * 获取订单数量
@@ -144,7 +144,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderItemList
      * @param couponId
      */
-    void setDiscount(Order order, List<OrderItem> orderItemList, String couponId);
+    void setDiscount(Order order, List<OrderItem> orderItemList, Long couponId);
 
     /**
      * 设置一般折扣
@@ -170,7 +170,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderItemList 预检查的订单商品项
      * @param couponId      优惠卷Id
      */
-    void postCheckOrder(Order order, List<OrderItem> orderItemList, String couponId);
+    void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId);
 
     /**
      * 对指定订单列表的商品进行排名 从高到低

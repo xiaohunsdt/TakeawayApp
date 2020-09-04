@@ -26,7 +26,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param isShowDeleted 是否显示被删除的订单
      * @return
      */
-    Optional<Order> getById(@Param("orderId") String orderId, @Param("isShowDeleted") boolean isShowDeleted);
+    Optional<Order> getById(@Param("orderId") Long orderId, @Param("isShowDeleted") boolean isShowDeleted);
 
     /**
      * 获取指定用户的订单
@@ -37,7 +37,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param isShowDeleted 是否显示已被删除的账户
      * @return 筛选后的指定用户订单列表
      */
-    List<Order> getOrderListByUserId(@Param("userId") String userId,
+    List<Order> getOrderListByUserId(@Param("userId") Long userId,
                                      @Param("paymentWay") PaymentWay paymentWay,
                                      @Param("orderState") OrderState orderState,
                                      @Param("isShowDeleted") boolean isShowDeleted);
@@ -96,7 +96,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param orderState 订单状态
      * @return 订单列表
      */
-    IPage<Order> getOrderListByPageU(@Param("page") Page page, @Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
+    IPage<Order> getOrderListByPageU(@Param("page") Page page, @Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 用户端获取指定订单类型的数量
@@ -105,7 +105,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    int getOrderCountByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
+    int getOrderCountByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 用户端获取今日指定类型的订单
@@ -114,7 +114,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    List<Order> getTodayOrderByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
+    List<Order> getTodayOrderByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 用户端获取今日指定类型的订单数量
@@ -123,7 +123,7 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @param orderState 订单状态
      * @return 订单数量
      */
-    int getTodayOrderCountByStateU(@Param("userId") String userId, @Param("orderState") OrderStateEx orderState);
+    int getTodayOrderCountByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
 
     /**
      * 获取订单数量

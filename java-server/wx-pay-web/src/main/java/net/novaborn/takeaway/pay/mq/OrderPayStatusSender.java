@@ -21,9 +21,9 @@ public class OrderPayStatusSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(String orderId, int delaySeconds) {
+    public void send(Long orderId, int delaySeconds) {
         CorrelationData cd = new CorrelationData();
-        cd.setId(orderId);
+        cd.setId(orderId.toString());
 
         rabbitTemplate.convertAndSend(OrderPayStatusQueueConfig.EXCHANGE_NAME, OrderPayStatusQueueConfig.QUEUE_NAME, orderId, message -> {
             message.getMessageProperties().setHeader("x-delay", delaySeconds * 1000);

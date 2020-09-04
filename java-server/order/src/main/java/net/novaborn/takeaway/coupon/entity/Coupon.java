@@ -22,10 +22,10 @@ import java.util.Date;
 public class Coupon extends Model<Coupon> {
     private static final long serialVersionUID = 7938677365637245592L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
-    private String userId;
+    private Long userId;
 
     private String couponName;
 

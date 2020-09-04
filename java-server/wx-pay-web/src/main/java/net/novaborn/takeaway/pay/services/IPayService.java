@@ -10,11 +10,11 @@ public interface IPayService {
      * @param ipAddr 客户端的ip
      * @return
      */
-    WxPayMpOrderResult createPayInfo(String openId, String orderId, String ipAddr);
+    WxPayMpOrderResult createPayInfo(String openId, Long orderId, String ipAddr);
 
     /**
      * 确认微信支付的状态
      * @param orderId
      */
-    void confirmPay(String orderId);
+    void confirmPay(Long orderId);
 }

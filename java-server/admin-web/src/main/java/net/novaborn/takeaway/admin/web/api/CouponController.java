@@ -46,7 +46,7 @@ public class CouponController extends BaseController {
     public ResponseEntity<Page> getCouponListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
-            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+            List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
                     .map(User::getId)
                     .collect(Collectors.toList());
             if (ids.size() > 0) {
@@ -67,8 +67,11 @@ public class CouponController extends BaseController {
         Optional<CouponTemplate> couponTemplate = Optional.ofNullable(couponTemplateService.getById(templateId));
         couponTemplate.orElseThrow(() -> new SysException(CouponTemplateExceptionEnum.HAVE_NO_THIS_TEMPLATE));
 
-        List<String> userIdArray = new ArrayList<>(List.of(userIds.replaceAll("\r", "").split("\n")));
-        userIdArray.removeAll(Arrays.asList("", null));
+        List<Long> userIdArray = new ArrayList<>();
+        if (StrUtil.isNotBlank(userIds)) {
+            userIdArray.addAll(List.of(userIds.replaceAll("\r", "").split("\n")).stream().map(Long::valueOf).collect(Collectors.toList()));
+        }
+        userIdArray.removeAll(Arrays.asList(0L, null));
         if (userIdArray.size() > 0) {
             couponService.generateCoupon(couponTemplate.get(), userIdArray, expireDays, count);
         } else {

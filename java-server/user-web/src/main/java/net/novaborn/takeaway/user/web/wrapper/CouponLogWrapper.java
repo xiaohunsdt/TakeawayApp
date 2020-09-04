@@ -21,6 +21,6 @@ public class CouponLogWrapper extends BaseControllerWrapper {
     protected void warpTheMap(Map<String, Object> map) {
         CouponService couponService = SpringContextHolder.getBean(CouponService.class);
 
-        map.put("couponName", couponService.getById((String) map.get("couponId")).getCouponName());
+        map.put("couponName", couponService.getById((Long) map.get("couponId")).getCouponName());
     }
 }

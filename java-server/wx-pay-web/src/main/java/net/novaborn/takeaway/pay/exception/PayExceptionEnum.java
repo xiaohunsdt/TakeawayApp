@@ -6,7 +6,7 @@ public enum PayExceptionEnum implements ServiceExceptionEnum {
     /**
      * order 异常
      */
-    PAY_ERROR(500, "支付失败!"),
+    PAY_ERROR(500, "支付失败! 状态码: %s"),
 
     /**
      * 没有订单商品

@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.user.entity;
 
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -31,8 +32,10 @@ public class UserTest {
 
     @Test
     public void updateUserTest() {
+        DefaultIdentifierGenerator defaultIdentifierGenerator = new DefaultIdentifierGenerator();
+
         User user = new User();
-        user.setId("49268c005a631e2d77b7b90a206fe0eb");
+        user.setId(defaultIdentifierGenerator.nextId(user));
         user.setName("test1");
         userService.updateById(user);
     }

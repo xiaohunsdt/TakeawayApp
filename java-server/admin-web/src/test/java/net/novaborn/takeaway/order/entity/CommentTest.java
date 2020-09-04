@@ -20,8 +20,8 @@ public class CommentTest {
     @Test
     public void createTest() {
         Comment comment = new Comment();
-        comment.setOrderId("1111");
-        comment.setUserId("zxczc");
+        comment.setOrderId(1111L);
+        comment.setUserId(2222L);
         comment.setDelicious(3);
         comment.setExpress(4);
         comment.setService(5);

@@ -22,5 +22,5 @@ public interface IGoodsStockDao extends BaseMapper<GoodsStock> {
      * @param goodsId 产品ID
      * @return 查询到的产品库存
      */
-    Optional<GoodsStock> getByGoodsId(String goodsId);
+    Optional<GoodsStock> getByGoodsId(Long goodsId);
 }

@@ -21,7 +21,7 @@ public interface ICouponDao extends BaseMapper<Coupon> {
      * @param userId          用户ID
      * @return 优惠卷列表
      */
-    List<Coupon> getCouponListByUserId(@Param("userId") String userId, @Param("onlyShowUseAble") boolean onlyShowUseAble);
+    List<Coupon> getCouponListByUserId(@Param("userId") Long userId, @Param("onlyShowUseAble") boolean onlyShowUseAble);
 
     /**
      * 分页获取优惠卷列表

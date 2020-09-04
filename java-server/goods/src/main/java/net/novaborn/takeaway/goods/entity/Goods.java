@@ -28,8 +28,8 @@ public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;
 
     @Id
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 名称
@@ -55,7 +55,7 @@ public class Goods extends Model<Goods> {
     /**
      * 所属类目
      */
-    private String categoryId;
+    private Long categoryId;
 
     private Integer price;
 
@@ -95,7 +95,7 @@ public class Goods extends Model<Goods> {
     @TableLogic
     private Integer deleted;
 
-    public Goods(String id) {
+    public Goods(Long id) {
         this.id = id;
     }
 

@@ -61,7 +61,7 @@ public class GoodsController extends BaseController {
     }
 
     @GetMapping("getStockByGoodsId")
-    public ResponseEntity getStockByGoodsId(String id) {
+    public ResponseEntity getStockByGoodsId(Long id) {
         GoodsStock goodsStock = goodsStockService.getByGoodsId(id)
                 .orElseThrow(() -> new SysException(GoodsStockExceptionEnum.STOCK_NOT_FOUND));
         return ResponseEntity.ok(goodsStock.getStock());
@@ -114,7 +114,7 @@ public class GoodsController extends BaseController {
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
     @PostMapping("updateStock")
-    public Tip updateStock(String goodsId, int stock) {
+    public Tip updateStock(Long goodsId, int stock) {
         Optional<GoodsStock> targetGoodsStock = goodsStockService.getByGoodsId(goodsId);
         if (!targetGoodsStock.isPresent()) {
             return new ErrorTip(-1, "没有此商品的库存信息!");

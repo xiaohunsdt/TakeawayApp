@@ -20,7 +20,7 @@ public interface ISignInService {
      * @param date 指定时间(所在月)
      * @return 用户的签到实例
      */
-    Optional<SignIn> getSignIn(String userId, Date date);
+    Optional<SignIn> getSignIn(Long userId, Date date);
 
     /**
      *
@@ -28,14 +28,14 @@ public interface ISignInService {
      * @param date      指定时间(所在月)
      * @param signIn    签到实例
      */
-    void saveSignIn(String userId, Date date, SignIn signIn);
+    void saveSignIn(Long userId, Date date, SignIn signIn);
 
     /**
      * 给指定的用户和日期进行签到
      * @param userId
      * @param date
      */
-    void signIn(String userId, Date date);
+    void signIn(Long userId, Date date);
 
     /**
      * 检查是否签到
@@ -47,7 +47,7 @@ public interface ISignInService {
      *                      MONTH（某月）
      * @return
      */
-    boolean checkSignIn(String userId, Date date, int dateUnit);
+    boolean checkSignIn(Long userId, Date date, int dateUnit);
 
     /**
      * 检查是否满足签到要求
@@ -71,7 +71,7 @@ public interface ISignInService {
      *                      Calendar.MONTH (某月，全部签到)
      * @return
      */
-    int getSignInedCount(String userId, Date date, int dateUnit);
+    int getSignInedCount(Long userId, Date date, int dateUnit);
 
     /**
      * 遍历一个签到实例,返回一个签过到的天数集
@@ -80,7 +80,7 @@ public interface ISignInService {
      */
     int[] getAllSignInedDays(int record);
 
-    default String getKeyStr(String userId, Date date) {
-        return String.format("signin:%d-%d:%s", DateUtil.year(date), DateUtil.month(date), userId);
+    default String getKeyStr(Long userId, Date date) {
+        return String.format("signin:%d-%d:%d", DateUtil.year(date), DateUtil.month(date), userId);
     }
 }

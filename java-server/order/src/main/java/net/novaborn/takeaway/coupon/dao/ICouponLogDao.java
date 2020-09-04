@@ -21,7 +21,7 @@ public interface ICouponLogDao extends BaseMapper<CouponLog> {
      * @param couponId
      * @return
      */
-    List<CouponLog> getLogListByCouponId(@Param("couponId") String couponId);
+    List<CouponLog> getLogListByCouponId(@Param("couponId") Long couponId);
 
     /**
      * 根据 订单ID 获取优惠卷记录
@@ -29,7 +29,7 @@ public interface ICouponLogDao extends BaseMapper<CouponLog> {
      * @param orderId          订单ID
      * @return 优惠卷记录列表
      */
-    List<CouponLog> getLogListByOrderId(@Param("orderId") String orderId);
+    List<CouponLog> getLogListByOrderId(@Param("orderId") Long orderId);
 
     /**
      * 分页获取优惠卷使用列表

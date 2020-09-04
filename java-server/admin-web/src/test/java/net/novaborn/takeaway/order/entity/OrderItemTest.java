@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.order.entity;
 
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
@@ -21,9 +22,11 @@ public class OrderItemTest {
 
     @Test
     public void createOrderItemTest() {
+        DefaultIdentifierGenerator defaultIdentifierGenerator = new DefaultIdentifierGenerator();
+
         OrderItem orderItem = new OrderItem();
-        orderItem.setOrderId("f4b4e5d5dbc88094db45ca98f3e81eec");
-        orderItem.setGoodsId("2d912f7f177635c9cb0e6a28e5e4439e");
+        orderItem.setOrderId(defaultIdentifierGenerator.nextId(orderItem));
+        orderItem.setGoodsId(defaultIdentifierGenerator.nextId(orderItem));
         orderItem.setGoodsName("松花蛋豆腐");
         orderItem.setGoodsPrice(6000);
         orderItem.setGoodsCount(3);

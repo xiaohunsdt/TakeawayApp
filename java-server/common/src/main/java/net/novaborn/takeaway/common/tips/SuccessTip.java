@@ -13,7 +13,7 @@ public class SuccessTip extends Tip {
 		super.message = "操作成功";
 	}
 
-	public SuccessTip(String message){
+	public SuccessTip(Object message){
 		super.code = 0;
 		super.message = message;
 	}

@@ -71,7 +71,7 @@ public class CouponTemplateController extends BaseController {
                 throw new SysException(CouponTemplateExceptionEnum.ERROR_COUPON_TYPE);
         }
 
-        if (StrUtil.isBlank(couponTemplate.getId())) {
+        if (couponTemplate.getId() == null) {
             result = couponTemplateService.save(couponTemplate);
         } else {
             result = couponTemplateService.updateById(couponTemplate);

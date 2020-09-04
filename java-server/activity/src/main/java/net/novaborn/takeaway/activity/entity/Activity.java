@@ -21,8 +21,8 @@ import java.util.Date;
 public class Activity extends Model<Activity> {
     private static final long serialVersionUID = 7938670865637915592L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     @NotBlank(message = "标题不能为空")
     private String title;
