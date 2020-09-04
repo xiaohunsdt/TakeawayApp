@@ -36,7 +36,7 @@ public class PayController extends BaseController {
         WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
         log.info("订单:{},创建微信支付预信息成功!!", orderId);
 
-        orderPayStatusSender.send(orderId, 8);
+        orderPayStatusSender.send(orderId, 15);
         return result;
     }
 
