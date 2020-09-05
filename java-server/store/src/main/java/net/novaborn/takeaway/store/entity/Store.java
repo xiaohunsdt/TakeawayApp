@@ -2,6 +2,7 @@ package net.novaborn.takeaway.store.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import net.novaborn.takeaway.store.enums.PaymentWay;
 import net.novaborn.takeaway.store.enums.State;
@@ -12,7 +13,7 @@ import java.util.Date;
 
 @Data
 @TableName("`store`")
-public class Store {
+public class Store extends Model<Store> {
 
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;

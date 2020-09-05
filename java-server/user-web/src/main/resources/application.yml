@@ -35,7 +35,7 @@ spring:
       max-request-size: 100MB
       max-file-size: 100MB
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: wy1996
     type: com.alibaba.druid.pool.DruidDataSource
@@ -80,7 +80,7 @@ sys:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://192.168.0.7:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.0.7:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
   redis:
     host: 192.168.0.7
     password: wy1996
@@ -99,7 +99,7 @@ spring:
 spring:
   profiles: test
   datasource:
-    url: jdbc:mysql://cxy.novaborn.net:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://cxy.novaborn.net:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: takeaway
     password: takeaway123!
   redis:
@@ -115,7 +115,7 @@ spring:
 spring:
   profiles: pro
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://127.0.0.1:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: takeaway
     password: takeaway123!
   redis:

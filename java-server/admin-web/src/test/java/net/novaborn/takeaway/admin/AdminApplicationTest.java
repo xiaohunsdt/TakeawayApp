@@ -1,35 +1,20 @@
 package net.novaborn.takeaway.admin;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
-import net.novaborn.takeaway.activity.entity.Activity;
 import net.novaborn.takeaway.activity.service.impl.ActivityService;
-import net.novaborn.takeaway.banner.entity.Banner;
 import net.novaborn.takeaway.banner.service.impl.BannerService;
-import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
-import net.novaborn.takeaway.coupon.entity.Coupon;
-import net.novaborn.takeaway.coupon.entity.CouponLog;
-import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.coupon.services.impl.CouponTemplateService;
-import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.entity.GoodsStock;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
-import net.novaborn.takeaway.order.entity.Comment;
-import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.impl.CommentService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.service.impl.SettingService;
-import net.novaborn.takeaway.user.entity.Address;
-import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.junit.jupiter.api.Test;
@@ -38,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
