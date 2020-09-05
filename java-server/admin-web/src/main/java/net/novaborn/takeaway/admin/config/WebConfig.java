@@ -7,6 +7,7 @@ import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.admin.common.auth.filter.AuthFilter;
 import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
 import net.novaborn.takeaway.admin.common.auth.security.impl.Base64SecurityAction;
@@ -25,7 +26,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -50,10 +50,13 @@ public class WebConfig implements WebMvcConfigurer {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
+    SysContext sysContext;
+
+    @Autowired
     private JwtProperties jwtProperties;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -78,6 +81,7 @@ public class WebConfig implements WebMvcConfigurer {
     public FilterRegistrationBean jwtAuthenticationTokenFilter() {
         AuthFilter authFilter = new AuthFilter();
         authFilter.setJwtProperties(this.jwtProperties);
+        authFilter.setSysContext(this.sysContext);
         authFilter.setJwtTokenUtil(this.jwtTokenUtil);
         authFilter.setRedisTemplate(redisTemplate);
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(authFilter);

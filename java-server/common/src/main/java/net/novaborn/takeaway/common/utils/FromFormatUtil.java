@@ -5,6 +5,7 @@ import net.novaborn.takeaway.common.enums.From;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class FromFormatUtil {
     private static Map<From, String> fromMap = new HashMap<>();
 

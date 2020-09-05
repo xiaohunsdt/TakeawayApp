@@ -23,6 +23,8 @@ public class Admin extends Model<Admin> {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
+    private Long storeId;
+
     @NotBlank(message = "用户名必须设置")
     private String userName;
 

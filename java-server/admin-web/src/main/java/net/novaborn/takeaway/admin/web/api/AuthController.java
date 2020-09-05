@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,7 +49,7 @@ public class AuthController extends BaseController {
             Admin admin = adminService.getBaseMapper().selectByName(authRequest.getUserName()).get();
 
             final String randomKey = jwtTokenUtil.getRandomKey();
-            final String token = jwtTokenUtil.generateToken(admin.getId().toString(), randomKey);
+            final String token = jwtTokenUtil.generateToken(admin.getId().toString(), admin.getStoreId().toString(), randomKey);
 
             // 保存到redis
             String redisKey = jwtTokenUtil.getRedisKey(token);

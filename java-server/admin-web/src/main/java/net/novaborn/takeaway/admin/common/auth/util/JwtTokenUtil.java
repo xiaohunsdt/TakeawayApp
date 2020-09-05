@@ -40,11 +40,11 @@ public class JwtTokenUtil {
     @Autowired
     private JwtProperties jwtProperties;
 
-    public String getToken(HttpServletRequest request){
+    public String getToken(HttpServletRequest request) {
         return request.getHeader(jwtProperties.getHeader()).replace("Bearer ", "");
     }
 
-    public String getRedisKey(String token){
+    public String getRedisKey(String token) {
         return String.format("jwt:%s:%s", getUserIdFromToken(token), token);
     }
 
@@ -83,7 +83,7 @@ public class JwtTokenUtil {
     /**
      * 获取私有的jwt claim
      */
-    public String getPrivateClaimFromToken(String token, String key) {
+    public Object getPrivateClaimFromToken(String token, String key) {
         return getClaimFromToken(token).get(key).toString();
     }
 
@@ -91,7 +91,11 @@ public class JwtTokenUtil {
      * 获取md5 key从token中
      */
     public String getMd5KeyFromToken(String token) {
-        return getPrivateClaimFromToken(token, jwtProperties.getMd5Key());
+        return (String) getPrivateClaimFromToken(token, jwtProperties.getMd5Key());
+    }
+
+    public String getStoreIdFromToken(String token) {
+        return (String) getPrivateClaimFromToken(token, "storeId");
     }
 
     /**
@@ -120,10 +124,11 @@ public class JwtTokenUtil {
     /**
      * 生成token(通过用户名和签名时候用的随机数)
      */
-    public String generateToken(String userName, String randomKey) {
+    public String generateToken(String userId, String storeId, String randomKey) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("storeId", storeId);
         claims.put(jwtProperties.getMd5Key(), randomKey);
-        return doGenerateToken(claims, userName);
+        return doGenerateToken(claims, userId);
     }
 
     public String reGenerateToken(String token) {

@@ -2,6 +2,7 @@ package net.novaborn.takeaway.admin.common.auth.filter;
 
 import io.jsonwebtoken.JwtException;
 import lombok.Data;
+import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
@@ -27,6 +28,8 @@ import java.util.Set;
  */
 @Data
 public class AuthFilter extends OncePerRequestFilter {
+    private SysContext sysContext;
+
     private JwtTokenUtil jwtTokenUtil;
 
     private JwtProperties jwtProperties;
@@ -72,6 +75,11 @@ public class AuthFilter extends OncePerRequestFilter {
             RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()));
             return;
         }
+
+        // 将管理员信息保存到当前线程的上下文中
+        sysContext.setCurrentAdminId(Long.valueOf(jwtTokenUtil.getUserIdFromToken(authToken)));
+        sysContext.setCurrentStoreId(Long.valueOf(jwtTokenUtil.getStoreIdFromToken(authToken)));
+
         chain.doFilter(request, response);
     }
 
