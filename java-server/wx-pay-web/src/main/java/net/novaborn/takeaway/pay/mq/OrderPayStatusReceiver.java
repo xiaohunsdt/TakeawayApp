@@ -45,7 +45,7 @@ public class OrderPayStatusReceiver {
 
     @SneakyThrows
     @RabbitHandler
-    public void process(@Payload String orderId, Channel channel, @Headers Map<String, Object> headers) {
+    public void process(@Payload Long orderId, Channel channel, @Headers Map<String, Object> headers) {
         log.debug("订单支付状态队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Order target = orderService.getById(orderId);
@@ -56,14 +56,12 @@ public class OrderPayStatusReceiver {
             }
         } catch (Exception e) {
             // 如果15分钟之内还没有确认支付,视为支付失败!!设置订单状态为过去过期!
-            if (DateUtil.between(target.getCreateDate(), DateUtil.date(), DateUnit.MINUTE) > 15) {
-                target.setOrderState(OrderState.EXPIRED);
-                target.updateById();
-                log.warn("订单:{} 支付验证过期!设置订单为过期订单", orderId);
-            } else {
+            if (DateUtil.between(target.getCreateDate(), DateUtil.date(), DateUnit.MINUTE) <= 5) {
                 // 验证失败再次将这个订单丢到延迟队列当中
-                orderPayStatusSender.send(orderId, 30);
-                log.error("订单:{} 验证支付失败!原因: {}, 重新丢回延迟队列中!", orderId, e.getMessage());
+                orderPayStatusSender.send(orderId, 15);
+                log.warn("订单:{} 验证支付失败!原因: {}, 重新丢回延迟队列中!", orderId, e.getMessage());
+            }else {
+                log.error("订单:{} 验证支付失败!原因: {}, 系统自动认为未支付!", orderId, e.getMessage());
             }
         } finally {
             channel.basicAck(deliveryTag, false);

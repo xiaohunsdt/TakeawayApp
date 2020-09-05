@@ -54,18 +54,18 @@ public class CouponController extends BaseController {
 
     @ResponseBody
     @PostMapping("getCouponLogByOrderId")
-    public Object getCouponLogByOrderId(@RequestParam String orderId) {
+    public Object getCouponLogByOrderId(@RequestParam Long orderId) {
         List<CouponLog> couponLogList = couponLogService.getLogListByOrderId(orderId);
         return new CouponLogWrapper(couponLogList).warp();
     }
 
     @ResponseBody
     @PostMapping("exchangeCoupon")
-    public Tip exchangeCoupon(@RequestParam String couponId) {
+    public Tip exchangeCoupon(@RequestParam Long couponId) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
 
-        if (couponService.bindCoupon(user.get().getId(), couponId.trim())) {
+        if (couponService.bindCoupon(user.get().getId(), couponId)) {
             return new SuccessTip();
         } else {
             return new ErrorTip(-1, "兑换失败!请联系客服!");

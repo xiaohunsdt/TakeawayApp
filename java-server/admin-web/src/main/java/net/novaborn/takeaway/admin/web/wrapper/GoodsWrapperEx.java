@@ -22,7 +22,7 @@ public class GoodsWrapperEx extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         GoodsStockService goodsStockService = SpringContextHolder.getBean(GoodsStockService.class);
-        Optional<GoodsStock> goodsStock = goodsStockService.getByGoodsId((String) map.get("id"));
+        Optional<GoodsStock> goodsStock = goodsStockService.getByGoodsId((Long)map.get("id"));
         if (goodsStock.isPresent()) {
             map.put("stock", goodsStock.get().getStock());
         } else {

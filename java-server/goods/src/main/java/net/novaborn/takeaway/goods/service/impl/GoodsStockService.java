@@ -40,7 +40,7 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
     }
 
     @Override
-    public Optional<GoodsStock> getByGoodsId(String goodsId) {
+    public Optional<GoodsStock> getByGoodsId(Long goodsId) {
         return this.baseMapper.getByGoodsId(goodsId);
     }
 

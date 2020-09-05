@@ -24,18 +24,18 @@ import java.util.Objects;
 public class Order extends Model<Order> {
     private static final long serialVersionUID = -6354741085522616794L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     /**
      * 当天的编号
      */
     private Integer number;
 
-    private String userId;
+    private Long userId;
 
-    @NotEmpty(message = "地址不能为空")
-    private String addressId;
+    @NotNull(message = "地址不能为空")
+    private Long addressId;
 
     private Integer goodsCount;
 

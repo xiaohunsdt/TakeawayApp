@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.goods.entity;
 
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -17,11 +18,13 @@ public class GoodsTest {
 
     @Test
     public void createGoodsTest() {
+        DefaultIdentifierGenerator defaultIdentifierGenerator = new DefaultIdentifierGenerator();
+
         Goods goods = new Goods();
         goods.setName("蒜蓉黄瓜");
         goods.setDesc("美味好吃的蒜蓉黄瓜!");
         goods.setThumb("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569665705&di=2ba082452b0304e60a4b4d2bf58cc23d&imgtype=jpg&er=1&src=http%3A%2F%2Fpic16.nipic.com%2F20110820%2F128199_122056177000_2.jpg");
-        goods.setCategoryId("8410fe3eac3dd72c7b0aeb4f24cc05a8");
+        goods.setCategoryId(defaultIdentifierGenerator.nextId(goods));
         goods.setPrice(6000);
         goodsService.save(goods);
     }

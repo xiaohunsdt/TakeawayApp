@@ -67,7 +67,7 @@ public class OrderController extends BaseController {
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
-            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+            List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
                     .map(User::getId)
                     .collect(Collectors.toList());
             if (ids.size() > 0) {
@@ -108,7 +108,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getOrderDetail")
-    public ResponseEntity getOrderDetail(@RequestParam String orderId) {
+    public ResponseEntity getOrderDetail(@RequestParam Long orderId) {
         Optional<Order> order = orderService.getById(orderId, true);
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
@@ -143,7 +143,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("confirmPay")
-    public Tip confirmPay(@RequestParam String orderId) {
+    public Tip confirmPay(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -160,7 +160,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("receiveOrder")
-    public Tip receiveOrder(@RequestParam String orderId) {
+    public Tip receiveOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -180,7 +180,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("deliveryOrder")
-    public Tip deliveryOrder(@RequestParam String orderId) {
+    public Tip deliveryOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -199,7 +199,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("finishOrder")
-    public Tip finishOrder(@RequestParam String orderId) {
+    public Tip finishOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -225,7 +225,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("refundOrder")
-    public Tip refundOrder(@RequestParam String orderId) {
+    public Tip refundOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -252,7 +252,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("deleteOrder")
-    public Tip deleteOrder(@RequestParam String orderId) {
+    public Tip deleteOrder(@RequestParam Long orderId) {
         if (!orderService.removeById(orderId)) {
             return new ErrorTip(-1, "删除失败!");
         }

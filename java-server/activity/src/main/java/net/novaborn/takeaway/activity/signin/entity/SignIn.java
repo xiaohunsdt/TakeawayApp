@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SignIn {
 
-    String userId;
+    Long userId;
 
     /**
      * 记录一个月里的签到次数
@@ -31,7 +31,7 @@ public class SignIn {
 
     Date createDate;
 
-    public SignIn(String userId) {
+    public SignIn(Long userId) {
         this.userId = userId;
         this.setRecord(0);
         this.setCreateDate(new Date());

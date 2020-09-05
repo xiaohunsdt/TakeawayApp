@@ -23,7 +23,7 @@ public interface IAddressDao extends BaseMapper<Address> {
      * @param userId 用户ID
      * @return 查询到的地址列表
      */
-    List<Address> selectByUserId(@Param("userId") String userId);
+    List<Address> selectByUserId(@Param("userId") Long userId);
 
     /**
      * 分页获取地址列表
@@ -39,5 +39,5 @@ public interface IAddressDao extends BaseMapper<Address> {
      * @param userId 用户ID
      * @return 查询到的默认地址
      */
-    Optional<Address> selectDefaultAddressByUserId(@Param("userId") String userId);
+    Optional<Address> selectDefaultAddressByUserId(@Param("userId") Long userId);
 }

@@ -20,7 +20,7 @@ public class AddressWrapper extends BaseControllerWrapper {
     @Override
     protected void warpTheMap(Map<String, Object> map) {
         UserService userService = SpringContextHolder.getBean(UserService.class);
-        map.put("user", userService.getById((String) map.get("userId")));
+        map.put("user", userService.getById((Long) map.get("userId")));
         map.remove("userId");
     }
 }

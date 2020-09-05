@@ -129,7 +129,7 @@ public class OrderServiceTest {
         List<Order> orderList = orderService.getOrderList(args);
         List<UserConsumption> userConsumptionList = orderList.stream().map(order -> new UserConsumption(order.getUserId())).distinct().collect(Collectors.toList());
 
-        Map<String, UserConsumption> tempMap = new HashMap<>();
+        Map<Long, UserConsumption> tempMap = new HashMap<>();
         userConsumptionList.forEach(userConsumption -> tempMap.put(userConsumption.getUserId(), userConsumption));
 
         orderList.parallelStream().forEach(order -> {

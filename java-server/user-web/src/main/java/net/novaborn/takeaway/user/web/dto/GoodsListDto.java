@@ -38,9 +38,9 @@ public class GoodsListDto {
 
     @Data
     private class CategoryDto {
-        private String id;
+        private Long id;
         private String name;
-        private String parentId;
+        private Long parentId;
         private List<Map> goodsList;
     }
 }

@@ -26,8 +26,8 @@ public class OrderWrapperEx extends BaseControllerWrapper {
     protected void warpTheMap(Map<String, Object> map) {
         UserService userService = SpringContextHolder.getBean(UserService.class);
         AddressService addressService = SpringContextHolder.getBean(AddressService.class);
-        User user = userService.getById((String) map.get("userId"));
-        Address address = addressService.getById((String) map.get("addressId"));
+        User user = userService.getById((Long) map.get("userId"));
+        Address address = addressService.getById((Long) map.get("addressId"));
 
         if (user.getOpenId() != null) {
             map.put("userName", user.getNickName());

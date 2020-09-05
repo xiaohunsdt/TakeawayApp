@@ -6,14 +6,14 @@ import java.util.Objects;
 
 @Data
 public class UserConsumption {
-    private String userId;
+    private Long userId;
     private Integer totalOrderCount;
     private Integer totalOrderItemCount;
     private Integer totalOrderPrice;
     private Integer averageOrderPrice;
     private Integer averageDailyPrice;
 
-    public UserConsumption(String userId) {
+    public UserConsumption(Long userId) {
         this.userId = userId;
         this.totalOrderCount = 0;
         this.totalOrderItemCount = 0;

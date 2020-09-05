@@ -31,7 +31,7 @@ public class CommentController extends BaseController {
     @PostMapping("getCommentListByPage")
     public ResponseEntity<Page> getCommentListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
-            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+            List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
                     .map(User::getId)
                     .collect(Collectors.toList());
             if (ids.size() > 0) {

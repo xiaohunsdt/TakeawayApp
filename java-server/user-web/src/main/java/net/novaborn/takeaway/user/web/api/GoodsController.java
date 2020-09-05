@@ -36,7 +36,7 @@ public class GoodsController extends BaseController {
     }
 
     @GetMapping("getGoodsListByCategoryId")
-    public ResponseEntity getGoodsListByCategoryId(@RequestParam String categoryId) {
+    public ResponseEntity getGoodsListByCategoryId(@RequestParam Long categoryId) {
         List<Goods> goodsList = goodsService.getGoodsListByCategoryId(categoryId);
 
         // 筛选有效商品

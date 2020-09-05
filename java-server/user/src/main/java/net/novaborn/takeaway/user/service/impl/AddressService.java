@@ -36,12 +36,12 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     SettingService settingService;
 
     @Override
-    public List<Address> selectByUserId(String userId) {
+    public List<Address> selectByUserId(Long userId) {
         return this.baseMapper.selectByUserId(userId);
     }
 
     @Override
-    public Optional<Address> selectDefaultAddressByUserId(String userId) {
+    public Optional<Address> selectDefaultAddressByUserId(Long userId) {
         return this.baseMapper.selectDefaultAddressByUserId(userId);
     }
 
@@ -51,7 +51,7 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     }
 
     @Override
-    public Boolean setDefaultAddress(String addressId, String userId) {
+    public Boolean setDefaultAddress(Long addressId, Long userId) {
         // 首先取消之前的默认地址
         Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(userId);
 
@@ -68,7 +68,7 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
     }
 
     @Override
-    public Double getDistanceWithStore(String addressId) {
+    public Double getDistanceWithStore(Long addressId) {
         Optional<Address> address = Optional.ofNullable(addressService.getById(addressId));
 
         address.orElseThrow(() -> new SysException(AddressExceptionEnum.NO_ADDRESS_ERROR));
@@ -87,8 +87,8 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
         return MapDistanceUtil.getDistance(
                 address.get().getX(),
                 address.get().getY(),
-                Double.parseDouble((String) store_coordinate_x.getValue()),
-                Double.parseDouble((String) store_coordinate_y.getValue())
+                Double.parseDouble(store_coordinate_x.getValue()),
+                Double.parseDouble(store_coordinate_y.getValue())
         );
     }
 }

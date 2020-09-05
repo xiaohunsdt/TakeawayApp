@@ -59,7 +59,7 @@ public class IndexController extends BaseController {
 
     @ResponseBody
     @RequestMapping("print")
-    public Tip printOrder(@RequestParam String orderId) {
+    public Tip printOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         this.print(order.get());

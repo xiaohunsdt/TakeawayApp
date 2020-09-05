@@ -18,8 +18,8 @@ import java.util.Date;
 public class Banner extends Model<Banner> {
     private static final long serialVersionUID = 7938670865637115592L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
     @NotBlank(message = "标题不能为空")
     private String title;

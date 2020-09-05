@@ -22,10 +22,10 @@ import java.util.Objects;
 public class Address extends Model<Address> {
     private static final long serialVersionUID = -3379009665983595457L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
-    private String userId;
+    private Long userId;
 
     /**
      * 具体地址

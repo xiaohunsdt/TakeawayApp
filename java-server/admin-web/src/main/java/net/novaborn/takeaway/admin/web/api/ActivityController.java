@@ -60,11 +60,7 @@ public class ActivityController extends BaseController {
     public Tip createNewActivity(@Valid Activity activity) {
         boolean result;
 
-        if (StrUtil.isBlank(activity.getId())) {
-            result = activityService.save(activity);
-        } else {
-            result = activityService.updateById(activity);
-        }
+        result = activity.getId() == null ? activityService.save(activity) : activityService.updateById(activity);
 
         if (result) {
             return new SuccessTip("成功!");

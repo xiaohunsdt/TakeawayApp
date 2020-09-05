@@ -1,7 +1,6 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -52,25 +51,25 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @PostConstruct
     public void init() {
         gifts = new HashMap<>();
-        gifts.put("鸭脖", goodsService.getById("c14ebb430a2a13a06a0c46257da111e9"));
-        gifts.put("鸭锁骨", goodsService.getById("acdb4768dcdb262017994e5b4194d6dd"));
-        gifts.put("鸭翅", goodsService.getById("fcc8b84ab29e5fd69acfc4859a0a33f6"));
-        gifts.put("川香卤蛋", goodsService.getById("3624d263cc0e3dce7898fd7071f9437a"));
-        gifts.put("饮料", goodsService.getById("9daf4687b855ed61ba74f8115ff792b5"));
+        gifts.put("鸭脖", goodsService.getById(1301894883776212994L));
+        gifts.put("鸭锁骨", goodsService.getById(1301894884560547841L));
+        gifts.put("鸭翅", goodsService.getById(1301894884560547841L));
+        gifts.put("川香卤蛋", goodsService.getById(1301894882715054082L));
+        gifts.put("饮料", goodsService.getById(1301894885328105474L));
     }
 
     @Override
-    public Optional<Order> getById(String orderId, boolean isShowDeleted) {
+    public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
         return this.baseMapper.getById(orderId, isShowDeleted);
     }
 
     @Override
-    public List<Order> getOrderListByUserId(String userId) {
+    public List<Order> getOrderListByUserId(Long userId) {
         return this.getOrderListByUserId(userId, null, null, false);
     }
 
     @Override
-    public List<Order> getOrderListByUserId(String userId, PaymentWay paymentWay, OrderState orderState, boolean isShowDeleted) {
+    public List<Order> getOrderListByUserId(Long userId, PaymentWay paymentWay, OrderState orderState, boolean isShowDeleted) {
         return this.baseMapper.getOrderListByUserId(userId, paymentWay, orderState, isShowDeleted);
     }
 
@@ -91,22 +90,22 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public IPage<Order> getOrderListByPageU(Page page, String userId, OrderStateEx orderState) {
+    public IPage<Order> getOrderListByPageU(Page page, Long userId, OrderStateEx orderState) {
         return this.baseMapper.getOrderListByPageU(page, userId, orderState);
     }
 
     @Override
-    public int getOrderCountByStateU(String userId, OrderStateEx orderState) {
+    public int getOrderCountByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getOrderCountByStateU(userId, orderState);
     }
 
     @Override
-    public List<Order> getTodayOrderByStateU(String userId, OrderStateEx orderState) {
+    public List<Order> getTodayOrderByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderByStateU(userId, orderState);
     }
 
     @Override
-    public int getTodayOrderCountByStateU(String userId, OrderStateEx orderState) {
+    public int getTodayOrderCountByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
     }
 
@@ -116,7 +115,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void setDiscount(Order order, List<OrderItem> orderItemList, String couponId) {
+    public void setDiscount(Order order, List<OrderItem> orderItemList, Long couponId) {
         couponService.getDiscountMoney(order, orderItemList, couponId);
     }
 
@@ -128,7 +127,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-                .filter(orderItem -> !StrUtil.isBlank(orderItem.getGoodsId()))
+                .filter(orderItem -> orderItem.getGoodsId() != null)
                 .map(orderItem -> {
                     Goods goods = goodsService.getById(orderItem.getGoodsId());
                     // 鸭货除外
@@ -158,7 +157,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void postCheckOrder(Order order, List<OrderItem> orderItemList, String couponId) {
+    public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
         // 设置优惠
         if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
@@ -196,7 +195,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         //设置 优惠卷折扣
-        if (!StrUtil.isBlank(couponId)) {
+        if (couponId != null) {
             this.setDiscount(order, orderItemList, couponId);
         }
 

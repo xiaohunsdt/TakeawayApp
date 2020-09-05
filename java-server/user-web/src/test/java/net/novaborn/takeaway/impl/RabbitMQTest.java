@@ -27,7 +27,7 @@ public class RabbitMQTest {
     @Test
     public void orderPayExpiredSender() {
         Order order = new Order();
-        order.setId(UUID.randomUUID().toString());
+        order.setId(111L);
         orderPayExpiredSender.send(order, 10);
         System.out.println(DateUtil.formatDateTime(new Date()));
     }
@@ -35,7 +35,7 @@ public class RabbitMQTest {
     @Test
     public void couponExpiredSender() {
         Coupon coupon = new Coupon();
-        coupon.setId(UUID.randomUUID().toString());
+        coupon.setId(111L);
         couponExpiredSender.send(coupon, 10);
         System.out.println(DateUtil.formatDateTime(new Date()));
     }

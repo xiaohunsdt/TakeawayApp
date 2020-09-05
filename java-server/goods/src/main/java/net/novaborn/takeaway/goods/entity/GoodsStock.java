@@ -19,10 +19,10 @@ import java.util.Date;
 public class GoodsStock extends Model<GoodsStock> {
     private static final long serialVersionUID = -7514580043247682497L;
 
-    @TableId(type = IdType.ASSIGN_UUID)
-    private String id;
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
 
-    private String goodsId;
+    private Long goodsId;
 
     private Integer stock;
 

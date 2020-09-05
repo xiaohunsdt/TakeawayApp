@@ -21,14 +21,14 @@ public interface IOrderItemService extends IService<OrderItem> {
      * @param orderId 订单ID
      * @return 订单项列表
      */
-    List<OrderItem> selectByOrderId(String orderId);
+    List<OrderItem> selectByOrderId(Long orderId);
 
     /**
      * 根据订单ID删除指定订单项
      * @param orderId 订单ID
      * @return 是否成功
      */
-    boolean removeByOrderId(String orderId);
+    boolean removeByOrderId(Long orderId);
 
     /**
      * 检查商品项是否可以下单

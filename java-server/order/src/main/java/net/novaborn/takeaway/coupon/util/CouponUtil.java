@@ -50,19 +50,31 @@ public class CouponUtil {
         boolean result = true;
 
         if (!couponRules.get("limitCategory").isEmpty()) {
-            result = !couponRules.get("limitCategory").contains(goods.getCategoryId());
+            result = !couponRules.get("limitCategory").contains(goods.getCategoryId().toString());
+            if (!result) {
+                return result;
+            }
         }
 
         if (!couponRules.get("limitGoods").isEmpty()) {
             result = !couponRules.get("limitGoods").contains(goods.getName());
+            if (!result) {
+                return false;
+            }
         }
 
         if (!couponRules.get("allowCategory").isEmpty()) {
-            result = couponRules.get("allowCategory").contains(goods.getCategoryId());
+            result = couponRules.get("allowCategory").contains(goods.getCategoryId().toString());
+            if (!result) {
+                return false;
+            }
         }
 
         if (!couponRules.get("allowGoods").isEmpty()) {
             result = couponRules.get("allowGoods").contains(goods.getName());
+            if (!result) {
+                return false;
+            }
         }
 
         return result;
@@ -73,7 +85,7 @@ public class CouponUtil {
         return categoryList.parallelStream()
                 .map(item -> {
                     Optional<Category> category = categoryService.getByName(item);
-                    return category.isPresent() ? category.get().getId() : null;
+                    return category.map(value -> value.getId().toString()).orElse(null);
                 })
                 .collect(Collectors.toList());
     }

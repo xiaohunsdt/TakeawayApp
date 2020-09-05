@@ -78,7 +78,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("selectOrderById")
-    public ResponseEntity selectOrderById(@RequestParam String orderId) {
+    public ResponseEntity selectOrderById(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
         return ResponseEntity.ok(new OrderDetailWrapper(order.get()).warp());
@@ -110,7 +110,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("confirmGetOrder")
-    public Tip confirmGetOrder(@RequestParam String orderId) {
+    public Tip confirmGetOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -163,7 +163,7 @@ public class OrderController extends BaseController {
             });
 
             // 对优惠卷进行后续处理
-            if (orderDto.getCouponId() != null && !orderDto.getCouponId().isBlank()) {
+            if (orderDto.getCouponId() != null && orderDto.getCouponId() != null) {
                 Coupon coupon = couponService.getById(orderDto.getCouponId());
                 coupon.setState(CouponState.USED);
                 coupon.updateById();
@@ -206,7 +206,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("deleteOrder")
-    public Tip deleteOrder(@RequestParam String orderId) {
+    public Tip deleteOrder(@RequestParam Long orderId) {
         if (!orderService.removeById(orderId)) {
             return new ErrorTip(-1, "删除失败!");
         }
@@ -230,7 +230,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getDeliveryArriveTime")
-    public Object getDeliveryArriveTime(@RequestParam(required = false) String orderId) {
+    public Object getDeliveryArriveTime(@RequestParam(required = false) Long orderId) {
         Date deliveryDate;
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
 //        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));

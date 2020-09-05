@@ -31,7 +31,7 @@ public interface IGoodsService extends IService<Goods> {
      * @param categoryId 分类Id
      * @return 查询到的产品列表
      */
-    List<Goods> getGoodsListByCategoryId(String categoryId);
+    List<Goods> getGoodsListByCategoryId(Long categoryId);
 
     /**
      * 根据产品标志名称获取指定产品

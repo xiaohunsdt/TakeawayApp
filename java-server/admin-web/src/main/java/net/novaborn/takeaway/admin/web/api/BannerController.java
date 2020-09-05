@@ -53,11 +53,7 @@ public class BannerController extends BaseController {
     public Tip createNewBanner(@Valid Banner banner) {
         boolean result;
 
-        if (StrUtil.isBlank(banner.getId())) {
-            result = bannerService.save(banner);
-        } else {
-            result = bannerService.updateById(banner);
-        }
+        result = banner.getId() == null? bannerService.save(banner) : bannerService.updateById(banner);
 
         if (result) {
             return new SuccessTip("成功!");

@@ -35,7 +35,7 @@ public class CouponLogController extends BaseController {
     public ResponseEntity<Page> getCouponLogListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
-            List<String> ids = userService.getByNickName((String) args.get("nickName")).stream()
+            List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
                     .map(User::getId)
                     .collect(Collectors.toList());
             if (ids.size() > 0) {

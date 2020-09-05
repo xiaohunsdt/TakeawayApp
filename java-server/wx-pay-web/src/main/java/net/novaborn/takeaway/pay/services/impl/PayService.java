@@ -2,12 +2,10 @@ package net.novaborn.takeaway.pay.services.impl;
 
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
-import com.github.binarywang.wxpay.bean.result.WxPayOrderCloseResult;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.order.entity.Order;
@@ -33,14 +31,14 @@ public class PayService implements IPayService {
     private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
 
     @Override
-    public WxPayMpOrderResult createPayInfo(String openId, String orderId, String ipAddr) {
+    public WxPayMpOrderResult createPayInfo(String openId, Long orderId, String ipAddr) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setOpenid(openId);
         request.setBody("支付-川香苑外卖");
-        request.setOutTradeNo(orderId);
+        request.setOutTradeNo(orderId.toString());
         request.setTotalFee(getOrderPrice(order.get())); // 精确到分
         request.setSpbillCreateIp(ipAddr);
         request.setNotifyUrl(NOTICE_URL);
@@ -60,10 +58,10 @@ public class PayService implements IPayService {
     }
 
     @Override
-    public void confirmPay(String orderId) {
+    public void confirmPay(Long orderId) {
         WxPayOrderQueryResult result;
         try {
-            result = wxPayService.queryOrder(null, orderId);
+            result = wxPayService.queryOrder(null, orderId.toString());
         } catch (WxPayException e) {
             log.error(null, e);
             SysException sysException = new SysException(PayExceptionEnum.QUERY_PAY_ERROR);
@@ -76,7 +74,7 @@ public class PayService implements IPayService {
         this.confirmOrder(orderId, totalPrice, state);
     }
 
-    private void confirmOrder(String orderId, int totalPrice, String state) {
+    private void confirmOrder(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -94,7 +92,7 @@ public class PayService implements IPayService {
                 throw new SysException(PayExceptionEnum.PAY_PRICE_ERROR);
             }
         } else {
-            throw new SysException(PayExceptionEnum.PAY_ERROR);
+            throw new SysException(PayExceptionEnum.PAY_ERROR, state);
         }
     }
 

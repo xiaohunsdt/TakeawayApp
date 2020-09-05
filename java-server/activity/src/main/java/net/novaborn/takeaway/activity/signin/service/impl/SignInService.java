@@ -22,19 +22,19 @@ public class SignInService implements ISignInService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public Optional<SignIn> getSignIn(String userId, Date date) {
+    public Optional<SignIn> getSignIn(Long userId, Date date) {
         String key = getKeyStr(userId, date);
         return Optional.ofNullable((SignIn) redisTemplate.opsForValue().get(key));
     }
 
     @Override
-    public void saveSignIn(String userId, Date date, SignIn signIn) {
+    public void saveSignIn(Long userId, Date date, SignIn signIn) {
         String key = getKeyStr(userId, date);
         redisTemplate.opsForValue().set(key, signIn, 31, TimeUnit.DAYS);
     }
 
     @Override
-    public void signIn(String userId, Date date) {
+    public void signIn(Long userId, Date date) {
         Optional<SignIn> signIn = getSignIn(userId, date).or(() -> {
             SignIn temp = new SignIn(userId);
             return Optional.of(temp);
@@ -48,7 +48,7 @@ public class SignInService implements ISignInService {
     }
 
     @Override
-    public boolean checkSignIn(String userId, Date date, int dateUnit) {
+    public boolean checkSignIn(Long userId, Date date, int dateUnit) {
         Optional<SignIn> signIn = getSignIn(userId, date);
         if (signIn.isEmpty()) {
             return false;
@@ -109,7 +109,7 @@ public class SignInService implements ISignInService {
     }
 
     @Override
-    public int getSignInedCount(String userId, Date date, int dateUnit) {
+    public int getSignInedCount(Long userId, Date date, int dateUnit) {
         SignIn signIn = getSignIn(userId, date).orElse(null);
         if (signIn == null) {
             return 0;

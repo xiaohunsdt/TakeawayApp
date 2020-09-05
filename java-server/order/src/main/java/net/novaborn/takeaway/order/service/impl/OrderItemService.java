@@ -35,12 +35,12 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
     private GoodsStockService goodsStockService;
 
     @Override
-    public List<OrderItem> selectByOrderId(String orderId) {
+    public List<OrderItem> selectByOrderId(Long orderId) {
         return this.baseMapper.selectByOrderId(orderId);
     }
 
     @Override
-    public boolean removeByOrderId(String orderId) {
+    public boolean removeByOrderId(Long orderId) {
         return this.baseMapper.removeByOrderId(orderId);
     }
 

@@ -29,7 +29,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param onlyShowUseAble 只显示可用优惠卷
      * @return 优惠卷列表
      */
-    List<Coupon> getCouponListByUserId(String userId, boolean onlyShowUseAble);
+    List<Coupon> getCouponListByUserId(Long userId, boolean onlyShowUseAble);
 
     /**
      * 分页获取优惠卷列表
@@ -50,13 +50,13 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userIds  用户ID列表
      */
-    void generateCoupon(CouponTemplate template, List<String> userIds);
+    void generateCoupon(CouponTemplate template, List<Long> userIds);
 
-    void generateCoupon(CouponTemplate template, List<String> userIds, Integer count);
+    void generateCoupon(CouponTemplate template, List<Long> userIds, Integer count);
 
     void generateCoupon(CouponTemplate template, Integer expireDays, Integer count);
 
-    void generateCoupon(CouponTemplate template, List<String> userIds, Integer expireDays, Integer count);
+    void generateCoupon(CouponTemplate template, List<Long> userIds, Integer expireDays, Integer count);
 
     /**
      * 生成优惠卷
@@ -64,11 +64,11 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userId   用户ID
      */
-    void generateCoupon(CouponTemplate template, String userId);
+    void generateCoupon(CouponTemplate template, Long userId);
 
-    void generateCoupon(CouponTemplate template, String userId, Integer count);
+    void generateCoupon(CouponTemplate template, Long userId, Integer count);
 
-    void generateCoupon(CouponTemplate template, String userId, Integer expireDays, Integer count);
+    void generateCoupon(CouponTemplate template, Long userId, Integer expireDays, Integer count);
 
     /**
      * 绑定优惠卷
@@ -76,7 +76,7 @@ public interface ICouponService extends IService<Coupon> {
      * @param couponId
      * @return
      */
-    boolean bindCoupon(String userId, String couponId);
+    boolean bindCoupon(Long userId, Long couponId);
 
     /**
      * 获取优惠金额
@@ -86,5 +86,5 @@ public interface ICouponService extends IService<Coupon> {
      * @param couponId   优惠卷ID
      * @return order 一个Order实例,里面包含折扣信息
      */
-    Order getDiscountMoney(Order order, List<OrderItem> orderItems, String couponId);
+    Order getDiscountMoney(Order order, List<OrderItem> orderItems, Long couponId);
 }

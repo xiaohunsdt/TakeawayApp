@@ -25,8 +25,8 @@ public class OrderDetailWrapper extends OrderWrapper {
         AddressService addressService = SpringContextHolder.getBean(AddressService.class);
         OrderItemService orderItemService = SpringContextHolder.getBean(OrderItemService.class);
 
-        Address address = addressService.getById((String) map.get("addressId"));
-        List<OrderItem> orderItemList = orderItemService.selectByOrderId((String) map.get("id"));
+        Address address = addressService.getById((Long) map.get("addressId"));
+        List<OrderItem> orderItemList = orderItemService.selectByOrderId((Long) map.get("id"));
 
         map.put("address", address);
         map.put("orderItemList", new OrderItemWrapper(orderItemList).warp());

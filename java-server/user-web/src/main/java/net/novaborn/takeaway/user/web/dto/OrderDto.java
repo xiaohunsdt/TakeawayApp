@@ -21,5 +21,5 @@ public class OrderDto {
     @Size(min = 1, message = "没有订单产品信息")
     private List<OrderItem> orderItems;
 
-    private String couponId;
+    private Long couponId;
 }
