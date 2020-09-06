@@ -67,7 +67,7 @@
             label="操作">
           <template v-slot="props">
             <el-button @click="onEdit(props.row.id)" size="mini" type="primary">编辑</el-button>
-            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>
+<!--            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -91,7 +91,6 @@
 import BaseCard from '@/components/BaseCard'
 import AdminDialog from './components/AdminDialog'
 import adminApi from '@/api/admin'
-import bannerApi from '@/api/banner'
 
 export default {
   name: 'AdminManagement',
@@ -142,32 +141,11 @@ export default {
       this.page.current = 1
       this.getList()
     },
-    onChange(banner) {
-      bannerApi.changeIsShow(banner.id, banner.isShow)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
-          })
-    },
     onCreateNewAdmin() {
       this.$refs['admin-dialog'].openDialog()
     },
     onEdit(id) {
       this.$refs['admin-dialog'].openDialog(id)
-    },
-    onDelete(id) {
-      this.$confirm('是否确定删除此横幅?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        bannerApi.deleteBanner(id)
-            .then(() => {
-              this.getList()
-            })
-      })
     },
     onUpdatedAdmin() {
       this.onSearch()
