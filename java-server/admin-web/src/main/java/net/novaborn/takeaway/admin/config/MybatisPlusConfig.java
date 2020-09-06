@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 /**
  * MybatisPlus配置
  *
@@ -34,6 +36,8 @@ public class MybatisPlusConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         // 多租户插件
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
+            List<String> ignoreTable = List.of("user", "address", "activity", "banner", "goods_stock", "order_item", "store");
+
             @Override
             public Expression getTenantId() {
                 return sysContext.getCurrentStoreId() != 0L ? new LongValue(sysContext.getCurrentStoreId()) : null;
@@ -41,7 +45,7 @@ public class MybatisPlusConfig {
 
             @Override
             public boolean ignoreTable(String tableName) {
-                return false;
+                return ignoreTable.contains(tableName);
             }
 
             @Override
