@@ -11,7 +11,6 @@ public class SysContext {
     private final ThreadLocal<Long> currentStoreId = new ThreadLocal<>();
 
     public void setCurrentAdminId(Long adminId) {
-        log.info(adminId.toString());
         this.currentAdminId.set(adminId);
     }
 
@@ -20,7 +19,6 @@ public class SysContext {
     }
 
     public void setCurrentStoreId(Long storeId) {
-        log.info(storeId.toString());
         this.currentStoreId.set(storeId);
     }
 
