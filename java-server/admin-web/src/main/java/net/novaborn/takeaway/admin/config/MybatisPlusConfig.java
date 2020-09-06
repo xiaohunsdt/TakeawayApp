@@ -34,6 +34,7 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
         // 多租户插件
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
             List<String> ignoreTable = List.of("user", "address", "activity", "banner", "goods_stock", "order_item", "store");
@@ -53,8 +54,6 @@ public class MybatisPlusConfig {
                 return "store_id";
             }
         }));
-
-
         // 分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         // 乐观锁插件

@@ -45,18 +45,18 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     private SettingService settingService;
 
-    @Setter
-    protected Map<String, Goods> gifts;
-
-    @PostConstruct
-    public void init() {
-        gifts = new HashMap<>();
-        gifts.put("鸭脖", goodsService.getById(1301894883776212994L));
-        gifts.put("鸭锁骨", goodsService.getById(1301894884560547841L));
-        gifts.put("鸭翅", goodsService.getById(1301894884560547841L));
-        gifts.put("川香卤蛋", goodsService.getById(1301894882715054082L));
-        gifts.put("饮料", goodsService.getById(1301894885328105474L));
-    }
+//    @Setter
+//    protected Map<String, Goods> gifts;
+//
+//    @PostConstruct
+//    public void init() {
+//        gifts = new HashMap<>();
+//        gifts.put("鸭脖", goodsService.getById(1301894883776212994L));
+//        gifts.put("鸭锁骨", goodsService.getById(1301894884560547841L));
+//        gifts.put("鸭翅", goodsService.getById(1301894884560547841L));
+//        gifts.put("川香卤蛋", goodsService.getById(1301894882715054082L));
+//        gifts.put("饮料", goodsService.getById(1301894885328105474L));
+//    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
@@ -159,40 +159,40 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
         // 设置优惠
-        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-            Goods gift = null;
-            if (order.getRealPrice() >= 40000) {
-                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
-                    gift = gifts.get("鸭脖");
-                }
-            } else if (order.getRealPrice() >= 30000) {
-                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
-                    gift = gifts.get("鸭锁骨");
-                }
-            } else if (order.getRealPrice() >= 25000) {
-                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
-                    gift = gifts.get("鸭翅");
-                }
-            } else if (order.getRealPrice() >= 20000) {
-                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
-                    gift = gifts.get("饮料");
-                }
-            } else if (order.getRealPrice() >= 15000) {
-                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
-                    gift = gifts.get("川香卤蛋");
-                }
-            }
-            if (gift != null) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setGoodsId(gift.getId());
-                orderItem.setGoodsName("暑假特惠-" + gift.getName());
-                orderItem.setGoodsThumb(gift.getThumb());
-                orderItem.setGoodsPrice(0);
-                orderItem.setGoodsCount(1);
-                orderItemList.add(orderItem);
-                order.setGoodsCount(order.getGoodsCount() + 1);
-            }
-        }
+//        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+//            Goods gift = null;
+//            if (order.getRealPrice() >= 40000) {
+//                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
+//                    gift = gifts.get("鸭脖");
+//                }
+//            } else if (order.getRealPrice() >= 30000) {
+//                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
+//                    gift = gifts.get("鸭锁骨");
+//                }
+//            } else if (order.getRealPrice() >= 25000) {
+//                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
+//                    gift = gifts.get("鸭翅");
+//                }
+//            } else if (order.getRealPrice() >= 20000) {
+//                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
+//                    gift = gifts.get("饮料");
+//                }
+//            } else if (order.getRealPrice() >= 15000) {
+//                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
+//                    gift = gifts.get("川香卤蛋");
+//                }
+//            }
+//            if (gift != null) {
+//                OrderItem orderItem = new OrderItem();
+//                orderItem.setGoodsId(gift.getId());
+//                orderItem.setGoodsName("暑假特惠-" + gift.getName());
+//                orderItem.setGoodsThumb(gift.getThumb());
+//                orderItem.setGoodsPrice(0);
+//                orderItem.setGoodsCount(1);
+//                orderItemList.add(orderItem);
+//                order.setGoodsCount(order.getGoodsCount() + 1);
+//            }
+//        }
 
         //设置 优惠卷折扣
         if (couponId != null) {
