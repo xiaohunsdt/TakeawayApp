@@ -2,7 +2,7 @@
     <el-dialog :close-on-click-modal="false" :visible.sync="dialogFormVisible" size="mini" title="编辑地址" width="600px">
         <el-form :model="formData" v-if="formData">
             <el-form-item label="地址ID" label-width="120">
-                <el-input v-model="formData.id"></el-input>
+                <el-input v-model="formData.id" disabled></el-input>
             </el-form-item>
             <el-form-item label="地址" label-width="120">
                 <el-select
