@@ -262,6 +262,26 @@ export const asyncRoutes = [
         ]
     },
     {
+        path: '/store',
+        component: Layout,
+        redirect: '/store/index',
+        meta: {
+            title: '店铺管理',
+            icon: 'example',
+            affix: true,
+            roles: ['SUPER_MANAGER']
+        },
+        children: [
+            {
+                path: 'index',
+                name: 'StoreManagement',
+                // props: true,
+                component: () => import('@/views/store/index'),
+                meta: { title: '店铺管理', icon: 'setting' }
+            }
+        ]
+    },
+    {
         path: '/sys',
         component: Layout,
         redirect: '/sys/index',
