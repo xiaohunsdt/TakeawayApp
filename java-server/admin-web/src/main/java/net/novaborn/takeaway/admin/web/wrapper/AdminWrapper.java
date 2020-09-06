@@ -4,7 +4,8 @@ import net.novaborn.takeaway.admin.enums.Level;
 import net.novaborn.takeaway.admin.enums.State;
 import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
-import net.novaborn.takeaway.user.service.impl.UserService;
+import net.novaborn.takeaway.store.entity.Store;
+import net.novaborn.takeaway.store.service.impl.StoreService;
 
 import java.util.Map;
 
@@ -21,28 +22,35 @@ public class AdminWrapper extends BaseControllerWrapper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
-        switch ((Level)map.get("level")) {
+        StoreService storeService = SpringContextHolder.getBean(StoreService.class);
+
+        switch ((Level) map.get("level")) {
             case SUPER_MANAGER:
-                map.put("level","超级管理员");
+                map.put("level", "超级管理员");
                 break;
             case SHOP_MANAGER:
-                map.put("level","店铺管理员");
+                map.put("level", "店铺管理员");
                 break;
             case RECEIVER:
-                map.put("level","接单员");
+                map.put("level", "接单员");
                 break;
             case DELIVERER:
-                map.put("level","配送员");
+                map.put("level", "配送员");
                 break;
         }
 
-        switch ((State)map.get("state")) {
+        switch ((State) map.get("state")) {
             case NORMAL:
-                map.put("state","正常");
+                map.put("state", "正常");
                 break;
             case STOP:
-                map.put("state","冻结");
+                map.put("state", "冻结");
                 break;
+        }
+
+        if ((Long) map.get("storeId") != 0L) {
+            Store store = storeService.getById((Long) map.get("storeId"));
+            map.put("belong", store.getName());
         }
     }
 }

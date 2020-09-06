@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.store.entity;
+package net.novaborn.takeaway.store.services;
 
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.store.service.impl.StoreService;
@@ -10,18 +10,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {AdminApplication.class})
-public class RelationshipTest {
+public class StoreServiceTest {
     @Autowired
     StoreService storeService;
 
     @Test
-    public void createTest() {
-        Store store = new Store();
-        store.setName("川香苑-新村店");
-        store.insert();
-    }
-
-    @Test
-    public void updateTest() {
+    public void test1() {
+        System.out.println(storeService.getAllAvailableStore());
     }
 }

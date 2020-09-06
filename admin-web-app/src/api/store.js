@@ -1,6 +1,18 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
+export function getStoreById(storeId) {
+    return request({
+        url: '/store/getStoreById',
+        method: 'post',
+        data: { storeId },
+        transformRequest: [function(data) {
+            data = Qs.stringify(data)
+            return data
+        }]
+    })
+}
+
 export function getListByPage(page, args) {
     const data = Object.assign({}, page, args)
     return request({
@@ -39,6 +51,7 @@ export function update(admin) {
 }
 
 export default {
+    getStoreById,
     getListByPage,
     create,
     update

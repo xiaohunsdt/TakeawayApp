@@ -55,6 +55,11 @@
             width="200"/>
         <el-table-column
             align="center"
+            label="所属店铺"
+            prop="belong"
+            width="200"/>
+        <el-table-column
+            align="center"
             label="状态"
             prop="state"
             width="200"/>

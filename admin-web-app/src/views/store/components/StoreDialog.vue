@@ -1,44 +1,44 @@
 <template>
   <el-dialog
       :close-on-click-modal="false"
-      :title="adminId?'管理员详情':'生成新管理员'"
+      :title="storeId?'店铺详情':'生成店铺'"
       :visible.sync="dialogFormVisible"
       size="mini"
       width="400px">
     <el-form :model="formData">
-      <el-form-item label="管理员ID" label-width="120" v-if="adminId">
-        <el-input disabled v-model="formData.id"></el-input>
+      <el-form-item v-if="storeId" label="店铺ID" label-width="70px">
+        <el-input v-model="formData.id" disabled></el-input>
       </el-form-item>
-      <el-form-item label="用户名" label-width="120">
-        <el-input :disabled="adminId!==null && adminId!==undefined" v-model="formData.userName"></el-input>
+      <el-form-item label="店铺名" label-width="70px">
+        <el-input v-model="formData.name" :disabled="storeId!==null && storeId!==undefined"></el-input>
       </el-form-item>
-      <el-form-item label="密码" label-width="120">
-        <el-input v-model="formData.password"></el-input>
-      </el-form-item>
-      <el-form-item label="级别" label-width="120">
-        <el-select placeholder="请输入关键词" v-model="formData.level">
-          <el-option label="店管理员" v-permission="['SUPER_MANAGER']" value="SHOP_MANAGER"/>
-          <el-option label="接单员" v-permission="['SUPER_MANAGER','SHOP_MANAGER']" value="RECEIVER"/>
-          <el-option label="外卖员" v-permission="['SUPER_MANAGER','SHOP_MANAGER']" value="DELIVERER"/>
+      <el-form-item label="支付方式" label-width="70px">
+        <el-select v-model="formData.paymentWay" placeholder="请选择关键字">
+          <el-option label="免费" value="FREE"/>
+          <el-option label="按量计费" value="PAY_AS_YOU_GO"/>
+          <el-option label="包月" value="MONTH"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="状态" label-width="120">
-        <el-select placeholder="请输入关键词" v-model="formData.state">
-          <el-option label="冻结" value="STOP"/>
-          <el-option label="正常" value="NORMAL"/>
+      <el-form-item label="到期时间" label-width="70px">
+        <el-date-picker type="date" placeholder="选择日期" v-model="formData.expireDate" :disabled="formData.paymentWay !== 'MONTH'" value-format="yyyy-MM-dd"/>
+      </el-form-item>
+      <el-form-item label="状态" label-width="70px">
+        <el-select v-model="formData.state" placeholder="请输入关键词">
+          <el-option label="停止" value="OFF"/>
+          <el-option label="正常" value="ON"/>
         </el-select>
       </el-form-item>
     </el-form>
-    <div class="dialog-footer" slot="footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button @click="onEdit" type="primary" v-if="adminId">修 改</el-button>
-      <el-button @click="onSave" type="success" v-else>生 成</el-button>
+      <el-button v-if="storeId" type="primary" @click="onEdit">修 改</el-button>
+      <el-button v-else type="success" @click="onSave">生 成</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import adminApi from '@/api/admin'
+import storeApi from '@/api/store'
 import permission from '@/directive/permission/index.js'
 
 export default {
@@ -47,12 +47,12 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
-      adminId: null,
+      storeId: null,
       formData: {
         id: null,
-        userName: null,
-        password: null,
-        level: null,
+        name: null,
+        paymentWay: null,
+        expireDate: null,
         state: null
       },
       loading: false
@@ -69,11 +69,11 @@ export default {
   },
   methods: {
     init() {
-      if (!this.adminId) {
+      if (!this.storeId) {
         return
       }
       this.loading = true
-      adminApi.getAdminInfoById(this.adminId)
+      storeApi.getStoreById(this.storeId)
           .then(res => {
             this.formData = res
             this.loading = false
@@ -82,28 +82,28 @@ export default {
             this.loading = false
           })
     },
-    openDialog(adminId) {
-      this.adminId = adminId
+    openDialog(storeId) {
+      this.storeId = storeId
       this.dialogFormVisible = true
     },
     onEdit() {
-      adminApi.updateAdmin(this.formData)
+      storeApi.update(this.formData)
           .then(res => {
             this.$message({
               message: res.message,
               type: 'success'
             })
-            this.$emit('updated-admin', this.formData)
+            this.$emit('updated-store', this.formData)
           })
     },
     onSave() {
-      adminApi.createNewSubAdmin(this.formData)
+      storeApi.create(this.formData)
           .then(res => {
             this.$message({
               message: res.message,
               type: 'success'
             })
-            this.$emit('updated-admin', this.formData)
+            this.$emit('updated-store', this.formData)
           })
     }
   }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.entity.Admin;
+import net.novaborn.takeaway.admin.enums.Level;
 import net.novaborn.takeaway.admin.enums.State;
 import net.novaborn.takeaway.admin.exception.AdminExceptionEnum;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
@@ -82,7 +83,7 @@ public class AdminController extends BaseController {
         Admin parent = adminService.getById(adminId);
 
         if (parent.getLevel().getCode() >= admin.getLevel().getCode()) {
-            throw new SysException(AdminExceptionEnum.LEVEL_ERROR_SETTING);
+            throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
         }
 
         Optional<Admin> temp = adminService.getBaseMapper().selectByName(admin.getUserName());
@@ -93,6 +94,16 @@ public class AdminController extends BaseController {
         String parentStr = StrUtil.isNotBlank(parent.getParentIds()) ? parent.getParentIds() + "," : "";
         parentStr += adminId;
 
+        if (!parent.getLevel().equals(Level.SUPER_MANAGER) && admin.getStoreId() != null) {
+            if (!parent.getStoreId().equals(admin.getStoreId())) {
+                throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+            }
+        }
+
+        if (admin.getStoreId() == null && parent.getStoreId() != 0L) {
+            admin.setStoreId(parent.getStoreId());
+        }
+
         admin.setParentIds(parentStr);
         admin.insert();
         return new SuccessTip();
@@ -102,6 +113,7 @@ public class AdminController extends BaseController {
     @PostMapping("updateAdmin")
     public Tip updateAdmin(@ModelAttribute Admin admin) {
         String adminId = jwtTokenUtil.getUserIdFromToken(request);
+        Admin parent = adminService.getById(adminId);
 
         Admin target = adminService.getById(admin.getId());
 
@@ -111,10 +123,16 @@ public class AdminController extends BaseController {
 
         if (!target.getLevel().equals(admin.getLevel())) {
             for (String parentStr : target.getParentIds().split(",")) {
-                Admin parent = adminService.getById(parentStr);
-                if (parent.getLevel().getCode() >= admin.getLevel().getCode()) {
-                    throw new SysException(AdminExceptionEnum.LEVEL_ERROR_SETTING);
+                Admin parentTemp = adminService.getById(parentStr);
+                if (parentTemp.getLevel().getCode() >= admin.getLevel().getCode()) {
+                    throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
                 }
+            }
+        }
+
+        if (!parent.getLevel().equals(Level.SUPER_MANAGER) && admin.getStoreId() != null) {
+            if (!parent.getStoreId().equals(admin.getStoreId())) {
+                throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
             }
         }
 

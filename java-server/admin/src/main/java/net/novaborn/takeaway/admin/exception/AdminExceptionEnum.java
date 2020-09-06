@@ -12,7 +12,7 @@ import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 public enum AdminExceptionEnum implements ServiceExceptionEnum {
     REPEATED_NAME(500, "用户名重复!!!"),
     ADMIN_STOP(500, "管理账号已经被冻结!!!"),
-    LEVEL_ERROR_SETTING(500, "权限设置错误!");
+    LEVEL_ERROR(500, "权限错误!");
 
     AdminExceptionEnum(int code, String message) {
         this.code = code;

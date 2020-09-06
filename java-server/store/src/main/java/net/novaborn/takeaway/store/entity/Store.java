@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import net.novaborn.takeaway.store.enums.PaymentWay;
 import net.novaborn.takeaway.store.enums.State;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -23,6 +24,12 @@ public class Store extends Model<Store> {
 
     @NotNull(message = "计费方式不能为空")
     private PaymentWay paymentWay;
+
+    /**
+     * 到期时间，当 PaymentWay 为 MONTH 时可用
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date expireDate;
 
     @TableField(value = "`state`")
     private State state;

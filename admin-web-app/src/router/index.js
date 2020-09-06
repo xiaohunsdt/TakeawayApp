@@ -204,7 +204,11 @@ export const asyncRoutes = [
         path: '/activity',
         component: Layout,
         redirect: '/activity/index',
-        meta: { title: '活动管理', icon: 'example' },
+        meta: {
+            title: '活动管理',
+            icon: 'example',
+            roles: ['SUPER_MANAGER']
+        },
         children: [
             {
                 path: 'edit',
@@ -226,7 +230,11 @@ export const asyncRoutes = [
         path: '/banner',
         component: Layout,
         redirect: '/banner/index',
-        meta: { title: '横幅管理', icon: 'example' },
+        meta: {
+            title: '横幅管理',
+            icon: 'example',
+            roles: ['SUPER_MANAGER']
+        },
         children: [
             {
                 path: 'edit',

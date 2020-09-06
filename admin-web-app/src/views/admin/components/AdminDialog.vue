@@ -6,33 +6,36 @@
       size="mini"
       width="400px">
     <el-form :model="formData">
-      <el-form-item label="管理员ID" label-width="120" v-if="adminId">
-        <el-input disabled v-model="formData.id"></el-input>
+      <el-form-item v-if="adminId" label="管理员ID" label-width="120">
+        <el-input v-model="formData.id" disabled></el-input>
       </el-form-item>
       <el-form-item label="用户名" label-width="120">
-        <el-input :disabled="adminId!==null && adminId!==undefined" v-model="formData.userName"></el-input>
+        <el-input v-model="formData.userName" :disabled="adminId!==null && adminId!==undefined"></el-input>
       </el-form-item>
       <el-form-item label="密码" label-width="120">
         <el-input v-model="formData.password"></el-input>
       </el-form-item>
       <el-form-item label="级别" label-width="120">
-        <el-select placeholder="请输入关键词" v-model="formData.level">
-          <el-option label="店管理员" v-permission="['SUPER_MANAGER']" value="SHOP_MANAGER"/>
-          <el-option label="接单员" v-permission="['SUPER_MANAGER','SHOP_MANAGER']" value="RECEIVER"/>
-          <el-option label="外卖员" v-permission="['SUPER_MANAGER','SHOP_MANAGER']" value="DELIVERER"/>
+        <el-select v-model="formData.level" placeholder="请输入关键词">
+          <el-option v-permission="['SUPER_MANAGER']" label="店管理员" value="SHOP_MANAGER"/>
+          <el-option v-permission="['SUPER_MANAGER','SHOP_MANAGER']" label="接单员" value="RECEIVER"/>
+          <el-option v-permission="['SUPER_MANAGER','SHOP_MANAGER']" label="外卖员" value="DELIVERER"/>
         </el-select>
       </el-form-item>
+      <el-form-item label="店铺Id" label-width="120" v-permission="['SUPER_MANAGER']">
+        <el-input v-model="formData.storeId"></el-input>
+      </el-form-item>
       <el-form-item label="状态" label-width="120">
-        <el-select placeholder="请输入关键词" v-model="formData.state">
+        <el-select v-model="formData.state" placeholder="请输入关键词">
           <el-option label="冻结" value="STOP"/>
           <el-option label="正常" value="NORMAL"/>
         </el-select>
       </el-form-item>
     </el-form>
-    <div class="dialog-footer" slot="footer">
+    <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button @click="onEdit" type="primary" v-if="adminId">修 改</el-button>
-      <el-button @click="onSave" type="success" v-else>生 成</el-button>
+      <el-button v-if="adminId" type="primary" @click="onEdit">修 改</el-button>
+      <el-button v-else type="success" @click="onSave">生 成</el-button>
     </div>
   </el-dialog>
 </template>
@@ -50,6 +53,7 @@ export default {
       adminId: null,
       formData: {
         id: null,
+        storeId: null,
         userName: null,
         password: null,
         level: null,
@@ -82,8 +86,9 @@ export default {
             this.loading = false
           })
     },
-    openDialog(adminId) {
+    openDialog(adminId, storeId) {
       this.adminId = adminId
+      this.formData.storeId = storeId
       this.dialogFormVisible = true
     },
     onEdit() {
