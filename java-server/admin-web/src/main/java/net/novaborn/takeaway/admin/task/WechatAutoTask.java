@@ -5,8 +5,10 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
@@ -33,6 +35,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class WechatAutoTask {
+    @Autowired
+    SysContext sysContext;
+
     @Autowired
     SysJobServiceImpl sysJobService;
 
@@ -64,6 +69,7 @@ public class WechatAutoTask {
     @SneakyThrows
     @PostConstruct
     public void init() {
+        sysContext.setCurrentStoreId(1302193963869949953L);
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
         String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
         storeOpenTime = DateUtil.parseDateTime(store_open_time);

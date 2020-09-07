@@ -100,7 +100,11 @@ export const asyncRoutes = [
         path: '/order',
         component: Layout,
         redirect: '/order/index',
-        meta: { title: '订单管理', icon: 'order' },
+        meta: {
+            title: '订单管理',
+            icon: 'order',
+            roles: ['SHOP_MANAGER', 'RECEIVER', 'DELIVERER']
+        },
         children: [
             {
                 path: 'index',
@@ -136,6 +140,9 @@ export const asyncRoutes = [
         path: '/goods',
         component: Layout,
         redirect: '/goods/index',
+        meta: {
+            roles: ['SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'GoodsManagement',
@@ -148,6 +155,9 @@ export const asyncRoutes = [
         path: '/category',
         component: Layout,
         redirect: '/category/index',
+        meta: {
+            roles: ['SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'CategoryManagement',
@@ -160,7 +170,11 @@ export const asyncRoutes = [
         path: '/coupon',
         component: Layout,
         redirect: '/coupon/index',
-        meta: { title: '优惠券管理', icon: 'tree-table' },
+        meta: {
+            title: '优惠券管理',
+            icon: 'tree-table',
+            roles: ['SHOP_MANAGER']
+        },
         children: [
             {
                 path: 'index',
@@ -293,6 +307,12 @@ export const asyncRoutes = [
         path: '/sys',
         component: Layout,
         redirect: '/sys/index',
+        meta: {
+            title: '系统设置',
+            icon: 'example',
+            affix: true,
+            roles: ['SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'SysManagement',

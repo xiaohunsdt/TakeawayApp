@@ -30,6 +30,8 @@ public class Comment extends Model<Comment> {
 
     private Long orderId;
 
+    private Long storeId;
+
     /**
      * 菜品口味
      */

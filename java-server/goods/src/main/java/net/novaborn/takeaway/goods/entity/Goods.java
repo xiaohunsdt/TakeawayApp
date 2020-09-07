@@ -18,8 +18,6 @@ import java.util.Objects;
  * @author xiaohun
  * @since 2019-09-20
  */
-
-
 @Data
 @TableName("`goods`")
 @Document(indexName = "takeaway")
@@ -30,7 +28,6 @@ public class Goods extends Model<Goods> {
     @Id
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
-
     /**
      * 名称
      */
@@ -51,6 +48,8 @@ public class Goods extends Model<Goods> {
      * 标记 热门 新品
      */
     private String flags;
+
+    private Long storeId;
 
     /**
      * 所属类目

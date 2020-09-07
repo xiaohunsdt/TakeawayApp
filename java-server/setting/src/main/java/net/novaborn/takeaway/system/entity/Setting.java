@@ -31,6 +31,8 @@ public class Setting extends Model<Setting> {
     @TableField(value = "`scope`")
     private SettingScope scope;
 
+    private Long storeId;
+
     @NotEmpty(message = "设置值不能为空")
     private String value;
 

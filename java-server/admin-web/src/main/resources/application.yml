@@ -103,10 +103,10 @@ spring:
     username: xiaohun
     password: wy1996
 
-#logging:
-#    level:
-#        root: info
-#        net.novaborn: debug
+logging:
+    level:
+        root: info
+        net.novaborn: debug
 
 ---
 spring:

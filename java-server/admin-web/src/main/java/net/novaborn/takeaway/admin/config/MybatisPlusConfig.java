@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerIntercept
 import net.novaborn.takeaway.admin.common.SysContext;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.NullValue;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,11 +38,11 @@ public class MybatisPlusConfig {
 
         // 多租户插件
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
-            List<String> ignoreTable = List.of("user", "address", "activity", "banner", "goods_stock", "order_item", "store");
+            final List<String> ignoreTable = List.of("`admin`", "`user`", "`address`", "`activity`", "`banner`", "`goods_stock`", "`order_item`", "`store`");
 
             @Override
             public Expression getTenantId() {
-                return sysContext.getCurrentStoreId() != 0L ? new LongValue(sysContext.getCurrentStoreId()) : null;
+                return sysContext.getCurrentStoreId() != null ? new LongValue(sysContext.getCurrentStoreId()) : new NullValue();
             }
 
             @Override

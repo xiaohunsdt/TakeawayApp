@@ -27,6 +27,8 @@ public class CouponTemplate extends Model<CouponTemplate> {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
+    private Long storeId;
+
     @NotBlank(message = "名称不能为空")
     private String couponName;
 

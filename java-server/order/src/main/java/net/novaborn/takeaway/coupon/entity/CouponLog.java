@@ -27,6 +27,8 @@ public class CouponLog extends Model<CouponLog> {
 
     private Long orderId;
 
+    private Long storeId;
+
     private Integer couponAmount;
 
     private Integer orderOriginalAmount;

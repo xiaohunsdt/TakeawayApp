@@ -23,8 +23,10 @@ public class Category extends Model<Category> {
     // 名称
     private String name;
 
-    // 父 id
+    // 父id
     private Long parentId;
+
+    private Long storeId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;

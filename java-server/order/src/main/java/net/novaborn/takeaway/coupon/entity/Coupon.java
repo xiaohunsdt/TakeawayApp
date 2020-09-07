@@ -27,6 +27,8 @@ public class Coupon extends Model<Coupon> {
 
     private Long userId;
 
+    private Long storeId;
+
     private String couponName;
 
     private CouponType couponType;
