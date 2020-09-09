@@ -1,3 +1,10 @@
 .itemImg {
   width: 100%;
 }
+
+
+.store-cards{
+  margin-top: 25rpx;
+  padding: 20rpx;
+  background-color: white;
+}

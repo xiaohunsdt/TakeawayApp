@@ -27,6 +27,16 @@ public interface ISettingService extends IService<Setting> {
     Setting getSettingByName(String key, SettingScope scope);
 
     /**
+     * 获取指定的设置项
+     *
+     * @param storeId   店铺Id
+     * @param key   设置项的名称
+     * @param scope 设置项的域
+     * @return
+     */
+    Setting getSettingByName(Long storeId, String key, SettingScope scope);
+
+    /**
      * 获取指定设置域中的所有设置项
      *
      * @param scope
@@ -35,8 +45,19 @@ public interface ISettingService extends IService<Setting> {
     List<Setting> getSettingsByScope(SettingScope scope);
 
     /**
-     * 返回系统设置中的的距离对应价格的设置
+     * 获取指定设置域中的所有设置项
+     *
+     * @param storeId   店铺Id
+     * @param scope
      * @return
      */
-    List<BaseKVO<Integer, Integer>> getDistancePriceArr();
+    List<Setting> getSettingsByScope(Long storeId, SettingScope scope);
+
+    /**
+     * 返回系统设置中的的距离对应价格的设置
+     *
+     * @param storeId   店铺Id
+     * @return
+     */
+    List<BaseKVO<Integer, Integer>> getDistancePriceArr(Long storeId);
 }

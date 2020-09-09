@@ -17,13 +17,13 @@
 .goods-card .card-content{
   width: 100%;
   margin-top: -10rpx;
-  margin-left: 15rpx;
+  margin-left: 20rpx;
 }
 
 .goods-card .card-content .title {
   margin-top: 5rpx;
   font-size: 35rpx;
-  font-weight: 800;
+  font-weight: bolder;
   margin-bottom: 20rpx;
 }
 

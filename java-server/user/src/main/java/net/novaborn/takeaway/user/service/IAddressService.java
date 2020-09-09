@@ -53,11 +53,4 @@ public interface IAddressService extends IService<Address> {
      * @return 是否成功
      */
     Boolean setDefaultAddress(Long addressId, Long userId);
-
-    /**
-     * 获取指定地址与店的直线距离
-     * @param addressId
-     * @return
-     */
-    Double getDistanceWithStore(Long addressId);
 }

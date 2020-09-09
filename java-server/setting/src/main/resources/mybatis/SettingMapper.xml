@@ -5,7 +5,10 @@
     <select id="getSettingByName" resultType="Setting">
         SELECT * FROM setting
         <where>
-            `key` = #{key}
+            <if test="storeId != null">
+                store_id = #{storeId}
+            </if>
+            AND `key` = #{key}
             AND `scope` = #{scope}
         </where>
     </select>
@@ -13,7 +16,10 @@
     <select id="getSettingsByScope" resultType="Setting">
         SELECT * FROM setting
         <where>
-            `scope` = #{scope}
+            <if test="storeId != null">
+                store_id = #{storeId}
+            </if>
+            AND `scope` = #{scope}
         </where>
     </select>
 </mapper>

@@ -1,12 +1,13 @@
 
 const app = getApp()
 import indexService from '../../services/index'
-
+import storeService from '../../services/store'
 Page({
   data: {
     bannerList: [],
     newGoodsList: [],
-    hotGoodsList: []
+    hotGoodsList: [],
+    storeList: []
   },
   onLoad: function (option) {
     // console.log(option)
@@ -32,16 +33,21 @@ Page({
         bannerList: res
       })
     })
-    indexService.getNewGoodsList().then(res => {
+    storeService.getAllStoreList().then(res =>{
       this.setData({
-        newGoodsList: res
+        storeList: res
       })
     })
-    indexService.getHotGoodsList().then(res => {
-      this.setData({
-        hotGoodsList: res
-      })
-    })
+    // indexService.getNewGoodsList().then(res => {
+    //   this.setData({
+    //     newGoodsList: res
+    //   })
+    // })
+    // indexService.getHotGoodsList().then(res => {
+    //   this.setData({
+    //     hotGoodsList: res
+    //   })
+    // })
   },
   gotoPage(event) {
     let page = event.currentTarget.dataset.pagePath

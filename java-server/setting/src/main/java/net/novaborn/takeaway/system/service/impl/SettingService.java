@@ -24,18 +24,28 @@ import java.util.List;
 public class SettingService extends ServiceImpl<ISettingDao, Setting> implements ISettingService {
     @Override
     public Setting getSettingByName(String key, SettingScope scope) {
-        return this.baseMapper.getSettingByName(key, scope);
+        return this.baseMapper.getSettingByName(null, key, scope);
+    }
+
+    @Override
+    public Setting getSettingByName(Long storeId, String key, SettingScope scope) {
+        return this.baseMapper.getSettingByName(storeId, key, scope);
     }
 
     @Override
     public List<Setting> getSettingsByScope(SettingScope scope) {
-        return this.baseMapper.getSettingsByScope(scope);
+        return this.baseMapper.getSettingsByScope(null, scope);
     }
 
     @Override
-    public List<BaseKVO<Integer, Integer>> getDistancePriceArr() {
+    public List<Setting> getSettingsByScope(Long storeId, SettingScope scope) {
+        return this.baseMapper.getSettingsByScope(storeId, scope);
+    }
+
+    @Override
+    public List<BaseKVO<Integer, Integer>> getDistancePriceArr(Long storeId) {
         List result = new ArrayList();
-        Setting setting = this.getSettingByName("distance_price_arr", SettingScope.EXPRESS);
+        Setting setting = this.getSettingByName(storeId, "distance_price_arr", SettingScope.EXPRESS);
         if (setting != null) {
             result.addAll(JSON.parseArray(setting.getValue(), BaseKVO.class));
         }

@@ -21,6 +21,10 @@ const api = {
   getSpecificFlagGoodsList: (flag) => request.get('index/getSpecificFlagGoodsList', {
     flag
   }),
+
+  // 获取总店铺列表
+  getAllStoreList: () => request.get('store/getAllStoreList'),
+
   // 获取总服务状态
   getServiceState: () => request.get('index/getServiceState'),
   // 获取指定地址是否可以配送
@@ -61,7 +65,9 @@ const api = {
   // 更新一个地址
   updateAddress: (address) => request.post('address/updateAddress', address),
   // 设置默认地址
-  setDefaultAddress: (addressId) => request.post('address/setDefaultAddress', {id: addressId}),
+  setDefaultAddress: (addressId) => request.post('address/setDefaultAddress', {
+    id: addressId
+  }),
   deleteAddress: (addressId) => request.post('address/deleteAddress', {
     addressId
   }),

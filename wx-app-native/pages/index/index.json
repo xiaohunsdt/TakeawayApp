@@ -2,6 +2,7 @@
   "enablePullDownRefresh": true,
   "usingComponents": {
     "search-bar": "/components/search-bar/index",
-    "food-panel": "./components/food-panel/index"
+    "food-panel": "./components/food-panel/index",
+    "store-card": "/components/store-card/index"
   }
 }

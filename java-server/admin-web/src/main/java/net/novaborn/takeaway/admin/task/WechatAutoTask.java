@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.SysContext;
@@ -108,6 +107,8 @@ public class WechatAutoTask {
     }
 
     public void goodsShow() {
+        sysContext.setCurrentStoreId(1302193963869949953L);
+
         Date currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
@@ -149,6 +150,8 @@ public class WechatAutoTask {
     }
 
     public void orderShow(Order order) {
+        sysContext.setCurrentStoreId(order.getStoreId());
+
         if (order.getRealPrice() < 18000) {
             return;
         }

@@ -12,7 +12,10 @@
 				</swiper>
 			</view>
 		</view>
-		<food-panel foodList="{{newGoodsList}}" title="新品" />
-		<food-panel foodList="{{hotGoodsList}}" title="热门" />
+		<!-- <food-panel foodList="{{newGoodsList}}" title="新品" /> -->
+		<!-- <food-panel foodList="{{hotGoodsList}}" title="热门" /> -->
+		<view class="store-cards">
+			<store-card store="{{item}}" wx:for="{{storeList}}" wx:key="id"/>
+		</view>
 	</view>
 </view>

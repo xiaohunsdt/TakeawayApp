@@ -21,9 +21,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AddressServiceTest {
     @Autowired
     AddressService addressService;
-
-    @Test
-    public void getDistanceWithStoreTest() {
-        System.out.println(addressService.getDistanceWithStore(1111L));
-    }
 }

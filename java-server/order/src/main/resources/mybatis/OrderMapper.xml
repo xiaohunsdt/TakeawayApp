@@ -6,9 +6,9 @@
         SELECT * FROM `order`
         <where>
             `id` = #{orderId}
-            <if test="!isShowDeleted">
+            `<if test="!isShowDeleted">
                 AND deleted = 0
-            </if>
+            </if>`
         </where>
     </select>
 

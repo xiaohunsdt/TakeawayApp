@@ -66,29 +66,4 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
         target.setIsDefault(true);
         return target.updateById();
     }
-
-    @Override
-    public Double getDistanceWithStore(Long addressId) {
-        Optional<Address> address = Optional.ofNullable(addressService.getById(addressId));
-
-        address.orElseThrow(() -> new SysException(AddressExceptionEnum.NO_ADDRESS_ERROR));
-
-        if (address.get().getX() == null) {
-            throw new SysException(AddressExceptionEnum.ADDRESS_NO_COORDINATE_ERROR);
-        }
-
-        Setting store_coordinate_x = settingService.getSettingByName("store_address_x", SettingScope.STORE);
-        Setting store_coordinate_y = settingService.getSettingByName("store_address_y", SettingScope.STORE);
-
-        if (store_coordinate_x == null || store_coordinate_y == null) {
-            throw new SysException(AddressExceptionEnum.STORE_ADDRESS_NO_COORDINATE_ERROR);
-        }
-
-        return MapDistanceUtil.getDistance(
-                address.get().getX(),
-                address.get().getY(),
-                Double.parseDouble(store_coordinate_x.getValue()),
-                Double.parseDouble(store_coordinate_y.getValue())
-        );
-    }
 }

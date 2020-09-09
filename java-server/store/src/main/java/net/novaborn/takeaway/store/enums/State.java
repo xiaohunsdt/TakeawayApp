@@ -13,7 +13,12 @@ public enum State {
     /**
      * 正常
      */
-    ON(1);
+    ON(1),
+
+    /**
+     * 休业
+     */
+    CLOSED(2);
 
     State(int code) {
         this.code = code;
