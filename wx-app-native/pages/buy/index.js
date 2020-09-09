@@ -1,4 +1,5 @@
 import indexService from '../../services/index'
+import storeService from '../../services/store'
 import userService from '../../services/user'
 import orderService from '../../services/order'
 import payService from '../../services/pay'
@@ -214,7 +215,7 @@ Page({
       }
     })
 
-    indexService.getDeliveryPrice()
+    storeService.getDeliveryPrice()
     .then(res => {
       this.setData({
         deliveryPrice: res
@@ -222,7 +223,7 @@ Page({
     })
 
     // 获取预约时间项
-    indexService.getAppointmentTimes()
+    storeService.getAppointmentTimes()
       .then(res => {
         times = res.appointmentTimes
         const canDeliveryNow = res.canDeliveryNow
@@ -403,7 +404,7 @@ Page({
       submitLoading: true
     })
     orderService.createOrder(
-      orderService.generateOrder(this.data.payWay, this.data.psData, indexService.formatAppointmentTime(this.data.deliveryType, this.data.appointment), this.data.from),
+      orderService.generateOrder(this.data.payWay, this.data.psData, storeService.formatAppointmentTime(this.data.deliveryType, this.data.appointment), this.data.from),
       this.data.orderItems,
       this.data.coupon,
       this.data.address
@@ -435,7 +436,7 @@ Page({
     this.setData({
       disableService: false
     })
-    indexService.getExpressServiceState(addressId, allPrice)
+    storeService.getExpressServiceState(addressId, allPrice)
       .then(res => {
         if (res.state !== 0) {
           this.setData({

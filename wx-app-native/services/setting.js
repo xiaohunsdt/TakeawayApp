@@ -26,15 +26,15 @@ export function getSystemSettings () {
 }
 
 export function getStoreSettings () {
-  return api.getSettingsByScope('STORE')
+  return api.getSettingsByScope(getApp().globalData.currentStore,'STORE')
 }
 
 export function getExpressSettings () {
-  return api.getSettingsByScope('EXPRESS')
+  return api.getSettingsByScope(getApp().globalData.currentStore,'EXPRESS')
 }
 
 export function getGoodsPageSettings () {
-  return api.getGoodsPageSettings()
+  return api.getGoodsPageSettings(getApp().globalData.currentStore)
 }
 
 export default {

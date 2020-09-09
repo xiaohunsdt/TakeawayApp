@@ -21,28 +21,36 @@ const api = {
   getSpecificFlagGoodsList: (flag) => request.get('index/getSpecificFlagGoodsList', {
     flag
   }),
-
-  // 获取总店铺列表
-  getAllStoreList: () => request.get('store/getAllStoreList'),
-
-  // 获取总服务状态
-  getServiceState: () => request.get('index/getServiceState'),
-  // 获取指定地址是否可以配送
-  getExpressServiceState: (addressId, allPrice) => request.get('index/getExpressServiceState', {
-    addressId,
-    allPrice
-  }),
-  getDeliveryPrice: () => request.get('index/getDeliveryPrice'),
-  getAppointmentTimes: () => request.get('index/getAppointmentTimes'),
   // 获取来自者的消息提示
   getFormerNotice: (from) => request.get('index/getFormerNotice', {
     from
   }),
 
+  // 获取总店铺列表
+  getAllStoreList: () => request.get('store/getAllStoreList'),
+  // 获取总服务状态
+  getServiceState: (storeId) => request.get('store/getServiceState', {
+    storeId
+  }),
+  // 获取指定地址是否可以配送
+  getExpressServiceState: (storeId, addressId, allPrice) => request.get('store/getExpressServiceState', {
+    storeId,
+    addressId,
+    allPrice
+  }),
+  getDeliveryPrice: (storeId) => request.get('store/getDeliveryPrice', {
+    storeId
+  }),
+  getAppointmentTimes: (storeId) => request.get('store/getAppointmentTimes', {
+    storeId
+  }),
+
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品
-  getAllGoodsList: () => request.get('goods/getAllGoodsList'),
+  getAllGoodsList: (storeId) => request.get('goods/getAllGoodsList', {
+    storeId
+  }),
   getGoodsListByCategoryId: (categoryId) => request.get('goods/getGoodsListByCategoryId', {
     categoryId
   }),
@@ -99,13 +107,18 @@ const api = {
   getDeliveryArriveTime: (orderId) => request.post('order/getDeliveryArriveTime', {
     orderId
   }),
-  getCanOrderNow: () => request.post('order/getCanOrderNow'),
+  getCanOrderNow: (storeId) => request.post('order/getCanOrderNow', {
+    storeId
+  }),
 
   // 获取指定域的设置
-  getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', {
+  getSettingsByScope: (storeId, scope) => request.post('setting/getSettingsByScope', {
+    storeId,
     scope
   }),
-  getGoodsPageSettings: () => request.get('setting/getGoodsPageSettings'),
+  getGoodsPageSettings: (storeId) => request.get('setting/getGoodsPageSettings', {
+    storeId
+  }),
 
   // 获得所有活动
   getActivityById: (id) => request.get('activity/getActivityById', {

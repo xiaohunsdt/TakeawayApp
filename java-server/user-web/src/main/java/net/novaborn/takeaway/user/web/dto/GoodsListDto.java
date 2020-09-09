@@ -19,7 +19,9 @@ public class GoodsListDto {
 
     public GoodsListDto(List<Goods> goodsList) {
         CategoryService categoryService = SpringContextHolder.getBean(CategoryService.class);
-        categoryService.list().stream()
+        goodsList.stream()
+                .map(Goods::getCategoryId).distinct()
+                .map(categoryService::getById)
                 .sorted(Comparator.comparing(Category::getCreateDate))
                 .forEach(category -> {
                     List<Map> goodsWrapperExList = goodsList.parallelStream()

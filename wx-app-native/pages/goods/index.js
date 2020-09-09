@@ -12,6 +12,7 @@ Page({
     pageSettings: {}
   },
   onLoad: function (options) {
+    getApp().globalData.currentStore = options.storeId
     this.init()
   },
   onShow: function () {},

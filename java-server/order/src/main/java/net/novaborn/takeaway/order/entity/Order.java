@@ -32,6 +32,7 @@ public class Order extends Model<Order> {
      */
     private Integer number;
 
+    @NotNull(message = "店铺不能为空")
     private Long storeId;
 
     private Long userId;

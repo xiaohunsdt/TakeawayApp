@@ -138,7 +138,7 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
         }
 
-        if (order.getAppointmentDate() == null && !this.getCanOrderNow()) {
+        if (order.getAppointmentDate() == null && !this.getCanOrderNow(order.getStoreId())) {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
         }
 
@@ -216,11 +216,11 @@ public class OrderController extends BaseController {
 
     @RequestMapping("getCanOrderNow")
     @ResponseBody
-    public Boolean getCanOrderNow() {
+    public Boolean getCanOrderNow(Long storeId) {
         Date now = new Date();
-        String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
-        String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
-        String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
+        String store_open_date = settingService.getSettingByName(storeId, "store_open_date", SettingScope.STORE).getValue();
+        String store_open_time = settingService.getSettingByName(storeId, "store_open_time", SettingScope.STORE).getValue();
+        String store_close_time = settingService.getSettingByName(storeId, "store_close_time", SettingScope.STORE).getValue();
 
         if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(now)))) {
             return false;

@@ -15,6 +15,7 @@ export function generateOrder (paymentWay, ps, appointmentDate, from) {
   //   allPrice += item.goodsCount * item.goodsPrice
   // })
   let order = {
+    storeId: getApp().globalData.currentStore,
     paymentWay,
     ps,
     appointmentDate,
@@ -79,7 +80,7 @@ export function getDeliveryArriveTime (orderId) {
 }
 
 export function getCanOrderNow () {
-  return api.getCanOrderNow()
+  return api.getCanOrderNow(getApp().globalData.currentStore)
 }
 
 export default {

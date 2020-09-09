@@ -20,7 +20,6 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -148,7 +147,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     public void checkOrder(Order order, List<OrderItem> orderItemList) {
         int allCount = orderItemList.parallelStream().mapToInt(OrderItem::getGoodsCount).sum();
         int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
-        int deliveryPrice = settingService.getSettingByName("delivery_price", SettingScope.EXPRESS).getValueAsInt();
+        int deliveryPrice = settingService.getSettingByName(order.getStoreId(), "delivery_price", SettingScope.EXPRESS).getValueAsInt();
 
         order.setGoodsCount(allCount);
         order.setAllPrice(allPrice + deliveryPrice);

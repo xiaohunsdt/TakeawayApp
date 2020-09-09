@@ -42,12 +42,6 @@
         "selectedIconPath": "static/tabs/home_active.png"
       },
       {
-        "text": "点餐",
-        "pagePath": "pages/goods/index",
-        "iconPath": "static/tabs/order.png",
-        "selectedIconPath": "static/tabs/order_active.png"
-      },
-      {
         "text": "活动",
         "pagePath": "pages/activity/index",
         "iconPath": "static/tabs/activity.png",

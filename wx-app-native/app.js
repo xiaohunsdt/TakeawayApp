@@ -37,8 +37,16 @@ App({
       cartAllCount: 0,
       cartAllPrice: 0
     },
+    currentStore: null,
     currentAddress: null,
     currentCoupon: null,
     from: null
   }
 })
+
+      // {
+      //   "text": "点餐",
+      //   "pagePath": "pages/goods/index",
+      //   "iconPath": "static/tabs/order.png",
+      //   "selectedIconPath": "static/tabs/order_active.png"
+      // },

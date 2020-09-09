@@ -14,7 +14,7 @@ export function getGoodsListByCategoryId (categoryId) {
  * 获取所有商品
  */
 export function getAllGoodsList () {
-  return api.getAllGoodsList()
+  return api.getAllGoodsList(getApp().globalData.currentStore)
 }
 
 export default {

@@ -1,5 +1,8 @@
 package net.novaborn.takeaway.user.web.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.goods.entity.Goods;
@@ -48,8 +51,10 @@ public class GoodsController extends BaseController {
     }
 
     @GetMapping("getAllGoodsList")
-    public ResponseEntity getAllGoodsList() {
-        List<Goods> goodsList = goodsService.list().stream()
+    public ResponseEntity getAllGoodsList(Long storeId) {
+        LambdaQueryWrapper<Goods> query = Wrappers.lambdaQuery();
+        query.eq(Goods::getStoreId, storeId);
+        List<Goods> goodsList = goodsService.list(query).stream()
                 .filter(item -> !item.getState().equals(GoodsState.OFF))
                 .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName).thenComparing(Goods::getIndex).reversed())
                 .collect(Collectors.toList());

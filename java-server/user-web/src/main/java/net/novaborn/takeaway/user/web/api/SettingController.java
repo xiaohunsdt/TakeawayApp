@@ -37,30 +37,30 @@ public class SettingController extends BaseController {
 
     @PostMapping("getSettingByName")
     @ResponseBody
-    public Setting getSettingByName(@RequestParam String key, @RequestParam SettingScope scope) {
-        return settingService.getSettingByName(key, scope);
+    public Setting getSettingByName(Long storeId, String key,SettingScope scope) {
+        return settingService.getSettingByName(storeId, key, scope);
     }
 
     @PostMapping("getSettingsByScope")
     @ResponseBody
-    public List<Setting> getSettingsByScope(@RequestParam SettingScope scope) {
-        return settingService.getSettingsByScope(scope);
+    public List<Setting> getSettingsByScope(Long storeId, SettingScope scope) {
+        return settingService.getSettingsByScope(storeId, scope);
     }
 
     @GetMapping("getGoodsPageSettings")
     @ResponseBody
-    public GoodsPageSettingDto getGoodsPageSetting() {
+    public GoodsPageSettingDto getGoodsPageSetting(Long storeId) {
         GoodsPageSettingDto dto = new GoodsPageSettingDto();
         dto.setDisableService(false);
 
         // system
-        String goods_page_notice = this.getSettingByName("goods_page_notice", SettingScope.SYSTEM).getValue();
-        List<String> goods_page_tags = Arrays.asList(this.getSettingByName("goods_page_tags", SettingScope.SYSTEM).getValue().split(","));
-        Boolean service_running = Boolean.valueOf(this.getSettingByName("service_running", SettingScope.SYSTEM).getValue());
+        String goods_page_notice = this.getSettingByName(storeId,"goods_page_notice", SettingScope.SYSTEM).getValue();
+        List<String> goods_page_tags = Arrays.asList(this.getSettingByName(storeId,"goods_page_tags", SettingScope.SYSTEM).getValue().split(","));
+        Boolean service_running = Boolean.valueOf(this.getSettingByName(storeId,"service_running", SettingScope.SYSTEM).getValue());
 
         // 服务是否在正常运行!
         if (!service_running) {
-            String service_close_notice = this.getSettingByName("service_close_notice", SettingScope.SYSTEM).getValue();
+            String service_close_notice = this.getSettingByName(storeId,"service_close_notice", SettingScope.SYSTEM).getValue();
             dto.setDisableService(true);
             dto.setDisableServiceNotice(service_close_notice);
         }
