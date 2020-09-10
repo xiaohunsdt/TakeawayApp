@@ -22,6 +22,12 @@ Component({
       wx.navigateTo({
         url: `/pages/goods/index?storeId=${this.data.store.id}`
       })
+    },
+    showServiceStopNotice() {
+      wx.showModal({
+        content: this.data.store.serviceNotice,
+        showCancel: false
+      })
     }
   }
 })

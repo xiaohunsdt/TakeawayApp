@@ -72,7 +72,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
         String store_close_time = settingService.getSettingByName(storeId, "store_close_time", SettingScope.STORE).getValue();
 
         if (!Boolean.parseBoolean(service_running.getValue())) {
-            return new ServiceStateDto(State.CLOSED.getCode(), service_close_notice.getValue());
+            return new ServiceStateDto(-1, service_close_notice.getValue());
         }
 
         if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {

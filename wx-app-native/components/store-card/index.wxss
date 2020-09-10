@@ -15,6 +15,7 @@
 }
 
 .goods-card .card-content{
+  padding: 5rpx 0rpx;
   width: 100%;
   margin-top: -10rpx;
   margin-left: 20rpx;
@@ -24,12 +25,12 @@
   margin-top: 5rpx;
   font-size: 35rpx;
   font-weight: 800;
-  margin-bottom: 20rpx;
+  margin-bottom: 10rpx;
 }
 
 .goods-card .card-content .card-desc {
   font-size: 24rpx;
-  margin-top: 10rpx;
+  /* margin-top: 10rpx; */
   color: gray;
 }
 
@@ -126,10 +127,10 @@
 
 .overlay {
   position: relative;
-  top: -130rpx;
+  top: -140rpx;
   background-color: rgba(000, 000, 000, 0.5);
   color: white;
-  padding: 15rpx;
+  padding: 25rpx 15rpx;
   text-align: center;
   font-weight: bolder;
 }

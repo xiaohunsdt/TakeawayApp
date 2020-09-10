@@ -1,8 +1,13 @@
 <view class="goods-card">
-	<view class="card-thumb" bind:tap="onOpenThumbDialog">
+	<view class="card-thumb">
 		<image src="{{store.logo?store.logo:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 		<view class="overlay" wx:if="{{store.serviceState!==1}}">
-			打烊中
+			<view wx:if="{{store.serviceState===-1}}" bind:tap="showServiceStopNotice">
+				暂停接单
+			</view>
+			<view wx:if="{{store.serviceState===2}}">
+				打烊中
+			</view>
 		</view>
 	</view>
 	<view class="card-content">
@@ -22,8 +27,8 @@
 			</view>
 		</view>
 		<view class="card-order-btn">
-			<van-button bind:click="goToStore" custom-class="order-btn" icon="goods-collect" round size="small" type="primary">
-				<span wx:if="{{store.serviceState===1}}">
+			<van-button bind:click="goToStore" disabled="{{store.serviceState===-1}}" custom-class="order-btn" icon="goods-collect" round size="small" type="primary">
+				<span wx:if="{{store.serviceState!==2}}">
 					下单
 				</span>
 				<span wx:else>

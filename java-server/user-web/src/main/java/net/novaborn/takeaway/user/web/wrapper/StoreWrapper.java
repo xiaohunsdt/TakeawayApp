@@ -32,7 +32,13 @@ public class StoreWrapper extends BaseControllerWrapper {
         Setting storeLogo = settingService.getSettingByName((Long) map.get("id"), "store_logo", SettingScope.STORE);
         ServiceStateDto storeState = storeService.getServiceState((Long) map.get("id"));
 
-        map.put("logo", storeLogo != null ? systemProperties.getUploadServerUrl() + storeLogo.getValue() : "");
+        if (storeState.getState() == -1) {
+            map.put("serviceNotice", storeState.getMessage());
+        }
+
+        if (storeLogo != null) {
+            map.put("logo", systemProperties.getUploadServerUrl() + storeLogo.getValue());
+        }
         map.put("address", address.getValue());
         map.put("serviceState", storeState.getState());
     }
