@@ -1,6 +1,6 @@
 <view class="goods-card">
 	<view class="card-thumb" bind:tap="onOpenThumbDialog">
-		<image src="{{store.thumb?store.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
+		<image src="{{store.logo?store.logo:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 		<view class="overlay" wx:if="{{store.serviceState!==1}}">
 			打烊中
 		</view>

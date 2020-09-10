@@ -7,6 +7,7 @@ import net.novaborn.takeaway.store.service.impl.StoreService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
+import net.novaborn.takeaway.user.config.properties.SystemProperties;
 
 import java.util.Map;
 
@@ -23,12 +24,15 @@ public class StoreWrapper extends BaseControllerWrapper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
+        SystemProperties systemProperties = SpringContextHolder.getBean(SystemProperties.class);
         StoreService storeService = SpringContextHolder.getBean(StoreService.class);
         SettingService settingService = SpringContextHolder.getBean(SettingService.class);
 
         Setting address = settingService.getSettingByName((Long) map.get("id"), "store_address", SettingScope.STORE);
+        Setting storeLogo = settingService.getSettingByName((Long) map.get("id"), "store_logo", SettingScope.STORE);
         ServiceStateDto storeState = storeService.getServiceState((Long) map.get("id"));
 
+        map.put("logo", storeLogo != null ? systemProperties.getUploadServerUrl() + storeLogo.getValue() : "");
         map.put("address", address.getValue());
         map.put("serviceState", storeState.getState());
     }
