@@ -32,7 +32,8 @@ public class RabbitMQService extends Service {
         factory.setPort(5672);
         factory.setUsername("xiaohun");
         factory.setPassword("wy1996");
-        factory.setAutomaticRecoveryEnabled(true);
+        factory.setNetworkRecoveryInterval(5000);// 设置每个10s ，重试一次
+        factory.setRequestedHeartbeat(20);
     }
 
     @Nullable
@@ -53,9 +54,7 @@ public class RabbitMQService extends Service {
         new Thread(() -> {
             try {
                 this.basicConsume(this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
+            } catch (IOException | TimeoutException e) {
                 e.printStackTrace();
             }
         }).start();

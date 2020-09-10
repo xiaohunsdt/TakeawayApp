@@ -48,10 +48,10 @@ spring:
         acknowledge-mode: manual
         concurrency: 5
         max-concurrency: 10
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
+#  data:
+#    elasticsearch:
+#      repositories:
+#        enabled: true
   quartz:
 #    job-store-type: jdbc
 #    initialize-schema: embedded
@@ -103,10 +103,10 @@ spring:
     username: xiaohun
     password: wy1996
 
-#logging:
-#    level:
-#        root: info
-#        net.novaborn: debug
+logging:
+    level:
+        root: info
+        net.novaborn: debug
 
 ---
 spring:

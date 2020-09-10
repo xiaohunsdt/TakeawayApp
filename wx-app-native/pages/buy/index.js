@@ -306,6 +306,11 @@ Page({
       })
       return 
     }
+
+    this.setData({
+      submitLoading: true
+    })
+
     const $this = this
     const tmplIds = [
       'chtooPomhx0JrFECp0ZzYLlRZHc6tA7UdN-l5lAV0A4',
@@ -336,7 +341,12 @@ Page({
                     content: '请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
                     showCancel: false
                   })
+
+                  $this.setData({
+                    submitLoading: false
+                  })
                 }
+
                 if (res.confirm) {
                   $this.createOrder()
                 }
@@ -347,6 +357,10 @@ Page({
           }
         },
         fail(res) {
+          $this.setData({
+            submitLoading: false
+          })
+
           if (res.errCode === 20004) {
             wx.showModal({
               title: '警告',
@@ -365,6 +379,7 @@ Page({
           if (res[tmplIds[2]] === 'reject') {
             isReject = true
           }
+
           if (isReject) {
             wx.showModal({
               title: '提示',
@@ -375,6 +390,10 @@ Page({
                     title: '提示',
                     content: '请点击页面右上角"┅"按钮, 点击设置, 打开订阅消息权限',
                     showCancel: false
+                  })
+
+                  $this.setData({
+                    submitLoading: false
                   })
                 }
                 if (res.confirm) {
@@ -387,6 +406,10 @@ Page({
           }
         },
         fail(res) {
+          $this.setData({
+            submitLoading: false
+          })
+
           if (res.errCode === 20004) {
             wx.showModal({
               title: '警告',
@@ -399,9 +422,6 @@ Page({
     }
   },
   createOrder() {
-    this.setData({
-      submitLoading: true
-    })
     orderService.createOrder(
       orderService.generateOrder(this.data.payWay, this.data.psData, indexService.formatAppointmentTime(this.data.deliveryType, this.data.appointment), this.data.from),
       this.data.orderItems,

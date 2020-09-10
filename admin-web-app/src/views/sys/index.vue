@@ -5,13 +5,18 @@
         <el-tab-pane label="系统设置">
           <el-form ref="form" :model="systemSetting" label-width="120px" size="mini" style="max-width: 660px">
             <el-form-item label="接单服务">
-              <el-tooltip content="当前是否正常结单" placement="right">
+              <el-tooltip content="是否允许下单" placement="right">
                 <el-switch v-model="systemSetting.service_running"></el-switch>
               </el-tooltip>
             </el-form-item>
             <el-form-item v-if="!systemSetting.service_running" label="服务关闭提送">
               <el-tooltip content="当接单服务关闭时给用户看的提示信息" placement="right">
                 <el-input v-model="systemSetting.service_close_notice"></el-input>
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="自动接单">
+              <el-tooltip content="是否允许系统自动接单" placement="right">
+                <el-switch v-model="systemSetting.auto_receive_order"></el-switch>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="商品页公告">
@@ -183,6 +188,7 @@ export default {
       timePickValue: [new Date(), new Date()],
       systemSetting: {
         service_running: true,
+        auto_receive_order: false,
         service_close_notice: '',
         goods_page_notice: '',
         goods_page_tags: ''

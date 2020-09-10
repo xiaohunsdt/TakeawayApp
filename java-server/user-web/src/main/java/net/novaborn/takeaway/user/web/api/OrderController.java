@@ -18,6 +18,7 @@ import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
@@ -28,6 +29,7 @@ import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
@@ -73,6 +75,8 @@ public class OrderController extends BaseController {
     private SettingService settingService;
 
     private OrderPayExpiredSender orderPayExpiredSender;
+
+    private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -176,6 +180,12 @@ public class OrderController extends BaseController {
         //将未支付的订单丢给订单过期队列
         if (order.getPayState() == PayState.UN_PAY) {
             orderPayExpiredSender.send(order, 30 * 60);
+        } else {
+            // 系统是否允许自动接单
+            Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
+            if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                orderAutoReceiveSender.send(order);
+            }
         }
 
         //将订单id返回
