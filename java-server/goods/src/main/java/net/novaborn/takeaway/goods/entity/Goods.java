@@ -20,7 +20,6 @@ import java.util.Objects;
  */
 @Data
 @TableName("`goods`")
-@Document(indexName = "takeaway")
 @NoArgsConstructor
 public class Goods extends Model<Goods> {
     private static final long serialVersionUID = -7514580043247682497L;

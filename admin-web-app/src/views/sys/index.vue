@@ -3,15 +3,20 @@
     <base-card>
       <el-tabs type="card">
         <el-tab-pane label="系统设置">
-          <el-form :model="systemSetting" label-width="120px" ref="form" size="mini" style="max-width: 660px">
+          <el-form ref="form" :model="systemSetting" label-width="120px" size="mini" style="max-width: 660px">
             <el-form-item label="接单服务">
-              <el-tooltip content="当前是否正常结单" placement="right">
+              <el-tooltip content="是否允许下单" placement="right">
                 <el-switch v-model="systemSetting.service_running"></el-switch>
               </el-tooltip>
             </el-form-item>
-            <el-form-item label="服务关闭提送" v-if="!systemSetting.service_running">
+            <el-form-item v-if="!systemSetting.service_running" label="服务关闭提送">
               <el-tooltip content="当接单服务关闭时给用户看的提示信息" placement="right">
                 <el-input v-model="systemSetting.service_close_notice"></el-input>
+              </el-tooltip>
+            </el-form-item>
+            <el-form-item label="自动接单">
+              <el-tooltip content="是否允许系统自动接单" placement="right">
+                <el-switch v-model="systemSetting.auto_receive_order"></el-switch>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="商品页公告">
@@ -23,14 +28,31 @@
               </el-tooltip>
             </el-form-item>
             <el-form-item>
-              <el-button :loading="saveLoading" @click="saveSetting('SYSTEM')" type="primary">保存设置</el-button>
+              <el-button :loading="saveLoading" type="primary" @click="saveSetting('SYSTEM')">保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="店铺设置">
-          <el-form :model="storeSetting" label-width="130px" ref="form" size="mini" style="max-width: 660px">
+          <el-form ref="form" :model="storeSetting" label-width="130px" size="mini" style="max-width: 660px">
+            <el-form-item label="店铺Logo">
+              <el-upload
+                  ref="upload"
+                  :action="$VUE_APP_BASE_API + '/api/admin/uploadStoreLogo'"
+                  :before-upload="beforeUpload"
+                  :headers="authHeader"
+                  :multiple="false"
+                  :on-success="handleUploadSuccess"
+                  :show-file-list="false">
+                <img
+                    v-if="storeSetting.store_logo !== ''"
+                    :src="$VUE_APP_BASE_API + storeSetting.store_logo"
+                    style="height: 150px;width: auto;"/>
+                <el-button v-else size="small" type="primary">点击上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M！建议上传长宽相等的正方形图片</div>
+              </el-upload>
+            </el-form-item>
             <el-form-item label="运营周期" size="small">
-              <el-checkbox-group size="mini" v-model="storeSetting.store_open_date">
+              <el-checkbox-group v-model="storeSetting.store_open_date" size="mini">
                 <el-checkbox-button label="2">星期一</el-checkbox-button>
                 <el-checkbox-button label="3">星期二</el-checkbox-button>
                 <el-checkbox-button label="4">星期三</el-checkbox-button>
@@ -42,37 +64,37 @@
             </el-form-item>
             <el-form-item label="运营时间">
               <el-time-picker
+                  v-model="timePickValue"
                   end-placeholder="关门时间"
                   is-range
                   placeholder="选择运营时间范围"
                   range-separator="至"
-                  start-placeholder="开门时间"
-                  v-model="timePickValue"/>
+                  start-placeholder="开门时间"/>
             </el-form-item>
             <el-form-item label="店铺地址">
               <el-select
+                  v-model="storeSetting.store_address"
                   :loading="searchLoading"
                   :remote-method="onSearch"
-                  @change="onSelect"
                   filterable
                   placeholder="请输入关键词"
                   remote
                   reserve-keyword
                   style="display: block;"
-                  v-model="storeSetting.store_address">
+                  @change="onSelect">
                 <el-option
+                    v-for="item in addressList"
                     :key="item.address"
                     :label="item.address"
-                    :value="item.address"
-                    v-for="item in addressList">
+                    :value="item.address">
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="地址经度">
-              <el-input disabled v-model="storeSetting.store_address_x"></el-input>
+              <el-input v-model="storeSetting.store_address_x" disabled></el-input>
             </el-form-item>
             <el-form-item label="地址纬度">
-              <el-input disabled v-model="storeSetting.store_address_y"></el-input>
+              <el-input v-model="storeSetting.store_address_y" disabled></el-input>
             </el-form-item>
             <el-form-item label="厨师体温">
               <el-input v-model="storeSetting.temperature1"></el-input>
@@ -87,12 +109,12 @@
               <el-input v-model="storeSetting.temperature4"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button @click="saveSetting('STORE')" type="primary">保存设置</el-button>
+              <el-button type="primary" @click="saveSetting('STORE')">保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="配送设置">
-          <el-form :model="expressSetting" label-width="120px" ref="form" size="mini" style="max-width: 660px">
+          <el-form ref="form" :model="expressSetting" label-width="120px" size="mini" style="max-width: 660px">
             <el-form-item label="最低起送价格">
               <el-tooltip content="最低起送价格" placement="right">
                 <el-input v-model.number="expressSetting.lowest_order_price"></el-input>
@@ -127,7 +149,7 @@
               <el-input v-model.number="expressSetting.deliverier_count"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button @click="saveSetting('EXPRESS')" type="primary">保存设置</el-button>
+              <el-button type="primary" @click="saveSetting('EXPRESS')">保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -142,12 +164,20 @@ import BaseCard from '@/components/BaseCard'
 import settingApi from '@/api/sys-setting'
 import addressApi from '@/api/address'
 import DynamicInput from './components/DynamicInput'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'SysManagement',
   components: {
     BaseCard,
     DynamicInput
+  },
+  computed: {
+    authHeader() {
+      return {
+        Authorization: `Bearer ${getToken()}`
+      }
+    }
   },
   created() {
     this.init(0)
@@ -158,11 +188,13 @@ export default {
       timePickValue: [new Date(), new Date()],
       systemSetting: {
         service_running: true,
+        auto_receive_order: false,
         service_close_notice: '',
         goods_page_notice: '',
         goods_page_tags: ''
       },
       storeSetting: {
+        store_logo: '',
         store_open_date: [],
         store_open_time: null,
         store_close_time: null,
@@ -275,6 +307,22 @@ export default {
       this.storeSetting.store_address = temp.address
       this.storeSetting.store_address_x = temp.x
       this.storeSetting.store_address_y = temp.y
+    },
+    beforeUpload(file) {
+      const isImg = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt5M = file.size / 1024 / 1024 < 5
+
+      if (!isImg) {
+        this.$message.error('只能上传图片')
+      }
+      if (!isLt5M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+      }
+      return isImg && isLt5M
+    },
+    handleUploadSuccess(response, file, fileList) {
+      const storeLogo = `/upload/images/store/${response.message}`
+      this.storeSetting.store_logo = storeLogo
     }
   }
 }

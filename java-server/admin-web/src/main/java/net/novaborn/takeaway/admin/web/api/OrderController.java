@@ -18,12 +18,16 @@ import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderSignInSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +60,13 @@ public class OrderController extends BaseController {
 
     private OrderItemService orderItemService;
 
+    private SettingService settingService;
+
     private OrderSmsUtil orderSmsUtil;
 
     private WechatAutoTask wechatAutoTask;
+
+    private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private OrderSignInSender orderSignInSender;
 
@@ -155,6 +163,13 @@ public class OrderController extends BaseController {
         if (!order.get().updateById()) {
             return new ErrorTip(-1, "操作失败!");
         }
+
+        // 系统是否允许自动接单
+        Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
+        if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+            orderAutoReceiveSender.send(order.get());
+        }
+
         return new SuccessTip();
     }
 

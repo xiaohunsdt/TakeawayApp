@@ -8,6 +8,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
@@ -15,6 +16,9 @@ import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.exception.PayExceptionEnum;
 import net.novaborn.takeaway.pay.services.IPayService;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,10 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 public class PayService implements IPayService {
     private OrderService orderService;
+
+    private SettingService settingService;
+
+    private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private WxPayService wxPayService;
 
@@ -93,6 +101,12 @@ public class PayService implements IPayService {
             }
         } else {
             throw new SysException(PayExceptionEnum.PAY_ERROR, state);
+        }
+
+        // 系统是否允许自动接单
+        Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
+        if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+            orderAutoReceiveSender.send(order.get());
         }
     }
 
