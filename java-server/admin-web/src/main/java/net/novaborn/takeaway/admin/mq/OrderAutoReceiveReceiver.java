@@ -50,6 +50,7 @@ public class OrderAutoReceiveReceiver {
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
         sysContext.setCurrentStoreId(order.getStoreId());
+
         orderController.receiveOrder(order.getId());
         channel.basicAck(deliveryTag, false);
     }

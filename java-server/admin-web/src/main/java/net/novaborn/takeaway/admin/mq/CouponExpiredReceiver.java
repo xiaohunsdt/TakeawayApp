@@ -6,6 +6,7 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
@@ -39,14 +40,17 @@ public class CouponExpiredReceiver {
 
     private CouponService couponService;
 
+    private SysContext sysContext;
+
     @SneakyThrows
     @RabbitHandler
     public void process(@Payload Coupon coupon, Channel channel, @Headers Map<String, Object> headers) {
         log.debug("优惠卷过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
-        Coupon target = couponService.getById(coupon.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
+        sysContext.setCurrentStoreId(coupon.getStoreId());
+        Coupon target = couponService.getById(coupon.getId());
         if (target != null) {
             Date current = new Date();
             if (!target.getExpireDate().equals(coupon.getExpireDate()) && target.getExpireDate().after(current)) {

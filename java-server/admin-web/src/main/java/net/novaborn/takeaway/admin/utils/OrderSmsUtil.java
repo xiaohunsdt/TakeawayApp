@@ -55,8 +55,9 @@ public class OrderSmsUtil {
     public boolean pushMessage(Order order) {
         orderSubscribeMessageSender.send(order);
 
-        Message item = new Message(order, DELAY_TIME * 1000);
-        return !queue.contains(item) && queue.add(item);
+//        Message item = new Message(order, DELAY_TIME * 1000);
+        return true;
+//        return !queue.contains(item) && queue.add(item);
     }
 
     @Data
