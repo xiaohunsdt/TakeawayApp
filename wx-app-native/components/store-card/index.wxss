@@ -1,0 +1,135 @@
+.goods-card {
+  padding: unset !important;
+  overflow: hidden;
+  margin-bottom: 40rpx;
+  background-color: transparent !important;
+  display: flex;
+  position: relative;
+}
+
+.goods-card .card-thumb {
+  min-width: 220rpx !important;
+  height: 170rpx !important;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.goods-card .card-content{
+  width: 100%;
+  margin-top: -10rpx;
+  margin-left: 20rpx;
+}
+
+.goods-card .card-content .title {
+  margin-top: 5rpx;
+  font-size: 35rpx;
+  font-weight: 800;
+  margin-bottom: 20rpx;
+}
+
+.goods-card .card-content .card-desc {
+  font-size: 24rpx;
+  margin-top: 10rpx;
+  color: gray;
+}
+
+.goods-card .card-content .desc {
+  display: flex;
+}
+
+.goods-card .card-content .card-desc .comment {
+  color: gray;
+  display: flex;
+  margin-top: 10rpx;
+  flex-direction: row;
+}
+
+.goods-card .card-content .card-desc .comment .viewidLine {
+  border-right: #F3F3F3 1rpx solid;
+  width: 1rpx;
+  margin: 0 10rpx;
+}
+
+.goods-card .card-content .card-price{
+  position: absolute;
+  top: 0rpx;
+  right: 0rpx;
+  font-size: 33rpx;
+  font-weight: bolder;
+  color: #FFD200 !important;
+}
+
+.goods-card .card-content .card-price .currency{
+  display: inline-block;
+  font-size: 23rpx;
+}
+
+
+.card-order-btn{
+  height: 0rpx;
+  text-align: right;
+  position: absolute;
+  bottom: 70rpx;
+  right: 0rpx;
+}
+
+.order-btn {
+  background-color: #FFD200 !important;
+  border: none !important;
+  /* display: block; */
+}
+
+/* .order-stepper-root {
+  position: relative;
+  bottom: 70rpx;
+  right: 0rpx;
+} */
+
+
+.order-stepper-input {
+  background-color: transparent !important;
+  width: 40rpx !important;
+  font-weight: 600 !important;
+}
+
+.order-stepper-input.van-stepper__input--disabled {
+  color: black;
+}
+
+.order-stepper-plus, .order-stepper-minus {
+  background-color: #FFD200 !important;
+  font-weight: 800 !important;
+  border-radius: 50% !important;
+  width: 50rpx !important;
+  height: 50rpx !important;
+}
+
+.order-stepper-plus:active, .order-stepper-minus:active {
+  background-color: #ffb105 !important;
+}
+
+.order-stepper-plus:before,
+.order-stepper-plus:after,
+.order-stepper-minus:before, .order-stepper-minus:after {
+  background-color: white !important;
+}
+
+.order-stepper-minus:before, .order-stepper-plus:before {
+  height: 5rpx !important;
+  width: 24rpx !important;
+}
+
+.order-stepper-minus:after, .order-stepper-plus:after {
+  width: 5rpx !important;
+  height: 24rpx !important;
+}
+
+.overlay {
+  position: relative;
+  top: -130rpx;
+  background-color: rgba(000, 000, 000, 0.5);
+  color: white;
+  padding: 15rpx;
+  text-align: center;
+  font-weight: bolder;
+}

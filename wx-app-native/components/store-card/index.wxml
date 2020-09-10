@@ -1,0 +1,35 @@
+<view class="goods-card">
+	<view class="card-thumb" bind:tap="onOpenThumbDialog">
+		<image src="{{store.thumb?store.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
+		<view class="overlay" wx:if="{{store.serviceState!==1}}">
+			打烊中
+		</view>
+	</view>
+	<view class="card-content">
+		<view class="title">{{store.name}}</view>
+		<view class="card-desc">
+			<view class="desc">
+				<van-icon name="shop" size="30rpx" style="display:inline-block" />
+				{{ store.address }}
+			</view>
+			<view class="comment">
+				<view>
+					月销 {{ food.monthSale }}
+				</view>
+				<view class="viewidLine"></view>
+				<view>评分 </view>
+				<view style="color: #FFD200">{{ food.rate }}</view>
+			</view>
+		</view>
+		<view class="card-order-btn">
+			<van-button bind:click="goToStore" custom-class="order-btn" icon="goods-collect" round size="small" type="primary">
+				<span wx:if="{{store.serviceState===1}}">
+					下单
+				</span>
+				<span wx:else>
+					预约
+				</span>
+			</van-button>
+		</view>
+	</view>
+</view>
