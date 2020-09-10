@@ -223,7 +223,7 @@ export default {
     init() {
       settingApi.getSettingsByScope('SYSTEM').then(res => {
         res.forEach(item => {
-          if (item.key === 'service_running') {
+          if (item.key === 'service_running' || item.key === 'auto_receive_order') {
             this.$set(this.systemSetting, item.key, item.value === 'true')
             return
           }
