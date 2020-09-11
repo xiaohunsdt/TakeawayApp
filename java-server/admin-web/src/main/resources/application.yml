@@ -12,6 +12,14 @@ jwt:
 sys:
   upload-server-url: https://admin.cxy.novaborn.net
 
+wx:
+  miniapp:
+    appid: wx3c0bde366c72ea19
+    secret: dc7706fbe07d49992bf48f081fce43a6
+    token: takeaway_token_mini_program
+    aesKey: orkh4QFZlWvTBLMG7hjVI9VYrPqVJoUP6vAPpH9JORy
+    msgDataFormat: JSON
+
 server:
   port: 8080
 

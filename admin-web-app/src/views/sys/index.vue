@@ -52,6 +52,9 @@
               </el-upload>
             </el-form-item>
             <el-form-item label="运营周期" size="small">
+              <el-button @click="onDownloadQrCode" size="small" type="primary">下载店铺二维码</el-button>
+            </el-form-item>
+            <el-form-item label="运营周期" size="small">
               <el-checkbox-group v-model="storeSetting.store_open_date" size="mini">
                 <el-checkbox-button label="2">星期一</el-checkbox-button>
                 <el-checkbox-button label="3">星期二</el-checkbox-button>
@@ -160,8 +163,10 @@
 </template>
 
 <script>
+import FileSaver from 'file-saver'
 import BaseCard from '@/components/BaseCard'
 import settingApi from '@/api/sys-setting'
+import storeApi from '@/api/store'
 import addressApi from '@/api/address'
 import DynamicInput from './components/DynamicInput'
 import { getToken } from '@/utils/auth'
@@ -307,6 +312,22 @@ export default {
       this.storeSetting.store_address = temp.address
       this.storeSetting.store_address_x = temp.x
       this.storeSetting.store_address_y = temp.y
+    },
+    onDownloadQrCode() {
+      storeApi.getStoreQRcode().then(res => {
+        FileSaver.saveAs(this.base64ToBlob(`data:image/jpg;base64,${res}`), 'QRcode.jpg')
+      })
+    },
+    base64ToBlob(code) {
+      const parts = code.split(';base64,')
+      const contentType = parts[0].split(':')[1]
+      const raw = window.atob(parts[1])
+      const rawLength = raw.length
+      const uInt8Array = new Uint8Array(rawLength)
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i)
+      }
+      return new Blob([uInt8Array], { type: contentType })
     },
     beforeUpload(file) {
       const isImg = file.type === 'image/jpeg' || file.type === 'image/png'

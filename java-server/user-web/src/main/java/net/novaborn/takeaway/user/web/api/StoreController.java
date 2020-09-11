@@ -2,9 +2,11 @@ package net.novaborn.takeaway.user.web.api;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.store.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.store.entity.Store;
 import net.novaborn.takeaway.store.enums.State;
+import net.novaborn.takeaway.store.exception.StoreExceptionEnum;
 import net.novaborn.takeaway.store.service.impl.StoreService;
 import net.novaborn.takeaway.user.web.wrapper.StoreWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,16 @@ import java.util.stream.Collectors;
 public class StoreController extends BaseController {
 
     StoreService storeService;
+
+    @ResponseBody
+    @PostMapping("getStoreById")
+    public Object getStoreById(Long storeId) {
+        Store store = storeService.getById(storeId);
+        if (store == null) {
+            throw new SysException(StoreExceptionEnum.STORE_NOT_EXIST);
+        }
+        return new StoreWrapper(store).warp();
+    }
 
     @ResponseBody
     @GetMapping("getAllStoreList")

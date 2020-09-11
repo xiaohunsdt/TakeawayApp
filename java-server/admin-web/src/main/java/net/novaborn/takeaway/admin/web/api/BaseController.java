@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import net.novaborn.takeaway.admin.common.SysContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -16,4 +17,7 @@ public class BaseController {
 
     @Resource
     protected HttpServletResponse response;
+
+    @Resource
+    SysContext sysContext;
 }

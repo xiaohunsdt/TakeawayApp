@@ -1,4 +1,5 @@
 import goodsService from '../../services/goods'
+import storeService from '../../services/store'
 import settingService from '../../services/setting'
 
 Page({
@@ -12,8 +13,19 @@ Page({
     pageSettings: {}
   },
   onLoad: function (options) {
-    getApp().globalData.currentStore = options.storeId
-    this.init()
+    let storeId;
+    if (options.storeId) {
+      storeId = options.storeId;
+    } else if (options.scene) {
+      storeId = decodeURIComponent(options.scene)
+    }
+    storeService.getStoreById(storeId).then(res => {
+      getApp().globalData.currentStore = res
+      wx.setNavigationBarTitle({
+        title: res.name
+      })
+      this.init()
+    })
   },
   onShow: function () {},
   /**

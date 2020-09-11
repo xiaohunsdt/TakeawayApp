@@ -4,24 +4,28 @@
 import api from '../utils/api'
 import indexUtil from '../utils/index'
 
+export function getStoreById (storeId) {
+  return api.getStoreById(storeId)
+}
+
 export function getAllStoreList () {
   return api.getAllStoreList()
 }
 
 export function getServiceState () {
-  return api.getServiceState(getApp().globalData.currentStore)
+  return api.getServiceState(getApp().globalData.currentStore.id)
 }
 
 export function getExpressServiceState (addressId, allPrice) {
-  return api.getExpressServiceState(getApp().globalData.currentStore,addressId, allPrice)
+  return api.getExpressServiceState(getApp().globalData.currentStore.id,addressId, allPrice)
 }
 
 export function getDeliveryPrice () {
-  return api.getDeliveryPrice(getApp().globalData.currentStore)
+  return api.getDeliveryPrice(getApp().globalData.currentStore.id)
 }
 
 export function getAppointmentTimes () {
-  return api.getAppointmentTimes(getApp().globalData.currentStore)
+  return api.getAppointmentTimes(getApp().globalData.currentStore.id)
 }
 
 export function formatAppointmentTime (deliveryType, appointment) {
@@ -53,6 +57,7 @@ export function formatAppointmentTime (deliveryType, appointment) {
 }
 
 export default {
+  getStoreById,
   getAllStoreList,
   getServiceState,
   getExpressServiceState,

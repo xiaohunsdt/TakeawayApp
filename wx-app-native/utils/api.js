@@ -26,6 +26,11 @@ const api = {
     from
   }),
 
+
+  //获取指定店铺信息
+  getStoreById :(storeId) => request.post('store/getStoreById', {
+    storeId
+  }),
   // 获取总店铺列表
   getAllStoreList: () => request.get('store/getAllStoreList'),
   // 获取总服务状态
