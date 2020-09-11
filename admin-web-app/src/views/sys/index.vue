@@ -164,6 +164,7 @@
                   <el-option value="신한은행">신한은행</el-option>
                   <el-option value="우리은행">우리은행</el-option>
                   <el-option value="기업은행">기업은행</el-option>
+                  <el-option value="하나은행">하나은행</el-option>
                   <el-option value="하나외환은행">하나외환은행</el-option>
                   <el-option value="우체국">우체국</el-option>
                   <el-option value="대구은행">대구은행</el-option>
