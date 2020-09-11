@@ -125,7 +125,6 @@ Page({
       })
       orderService.selectOrderById(this.data.orderId)
         .then(res => {
-          wx.hideLoading()
           this.setData({
             order: res
           })
@@ -142,7 +141,7 @@ Page({
             })
           }
         })
-        .catch(() => {
+        .finally(() => {
           wx.hideLoading()
         })
     } else {

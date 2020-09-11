@@ -20,7 +20,7 @@ Page({
    */
   onLoad: function (options) {
     console.log(options.state)
-    if(options.state && options.state!== "undefined"){
+    if (options.state && options.state !== "undefined") {
       this.setData({
         orderState: options.state
       })
@@ -68,13 +68,16 @@ Page({
     wx.showLoading({
       title: '加载中'
     })
-    orderService.getOrderListByPage(this.data.page, this.data.orderState).then(res => {
-      this.data.orderList.push(...res.records)
-      this.setData({
-        orderList: this.data.orderList
+    orderService.getOrderListByPage(this.data.page, this.data.orderState)
+      .then(res => {
+        this.data.orderList.push(...res.records)
+        this.setData({
+          orderList: this.data.orderList
+        })
+        this.data.page.total = parseInt(res.total)
       })
-      this.data.page.total = parseInt(res.total)
-      wx.hideLoading()
-    })
+      .finally(err => {
+        wx.hideLoading()
+      })
   }
 })

@@ -203,6 +203,7 @@ public class OrderController extends BaseController {
         }
 
         comment.setUserId(order.get().getUserId());
+        comment.setStoreId(order.get().getStoreId());
 
         if (!comment.insert()) {
             return new ErrorTip(-1, "评论失败!");
@@ -242,11 +243,13 @@ public class OrderController extends BaseController {
     @PostMapping("getDeliveryArriveTime")
     public Object getDeliveryArriveTime(@RequestParam(required = false) Long orderId) {
         Date deliveryDate;
+
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
-//        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
-        int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
-        int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
-        int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.EXPRESS).getValue());
+        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+
+        int base_express_time = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"base_express_time", SettingScope.EXPRESS).getValue());
+        int average_express_time = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"average_express_time", SettingScope.EXPRESS).getValue());
+        int deliverier_count = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"deliverier_count", SettingScope.EXPRESS).getValue());
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
                 .filter(item -> {
