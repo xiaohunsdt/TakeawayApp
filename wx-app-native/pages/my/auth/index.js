@@ -7,7 +7,6 @@ Page({
     })
     userApi.loginByWx()
       .then(() => {
-        wx.hideLoading()
         const pages = getCurrentPages()
         let pre = null
         let index = 2
@@ -19,9 +18,8 @@ Page({
           url: `/${pre.route}`
         })
       })
-      .catch(err => {
+      .finally(err => {
         wx.hideLoading()
-        console.error(err)
       })
   }
 })

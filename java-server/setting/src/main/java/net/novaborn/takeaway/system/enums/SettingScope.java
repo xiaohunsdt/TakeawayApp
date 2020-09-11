@@ -5,14 +5,13 @@ import lombok.Getter;
 
 @Getter
 public enum SettingScope {
-    /**
-     * 等待接单
-     */
     STORE("store"),
 
     EXPRESS("express"),
 
-    SYSTEM("system");
+    SYSTEM("system"),
+
+    PAYMENT("payment");
 
     SettingScope(String scope) {
         this.scope = scope;

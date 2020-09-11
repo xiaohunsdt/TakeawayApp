@@ -3,7 +3,7 @@
  */
 import api from '../utils/api'
 
-export function getSystemSettings () {
+export function getSystemSettings() {
   return new Promise((resolve, reject) => {
     api.getSettingsByScope('SYSTEM')
       .then(res => {
@@ -25,15 +25,55 @@ export function getSystemSettings () {
   })
 }
 
-export function getStoreSettings () {
-  return api.getSettingsByScope('STORE')
+export function getStoreSettings() {
+  return new Promise((reslove, reject) => {
+    api.getSettingsByScope('STORE')
+      .then(res => {
+        let result = {}
+        res.forEach(item => {
+          result[item.key] = item.value
+        })
+        reslove(result)
+      })
+      .catch(res => {
+        reject(res)
+      })
+  })
 }
 
-export function getExpressSettings () {
-  return api.getSettingsByScope('EXPRESS')
+export function getExpressSettings() {
+  return new Promise((reslove, reject) => {
+    api.getSettingsByScope('EXPRESS')
+      .then(res => {
+        let result = {}
+        res.forEach(item => {
+          result[item.key] = item.value
+        })
+        reslove(result)
+      })
+      .catch(res => {
+        reject(res)
+      })
+  })
 }
 
-export function getGoodsPageSettings () {
+export function getPaymentSettings() {
+  return new Promise((reslove, reject) => {
+    api.getSettingsByScope('PAYMENT')
+      .then(res => {
+        let result = {}
+        res.forEach(item => {
+          result[item.key] = item.value
+        })
+        reslove(result)
+      })
+      .catch(res => {
+        reject(res)
+      })
+  })
+}
+
+export function getGoodsPageSettings() {
   return api.getGoodsPageSettings()
 }
 
@@ -41,5 +81,6 @@ export default {
   getSystemSettings,
   getStoreSettings,
   getExpressSettings,
+  getPaymentSettings,
   getGoodsPageSettings
 }

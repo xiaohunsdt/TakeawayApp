@@ -46,9 +46,8 @@ Page({
         this.setData({
           categories: res.categoryGoods
         })
-        wx.hideLoading()
       })
-      .catch(() => {
+      .finally(() => {
         wx.hideLoading()
       })
   },

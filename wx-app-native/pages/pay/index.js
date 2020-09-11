@@ -1,18 +1,14 @@
 import orderService from '../../services/order'
+import settingService from '../../services/setting'
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     orderId: null,
-    order: null
+    order: null,
+    bank: '',
+    account: '',
+    accountName: ''
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     if (options.orderId) {
       this.setData({
@@ -21,17 +17,9 @@ Page({
       this.init()
     }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
     this.init()
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
   onPullDownRefresh: function () {
     this.init()
     wx.stopPullDownRefresh()
@@ -42,12 +30,27 @@ Page({
         order: res
       })
       if (this.data.order.payState === 'PAID') {
-        // mpvue.reLaunch({
-        //   url: `/pages/order/detail/main?orderId=${this.order.id}`
-        // })
         wx.reLaunch({
           url: '/pages/order/index?state=WAIT_EAT'
         })
+        return
+      }
+
+      if (this.data.order.paymentWay === 'TRANSFER') {
+        wx.showLoading({
+          title: '加载商家信息中...'
+        })
+        settingService.getPaymentSettings()
+          .then(res => {
+            this.setData({
+              bank: res.bank,
+              account: res.account,
+              accountName: res.accountName
+            })
+          })
+          .finally(() => {
+            wx.hideLoading()
+          })
       }
     })
   }

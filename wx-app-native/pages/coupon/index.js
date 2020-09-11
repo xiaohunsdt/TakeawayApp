@@ -33,9 +33,8 @@ Page({
         this.setData({
           couponList: res
         })
-        wx.hideLoading()
       })
-      .catch(() => {
+      .finally(() => {
         wx.hideLoading()
       })
   },

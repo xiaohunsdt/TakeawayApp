@@ -50,13 +50,13 @@
 				通帐转账
 			</view>
 			<view class="pay-way-detail">
-				账号: 645-910961-66007
+				账号: {{account}}
 			</view>
 			<view class="pay-way-detail">
-				银行: 하나은행
+				银行: {{bank}}
 			</view>
 			<view class="pay-way-detail">
-				户名: 왕잔용
+				户名: {{accountName}}
 			</view>
 			<view class="pay-way-detail">
 				转账成功后,请联系客服!将转账截图和订餐号告诉客服
