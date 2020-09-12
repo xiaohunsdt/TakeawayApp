@@ -5,7 +5,7 @@
       <form class="form">
         <input v-model="loginForm.userName" placeholder="用户名" type="text"/>
         <input v-model="loginForm.password" placeholder="密码" type="password"/>
-        <button id="login-button" type="button" @click="handleLogin">Login</button>
+        <button id="login-button" v-loading.fullscreen.lock="loading" type="button" @click="handleLogin">Login</button>
       </form>
     </div>
 
@@ -48,12 +48,13 @@ export default {
   methods: {
     handleLogin() {
       this.loading = true
-      this.$store.dispatch('admin/login', this.loginForm).then(() => {
-        this.$router.push({ path: this.redirect || '/' })
-        this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
+      this.$store.dispatch('admin/login', this.loginForm)
+          .then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+          })
+          .finally(() => {
+            this.loading = false
+          })
     }
   }
 }
