@@ -9,8 +9,9 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar"
-               src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"/>
+          <img
+              class="user-avatar"
+              src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"/>
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -54,11 +55,12 @@ export default {
     }
   },
   mounted() {
+    const $this = this
     this.$refs['normal-order'].volume = 0.3
     this.$refs['appointment-order'].volume = 0.3
     this.timer1 = setInterval(this.getWaitingReceiveNormalOrderCount, 1000 * 10)
     setTimeout(() => {
-      this.timer2 = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
+      $this.timer2 = setInterval(this.getWaitingReceiveAppointmentOrderCount, 1000 * 10)
     }, 4000)
   },
   beforeDestroy() {
