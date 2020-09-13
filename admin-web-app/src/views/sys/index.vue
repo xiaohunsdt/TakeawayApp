@@ -51,7 +51,7 @@
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M！建议上传长宽相等的正方形图片</div>
               </el-upload>
             </el-form-item>
-            <el-form-item label="运营周期" size="small">
+            <el-form-item label="店铺二维码" size="small">
               <el-button @click="onDownloadQrCode" size="small" type="primary">下载店铺二维码</el-button>
             </el-form-item>
             <el-form-item label="运营周期" size="small">
