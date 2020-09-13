@@ -334,13 +334,12 @@ export default {
       this.saveLoading = true
       settingApi.updateSetting(settings, scope)
           .then(res => {
-            this.saveLoading = false
             this.$message({
               message: res.message,
               type: 'success'
             })
           })
-          .catch(res => {
+          .finally(() => {
             this.saveLoading = false
           })
     },
@@ -350,10 +349,11 @@ export default {
         addressApi.searchAddress(query)
             .then(res => {
               this.addressList = res
-              this.searchLoading = false
             })
             .catch(() => {
               this.addressList = []
+            })
+            .finally(() => {
               this.searchLoading = false
             })
       } else {

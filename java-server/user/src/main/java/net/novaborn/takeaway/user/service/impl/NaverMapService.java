@@ -14,6 +14,7 @@ import net.novaborn.takeaway.common.utils.exception.MapExceptionEnum;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.user.service.INaverMapService;
+import net.novaborn.takeaway.user.vo.AddressVo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,8 +59,8 @@ public class NaverMapService implements INaverMapService {
     }
 
     @Override
-    public List<Address> searchAddress(String address) {
-        List<Address> addresses = new ArrayList<>();
+    public List<AddressVo> searchAddress(String address) {
+        List<AddressVo> addresses = new ArrayList<>();
 
         String result = requestApi(address);
         JSONObject jsonObject = JSON.parseObject(result);
@@ -84,13 +85,15 @@ public class NaverMapService implements INaverMapService {
                     })
                     .forEach(item -> {
                         String roadAddress = ((JSONObject) item).getString("roadAddress");
+                        String jibunAddress = ((JSONObject) item).getString("jibunAddress");
                         if (StrUtil.isBlank(roadAddress)) {
-                            roadAddress = ((JSONObject) item).getString("jibunAddress");
+                            roadAddress = jibunAddress;
                         }
                         Double x = ((JSONObject) item).getDouble("x");
                         Double y = ((JSONObject) item).getDouble("y");
-                        Address temp = new Address();
+                        AddressVo temp = new AddressVo();
                         temp.setAddress(roadAddress);
+                        temp.setJibunAddress(jibunAddress);
                         temp.setX(x);
                         temp.setY(y);
                         addresses.add(temp);
@@ -103,8 +106,8 @@ public class NaverMapService implements INaverMapService {
     }
 
     @Override
-    public List<Address> searchAddressEx(String address) {
-        List<Address> addressList = new ArrayList<>();
+    public List<AddressVo> searchAddressEx(String address) {
+        List<AddressVo> addressList = new ArrayList<>();
         HttpRequest request = HttpUtil.createGet(HTML_API + address);
         generateRequest(request);
         HttpResponse response = request.execute();
@@ -134,13 +137,15 @@ public class NaverMapService implements INaverMapService {
         for (Object item : addressesArr.stream().toArray()) {
             String name = ((JSONObject) item).getString("name");
             String roadAddress = ((JSONObject) item).getString("roadAddress");
+            String jibunAddress = ((JSONObject) item).getString("address");
             if (StrUtil.isBlank(roadAddress)) {
-                roadAddress = ((JSONObject) item).getString("jibunAddress");
+                roadAddress = jibunAddress;
             }
             Double x = ((JSONObject) item).getDouble("x");
             Double y = ((JSONObject) item).getDouble("y");
-            Address temp = new Address();
+            AddressVo temp = new AddressVo();
             temp.setAddress(String.format("%s %s", roadAddress, name));
+            temp.setJibunAddress(String.format("%s %s", jibunAddress, name));
             temp.setX(x);
             temp.setY(y);
             addressList.add(temp);

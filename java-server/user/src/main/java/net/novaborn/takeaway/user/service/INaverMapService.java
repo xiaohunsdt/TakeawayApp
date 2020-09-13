@@ -7,6 +7,7 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.utils.exception.MapExceptionEnum;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.Coordinate;
+import net.novaborn.takeaway.user.vo.AddressVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,7 @@ public interface INaverMapService {
      * @param address 被指定的地址
      * @return
      */
-    List<Address> searchAddress(String address);
+    List<AddressVo> searchAddress(String address);
 
     /**
      * 搜索地址列表(扩展)
@@ -51,7 +52,7 @@ public interface INaverMapService {
      * @param address
      * @return
      */
-    List<Address> searchAddressEx(String address);
+    List<AddressVo> searchAddressEx(String address);
 
     default String requestApi(String address) {
         HttpRequest request = HttpUtil.createGet(GEOCODE_API + address);
