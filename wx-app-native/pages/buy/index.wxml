@@ -58,6 +58,14 @@
 		</van-action-sheet>
 		<view class="{{showOrderTip?'show-order-tip':''}}" id="buy-content">
 			<base-panel>
+				<view class="store-info">
+					<van-image class="store-logo" round fit="cover" width="90rpx" height="90rpx" lazy-load src="{{store.logo}}" />
+					<view class="info">
+						<view class="name">{{store.name}}</view>
+						<view class="address">{{store.address}}</view>
+					</view>
+				</view>
+				<van-divider custom-style="margin: 0rpx"/>
 				<view class="order-items">
 					<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
 				</view>

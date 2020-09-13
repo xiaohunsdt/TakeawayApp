@@ -16,11 +16,33 @@
   padding-bottom: 250rpx;
 }
 
-.order-items{
+.store-info {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 10rpx;
+}
+
+.store-info .info {
+  margin-top: 2rpx;
+  margin-left: 20rpx;
+}
+
+.store-info .info .name{
+  font-weight: bolder;
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.store-info .info .address{
+  color: #999999;
+  font-size: 26rpx;
+}
+
+.order-items {
   margin-bottom: 22rpx;
 }
 
-.delivery-price-view{
+.delivery-price-view {
   display: flex;
   justify-content: flex-end;
   padding-bottom: 16rpx;
@@ -28,12 +50,13 @@
   font-size: 25rpx;
 }
 
-.delivery-price-view .delivery-str,.delivery-price-view .delivery-price{
-  display:inline-block;
+.delivery-price-view .delivery-str,
+.delivery-price-view .delivery-price {
+  display: inline-block;
   line-height: 20rpx;
 }
 
-.delivery-price-view .delivery-price{
+.delivery-price-view .delivery-price {
   color: #FFD200
 }
 

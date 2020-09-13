@@ -134,7 +134,7 @@ public class NaverMapService implements INaverMapService {
 
         });
 
-        for (Object item : addressesArr.stream().toArray()) {
+        for (Object item : addressesArr.toArray()) {
             String name = ((JSONObject) item).getString("name");
             String roadAddress = ((JSONObject) item).getString("roadAddress");
             String jibunAddress = ((JSONObject) item).getString("address");

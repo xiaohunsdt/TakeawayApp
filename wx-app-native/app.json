@@ -89,7 +89,8 @@
     "van-action-sheet": "@vant/weapp/action-sheet/index",
     "van-swipe-cell": "@vant/weapp/swipe-cell/index",
     "van-dialog": "@vant/weapp/dialog/index",
-    "van-calendar": "@vant/weapp/calendar/index"
+    "van-calendar": "@vant/weapp/calendar/index",
+    "van-divider": "@vant/weapp/divider/index"
   },
   "sitemapLocation": "sitemap.json"
 }

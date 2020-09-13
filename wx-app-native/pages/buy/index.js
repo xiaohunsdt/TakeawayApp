@@ -38,7 +38,7 @@ Page({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    deliveryPrice(newVal){
+    deliveryPrice(newVal) {
       const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
@@ -84,6 +84,7 @@ Page({
     tipNotice: '',
     fromNotice: null,
     signNotice: null,
+    store: null,
     orderId: '',
     order: {},
     address: null,
@@ -189,6 +190,7 @@ Page({
 
     // watch 监听，需要单独拿出来设置数据
     this.setData({
+      store: getApp().globalData.currentStore,
       cartAllPrice: getApp().globalData.cart.cartAllPrice,
       cartAllCount: getApp().globalData.cart.cartAllCount,
       orderItems: temp,
@@ -215,11 +217,11 @@ Page({
     })
 
     storeService.getDeliveryPrice()
-    .then(res => {
-      this.setData({
-        deliveryPrice: res
+      .then(res => {
+        this.setData({
+          deliveryPrice: res
+        })
       })
-    })
 
     // 获取预约时间项
     storeService.getAppointmentTimes()
@@ -304,7 +306,7 @@ Page({
         title: '请选择商品!!',
         image: '/static/images/error.png'
       })
-      return 
+      return
     }
 
     this.setData({

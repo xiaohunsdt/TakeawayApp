@@ -32,6 +32,7 @@
 	</van-dialog>
 	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart" bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
 		<view class="cart-content">
+			<van-image round fit="cover" width="60rpx" height="60rpx" lazy-load src="{{store.logo}}" style="position: absolute;top: 14rpx;"/>
 			<simple-goods-card cart-list="{{cartList}}" food="{{item.goods}}" wx:key="goodsId" wx:for="{{cartList}}" bind:cart-change="onCartChange" />
 		</view>
 	</van-action-sheet>

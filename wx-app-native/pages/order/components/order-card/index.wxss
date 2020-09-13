@@ -44,16 +44,38 @@
   text-align: right;
 }
 
-.order-header {
-  display: flex;
-  justify-content: space-between;
-}
-
 .order-header .header-left {
   font-size: 25rpx;
 }
 
 .order-header .header-right {
+  position: absolute;
+  right: 20rpx;
+  top: 30rpx;
+  z-index: 100;
   color: gray;
-  font-size: 25rpx;
+  font-size: 30rpx;
+  text-align: right;
+}
+
+.store-info {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 10rpx;
+}
+
+.store-info .info {
+  margin-top: 2rpx;
+  margin-left: 10rpx;
+}
+
+.store-info .info .name{
+  font-weight: bolder;
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.store-info .info .address{
+  color: #999999;
+  font-size: 26rpx;
 }

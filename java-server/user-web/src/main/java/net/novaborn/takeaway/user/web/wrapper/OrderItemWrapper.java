@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.user.web.wrapper;
 
+import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
@@ -15,7 +16,7 @@ import java.util.Map;
  *
  * @author xiaohun
  */
-public class OrderItemWrapper extends OrderWrapper {
+public class OrderItemWrapper extends BaseControllerWrapper {
 
     public OrderItemWrapper(Object element) {
         super(element);

@@ -27,7 +27,8 @@ Component({
     cartAllCount: 0,
     cartAllPrice: 0,
     selectedFood: null,
-    showThumbDialog: false
+    showThumbDialog: false,
+    store:null
   },
   pageLifetimes: {
     show: function () {
@@ -37,6 +38,7 @@ Component({
   methods: {
     initCartData() {
       this.setData({
+        store: getApp().globalData.currentStore,
         cartList: getApp().globalData.cart.cartList,
         cartAllCount: getApp().globalData.cart.cartAllCount,
         cartAllPrice: getApp().globalData.cart.cartAllPrice
