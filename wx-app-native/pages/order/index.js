@@ -60,8 +60,8 @@ Page({
     }
   },
   init() {
+    this.data.page.current = 1
     this.setData({
-      current: 1,
       orderList: []
     })
     this.getOrderList()
