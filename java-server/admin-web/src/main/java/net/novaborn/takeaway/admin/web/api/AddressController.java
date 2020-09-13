@@ -16,6 +16,7 @@ import net.novaborn.takeaway.user.exception.AddressExceptionEnum;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.service.impl.NaverMapService;
 import net.novaborn.takeaway.user.service.impl.UserService;
+import net.novaborn.takeaway.user.vo.AddressVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,7 @@ public class AddressController extends BaseController {
 
     @ResponseBody
     @PostMapping("searchAddress")
-    public List<Address> searchAddress(String address) {
+    public List<AddressVo> searchAddress(String address) {
         return naverMapService.searchAddress(address);
     }
 

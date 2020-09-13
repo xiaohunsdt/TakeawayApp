@@ -80,9 +80,8 @@ export default {
       adminApi.getAdminInfoById(this.adminId)
           .then(res => {
             this.formData = res
-            this.loading = false
           })
-          .catch(res => {
+          .finally(res => {
             this.loading = false
           })
     },

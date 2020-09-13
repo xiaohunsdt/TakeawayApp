@@ -5,7 +5,7 @@
         <el-col :span="18">
           <el-form :inline="true" :model="formData" class="demo-form-inline" size="mini">
             <el-form-item label="级别">
-              <el-select placeholder="选择级别" v-model="formData.type">
+              <el-select v-model="formData.type" placeholder="选择级别">
                 <el-option :value="null" label="所有"/>
                 <el-option :value="2" label="店长"/>
                 <el-option :value="3" label="接单员"/>
@@ -13,31 +13,31 @@
               </el-select>
             </el-form-item>
             <el-form-item label="状态">
-              <el-select placeholder="选择状态" v-model="formData.state">
+              <el-select v-model="formData.state" placeholder="选择状态">
                 <el-option :value="null" label="所有"/>
                 <el-option :value="1" label="正常"/>
                 <el-option :value="0" label="冻结"/>
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button @click="onSearch" type="primary">查询</el-button>
+              <el-button type="primary" @click="onSearch">查询</el-button>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <el-button @click="onCreateNewAdmin" size="mini" type="success">添加新管理员</el-button>
+          <el-button size="mini" type="success" @click="onCreateNewAdmin">添加新管理员</el-button>
         </el-col>
       </el-row>
     </base-card>
     <base-card class="container-main">
       <el-table
+          v-loading="listLoading"
           :data="tableData"
           class="tb-edit"
           element-loading-text="正在加载中..."
           highlight-current-row
           stripe
-          style="width: 100%"
-          v-loading="listLoading">
+          style="width: 100%">
         <el-table-column
             align="center"
             label="ID"
@@ -71,8 +71,8 @@
             align="center"
             label="操作">
           <template v-slot="props">
-            <el-button @click="onEdit(props.row.id)" size="mini" type="primary">编辑</el-button>
-<!--            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>-->
+            <el-button size="mini" type="primary" @click="onEdit(props.row.id)">编辑</el-button>
+            <!--            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -81,14 +81,14 @@
           :page-size="page.size"
           :page-sizes="[15, 50, 100]"
           :total="page.total"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
           background
           layout="total, sizes, prev, pager, next, jumper"
-          style="margin-top: 15px">
+          style="margin-top: 15px"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
-    <admin-dialog @updated-admin="onUpdatedAdmin" ref="admin-dialog"/>
+    <admin-dialog ref="admin-dialog" @updated-admin="onUpdatedAdmin"/>
   </div>
 </template>
 
@@ -128,9 +128,8 @@ export default {
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
-            this.listLoading = false
           })
-          .catch(() => {
+          .finally(() => {
             this.listLoading = false
           })
     },
