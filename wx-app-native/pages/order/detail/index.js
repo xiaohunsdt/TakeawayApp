@@ -58,7 +58,7 @@ Page({
       }
       if ((this.data.order.orderState === 'PRODUCING' || this.data.order.orderState === 'DELIVERING') && this.data.order.payState !== 'UN_PAY') {
         // 获取预计送达时间
-        orderService.getDeliveryArriveTime(this.data.orderId)
+        orderService.getDeliveryArriveTime(this.data.order.storeId, this.data.orderId)
           .then(res => {
             this.setData({
               deliveryArriveTime: res

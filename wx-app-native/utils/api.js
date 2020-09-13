@@ -28,7 +28,7 @@ const api = {
 
 
   //获取指定店铺信息
-  getStoreById :(storeId) => request.post('store/getStoreById', {
+  getStoreById: (storeId) => request.post('store/getStoreById', {
     storeId
   }),
   // 获取总店铺列表
@@ -109,9 +109,15 @@ const api = {
     orderId
   }),
   createComment: (commentData) => request.post('order/createComment', commentData),
-  getDeliveryArriveTime: (orderId) => request.post('order/getDeliveryArriveTime', {
-    orderId
-  }),
+  getDeliveryArriveTime: (storeId, orderId) => {
+    const data = {
+      storeId
+    }
+    if (orderId) {
+      data['orderId'] = orderId
+    }
+    return request.post('order/getDeliveryArriveTime', data)
+  },
   getCanOrderNow: (storeId) => request.post('order/getCanOrderNow', {
     storeId
   }),

@@ -241,15 +241,14 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getDeliveryArriveTime")
-    public Object getDeliveryArriveTime(@RequestParam(required = false) Long orderId) {
+    public Object getDeliveryArriveTime(Long storeId, @RequestParam(required = false) Long orderId) {
         Date deliveryDate;
 
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
-        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+        int base_express_time = Integer.parseInt(settingService.getSettingByName(storeId,"base_express_time", SettingScope.EXPRESS).getValue());
+        int average_express_time = Integer.parseInt(settingService.getSettingByName(storeId,"average_express_time", SettingScope.EXPRESS).getValue());
+        int deliverier_count = Integer.parseInt(settingService.getSettingByName(storeId,"deliverier_count", SettingScope.EXPRESS).getValue());
 
-        int base_express_time = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"base_express_time", SettingScope.EXPRESS).getValue());
-        int average_express_time = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"average_express_time", SettingScope.EXPRESS).getValue());
-        int deliverier_count = Integer.parseInt(settingService.getSettingByName(order.get().getStoreId(),"deliverier_count", SettingScope.EXPRESS).getValue());
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
                 .filter(item -> {
