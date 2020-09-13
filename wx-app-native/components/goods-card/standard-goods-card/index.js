@@ -21,6 +21,16 @@ Component({
     currentFoodCount: 0,
     showThumbDialog: false
   },
+  observers: {
+    "food": function (newFood) {
+      if (newFood) {
+        this.setData({
+          isHot: newFood.flags.indexOf('热门') > -1,
+          isNew: newFood.flags.indexOf('新品') > -1
+        })
+      }
+    }
+  },
   lifetimes: {
     attached: function () {
       this.init()

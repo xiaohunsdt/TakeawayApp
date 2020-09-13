@@ -19,7 +19,19 @@ Component({
    */
   data: {
     currentFoodCount: 0,
-    showThumbDialog: false
+    showThumbDialog: false,
+    isHot: false,
+    isNew: false
+  },
+  observers: {
+    "food": function (newFood) {
+      if (newFood) {
+        this.setData({
+          isHot: newFood.flags.indexOf('热门') > -1,
+          isNew: newFood.flags.indexOf('新品') > -1
+        })
+      }
+    }
   },
   lifetimes: {
     attached: function () {

@@ -27,6 +27,12 @@
   margin-bottom: 20rpx;
 }
 
+.goods-card .card-content .title .flag-img {
+  display: inline-block;
+  height: 26rpx;
+  width: 54rpx;
+}
+
 .goods-card .card-content .card-desc {
   font-size: 24rpx;
   margin-top: 10rpx;

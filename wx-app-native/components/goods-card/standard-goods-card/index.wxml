@@ -5,6 +5,8 @@
 	<view class="goods-card-content">
 		<view class="goods-card-title">
 			{{food.name}}
+			<image class="flag-img" wx:if="{{isHot}}" src="/static/images/store/shop_hot.png"></image>
+			<image class="flag-img" wx:if="{{isNew}}" src="/static/images/store/shop_new.png"></image>
 		</view>
 		<view class="goods-card-desc">
 			<van-icon name="label" />

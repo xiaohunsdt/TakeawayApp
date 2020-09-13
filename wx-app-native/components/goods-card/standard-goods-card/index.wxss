@@ -25,6 +25,11 @@
   margin-top: 5rpx;
   margin-bottom: 10rpx;
 }
+.goods-card-title .flag-img {
+  display: inline-block;
+  height: 26rpx;
+  width: 54rpx;
+}
 
 .goods-card-price, .goods-card-origin-price {
   font-size: 30rpx;

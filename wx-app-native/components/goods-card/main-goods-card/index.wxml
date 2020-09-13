@@ -3,7 +3,11 @@
 		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 	</view>
 	<view class="card-content">
-		<view class="title">{{food.name}}</view>
+		<view class="title">
+			{{food.name}}
+			<image class="flag-img" wx:if="{{isHot}}" src="/static/images/store/shop_hot.png"></image>
+			<image class="flag-img" wx:if="{{isNew}}" src="/static/images/store/shop_new.png"></image>
+		</view>
 		<view class="card-desc">
 			<view class="desc">
 				<van-icon name="label" />
