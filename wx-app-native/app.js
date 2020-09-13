@@ -5,11 +5,11 @@ App({
   onLaunch: function () {
     // 检测权限是否打开
     wx.getSetting({
-      success (res) {
+      success(res) {
         if (!res.authSetting['scope.userLocation']) {
           wx.authorize({
             scope: 'scope.userLocation',
-            success () {
+            success() {
               console.log('userLocation 权限已经打开')
             }
           })
@@ -30,9 +30,19 @@ App({
             console.log(res)
           })
       })
+
+    if (!Promise.prototype.finally) {
+      Promise.prototype.finally = function (callback) {
+        this.then(res => {
+          callback && callback(res)
+        }, error => {
+          callback && callback(error)
+        })
+      }
+    }
   },
   globalData: {
-    cart:{
+    cart: {
       cartList: [],
       cartAllCount: 0,
       cartAllPrice: 0
