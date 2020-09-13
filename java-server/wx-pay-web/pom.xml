@@ -11,9 +11,6 @@
 
     <artifactId>wx-pay-web</artifactId>
 
-    <properties>
-        <wx-java.version>3.7.0</wx-java.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>net.novaborn.takeaway</groupId>

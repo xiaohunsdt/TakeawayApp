@@ -55,15 +55,13 @@ Page({
   },
   onReachBottom: function () {
     if (this.data.page.current + 1 <= this.data.page.total) {
-      this.setData({
-        current: this.data.page.current + 1,
-      })
+      this.data.page.current++
       this.getOrderList()
     }
   },
   init() {
+    this.data.page.current = 1
     this.setData({
-      current: 1,
       orderList: []
     })
     this.getOrderList()
