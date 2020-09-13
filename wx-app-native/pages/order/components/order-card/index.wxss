@@ -54,7 +54,7 @@
   top: 30rpx;
   z-index: 100;
   color: gray;
-  font-size: 30rpx;
+  font-size: 28rpx;
   text-align: right;
 }
 
