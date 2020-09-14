@@ -6,11 +6,11 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.pay.config.mq.OrderPayStatusQueueConfig;
 import net.novaborn.takeaway.pay.services.impl.PayService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -34,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @Setter(onMethod_ = {@Autowired})
 @Component
-@RabbitListener(queues = OrderPayStatusQueueConfig.QUEUE_NAME)
+@RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_WX_PAY_CHECK)
 public class OrderPayStatusReceiver {
 
     private OrderService orderService;
@@ -45,10 +45,10 @@ public class OrderPayStatusReceiver {
 
     @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Long orderId, Channel channel, @Headers Map<String, Object> headers) {
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
         log.debug("订单支付状态队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
-        Order target = orderService.getById(orderId);
+        Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         try {
             if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
@@ -56,12 +56,12 @@ public class OrderPayStatusReceiver {
             }
         } catch (Exception e) {
             // 如果15分钟之内还没有确认支付,视为支付失败!!设置订单状态为过去过期!
-            if (DateUtil.between(target.getCreateDate(), DateUtil.date(), DateUnit.MINUTE) <= 5) {
+            if (DateUtil.between(order.getUpdateDate(), DateUtil.date(), DateUnit.MINUTE) <= 5) {
                 // 验证失败再次将这个订单丢到延迟队列当中
-                orderPayStatusSender.send(orderId, 15);
-                log.warn("订单:{} 验证支付失败!原因: {}, 重新丢回延迟队列中!", orderId, e.getMessage());
+                orderPayStatusSender.send(order, null,15);
+                log.warn("订单:{} 验证支付失败!原因: {}, 重新丢回延迟队列中!", order.getId(), e.getMessage());
             }else {
-                log.error("订单:{} 验证支付失败!原因: {}, 系统自动认为未支付!", orderId, e.getMessage());
+                log.error("订单:{} 验证支付失败!原因: {}, 系统自动认为未支付!", order.getId(), e.getMessage());
             }
         } finally {
             channel.basicAck(deliveryTag, false);

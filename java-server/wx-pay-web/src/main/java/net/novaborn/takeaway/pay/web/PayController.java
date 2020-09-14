@@ -6,12 +6,15 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.pay.mq.OrderPayStatusSender;
 import net.novaborn.takeaway.pay.services.impl.PayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 /**
  * @author xiaohun
@@ -21,10 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/api/wx/pay")
 public class PayController extends BaseController {
-
     private PayService payService;
 
-    private OrderPayStatusSender orderPayStatusSender;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -32,12 +33,7 @@ public class PayController extends BaseController {
     @ResponseBody
     public WxPayMpOrderResult createPayInfo(@RequestParam Long orderId) throws WxPayException {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
-
-        WxPayMpOrderResult result = payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
-        log.info("订单:{},创建微信支付预信息成功!!", orderId);
-
-        orderPayStatusSender.send(orderId, 15);
-        return result;
+        return payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
     }
 
 //    @PostMapping("closeOrder")
