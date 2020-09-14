@@ -38,7 +38,7 @@ spring:
     port: 6379
     timeout: 10000
   rabbitmq:
-    host: localhost
+    host: 192.168.0.7
     port: 5672
     username: guest
     password: guest
@@ -94,12 +94,12 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.0.7:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
   redis:
-    host: localhost
+    host: 192.168.0.7
     password: wy1996
   rabbitmq:
-    host: localhost
+    host: 192.168.0.7
     username: xiaohun
     password: wy1996
 
