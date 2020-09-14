@@ -6,7 +6,7 @@ import api from '../utils/api'
 export function getSystemSettings(storeId) {
   return new Promise((resolve, reject) => {
     if(!storeId){
-      storeId = getApp().globalData.currentStore.id
+      storeId = getApp().globalData.currentStoreId
     }
     api.getSettingsByScope(storeId,'SYSTEM')
       .then(res => {
@@ -31,7 +31,7 @@ export function getSystemSettings(storeId) {
 export function getStoreSettings(storeId) {
   return new Promise((reslove, reject) => {
     if(!storeId){
-      storeId = getApp().globalData.currentStore.id
+      storeId = getApp().globalData.currentStoreId
     }
     api.getSettingsByScope(storeId,'STORE')
       .then(res => {
@@ -50,7 +50,7 @@ export function getStoreSettings(storeId) {
 export function getExpressSettings(storeId) {
   return new Promise((reslove, reject) => {
     if(!storeId){
-      storeId = getApp().globalData.currentStore.id
+      storeId = getApp().globalData.currentStoreId
     }
     api.getSettingsByScope(storeId,'EXPRESS')
       .then(res => {
@@ -69,7 +69,7 @@ export function getExpressSettings(storeId) {
 export function getPaymentSettings(storeId) {
   return new Promise((reslove, reject) => {
     if(!storeId){
-      storeId = getApp().globalData.currentStore.id
+      storeId = getApp().globalData.currentStoreId
     }
     api.getSettingsByScope(storeId,'PAYMENT')
       .then(res => {
@@ -86,7 +86,7 @@ export function getPaymentSettings(storeId) {
 }
 
 export function getGoodsPageSettings() {
-  return api.getGoodsPageSettings(getApp().globalData.currentStore.id,)
+  return api.getGoodsPageSettings(getApp().globalData.currentStoreId,)
 }
 
 export default {

@@ -13,19 +13,19 @@ export function getAllStoreList () {
 }
 
 export function getServiceState () {
-  return api.getServiceState(getApp().globalData.currentStore.id)
+  return api.getServiceState(getApp().globalData.currentStoreId)
 }
 
 export function getExpressServiceState (addressId, allPrice) {
-  return api.getExpressServiceState(getApp().globalData.currentStore.id,addressId, allPrice)
+  return api.getExpressServiceState(getApp().globalData.currentStoreId,addressId, allPrice)
 }
 
 export function getDeliveryPrice () {
-  return api.getDeliveryPrice(getApp().globalData.currentStore.id)
+  return api.getDeliveryPrice(getApp().globalData.currentStoreId)
 }
 
 export function getAppointmentTimes () {
-  return api.getAppointmentTimes(getApp().globalData.currentStore.id)
+  return api.getAppointmentTimes(getApp().globalData.currentStoreId)
 }
 
 export function formatAppointmentTime (deliveryType, appointment) {

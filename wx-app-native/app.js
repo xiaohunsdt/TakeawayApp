@@ -47,6 +47,7 @@ App({
       cartAllCount: 0,
       cartAllPrice: 0
     },
+    currentStoreId: null,
     currentStore: null,
     currentAddress: null,
     currentCoupon: null,

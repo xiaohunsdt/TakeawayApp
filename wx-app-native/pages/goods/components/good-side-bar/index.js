@@ -1,4 +1,5 @@
 import orderService from '../../../../services/order'
+import cartService from '../../../../services/cart'
 
 Component({
   /**
@@ -39,9 +40,9 @@ Component({
     initCartData() {
       this.setData({
         store: getApp().globalData.currentStore,
-        cartList: getApp().globalData.cart.cartList,
-        cartAllCount: getApp().globalData.cart.cartAllCount,
-        cartAllPrice: getApp().globalData.cart.cartAllPrice
+        cartList: cartService.getCartList(),
+        cartAllCount: cartService.getCartAllCount(),
+        cartAllPrice: cartService.getCartAllPrice()
       })
     },
     chooseType(event) {

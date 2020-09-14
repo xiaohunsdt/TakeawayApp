@@ -19,6 +19,9 @@ Page({
     } else if (options.scene) {
       storeId = decodeURIComponent(options.scene)
     }
+
+    getApp().globalData.currentStoreId = storeId
+    
     storeService.getStoreById(storeId).then(res => {
       getApp().globalData.currentStore = res
       wx.setNavigationBarTitle({
