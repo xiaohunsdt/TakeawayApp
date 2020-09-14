@@ -1,10 +1,10 @@
-FROM elasticsearch:7.7.1
+FROM elasticsearch:7.9.1
 
 VOLUME /tmp
 
 ENV TZ=Asia/Seoul
 
-RUN apt-get update -y && apt-get -y install wget unzip
+RUN yum update -y && yum -y install wget unzip
 
 RUN cd plugins && mkdir ik
 
