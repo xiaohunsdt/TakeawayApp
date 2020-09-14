@@ -94,12 +94,12 @@ logging:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://192.168.0.7:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/takeaway?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
   redis:
-    host: 192.168.0.7
+    host: localhost
     password: wy1996
   rabbitmq:
-    host: 192.168.0.7
+    host: localhost
     username: xiaohun
     password: wy1996
 

@@ -4,6 +4,7 @@ import orderService from '../../services/order'
 import payService from '../../services/pay'
 import addressService from '../../services/address'
 import couponService from '../../services/coupon'
+import cartService from '../../services/cart'
 import util from '../../utils/util'
 const watch = require("../../utils/watch.js")
 
@@ -174,7 +175,7 @@ Page({
   init() {
     // 获取订单相关设置
     let temp = []
-    getApp().globalData.cart.cartList
+    cartService.getCartList()
       .filter(item => item.count > 0)
       .forEach(item => {
         let orderItem = {}
@@ -188,8 +189,8 @@ Page({
 
     // watch 监听，需要单独拿出来设置数据
     this.setData({
-      cartAllPrice: getApp().globalData.cart.cartAllPrice,
-      cartAllCount: getApp().globalData.cart.cartAllCount,
+      cartAllPrice: cartService.getCartAllPrice(),
+      cartAllCount: cartService.getCartAllCount(),
       orderItems: temp,
       from: getApp().globalData.from,
     })
@@ -427,11 +428,7 @@ Page({
       this.data.coupon,
       this.data.address
     ).then(res => {
-      getApp().globalData.cart = {
-        cartList: [],
-        cartAllCount: 0,
-        cartAllPrice: 0
-      }
+      cartService.clearCart()
       getApp().globalData.currentCoupon = null
       getApp().globalData.from = null
       this.setData({

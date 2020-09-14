@@ -51,7 +51,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-elasticsearch-deloy
-    hostname: elasticsearch
+#    hostname: elasticsearch
     environment:
       discovery.type: single-node
     restart: always

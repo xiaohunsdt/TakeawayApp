@@ -90,9 +90,13 @@ const api = {
     orderId
   }),
   createComment: (commentData) => request.post('order/createComment', commentData),
-  getDeliveryArriveTime: (orderId) => request.post('order/getDeliveryArriveTime', {
-    orderId
-  }),
+  getDeliveryArriveTime: (orderId) => {
+    let data = {}
+    if(orderId){
+      data['orderId'] = orderId
+    }
+    return request.post('order/getDeliveryArriveTime', data)
+  },
   getCanOrderNow: () => request.post('order/getCanOrderNow'),
 
   // 获取指定域的设置
