@@ -23,6 +23,7 @@ public class OrderQueueConfig {
     public final static String QUEUE_ORDER_SUBSCRIBE_MESSAGE = "direct.queue.order.subscribe.message";
     public final static String QUEUE_ORDER_SIGN_IN = "direct.queue.order.signin";
     public final static String QUEUE_ORDER_AUTO_RECEIVE = "direct.queue.order.auto.receive";
+    public final static String QUEUE_ORDER_WX_PAY_CHECK = "delayed.queue.order.wx_pay.check";
     public final static String DELAYED_EXCHANGE = "delayed.exchange.order";
     public final static String DIRECT_EXCHANGE = "direct.exchange.order";
 
@@ -44,6 +45,11 @@ public class OrderQueueConfig {
     @Bean
     public Queue orderAutoReceiveQueue() {
         return new Queue(OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE);
+    }
+
+    @Bean
+    public Queue orderWxPayCheckQueue() {
+        return new Queue(OrderQueueConfig.QUEUE_ORDER_WX_PAY_CHECK);
     }
 
     // 配置默认的交换机
@@ -79,5 +85,10 @@ public class OrderQueueConfig {
     @Bean
     Binding orderBinding4(Queue orderAutoReceiveQueue, CustomExchange orderDirectExchange) {
         return BindingBuilder.bind(orderAutoReceiveQueue).to(orderDirectExchange).with(OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE).noargs();
+    }
+
+    @Bean
+    Binding orderBinding5(Queue orderWxPayCheckQueue, CustomExchange orderDelayedExchange) {
+        return BindingBuilder.bind(orderWxPayCheckQueue).to(orderDelayedExchange).with(OrderQueueConfig.QUEUE_ORDER_WX_PAY_CHECK).noargs();
     }
 }

@@ -15,6 +15,7 @@ import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.exception.PayExceptionEnum;
+import net.novaborn.takeaway.pay.mq.OrderPayStatusSender;
 import net.novaborn.takeaway.pay.services.IPayService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
@@ -22,6 +23,7 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -33,6 +35,8 @@ public class PayService implements IPayService {
     private SettingService settingService;
 
     private OrderAutoReceiveSender orderAutoReceiveSender;
+
+    private OrderPayStatusSender orderPayStatusSender;
 
     private WxPayService wxPayService;
 
@@ -47,7 +51,8 @@ public class PayService implements IPayService {
         request.setOpenid(openId);
         request.setBody("支付-川香苑外卖");
         request.setOutTradeNo(orderId.toString());
-        request.setTotalFee(getOrderPrice(order.get())); // 精确到分
+        // 精确到分
+        request.setTotalFee(getOrderPrice(order.get()));
         request.setSpbillCreateIp(ipAddr);
         request.setNotifyUrl(NOTICE_URL);
         request.setTradeType("JSAPI");
@@ -62,6 +67,8 @@ public class PayService implements IPayService {
             throw sysException;
         }
 
+        orderPayStatusSender.send(order.get(), new Date(), 15);
+        log.info("订单:{},创建微信支付预信息成功!!", orderId);
         return result;
     }
 
