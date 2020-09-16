@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.pay.mq;
+package net.novaborn.takeaway.mq.sender;
 
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;

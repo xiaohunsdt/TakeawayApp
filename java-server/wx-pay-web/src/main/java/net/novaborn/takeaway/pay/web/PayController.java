@@ -6,15 +6,11 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.tips.SuccessTip;
-import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.common.auth.util.JwtTokenUtil;
-import net.novaborn.takeaway.pay.mq.OrderPayStatusSender;
 import net.novaborn.takeaway.pay.services.impl.PayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 /**
  * @author xiaohun

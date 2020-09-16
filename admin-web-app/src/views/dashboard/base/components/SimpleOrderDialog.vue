@@ -175,7 +175,7 @@
 
 <script>
 import orderApi from '@/api/order'
-import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
+import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils'
 
 export default {
   name: 'SimpleOrderDialog',

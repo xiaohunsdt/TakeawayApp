@@ -128,7 +128,7 @@ export const asyncRoutes = [
                 name: 'CommentManagement',
                 // props: true,
                 component: () => import('@/views/order/comment'),
-                meta: { title: '评价管理', icon: 'goods' }
+                meta: { title: '评价管理', icon: 'goods', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
             }
         ]
     },
@@ -136,6 +136,9 @@ export const asyncRoutes = [
         path: '/goods',
         component: Layout,
         redirect: '/goods/index',
+        meta: {
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'GoodsManagement',
@@ -148,6 +151,9 @@ export const asyncRoutes = [
         path: '/category',
         component: Layout,
         redirect: '/category/index',
+        meta: {
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'CategoryManagement',
@@ -160,7 +166,7 @@ export const asyncRoutes = [
         path: '/coupon',
         component: Layout,
         redirect: '/coupon/index',
-        meta: { title: '优惠券管理', icon: 'tree-table' },
+        meta: { title: '优惠券管理', icon: 'tree-table', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] },
         children: [
             {
                 path: 'index',
@@ -204,7 +210,7 @@ export const asyncRoutes = [
         path: '/activity',
         component: Layout,
         redirect: '/activity/index',
-        meta: { title: '活动管理', icon: 'example' },
+        meta: { title: '活动管理', icon: 'example', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] },
         children: [
             {
                 path: 'edit',
@@ -226,7 +232,7 @@ export const asyncRoutes = [
         path: '/banner',
         component: Layout,
         redirect: '/banner/index',
-        meta: { title: '横幅管理', icon: 'example' },
+        meta: { title: '横幅管理', icon: 'example', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] },
         children: [
             {
                 path: 'edit',
@@ -265,6 +271,9 @@ export const asyncRoutes = [
         path: '/sys',
         component: Layout,
         redirect: '/sys/index',
+        meta: {
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
+        },
         children: [{
             path: 'index',
             name: 'SysManagement',
