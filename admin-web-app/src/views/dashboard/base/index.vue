@@ -51,15 +51,15 @@ export default {
     BarChart,
     OrderNaverMap
   },
-  computed: {
-    ...mapGetters([
-      'userData'
-    ])
-  },
   data() {
     return {
       dashboardData: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'userData'
+    ])
   },
   created() {
     dashboardApi.getDashboardData().then(res => {
