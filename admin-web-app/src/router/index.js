@@ -282,6 +282,25 @@ export const asyncRoutes = [
             meta: { title: '系统设置', icon: 'setting' }
         }]
     },
+    {
+        path: '/deliverer',
+        component: Layout,
+        meta: {
+            roles: ['DELIVERER']
+        },
+        children: [
+            {
+                path: 'order',
+                name: 'DelivererOrderManagement',
+                component: () => import('@/views/deliverer/order/index')
+            },
+            {
+                path: 'log',
+                name: 'DelivererLogManagement',
+                component: () => import('@/views/deliverer/log/index')
+            }
+        ]
+    },
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
 ]

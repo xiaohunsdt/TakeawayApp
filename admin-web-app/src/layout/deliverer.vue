@@ -8,10 +8,10 @@
       <van-tabbar-item icon="wap-home" replace to="/dashboard">
         首页
       </van-tabbar-item>
-      <van-tabbar-item icon="label" replace to="/deliverer/index">
+      <van-tabbar-item icon="label" replace to="/deliverer/order">
         待处理
       </van-tabbar-item>
-      <van-tabbar-item icon="column" replace to="/deliverer/index">
+      <van-tabbar-item icon="column" replace to="/deliverer/log">
         记录
       </van-tabbar-item>
     </van-tabbar>
@@ -64,5 +64,9 @@ export default {
   background: linear-gradient(#FFD200, white, #F0F0F0);
   width: 100%;
   height: 30rem;
+}
+
+.van-tabbar {
+  z-index: 100000;
 }
 </style>
