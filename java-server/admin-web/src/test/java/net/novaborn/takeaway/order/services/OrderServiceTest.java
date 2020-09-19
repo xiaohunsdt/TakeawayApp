@@ -87,8 +87,8 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByGoodsNameTest() {
-        Date start = DateUtil.parseDateTime("2020-06-10 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-06-11 00:00:00");
+        Date start = DateUtil.parseDateTime("2020-09-18 00:00:00");
+        Date end = DateUtil.parseDateTime("2020-09-18 23:00:00");
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
@@ -98,7 +98,14 @@ public class OrderServiceTest {
                     List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
                     boolean isExist = false;
                     for (OrderItem orderItem : orderItems) {
-                        if (orderItem.getGoodsName().contains("鸭脖") || orderItem.getGoodsName().contains("鸭锁骨")) {
+                        if (orderItem.getGoodsName().contains("鸭脖")
+                                || orderItem.getGoodsName().contains("鸭锁骨")
+                                || orderItem.getGoodsName().contains("鸭翅")
+                                || orderItem.getGoodsName().contains("鸭头")
+                                || orderItem.getGoodsName().contains("鸭肠")
+                                || orderItem.getGoodsName().contains("鸭舌")
+                                || orderItem.getGoodsName().contains("鸭胗")
+                        ) {
                             isExist = true;
                             break;
                         }
@@ -109,9 +116,9 @@ public class OrderServiceTest {
                 .collect(Collectors.toList());
 
         System.out.println("订单号：");
-        orderList.stream().forEach(order -> System.out.println(order.getId()));
+        orderList.forEach(order -> System.out.println(order.getId()));
         System.out.println("用户：");
-        orderList.stream().forEach(order -> System.out.println(order.getUserId()));
+        orderList.forEach(order -> System.out.println(order.getUserId()));
         System.out.println(orderList.stream()
                 .map(order -> addressService.getById(order.getAddressId()).getPhone())
                 .collect(Collectors.joining(",")));
