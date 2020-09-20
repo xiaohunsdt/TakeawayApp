@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.novaborn.takeaway.order.dao.IDeliveryDao">
+    <select id="getByOrderId" resultType="Delivery">
+        SELECT * FROM `delivery`
+        <where>
+            `order_id` = #{orderId}
+        </where>
+    </select>
+
+    <select id="getDeliveryListByPage" resultType="Delivery">
+        SELECT * FROM `delivery`
+        <where>
+            <if test="args.adminId != null and args.adminId != ''">
+                AND `admin_id` = #{args.adminId}
+            </if>
+            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+            </if>
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+</mapper>

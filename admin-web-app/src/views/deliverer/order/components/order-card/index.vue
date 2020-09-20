@@ -1,5 +1,5 @@
 <template>
-  <base-card class="order-card" v-if="order.orderState === 'WAITING_RECEIVE' || order.orderState === 'PRODUCING'">
+  <base-card class="order-card">
     <div class="header" @click.stop="showMore=!showMore">
       <div class="number">
         <span v-if="order.appointmentDate===''" class="normal">
@@ -18,7 +18,12 @@
         </div>
       </div>
       <div class="action">
-        <el-button round size="small" type="success" @click.stop="onDelivery" :disabled="order.orderState === 'WAITING_RECEIVE'">配送</el-button>
+        <el-button v-if="order.orderState === 'WAITING_RECEIVE'|| order.orderState === 'PRODUCING'" :disabled="order.orderState === 'WAITING_RECEIVE'" round size="small" type="success" @click.stop="onDelivery">
+          配送
+        </el-button>
+        <el-button v-if="order.orderState === 'DELIVERING'" round size="small" type="success" @click.stop="onFinish">
+          完成
+        </el-button>
       </div>
     </div>
     <van-icon :name="showMore?'arrow-up':'arrow-down'" class="show-more-icon" color="#ffd200" @click.stop="showMore=!showMore"/>
@@ -42,19 +47,25 @@ import orderService from '@a/order'
 
 import BaseCard from '@/components/BaseCard'
 import { Icon, Notify } from 'vant'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'OrderCard',
+  components: {
+    BaseCard,
+    [Icon.name]: Icon,
+    [Notify.Component.name]: Notify.Component
+  },
   props: {
     order: {
       type: Object,
       required: true
     }
   },
-  components: {
-    BaseCard,
-    [Icon.name]: Icon,
-    [Notify.Component.name]: Notify.Component
+  computed: {
+    ...mapGetters([
+      'userData'
+    ])
   },
   data() {
     return {
@@ -65,6 +76,17 @@ export default {
     onDelivery() {
       orderService.deliveryOrder(this.order.id).then(res => {
         this.order.orderState = 'DELIVERING'
+        this.order.deliverer = this.userData.id
+        Notify({
+          type: 'success',
+          message: res.message,
+          duration: 1500
+        })
+      })
+    },
+    onFinish() {
+      orderService.finishOrder(this.order.id).then(res => {
+        this.order.orderState = 'FINISHED'
         Notify({
           type: 'success',
           message: res.message,
@@ -79,8 +101,9 @@ export default {
 
 <style scoped>
 .base-card {
-  padding: .2rem .8rem
+  padding: .4rem .8rem
 }
+
 .header {
   /*height: 4rem;*/
   display: flex;
@@ -125,7 +148,9 @@ export default {
   overflow: hidden;
   transition: max-height .3s;
   font-weight: bolder;
-  margin-bottom: 20px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .more-info .address, .more-info .phone {

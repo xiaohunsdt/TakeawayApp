@@ -2,22 +2,21 @@
   <div class="container-contain">
     <van-tabs sticky swipeable>
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <van-tab :badge="willDeliveryOrderCount" :style="{'min-height': scrollerHeight}" class="tab" title="待配送">
-          <order-card v-for="order in orderList" :key="order.id" :order="order"></order-card>
+        <van-tab :badge="willDeliveryOrderList.length" :style="{'min-height': scrollerHeight}" class="tab" title="待配送">
+          <order-card v-for="order in willDeliveryOrderList" :key="order.id" :order="order"></order-card>
         </van-tab>
-        <van-tab :badge="myDeliveryOrderCount" :style="{'min-height': scrollerHeight}" class="tab" title="正在配送">
+        <van-tab :badge="myDeliveryOrderList.length" :style="{'min-height': scrollerHeight}" class="tab" title="正在配送">
+          <order-card v-for="order in myDeliveryOrderList" :key="order.id" :order="order" type="delivering"></order-card>
         </van-tab>
       </van-pull-refresh>
     </van-tabs>
     <right-panel :button-icon="'el-icon-location'" :button-top="300" :full-screen="true">
       <template v-slot:default="slotProps">
         <div style="margin-top: 10px">
-          <el-button icon="el-icon-refresh" round size="small" style="position: absolute;right: 0;top: 10px"
-                     type="primary" @click="onRefreshMap">
+          <el-button icon="el-icon-refresh" round size="small" style="position: absolute;right: 0;top: 10px" type="primary" @click="onRefreshMap">
             刷新
           </el-button>
-          <order-naver-map v-if="slotProps.show" :key="mapRefreshCount" ref="naver-map" :all-order="false"
-                           :height="mapHeight"/>
+          <order-naver-map v-if="slotProps.show" :key="mapRefreshCount" ref="naver-map" :all-order="false" :height="mapHeight"/>
         </div>
       </template>
     </right-panel>
@@ -25,6 +24,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import orderService from '@a/order'
 import OrderCard from './components/order-card'
 import RightPanel from '@c/RightPanel'
@@ -43,14 +44,17 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
+      isLoading: false,
       orderList: [],
-      willDeliveryOrderCount: 0,
-      myDeliveryOrderCount: 0,
+      willDeliveryOrderList: [],
+      myDeliveryOrderList: [],
       mapRefreshCount: 0
     }
   },
   computed: {
+    ...mapGetters([
+      'userData'
+    ]),
     mapHeight() {
       return window.innerHeight - 100
     },
@@ -61,11 +65,14 @@ export default {
   watch: {
     orderList: {
       handler(newList) {
-        this.willDeliveryOrderCount = 0
-        this.myDeliveryOrderCount = 0
+        this.willDeliveryOrderList = []
+        this.myDeliveryOrderList = []
         newList.forEach(item => {
           if (item.orderState === 'WAITING_RECEIVE' || item.orderState === 'PRODUCING') {
-            this.willDeliveryOrderCount++
+            this.willDeliveryOrderList.push(item)
+          }
+          if (item.orderState === 'DELIVERING' && item.deliverer && item.deliverer === this.userData.id) {
+            this.myDeliveryOrderList.push(item)
           }
         })
       },
@@ -79,10 +86,11 @@ export default {
     getOrderList() {
       orderService.getTodayOrderListByState('WAIT_EAT').then(res => {
         this.orderList = res
+      }).finally(() => {
+        this.isLoading = false
       })
     },
     onRefresh() {
-      this.isLoading = false
       this.getOrderList()
     },
     onRefreshMap() {
