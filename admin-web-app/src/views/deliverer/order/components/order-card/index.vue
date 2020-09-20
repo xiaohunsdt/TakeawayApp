@@ -1,37 +1,36 @@
 <template>
-  <base-card class="order-card">
+  <base-card class="order-card" v-if="order.orderState === 'WAITING_RECEIVE' || order.orderState === 'PRODUCING'">
     <div class="header" @click.stop="showMore=!showMore">
       <div class="number">
-        <!--        <span class="appointment">-->
-        <!--          <span style="font-size: .2rem">#</span>519002-->
-        <!--        </span>-->
-        <span class="normal">
-          <span style="font-size: 1.5rem">#</span>16
+        <span v-if="order.appointmentDate===''" class="normal">
+          <span style="font-size: 1.5rem">#</span>{{ order.number }}
+        </span>
+        <span v-else class="appointment">
+          <span style="font-size: .2rem">#</span>{{ order.number }}
         </span>
       </div>
       <div class="info">
-        <div class="user-name">Jeremy.</div>
-        <!--        <div class="create-date">09-12 12:20</div>-->
-        <div class="appointment">
+        <div class="user-name">{{ order.userName }}</div>
+        <div v-if="order.appointmentDate===''" class="create-date">{{ order.createDate }}</div>
+        <div v-else class="appointment">
           <van-icon color="#ffd200" name="clock"/>
-          <div class="create-date">09-12 12:20</div>
+          <div class="create-date">{{ order.appointmentDate }}</div>
         </div>
       </div>
       <div class="action">
-        <el-button round size="small" type="success" @click.stop="test">配送</el-button>
+        <el-button round size="small" type="success" @click.stop="onDelivery" :disabled="order.orderState === 'WAITING_RECEIVE'">配送</el-button>
       </div>
     </div>
-    <van-icon :name="showMore?'arrow-up':'arrow-down'" class="show-more-icon" color="#ffd200"
-              @click.stop="showMore=!showMore"/>
+    <van-icon :name="showMore?'arrow-up':'arrow-down'" class="show-more-icon" color="#ffd200" @click.stop="showMore=!showMore"/>
     <div :style="{'max-height': showMore?'20rem':'0px'}" class="more-info">
-      <div class="address">신촌포스빌 707호</div>
-      <div class="phone">01056511996</div>
+      <div class="address">{{ order.address.address }}</div>
+      <div class="phone">{{ order.address.phone }}</div>
       <el-button-group>
         <el-button size="mini" type="primary">
-          <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=신촌포스빌`">打开地图</a>
+          <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${order.address.address}`">打开地图</a>
         </el-button>
         <el-button size="mini" type="primary">
-          <a :href="'tel:' + '01056511996'">拨打手机</a>
+          <a :href="'tel:' + order.address.phone">拨打手机</a>
         </el-button>
       </el-button-group>
     </div>
@@ -39,14 +38,23 @@
 </template>
 
 <script>
+import orderService from '@a/order'
+
 import BaseCard from '@/components/BaseCard'
-import { Icon } from 'vant'
+import { Icon, Notify } from 'vant'
 
 export default {
   name: 'OrderCard',
+  props: {
+    order: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
     BaseCard,
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Notify.Component.name]: Notify.Component
   },
   data() {
     return {
@@ -54,8 +62,15 @@ export default {
     }
   },
   methods: {
-    test() {
-      console.log('asdsad')
+    onDelivery() {
+      orderService.deliveryOrder(this.order.id).then(res => {
+        this.order.orderState = 'DELIVERING'
+        Notify({
+          type: 'success',
+          message: res.message,
+          duration: 1500
+        })
+      })
     }
   }
 
@@ -63,8 +78,11 @@ export default {
 </script>
 
 <style scoped>
+.base-card {
+  padding: .2rem .8rem
+}
 .header {
-  height: 4rem;
+  /*height: 4rem;*/
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,9 +123,9 @@ export default {
 
 .more-info {
   overflow: hidden;
-  transition: max-height .2s;
+  transition: max-height .3s;
   font-weight: bolder;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .more-info .address, .more-info .phone {

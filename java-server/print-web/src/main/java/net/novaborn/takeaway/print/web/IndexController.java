@@ -54,7 +54,7 @@ public class IndexController extends BaseController {
     private SettingService settingService;
 
     @Setter
-    @Value("${sys.printer-name}")
+    @Value("${sys.printer-name:#{null}}")
     String printerName;
 
     @ResponseBody
