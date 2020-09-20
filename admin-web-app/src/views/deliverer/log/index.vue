@@ -29,7 +29,7 @@
             <el-table-column
                 prop="orderCreateDate"
                 label="日期"
-                width="100"
+                width="120"
                 align="center">
               <template v-slot="props">
                 <div>
@@ -46,9 +46,9 @@
                 width="100"
                 align="center">
               <template v-slot="props">
-                <el-tag :type="props.row.orderFinishMinute!=='未完成'?'success':'info'" size="mini">{{props.row.orderFinishMinute}} 分钟</el-tag>
+                <el-tag :type="props.row.orderFinishMinute!=='未完成'?'success':'info'" size="mini">{{props.row.orderFinishMinute}} {{props.row.orderFinishMinute!=='未完成'?'分钟' : ''}}</el-tag>
                 <br />
-                <el-tag :type="props.row.deliveryFinishMinute!=='未完成'?'success':'info'" size="mini">{{props.row.deliveryFinishMinute}} 分钟</el-tag>
+                <el-tag :type="props.row.deliveryFinishMinute!=='未完成'?'success':'info'" size="mini">{{props.row.deliveryFinishMinute}} {{props.row.deliveryFinishMinute!=='未完成'?' 分钟' : ''}}</el-tag>
               </template>
             </el-table-column>
           </el-table>
