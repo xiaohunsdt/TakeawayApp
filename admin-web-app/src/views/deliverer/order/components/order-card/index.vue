@@ -18,7 +18,13 @@
         </div>
       </div>
       <div class="action">
-        <el-button v-if="order.orderState === 'WAITING_RECEIVE'|| order.orderState === 'PRODUCING'" :disabled="order.orderState === 'WAITING_RECEIVE'" round size="small" type="success" @click.stop="onDelivery">
+        <el-button
+            v-if="order.orderState === 'WAITING_RECEIVE'|| order.orderState === 'PRODUCING'"
+            :disabled="order.orderState === 'WAITING_RECEIVE'"
+            round
+            size="small"
+            type="success"
+            @click.stop="onDelivery">
           配送
         </el-button>
         <el-button v-if="order.orderState === 'DELIVERING'" round size="small" type="success" @click.stop="onFinish">
@@ -26,8 +32,12 @@
         </el-button>
       </div>
     </div>
-    <van-icon :name="showMore?'arrow-up':'arrow-down'" class="show-more-icon" color="#ffd200" @click.stop="showMore=!showMore"/>
-    <div :style="{'max-height': showMore?'20rem':'0px'}" class="more-info">
+    <van-icon
+        :name="showMore?'arrow-up':'arrow-down'"
+        class="show-more-icon"
+        color="#ffd200"
+        @click.stop="showMore=!showMore"/>
+    <div :style="{'max-height': showMore?'20rem':'0px'}" class="more-info" @click.stop="showMore=!showMore">
       <div class="address">{{ order.address.address }}</div>
       <div class="phone">{{ order.address.phone }}</div>
       <el-button-group>
@@ -46,7 +56,7 @@
 import orderService from '@a/order'
 
 import BaseCard from '@/components/BaseCard'
-import { Icon, Notify } from 'vant'
+import { Dialog, Icon, Notify } from 'vant'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -54,7 +64,8 @@ export default {
   components: {
     BaseCard,
     [Icon.name]: Icon,
-    [Notify.Component.name]: Notify.Component
+    [Notify.Component.name]: Notify.Component,
+    [Dialog.Component.name]: Dialog.Component
   },
   props: {
     order: {
@@ -85,17 +96,21 @@ export default {
       })
     },
     onFinish() {
-      orderService.finishOrder(this.order.id).then(res => {
-        this.order.orderState = 'FINISHED'
-        Notify({
-          type: 'success',
-          message: res.message,
-          duration: 1500
+      Dialog.confirm({
+        title: '提示',
+        message: '确认订单已完成吗？'
+      }).then(() => {
+        orderService.finishOrder(this.order.id).then(res => {
+          this.order.orderState = 'FINISHED'
+          Notify({
+            type: 'success',
+            message: res.message,
+            duration: 1000
+          })
         })
       })
     }
   }
-
 }
 </script>
 
@@ -109,6 +124,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .header .number {
@@ -148,9 +164,7 @@ export default {
   overflow: hidden;
   transition: max-height .3s;
   font-weight: bolder;
-  padding-top: 10px;
   margin-bottom: 10px;
-  box-sizing: border-box;
 }
 
 .more-info .address, .more-info .phone {

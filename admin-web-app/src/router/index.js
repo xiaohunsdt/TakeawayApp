@@ -129,6 +129,13 @@ export const asyncRoutes = [
                 // props: true,
                 component: () => import('@/views/order/comment'),
                 meta: { title: '评价管理', icon: 'goods', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
+            },
+            {
+                path: 'delivery',
+                name: 'DeliveryManagementA',
+                // props: true,
+                component: () => import('@/views/order/delivery'),
+                meta: { title: '配送管理', icon: 'goods', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
             }
         ]
     },

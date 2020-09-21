@@ -357,6 +357,10 @@ export default {
     this.onSearch()
   },
   methods: {
+    onSearch() {
+      this.page.current = 1
+      this.getList()
+    },
     getList() {
       this.listLoading = true
 
@@ -393,10 +397,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.page.current = val
-      this.getList()
-    },
-    onSearch() {
-      this.page.current = 1
       this.getList()
     },
     onEditOrder(orderId) {

@@ -52,6 +52,17 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+              :current-page="page.current"
+              :page-size="page.size"
+              :total="page.total"
+              background
+              small
+              layout="prev, pager, next"
+              style="margin-top: 15px"
+              @current-change="handleCurrentChange"
+              @size-change="handleSizeChange">
+          </el-pagination>
         </base-card>
       </div>
     </van-pull-refresh>
@@ -126,6 +137,7 @@ export default {
     getDeliveryList() {
       deliveryService.getMyDeliveryListByPage(this.page, this.formData).then(res => {
         this.deliveryList.push(...res.records)
+        this.page.total = parseInt(res.total)
       }).finally(() => {
         this.isLoading = false
       })
@@ -133,6 +145,14 @@ export default {
     onRefresh() {
       this.page.current = 1
       this.deliveryList = []
+      this.getDeliveryList()
+    },
+    handleSizeChange(val) {
+      this.page.size = val
+      this.getDeliveryList()
+    },
+    handleCurrentChange(val) {
+      this.page.current = val
       this.getDeliveryList()
     }
   }
