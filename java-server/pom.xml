@@ -21,6 +21,7 @@
         <module>banner</module>
         <module>statistics</module>
         <module>quartz</module>
+        <module>im-web</module>
     </modules>
 
     <parent>
