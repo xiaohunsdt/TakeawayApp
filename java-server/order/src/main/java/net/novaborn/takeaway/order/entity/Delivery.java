@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
+import net.novaborn.takeaway.order.enums.PaymentWay;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -23,6 +24,10 @@ public class Delivery extends Model<Delivery> {
     private Long adminId;
 
     private Long orderId;
+
+    private Integer number;
+
+    private PaymentWay paymentWay;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderCreateDate;

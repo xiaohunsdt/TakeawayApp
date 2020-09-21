@@ -219,6 +219,8 @@ public class OrderController extends BaseController {
         Delivery delivery = new Delivery();
         delivery.setAdminId(Long.parseLong(adminId));
         delivery.setOrderId(orderId);
+        delivery.setNumber(order.get().getNumber());
+        delivery.setPaymentWay(order.get().getPaymentWay());
         delivery.setOrderCreateDate(order.get().getCreateDate());
         delivery.insert();
 

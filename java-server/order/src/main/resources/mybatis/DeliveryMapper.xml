@@ -9,22 +9,18 @@
     </select>
 
     <select id="getDeliveryListByPage" resultType="Delivery">
-        SELECT `delivery`.* FROM `delivery`
-        <if test="args.paymentWay != null">
-            ,`order`
-        </if>
+        SELECT * FROM `delivery`
         <where>
             <if test="args.adminId != null and args.adminId != ''">
                 AND `admin_id` = #{args.adminId}
             </if>
             <if test="args.paymentWay != null">
-                AND `delivery`.order_id = `order`.id
-                AND `order`.`payment_way` = #{args.paymentWay.code}
+                AND `payment_way` = #{args.paymentWay.code}
             </if>
             <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
-                AND `delivery`.`create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
             </if>
         </where>
-        ORDER BY `delivery`.`create_date` DESC
+        ORDER BY `create_date` DESC
     </select>
 </mapper>

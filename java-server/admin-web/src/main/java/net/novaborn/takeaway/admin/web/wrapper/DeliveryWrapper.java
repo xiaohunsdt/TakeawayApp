@@ -25,11 +25,8 @@ public class DeliveryWrapper extends BaseControllerWrapper {
 
     @Override
     protected void warpTheMap(Map<String, Object> map) {
-        OrderService orderService = SpringContextHolder.getBean(OrderService.class);
         AdminService adminService = SpringContextHolder.getBean(AdminService.class);
-
         Admin admin = adminService.getById((Long) map.get("adminId"));
-        Order order = orderService.getById((Long) map.get("orderId"));
 
         if (map.get("finishDate") != null) {
             map.put("orderFinishMinute", DateUtil.between((Date) map.get("orderCreateDate"), (Date) map.get("finishDate"), DateUnit.MINUTE));
@@ -41,8 +38,6 @@ public class DeliveryWrapper extends BaseControllerWrapper {
         }
 
         map.put("adminName", admin.getUserName());
-        map.put("number", order.getNumber());
-        map.put("paymentWay", order.getPaymentWay());
         map.put("orderCreateDate", DateUtil.format((Date) map.get("orderCreateDate"), "MM-dd HH:mm"));
         map.put("createDate", DateUtil.format((Date) map.get("createDate"), "MM-dd HH:mm"));
     }
