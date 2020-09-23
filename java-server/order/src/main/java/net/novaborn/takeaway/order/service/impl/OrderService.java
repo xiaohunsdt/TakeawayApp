@@ -1,11 +1,13 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -45,18 +47,18 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     private SettingService settingService;
 
-//    @Setter
-//    protected Map<String, Goods> gifts;
-//
-//    @PostConstruct
-//    public void init() {
-//        gifts = new HashMap<>();
-//        gifts.put("鸭脖", goodsService.getById(1301894883776212994L));
-//        gifts.put("鸭锁骨", goodsService.getById(1301894884560547841L));
-//        gifts.put("鸭翅", goodsService.getById(1301894884560547841L));
-//        gifts.put("川香卤蛋", goodsService.getById(1301894882715054082L));
-//        gifts.put("饮料", goodsService.getById(1301894885328105474L));
-//    }
+    @Setter
+    protected List<Goods> gifts;
+
+    @PostConstruct
+    public void init() {
+        gifts = new ArrayList<>();
+        gifts.add(goodsService.getById(1308791764220502017L));
+        gifts.add(goodsService.getById(1308791764220502017L));
+        gifts.add(goodsService.getById(1308791764220502017L));
+        gifts.add(goodsService.getById(1308791979291828226L));
+        gifts.add(goodsService.getById(1308792121138995202L));
+    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
@@ -159,6 +161,29 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
         // 设置优惠
+        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+            Goods gift = null;
+            int randomInt = RandomUtil.randomInt(5);
+            if (order.getRealPrice() >= 18000) {
+                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
+                    gift = gifts.get(randomInt);
+                }
+            } else if (order.getRealPrice() >= 12000 && (order.getFrom().equals(From.YONSEI) || order.getFrom().equals(From.SOGANG))) {
+                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
+                    gift = gifts.get(randomInt);
+                }
+            }
+            if (gift != null) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setGoodsId(gift.getId());
+                orderItem.setGoodsName("中秋福利-" + gift.getName());
+                orderItem.setGoodsThumb(gift.getThumb());
+                orderItem.setGoodsPrice(0);
+                orderItem.setGoodsCount(1);
+                orderItemList.add(orderItem);
+                order.setGoodsCount(order.getGoodsCount() + 1);
+            }
+        }
 //        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
 //            Goods gift = null;
 //            if (order.getRealPrice() >= 40000) {
@@ -181,16 +206,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
 //                    gift = gifts.get("川香卤蛋");
 //                }
-//            }
-//            if (gift != null) {
-//                OrderItem orderItem = new OrderItem();
-//                orderItem.setGoodsId(gift.getId());
-//                orderItem.setGoodsName("暑假特惠-" + gift.getName());
-//                orderItem.setGoodsThumb(gift.getThumb());
-//                orderItem.setGoodsPrice(0);
-//                orderItem.setGoodsCount(1);
-//                orderItemList.add(orderItem);
-//                order.setGoodsCount(order.getGoodsCount() + 1);
 //            }
 //        }
 

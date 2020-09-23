@@ -11,7 +11,7 @@ Page({
   onLoad: function (option) {
     // console.log(option)
     if (option.from) {
-      app.globalData.form = option.from
+      app.globalData.from = option.from
     }
     this.init()
   },
