@@ -132,7 +132,14 @@ export const asyncRoutes = [
                 name: 'CommentManagement',
                 // props: true,
                 component: () => import('@/views/order/comment'),
-                meta: { title: '评价管理', icon: 'goods' }
+                meta: { title: '评价管理', icon: 'goods', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
+            },
+            {
+                path: 'delivery',
+                name: 'DeliveryManagementA',
+                // props: true,
+                component: () => import('@/views/order/delivery'),
+                meta: { title: '配送管理', icon: 'goods', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
             }
         ]
     },
@@ -320,6 +327,25 @@ export const asyncRoutes = [
             component: () => import('@/views/sys/index'),
             meta: { title: '系统设置', icon: 'setting' }
         }]
+    },
+    {
+        path: '/deliverer',
+        component: Layout,
+        meta: {
+            roles: ['DELIVERER']
+        },
+        children: [
+            {
+                path: 'order',
+                name: 'DelivererOrderManagement',
+                component: () => import('@/views/deliverer/order/index')
+            },
+            {
+                path: 'log',
+                name: 'DelivererLogManagement',
+                component: () => import('@/views/deliverer/log/index')
+            }
+        ]
     },
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }

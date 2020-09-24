@@ -19,7 +19,7 @@ class PayServiceTest {
 
     @Test
     void createPayInfo() {
-        WxPayMpOrderResult result = payService.createPayInfo("op37U5F3e01dNxNK4RM3nAMd78Xk", "243b155f0cf366476e1f13396115e772", "192.168.0.7");
+        WxPayMpOrderResult result = payService.createPayInfo("op37U5F3e01dNxNK4RM3nAMd78Xk", "243b155f0cf366476e1f13396115e772", "localhost");
         System.out.println(result);
     }
 }

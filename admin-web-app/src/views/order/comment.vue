@@ -140,6 +140,10 @@ export default {
   },
   methods: {
     onSearch() {
+      this.page.current = 1
+      this.getList()
+    },
+    getList() {
       this.listLoading = true
 
       const params = Object.assign({}, this.formData)
@@ -157,11 +161,11 @@ export default {
     },
     handleSizeChange(val) {
       this.page.size = val
-      this.onSearch()
+      this.getList()
     },
     handleCurrentChange(val) {
       this.page.current = val
-      this.onSearch()
+      this.getList()
     }
   }
 }

@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.task.WechatAutoTask;
 import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
@@ -20,9 +21,11 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderSignInSender;
+import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.service.impl.DeliveryService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.system.entity.Setting;
@@ -33,12 +36,10 @@ import net.novaborn.takeaway.user.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +70,10 @@ public class OrderController extends BaseController {
     private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private OrderSignInSender orderSignInSender;
+
+    private DeliveryService deliveryService;
+
+    private JwtTokenUtil jwtTokenUtil;
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
@@ -196,6 +201,8 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("deliveryOrder")
     public Tip deliveryOrder(@RequestParam Long orderId) {
+        String adminId = jwtTokenUtil.getUserIdFromToken(request);
+
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -208,12 +215,22 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "操作失败!");
         }
 
+        // 添加配送信息类
+        Delivery delivery = new Delivery();
+        delivery.setAdminId(Long.parseLong(adminId));
+        delivery.setOrderId(orderId);
+        delivery.setNumber(order.get().getNumber());
+        delivery.setPaymentWay(order.get().getPaymentWay());
+        delivery.setOrderCreateDate(order.get().getCreateDate());
+        delivery.insert();
+
         orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();
     }
 
     @ResponseBody
     @PostMapping("finishOrder")
+    @Transactional(rollbackFor = RuntimeException.class)
     public Tip finishOrder(@RequestParam Long orderId) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
@@ -233,6 +250,11 @@ public class OrderController extends BaseController {
         if (order.get().getPaymentWay() != PaymentWay.CREDIT_CARD && order.get().getRealPrice() >= 12000) {
             orderSignInSender.send(order.get());
         }
+
+        // 设置配送信息
+        Optional<Delivery> delivery = deliveryService.getByOrderId(orderId);
+        delivery.get().setFinishDate(new Date());
+        delivery.get().updateById();
 
         orderSmsUtil.pushMessage(order.get());
         return new SuccessTip();

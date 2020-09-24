@@ -25,7 +25,7 @@
               <!--                                    复制地址-->
               <!--                                </el-button>-->
               <el-button size="mini" type="primary">
-                <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${selectedOrder.address.address} ${selectedOrder.address.detail}`">打开地图</a>
+                <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${selectedOrder.address.address}`">打开地图</a>
               </el-button>
               <el-button size="mini" type="primary">
                 <a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
@@ -48,8 +48,7 @@
         @click="onMarkerClicked"
         @load="onMarkerLoaded"
         v-for="order in orderList"/>
-    <naver-circle :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key"
-                  v-for="item in distancePriceArr"/>
+    <naver-circle :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key" v-for="item in distancePriceArr"/>
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>-->

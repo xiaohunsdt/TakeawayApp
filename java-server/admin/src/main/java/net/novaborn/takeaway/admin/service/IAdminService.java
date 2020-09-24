@@ -8,6 +8,7 @@ import net.novaborn.takeaway.admin.entity.Admin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -18,6 +19,13 @@ import java.util.Map;
  * @since 2019-09-20
  */
 public interface IAdminService extends IService<Admin> {
+
+    /**
+     * 通过管理员名称获取实例
+     * @param adminName
+     * @return
+     */
+    Optional<Admin> getByAdminName(String adminName);
 
     /**
      * 管理员登陆

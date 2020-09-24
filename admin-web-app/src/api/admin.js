@@ -87,5 +87,6 @@ export default {
     getSubAdminByPage,
     getAdminInfoById,
     createNewSubAdmin,
-    updateAdmin
+    updateAdmin,
+    logout
 }

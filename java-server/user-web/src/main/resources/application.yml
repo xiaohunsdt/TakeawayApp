@@ -75,17 +75,17 @@ logging:
 
 ---
 sys:
-  upload-server-url: http://192.168.0.7:8080
+  upload-server-url: http://localhost:8080
 
 spring:
   profiles: dev
   datasource:
     url: jdbc:mysql://localhost:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
   redis:
-    host: 192.168.0.7
+    host: localhost
     password: wy1996
   rabbitmq:
-    host: 192.168.0.7
+    host: localhost
     username: xiaohun
     password: wy1996
 

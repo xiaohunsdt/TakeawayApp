@@ -22,6 +22,7 @@
         <module>statistics</module>
         <module>quartz</module>
         <module>store</module>
+        <module>im-web</module>
     </modules>
 
     <parent>

@@ -96,14 +96,14 @@ public class WechatAutoTask {
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
 
-//        sysJob = new SysJob();
-//        sysJob.setJobId(3L);
-//        sysJob.setJobGroup(jobGroup);
-//        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
-//        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
-//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-//        sysJob.setConcurrent(false);
-//        sysJobService.insertJob(sysJob);
+        sysJob = new SysJob();
+        sysJob.setJobId(3L);
+        sysJob.setJobGroup(jobGroup);
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
+        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+        sysJob.setConcurrent(false);
+        sysJobService.insertJob(sysJob);
     }
 
     public void goodsShow() {
@@ -178,15 +178,17 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "暑假活动来了哦！！\n" +
-                        "首次鸭货活动哦！\n" +
-                        "签到，满赠！一定要看活动说明哦！\n" +
-                        "现在将海报和活动说明发到朋友圈，可以找客服领优惠卷哦！"
+                "秋意满满!川香苑中秋送礼活动来啦~[拥抱][拥抱][拥抱]\n"+
+                        "为小伙伴们精心准备了350块月饼,免费送!![亲亲][亲亲]\n" +
+                        "详情请看海报哦!!\n" +
+                        "祝各位小伙伴们中秋快乐!![爱心]"
         );
         autoMessage.setImgUrlList(
                 Arrays.asList(
-                        "https://admin.cxy.novaborn.net/upload/images/activity/083f0f4e9e244601b740620f933cb061.png",
-                        "https://admin.cxy.novaborn.net/upload/images/activity/1a7311b40af24153b894ebc37b3160e6.png"
+                        "https://admin.cxy.novaborn.net/upload/images/activity/ae4e1ef3057a4752993184c7ca296650.png",
+                        "https://admin.cxy.novaborn.net/upload/images/ebd8dedc55d246a7ba04dd931dcaa113.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/1fc8c62b53094bc68d3dca29955cdedc.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/aeb41f5a6c0a4945be47a625b5f148ed.jpeg"
                 )
         );
 

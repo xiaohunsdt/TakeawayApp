@@ -36,6 +36,14 @@ public class IndexController extends BaseController {
 
     private BannerService bannerService;
 
+    private static Map<From,String> fromerNotice;
+
+    static {
+        fromerNotice = new HashMap<>();
+        fromerNotice.put(From.YONSEI,"让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。延世学联祝你中秋佳节快乐，月圆人圆事事圆满!");
+        fromerNotice.put(From.SOGANG,"让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。西江学联祝你中秋佳节快乐，月圆人圆事事圆满!");
+    }
+
     @GetMapping("getBannersList")
     public ResponseEntity getBannersList() {
         List<Banner> activities = bannerService.list()
@@ -62,7 +70,7 @@ public class IndexController extends BaseController {
     @GetMapping("getFormerNotice")
     @ResponseBody
     public Tip getFormerNotice(From from) {
-//        return new SuccessTip(fromerNotice.get(from));
-        return new SuccessTip();
+        return new SuccessTip(fromerNotice.get(from));
+//        return new SuccessTip();
     }
 }

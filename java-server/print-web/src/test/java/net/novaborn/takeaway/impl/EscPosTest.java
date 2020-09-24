@@ -18,6 +18,6 @@ public class EscPosTest {
 
     @Test
     public void testPrint() throws Exception {
-        indexController.printOrder(111L);
+        indexController.printOrder(1307285324024635394L);
     }
 }

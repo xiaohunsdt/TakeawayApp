@@ -31,6 +31,11 @@ import java.util.Optional;
 public class AdminService extends ServiceImpl<IAdminDao, Admin> implements IAdminService {
 
     @Override
+    public Optional<Admin> getByAdminName(String adminName) {
+        return this.baseMapper.selectByName(adminName);
+    }
+
+    @Override
     public boolean login(String userName, String password) {
         Optional<Admin> admin = this.baseMapper.selectByName(userName);
         admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
