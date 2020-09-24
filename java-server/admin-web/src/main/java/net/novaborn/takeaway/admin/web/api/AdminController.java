@@ -118,7 +118,7 @@ public class AdminController extends BaseController {
             }
         }
 
-        if (admin.getState().equals(State.STOP)) {
+        if (admin.getState().equals(State.STOP) || !admin.getPassword().equals(target.getPassword())) {
             Set<String> keyList = redisTemplate.keys(String.format("jwt:%s:*", admin.getId()));
             keyList.parallelStream().forEach(key -> redisTemplate.delete(key));
         }
