@@ -168,7 +168,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
                     gift = gifts.get(randomInt);
                 }
-            } else if (order.getRealPrice() >= 12000 && (order.getFrom().equals(From.YONSEI) || order.getFrom().equals(From.SOGANG))) {
+            } else if (order.getRealPrice() >= 12000 && (From.YONSEI.equals(order.getFrom()) || From.SOGANG.equals(order.getFrom()))) {
                 if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
                     gift = gifts.get(randomInt);
                 }
