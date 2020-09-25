@@ -156,7 +156,12 @@
         SELECT * FROM `order`
         <where>
             <include refid="common_order_list_where_u"/>
-            AND TO_DAYS(create_date) = TO_DAYS(NOW())
+            AND
+            (
+                TO_DAYS(create_date) = TO_DAYS(NOW())
+                OR
+                (appointment_date IS NOT NULL AND TO_DAYS(appointment_date) = TO_DAYS(NOW()))
+            )
         </where>
         ORDER BY `create_date` DESC
     </select>
