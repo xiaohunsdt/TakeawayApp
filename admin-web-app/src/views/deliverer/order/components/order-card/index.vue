@@ -39,6 +39,7 @@
         @click.stop="showMore=!showMore"/>
     <div :style="{'max-height': showMore?'20rem':'0px'}" class="more-info" @click.stop="showMore=!showMore">
       <div class="address">{{ order.address.address }}</div>
+      <div class="address">{{ order.address.detail }}</div>
       <div class="phone">{{ order.address.phone }}</div>
       <el-button-group>
         <el-button size="mini" type="primary">
