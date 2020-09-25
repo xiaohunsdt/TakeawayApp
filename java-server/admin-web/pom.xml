@@ -114,8 +114,8 @@
 
         <dependency>
             <groupId>net.xpyun.platform</groupId>
-            <artifactId>opensdk</artifactId>
-            <version>4.0.1</version>
+            <artifactId>xpyun-opensdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/lib/xpyun-opensdk.jar</systemPath>
         </dependency>
