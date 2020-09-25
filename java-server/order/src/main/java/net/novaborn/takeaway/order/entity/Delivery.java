@@ -29,6 +29,8 @@ public class Delivery extends Model<Delivery> {
 
     private PaymentWay paymentWay;
 
+    private Integer money;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderCreateDate;
 

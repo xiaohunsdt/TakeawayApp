@@ -220,6 +220,7 @@ public class OrderController extends BaseController {
         delivery.setAdminId(Long.parseLong(adminId));
         delivery.setOrderId(orderId);
         delivery.setNumber(order.get().getNumber());
+        delivery.setMoney(order.get().getRealPrice());
         delivery.setPaymentWay(order.get().getPaymentWay());
         delivery.setOrderCreateDate(order.get().getCreateDate());
         delivery.insert();
