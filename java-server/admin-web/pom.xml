@@ -111,6 +111,14 @@
             <optional>true</optional>
             <scope>true</scope>
         </dependency>
+
+        <dependency>
+            <groupId>net.xpyun.platform</groupId>
+            <artifactId>opensdk</artifactId>
+            <version>4.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/lib/xpyun-opensdk.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
@@ -119,6 +127,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope>
                     <fork>true</fork>
                 </configuration>
             </plugin>
