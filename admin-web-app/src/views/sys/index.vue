@@ -36,17 +36,17 @@
           <el-form ref="form" :model="storeSetting" label-width="130px" size="mini" style="max-width: 660px">
             <el-form-item label="店铺Logo">
               <el-upload
-                  ref="upload"
-                  :action="$VUE_APP_BASE_API + '/api/admin/uploadStoreLogo'"
-                  :before-upload="beforeUpload"
-                  :headers="authHeader"
-                  :multiple="false"
-                  :on-success="handleUploadSuccess"
-                  :show-file-list="false">
+                ref="upload"
+                :action="$VUE_APP_BASE_API + '/api/admin/uploadStoreLogo'"
+                :before-upload="beforeUpload"
+                :headers="authHeader"
+                :multiple="false"
+                :on-success="handleUploadSuccess"
+                :show-file-list="false">
                 <img
-                    v-if="storeSetting.store_logo !== ''"
-                    :src="$VUE_APP_BASE_API + storeSetting.store_logo"
-                    style="height: 150px;width: auto;"/>
+                  v-if="storeSetting.store_logo !== ''"
+                  :src="$VUE_APP_BASE_API + storeSetting.store_logo"
+                  style="height: 150px;width: auto;"/>
                 <el-button v-else size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过5M！建议上传长宽相等的正方形图片</div>
               </el-upload>
@@ -64,29 +64,29 @@
             </el-form-item>
             <el-form-item label="运营时间">
               <el-time-picker
-                  v-model="timePickValue"
-                  end-placeholder="关门时间"
-                  is-range
-                  placeholder="选择运营时间范围"
-                  range-separator="至"
-                  start-placeholder="开门时间"/>
+                v-model="timePickValue"
+                end-placeholder="关门时间"
+                is-range
+                placeholder="选择运营时间范围"
+                range-separator="至"
+                start-placeholder="开门时间"/>
             </el-form-item>
             <el-form-item label="店铺地址">
               <el-select
-                  v-model="storeSetting.store_address"
-                  :loading="searchLoading"
-                  :remote-method="onSearch"
-                  filterable
-                  placeholder="请输入关键词"
-                  remote
-                  reserve-keyword
-                  style="display: block;"
-                  @change="onSelect">
+                v-model="storeSetting.store_address"
+                :loading="searchLoading"
+                :remote-method="onSearch"
+                filterable
+                placeholder="请输入关键词"
+                remote
+                reserve-keyword
+                style="display: block;"
+                @change="onSelect">
                 <el-option
-                    v-for="item in addressList"
-                    :key="item.address"
-                    :label="item.address"
-                    :value="item.address">
+                  v-for="item in addressList"
+                  :key="item.address"
+                  :label="item.address"
+                  :value="item.address">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -95,18 +95,6 @@
             </el-form-item>
             <el-form-item label="地址纬度">
               <el-input v-model="storeSetting.store_address_y" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="厨师体温">
-              <el-input v-model="storeSetting.temperature1"></el-input>
-            </el-form-item>
-            <el-form-item label="外卖员体温">
-              <el-input v-model="storeSetting.temperature2"></el-input>
-            </el-form-item>
-            <el-form-item label="老板体温">
-              <el-input v-model="storeSetting.temperature3"></el-input>
-            </el-form-item>
-            <el-form-item label="打包员体温">
-              <el-input v-model="storeSetting.temperature4"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveSetting('STORE')">保存设置</el-button>
@@ -198,6 +186,37 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
+        <el-tab-pane label="打印设置">
+          <el-form ref="form" :model="printerSetting" label-width="120px" size="mini" style="max-width: 660px">
+            <el-form-item label="设备号">
+              <el-input v-model="printerSetting.sn"></el-input>
+            </el-form-item>
+            <el-form-item label="语音类型">
+              <el-select v-model.number="printerSetting.voiceType" placeholder="请选择语言类型">
+                <el-option value="0" label="真人语音 (大)"/>
+                <el-option value="1" label="真人语音 (中)"/>
+                <el-option value="2" label="真人语音 (小)"/>
+                <el-option value="3" label="嘀嘀声"/>
+                <el-option value="4" label="静音"/>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="厨师体温">
+              <el-input v-model="printerSetting.temperature1"></el-input>
+            </el-form-item>
+            <el-form-item label="外卖员体温">
+              <el-input v-model="printerSetting.temperature2"></el-input>
+            </el-form-item>
+            <el-form-item label="老板体温">
+              <el-input v-model="printerSetting.temperature3"></el-input>
+            </el-form-item>
+            <el-form-item label="打包员体温">
+              <el-input v-model="printerSetting.temperature4"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="saveSetting('PRINTER')">保存设置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
       </el-tabs>
     </base-card>
 
@@ -245,11 +264,7 @@ export default {
         store_close_time: null,
         store_address: '',
         store_address_x: null,
-        store_address_y: null,
-        temperature1: null,
-        temperature2: null,
-        temperature3: null,
-        temperature4: null
+        store_address_y: null
       },
       expressSetting: {
         lowest_order_price: 0,
@@ -264,6 +279,14 @@ export default {
         bank: null,
         account: null,
         accountName: null
+      },
+      printerSetting: {
+        sn: '',
+        voiceType: '0',
+        temperature1: '',
+        temperature2: '',
+        temperature3: '',
+        temperature4: ''
       },
       searchLoading: false,
       addressList: []
@@ -309,6 +332,11 @@ export default {
           this.$set(this.paymentSetting, item.key, item.value)
         })
       })
+      settingApi.getSettingsByScope('PRINTER').then(res => {
+        res.forEach(item => {
+          this.$set(this.printerSetting, item.key, item.value)
+        })
+      })
     },
     saveSetting(scope) {
       let settings
@@ -329,33 +357,43 @@ export default {
         case 'PAYMENT':
           settings = Object.assign({}, this.paymentSetting)
           break
+        case 'PRINTER':
+          if (this.printerSetting.sn === '') {
+            this.$message({
+              message: '请填写设备号!',
+              type: 'warning'
+            })
+            return
+          }
+          settings = Object.assign({}, this.printerSetting)
+          break
       }
 
       this.saveLoading = true
       settingApi.updateSetting(settings, scope)
-          .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+        .then(res => {
+          this.$message({
+            message: res.message,
+            type: 'success'
           })
-          .finally(() => {
-            this.saveLoading = false
-          })
+        })
+        .finally(() => {
+          this.saveLoading = false
+        })
     },
     onSearch(query) {
       if (query !== '') {
         this.searchLoading = true
         addressApi.searchAddress(query)
-            .then(res => {
-              this.addressList = res
-            })
-            .catch(() => {
-              this.addressList = []
-            })
-            .finally(() => {
-              this.searchLoading = false
-            })
+          .then(res => {
+            this.addressList = res
+          })
+          .catch(() => {
+            this.addressList = []
+          })
+          .finally(() => {
+            this.searchLoading = false
+          })
       } else {
         this.addressList = []
       }

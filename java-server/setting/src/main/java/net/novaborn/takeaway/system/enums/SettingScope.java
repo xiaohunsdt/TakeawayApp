@@ -11,7 +11,9 @@ public enum SettingScope {
 
     SYSTEM("system"),
 
-    PAYMENT("payment");
+    PAYMENT("payment"),
+
+    PRINTER("printer");
 
     SettingScope(String scope) {
         this.scope = scope;

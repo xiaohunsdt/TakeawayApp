@@ -18,6 +18,11 @@ class PrinterUtilTest {
 
     @Test
     void test() {
-        printerUtil.print(orderService.getById(1301895049803542529L));
+        printerUtil.print(orderService.getById(1309685645338337281L));
+    }
+
+    @Test
+    void test2() {
+        printerUtil.setVoiceType("05SBD7NDCE6834B",3);
     }
 }

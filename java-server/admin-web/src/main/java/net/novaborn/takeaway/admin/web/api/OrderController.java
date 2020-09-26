@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.task.WechatAutoTask;
-import net.novaborn.takeaway.admin.utils.OrderSmsUtil;
+import net.novaborn.takeaway.admin.utils.PrinterUtil;
 import net.novaborn.takeaway.admin.web.wrapper.OrderDetailWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.OrderWrapperEx;
@@ -21,6 +21,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderSignInSender;
+import net.novaborn.takeaway.mq.sender.OrderSubscribeMessageSender;
 import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.*;
@@ -63,8 +64,6 @@ public class OrderController extends BaseController {
 
     private SettingService settingService;
 
-    private OrderSmsUtil orderSmsUtil;
-
     private WechatAutoTask wechatAutoTask;
 
     private OrderAutoReceiveSender orderAutoReceiveSender;
@@ -72,6 +71,10 @@ public class OrderController extends BaseController {
     private OrderSignInSender orderSignInSender;
 
     private DeliveryService deliveryService;
+
+    private OrderSubscribeMessageSender orderSubscribeMessageSender;
+
+    private PrinterUtil printerUtil;
 
     private JwtTokenUtil jwtTokenUtil;
 
@@ -193,7 +196,8 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "操作失败!");
         }
 
-        orderSmsUtil.pushMessage(order.get());
+        orderSubscribeMessageSender.send(order.get());
+        printerUtil.print(order.get());
         wechatAutoTask.orderShow(order.get());
         return new SuccessTip();
     }
@@ -225,7 +229,7 @@ public class OrderController extends BaseController {
         delivery.setOrderCreateDate(order.get().getCreateDate());
         delivery.insert();
 
-        orderSmsUtil.pushMessage(order.get());
+        orderSubscribeMessageSender.send(order.get());
         return new SuccessTip();
     }
 
@@ -257,7 +261,7 @@ public class OrderController extends BaseController {
         delivery.get().setFinishDate(new Date());
         delivery.get().updateById();
 
-        orderSmsUtil.pushMessage(order.get());
+        orderSubscribeMessageSender.send(order.get());
         return new SuccessTip();
     }
 
@@ -294,6 +298,13 @@ public class OrderController extends BaseController {
         if (!orderService.removeById(orderId)) {
             return new ErrorTip(-1, "删除失败!");
         }
+        return new SuccessTip();
+    }
+
+    @ResponseBody
+    @PostMapping("printOrder")
+    public Tip printOrder(@RequestParam Long orderId) {
+        printerUtil.print(orderService.getById(orderId));
         return new SuccessTip();
     }
 }

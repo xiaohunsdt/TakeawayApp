@@ -83,8 +83,7 @@ export function editOrder(data) {
 export function printOrder(order) {
   const orderId = order.id
   return request({
-    baseURL: 'http://localhost:11996',
-    url: '/print',
+    url: '/order/printOrder',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: { orderId },

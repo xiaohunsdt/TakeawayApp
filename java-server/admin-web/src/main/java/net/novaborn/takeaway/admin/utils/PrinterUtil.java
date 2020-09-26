@@ -1,40 +1,34 @@
 package net.novaborn.takeaway.admin.utils;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.img.ImgUtil;
-import lombok.SneakyThrows;
+import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.utils.OrderFormatUtil;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.xpyun.platform.opensdk.service.PrintService;
 import net.xpyun.platform.opensdk.util.HashSignUtil;
-import net.xpyun.platform.opensdk.vo.ObjectRestResponse;
-import net.xpyun.platform.opensdk.vo.PrintRequest;
-import net.xpyun.platform.opensdk.vo.RestRequest;
+import net.xpyun.platform.opensdk.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class PrinterUtil {
     // 芯烨云注册用户帐号，注意不是开发者ID
     private final String USER_NAME = "825292796@qq.com";
     // 开发者密钥
-    private final String USER_KEY = "c8ae174868634260982bff1e56e66ebb";
+    private final String USER_KEY = "bf5e349900b44e928fd5e63cceb4e136";
     // 打印机编号
-    private final String OK_PRINTER_SN = "05SBD7NDCE6834B";
 
     private PrintService service = new PrintService();
 
@@ -44,9 +38,18 @@ public class PrinterUtil {
     @Autowired
     private AddressService addressService;
 
-    void print(Order order) {
+    @Autowired
+    private SettingService settingService;
+
+    public void print(Order order) {
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
         Address address = addressService.getById(order.getAddressId());
+        Setting sn = settingService.getSettingByName("sn", SettingScope.PRINTER);
+        if (sn == null || StrUtil.isBlank(sn.getValue())) {
+            log.warn("没有设置打印机设备");
+            return;
+        }
+        Setting temperature1 = settingService.getSettingByName("temperature1", SettingScope.PRINTER);
 
         StringBuffer sf = new StringBuffer();
         sf.append(String.format("<BOLD><B2><C>#%d\n", order.getNumber()));
@@ -70,13 +73,28 @@ public class PrinterUtil {
         }
         sf.append("<BR><BOLD>--------------------------------\n");
         sf.append(String.format("<R><BOLD>合计: %d 韩元\n", order.getRealPrice()));
-        sf.append(String.format("<L><LOGO>%s</LOGO>", textToImage(address.getAddress() + " " + address.getDetail())));
-        sf.append(String.format("<BOLD><L>联系方式: %s", address.getPhone()));
         sf.append("<BR>");
+        if (StrUtil.isNotBlank(order.getPs())) {
+            sf.append("<BOLD>--------------------------------\n");
+            sf.append("<B><L><BOLD>备注:\n");
+            sf.append(String.format("<B><L><BOLD>%s\n", order.getPs()));
+            sf.append("<BR>");
+        }
+        sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
+
+        if(temperature1!=null && StrUtil.isNotBlank(temperature1.getValue())){
+            sf.append("<BR><BR><B><C><BOLD>防疫安心卡\n");
+            sf.append("<N><BOLD>--------------------------------<BR><BR>");
+            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "厨师", temperature1.getValue()));
+            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "外卖员", settingService.getSettingByName("temperature2", SettingScope.PRINTER).getValue()));
+            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "老板", settingService.getSettingByName("temperature3", SettingScope.PRINTER).getValue()));
+            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "接单员", settingService.getSettingByName("temperature4", SettingScope.PRINTER).getValue()));
+            sf.append("<BR><N><BOLD>川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
+        }
 
         PrintRequest request = new PrintRequest();
         createRequestHeader(request);
-        request.setSn(OK_PRINTER_SN);
+        request.setSn(sn.getValue());
         request.setContent(sf.toString());
         request.setCopies(1);
 //        request.setPayType(41);
@@ -84,112 +102,41 @@ public class PrinterUtil {
 //        request.setMoney(20.15);
 
         ObjectRestResponse<String> resp = service.print(request);
-        System.out.println(resp);
+        log.debug(resp.toString());
+    }
+
+    public void setVoiceType(String sn, int type) {
+        SetVoiceTypeRequest request = new SetVoiceTypeRequest();
+        createRequestHeader(request);
+        // 声音类型： 0真人语音（大） 1真人语音（中） 2真人语音（小） 3 嘀嘀声  4 静音
+        request.setSn(sn);
+        request.setVoiceType(type);
+        ObjectRestResponse<Boolean> resp = service.setPrinterVoiceType(request);
+        log.debug(resp.toString());
+    }
+
+    public void addPrinter(String name, String sn) {
+        AddPrinterRequest request = new AddPrinterRequest();
+        createRequestHeader(request);
+        List<AddPrinterRequestItem> itemList = new ArrayList<>();
+
+        AddPrinterRequestItem item = new AddPrinterRequestItem();
+        // 真实打印机编号
+        item.setSn(sn);
+        item.setName(name);
+        itemList.add(item);
+
+        AddPrinterRequestItem[] items = new AddPrinterRequestItem[itemList.size()];
+        itemList.toArray(items);
+        request.setItems(items);
+        ObjectRestResponse<PrinterResult> resp = service.addPrinters(request);
+        log.debug(resp.toString());
     }
 
     private void createRequestHeader(RestRequest request) {
         request.setUser(USER_NAME);
-        request.setTimestamp(System.currentTimeMillis() + "");
+        request.setTimestamp(String.valueOf(System.currentTimeMillis()));
         request.setSign(HashSignUtil.sign(request.getUser() + USER_KEY + request.getTimestamp()));
         request.setDebug("0");
-    }
-
-    /**
-     * base64 字符串
-     * @param str
-     * @return
-     * @throws IOException
-     */
-    @SneakyThrows
-    private String textToImage(String str){
-        int width = 184;
-        int height = 377;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Font font = new Font(null, Font.BOLD, 14);
-        Graphics2D g = image.createGraphics();
-        g.setColor(Color.white);
-        g.fillRect(0, 0, width, height);
-        g.setFont(font);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(Color.BLACK);
-        int fontHeight = (int) font.getSize2D();
-
-        // 得到当前的font metrics
-        FontMetrics metrics = g.getFontMetrics();
-        // 字符串长度（像素） str要打印的字符串
-        int StrPixelWidth = metrics.stringWidth(str);
-        // 算出行数
-        int lineSize = (int) Math.ceil(StrPixelWidth * 1.0 / width);
-        // 页面宽度（width）小于 字符串长度
-        if (width < StrPixelWidth) {
-            // 存储每一行的字符串
-            StringBuilder sb = new StringBuilder();
-            int j = 0;
-            int tempStart = 0;
-            // 存储换行之后每一行的字符串
-            String tempStrs[] = new String[lineSize];
-            for (int i1 = 0; i1 < str.length(); i1++) {
-                char ch = str.charAt(i1);
-                sb.append(ch);
-                Rectangle2D bounds2 = metrics.getStringBounds(sb.toString(), null);
-                int tempStrPi1exlWi1dth = (int) bounds2.getWidth();
-                if (tempStrPi1exlWi1dth > width) {
-                    tempStrs[j++] = str.substring(tempStart, i1);
-                    tempStart = i1;
-                    sb.delete(0, sb.length());
-                    sb.append(ch);
-                }
-                // 最后一行
-                if (i1 == str.length() - 1) {
-                    tempStrs[j] = str.substring(tempStart);
-                }
-            }
-            for (int i = 0; i < tempStrs.length; i++) {
-                g.drawString(tempStrs[i], 0, (fontHeight + 5) * (i + 1));
-            }
-            image = cropImage(image, -1, -1, -1, (fontHeight + 5) * tempStrs.length + 5);
-        } else {
-            g.drawString(str, 0, fontHeight);
-            image = cropImage(image, -1, -1, -1, (fontHeight + 10));
-        }
-        g.dispose();
-
-        ImageIO.write(image, "png", new File("C:\\Users\\Xiaohun's PC\\Desktop\\1.png"));
-        return ImgUtil.toBase64(image,"png");
-    }
-
-    private BufferedImage cropImage(BufferedImage bufferedImage, int startX, int startY, int endX, int endY) {
-        int width = bufferedImage.getWidth();
-        int height = bufferedImage.getHeight();
-        if (startX == -1) {
-            startX = 0;
-        }
-        if (startY == -1) {
-            startY = 0;
-        }
-        if (endX == -1) {
-            endX = width - 1;
-        }
-        if (endY == -1) {
-            endY = height - 1;
-        }
-        BufferedImage result = new BufferedImage(endX - startX, endY - startY, 4);
-        for (int x = startX; x < endX; ++x) {
-            for (int y = startY; y < endY; ++y) {
-                int rgb = bufferedImage.getRGB(x, y);
-                result.setRGB(x - startX, y - startY, rgb);
-            }
-        }
-        return result;
-    }
-
-    public static byte[] imageToBytes(BufferedImage bImage, String format) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(bImage, format, out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return out.toByteArray();
     }
 }

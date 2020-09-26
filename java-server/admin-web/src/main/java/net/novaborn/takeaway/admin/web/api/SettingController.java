@@ -3,6 +3,7 @@ package net.novaborn.takeaway.admin.web.api;
 import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.utils.PrinterUtil;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -10,7 +11,6 @@ import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.exception.SettingExceptionEnum;
 import net.novaborn.takeaway.system.service.impl.SettingService;
-import net.novaborn.takeaway.user.service.impl.NaverMapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +31,8 @@ import java.util.TimeZone;
 @RequestMapping("/api/admin/setting")
 public class SettingController extends BaseController {
     private SettingService settingService;
+
+    private PrinterUtil printerUtil;
 
     @GetMapping("getAllSetting")
     @ResponseBody
@@ -65,6 +67,7 @@ public class SettingController extends BaseController {
                 setting = new Setting();
             }
 
+            value = ((String) value).trim();
             //如果是设置店的地址，那么店地址的坐标也要设置
 //            if ("store_address".equals(key)) {
 //                // 没有坐标/地址更新的情况，需要设置坐标
@@ -96,6 +99,21 @@ public class SettingController extends BaseController {
                 } catch (ParseException e) {
                     log.error(null, e);
                     throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
+                }
+            }
+
+            if ("sn".equals(key)) {
+                Setting sn = settingService.getSettingByName(key, settingScope);
+                if (sn == null || !sn.getValue().equals(value)) {
+                    printerUtil.addPrinter("test", (String) value);
+                }
+            }
+
+            if ("voiceType".equals(key)) {
+                Setting sn = settingService.getSettingByName("sn", SettingScope.PRINTER);
+                Setting voiceType = settingService.getSettingByName(key, settingScope);
+                if (voiceType == null || !voiceType.getValue().equals(value)) {
+                    printerUtil.setVoiceType(sn.getValue(), Integer.valueOf((String) value));
                 }
             }
 
