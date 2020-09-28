@@ -83,12 +83,26 @@ public class PrinterUtil {
         sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
 
         if(temperature1!=null && StrUtil.isNotBlank(temperature1.getValue())){
+            Setting temperature2 = settingService.getSettingByName("temperature2", SettingScope.PRINTER);
+            Setting temperature3 = settingService.getSettingByName("temperature3", SettingScope.PRINTER);
+            Setting temperature4 = settingService.getSettingByName("temperature4", SettingScope.PRINTER);
+
             sf.append("<BR><BR><B><C><BOLD>防疫安心卡\n");
             sf.append("<N><BOLD>--------------------------------<BR><BR>");
             sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "厨师", temperature1.getValue()));
-            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "外卖员", settingService.getSettingByName("temperature2", SettingScope.PRINTER).getValue()));
-            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "老板", settingService.getSettingByName("temperature3", SettingScope.PRINTER).getValue()));
-            sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "接单员", settingService.getSettingByName("temperature4", SettingScope.PRINTER).getValue()));
+
+            if(temperature2!=null && StrUtil.isNotBlank(temperature2.getValue())){
+                sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "外卖员", temperature2.getValue()));
+            }
+
+            if(temperature3!=null && StrUtil.isNotBlank(temperature3.getValue())) {
+                sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "老板", temperature3.getValue()));
+            }
+
+            if(temperature4!=null && StrUtil.isNotBlank(temperature4.getValue())) {
+                sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "接单员", temperature4.getValue()));
+            }
+
             sf.append("<BR><N><BOLD>川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
         }
 

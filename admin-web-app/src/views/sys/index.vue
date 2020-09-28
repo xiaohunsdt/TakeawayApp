@@ -34,6 +34,11 @@
         </el-tab-pane>
         <el-tab-pane label="店铺设置">
           <el-form ref="form" :model="storeSetting" label-width="130px" size="mini" style="max-width: 660px">
+            <el-form-item label="店铺微信">
+              <el-tooltip content="店铺的联系微信,方便顾客联系商家" placement="right">
+                <el-input v-model="storeSetting.store_wx_account"></el-input>
+              </el-tooltip>
+            </el-form-item>
             <el-form-item label="店铺Logo">
               <el-upload
                 ref="upload"
@@ -258,6 +263,7 @@ export default {
         goods_page_tags: ''
       },
       storeSetting: {
+        store_wx_account: null,
         store_logo: '',
         store_open_date: [],
         store_open_time: null,
