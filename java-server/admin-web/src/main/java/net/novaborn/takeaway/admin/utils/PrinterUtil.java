@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.utils;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -80,6 +82,7 @@ public class PrinterUtil {
             sf.append(String.format("<B><L><BOLD>%s\n", order.getPs()));
             sf.append("<BR>");
         }
+        sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
         sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
 
         if(temperature1!=null && StrUtil.isNotBlank(temperature1.getValue())){
@@ -152,5 +155,17 @@ public class PrinterUtil {
         request.setTimestamp(String.valueOf(System.currentTimeMillis()));
         request.setSign(HashSignUtil.sign(request.getUser() + USER_KEY + request.getTimestamp()));
         request.setDebug("0");
+    }
+
+    private String formatKoreaChar(String inputStr) {
+        String regex = "[ㄱ-ㅎㅏ-ㅣ가-힣\\s]+";
+        Pattern pattern = Pattern.compile(regex);
+        List<String> subStrings = ReUtil.getAllGroups(pattern, inputStr);
+        if (subStrings.size() > 0) {
+            for(String item : subStrings){
+                inputStr = inputStr.replace(item,String.format("<lk>%s<lc>", item));
+            }
+        }
+        return inputStr;
     }
 }
