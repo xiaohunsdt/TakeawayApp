@@ -94,15 +94,15 @@
 					</view>
 				</view>
 			</van-cell>
-			<van-cell bind:click="callCSPhone" clickable custom-class="profile-cell" is-link>
+			<!-- <van-cell bind:click="callCSPhone" clickable custom-class="profile-cell" is-link>
 				<view class="profile-title" slot="title">
 					<image class="title-image" src="/static/images/profile/phone.png" />
 					<view>
 						电话客服
 					</view>
 				</view>
-			</van-cell>
-			<van-cell clickable custom-class="profile-cell" is-link>
+			</van-cell> -->
+			<!-- <van-cell clickable custom-class="profile-cell" is-link>
 				<view class="profile-title contact-cell" slot="title">
 					<button class="contact-btn" open-type="contact" plain>
 						<image class="title-image" src="/static/images/profile/onlineservice.png" />
@@ -111,7 +111,7 @@
 						</view>
 					</button>
 				</view>
-			</van-cell>
+			</van-cell> -->
 		</view>
 	</view>
 </view>
