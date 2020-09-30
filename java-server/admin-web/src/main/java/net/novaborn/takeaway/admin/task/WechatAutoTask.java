@@ -201,7 +201,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
 //        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
-        autoMessage.setMessage(StrUtil.format("中秋节正常营业,点餐即送一块月饼[社会社会][社会社会][社会社会]\r\n为了防止订单量过多导致送餐过慢,小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+        autoMessage.setMessage(StrUtil.format("中秋节正常营业,点餐即送一块月饼(刷卡除外)[社会社会][社会社会][社会社会]\r\n为了防止订单量过多导致送餐过慢,小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
         autoMessage.setImgUrlList(
                 Arrays.asList(
                         "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"

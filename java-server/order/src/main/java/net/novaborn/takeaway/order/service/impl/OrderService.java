@@ -57,7 +57,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         gifts.add(goodsService.getById(1308791764220502017L));
         gifts.add(goodsService.getById(1308791764220502017L));
         gifts.add(goodsService.getById(1308791979291828226L));
-        gifts.add(goodsService.getById(1308792121138995202L));
     }
 
     @Override
@@ -163,15 +162,18 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         // 设置优惠
         if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
-            int randomInt = RandomUtil.randomInt(5);
-            if (order.getRealPrice() >= 18000) {
-                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
-                    gift = gifts.get(randomInt);
-                }
-            } else if (order.getRealPrice() >= 12000 && (From.YONSEI.equals(order.getFrom()) || From.SOGANG.equals(order.getFrom()))) {
-                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
-                    gift = gifts.get(randomInt);
-                }
+            int randomInt = RandomUtil.randomInt(gifts.size());
+//            if (order.getRealPrice() >= 18000) {
+//                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
+//                    gift = gifts.get(randomInt);
+//                }
+//            } else if (order.getRealPrice() >= 12000 && (From.YONSEI.equals(order.getFrom()) || From.SOGANG.equals(order.getFrom()))) {
+//                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
+//                    gift = gifts.get(randomInt);
+//                }
+//            }
+            if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
+                gift = gifts.get(randomInt);
             }
             if (gift != null) {
                 OrderItem orderItem = new OrderItem();
