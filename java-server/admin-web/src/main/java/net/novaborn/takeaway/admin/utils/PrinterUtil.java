@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -158,9 +159,15 @@ public class PrinterUtil {
     }
 
     private String formatKoreaChar(String inputStr) {
-        String regex = "[ㄱ-ㅎㅏ-ㅣ가-힣\\s]+";
+        String regex = "[ㄱ-ㅎㅏ-ㅣ가-힣\\s0-9]+";
         Pattern pattern = Pattern.compile(regex);
-        List<String> subStrings = ReUtil.getAllGroups(pattern, inputStr);
+        List<String> subStrings = new ArrayList<>();
+
+        final Matcher matcher = pattern.matcher(inputStr);
+        while (matcher.find()) { //此处find（）每次被调用后，会偏移到下一个匹配
+            subStrings.add(matcher.group());//获取当前匹配的值
+        }
+
         if (subStrings.size() > 0) {
             for(String item : subStrings){
                 inputStr = inputStr.replace(item,String.format("<lk>%s<lc>", item));
