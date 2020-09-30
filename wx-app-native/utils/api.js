@@ -99,6 +99,11 @@ const api = {
   },
   getCanOrderNow: () => request.post('order/getCanOrderNow'),
 
+  // 获取指定域的指定设置
+  getSettingByName: (key, scope) => request.post('setting/getSettingByName', {
+    key,
+    scope
+  }),
   // 获取指定域的设置
   getSettingsByScope: (scope) => request.post('setting/getSettingsByScope', {
     scope

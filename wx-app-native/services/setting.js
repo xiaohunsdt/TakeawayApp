@@ -77,10 +77,15 @@ export function getGoodsPageSettings() {
   return api.getGoodsPageSettings()
 }
 
+export function getSettingByName(key, scope) {
+  return api.getSettingByName(key, scope)
+}
+
 export default {
   getSystemSettings,
   getStoreSettings,
   getExpressSettings,
   getPaymentSettings,
-  getGoodsPageSettings
+  getGoodsPageSettings,
+  getSettingByName
 }
