@@ -54,9 +54,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     public void init() {
         gifts = new ArrayList<>();
         gifts.add(goodsService.getById(1308791764220502017L));
-        gifts.add(goodsService.getById(1308791764220502017L));
-        gifts.add(goodsService.getById(1308791764220502017L));
-        gifts.add(goodsService.getById(1308791979291828226L));
     }
 
     @Override
@@ -162,7 +159,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         // 设置优惠
         if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
-            int randomInt = RandomUtil.randomInt(gifts.size());
 //            if (order.getRealPrice() >= 18000) {
 //                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
 //                    gift = gifts.get(randomInt);
@@ -172,8 +168,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                    gift = gifts.get(randomInt);
 //                }
 //            }
-            if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
-                gift = gifts.get(randomInt);
+            if (goodsStockService.checkStock(gifts.get(0), 1)) {
+                gift = gifts.get(0);
             }
             if (gift != null) {
                 OrderItem orderItem = new OrderItem();
