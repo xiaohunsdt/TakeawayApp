@@ -177,12 +177,15 @@
     <select id="getOrderCount" resultType="java.lang.Integer">
         SELECT count(*) FROM `order`
         <where>
+            <if test="storeId != null">
+                AND `store_id` = #{storeId}
+            </if>
             <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
-                TO_DAYS(`create_date`) = TO_DAYS(#{day})
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
                 AND `appointment_date` is null
             </if>
             <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
-                TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
+                AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
                 AND `appointment_date` is not null
             </if>
         </where>

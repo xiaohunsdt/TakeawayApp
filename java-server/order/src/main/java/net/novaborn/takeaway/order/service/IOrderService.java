@@ -138,6 +138,16 @@ public interface IOrderService extends IService<Order> {
     int getOrderCount(Date day, DeliveryType deliveryType);
 
     /**
+     * 获取订单数量
+     *
+     * @param storeId      店铺Id
+     * @param day          指定的日期
+     * @param deliveryType 配送类型
+     * @return 订单数量
+     */
+    int getOrderCount(Long storeId, Date day, DeliveryType deliveryType);
+
+    /**
      * 设置优惠卷折扣
      *
      * @param order

@@ -10,7 +10,8 @@ Page({
     height: 800,
     currentIndex: 0,
     categories: [],
-    pageSettings: {}
+    pageSettings: {},
+    store: null
   },
   onLoad: function (options) {
     let storeId;
@@ -19,11 +20,13 @@ Page({
     } else if (options.scene) {
       storeId = decodeURIComponent(options.scene)
     }
-
     getApp().globalData.currentStoreId = storeId
     
     storeService.getStoreById(storeId).then(res => {
       getApp().globalData.currentStore = res
+      this.setData({
+        store: res
+      })
       wx.setNavigationBarTitle({
         title: res.name
       })

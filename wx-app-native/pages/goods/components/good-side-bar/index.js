@@ -8,6 +8,7 @@ Component({
   properties: {
     pageSettings: Object,
     categoryGoods: Object,
+    store: Object
   },
   observers: {
     "categoryGoods": function (categoryGoods) {
@@ -28,8 +29,7 @@ Component({
     cartAllCount: 0,
     cartAllPrice: 0,
     selectedFood: null,
-    showThumbDialog: false,
-    store:null
+    showThumbDialog: false
   },
   pageLifetimes: {
     show: function () {
@@ -39,7 +39,6 @@ Component({
   methods: {
     initCartData() {
       this.setData({
-        store: getApp().globalData.currentStore,
         cartList: cartService.getCartList(),
         cartAllCount: cartService.getCartAllCount(),
         cartAllPrice: cartService.getCartAllPrice()

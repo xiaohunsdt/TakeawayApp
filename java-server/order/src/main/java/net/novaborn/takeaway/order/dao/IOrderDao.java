@@ -132,5 +132,5 @@ public interface IOrderDao extends BaseMapper<Order> {
      *
      * @return 订单数量
      */
-    int getOrderCount(@Param("day") Date day, @Param("deliveryType") DeliveryType deliveryType);
+    int getOrderCount(@Param("storeId") Long storeId, @Param("day") Date day, @Param("deliveryType") DeliveryType deliveryType);
 }

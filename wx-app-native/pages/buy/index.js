@@ -457,12 +457,10 @@ Page({
     })
     storeService.getExpressServiceState(addressId, allPrice)
       .then(res => {
-        if (res.state !== 0) {
-          this.setData({
-            disableService: true,
-            tipNotice: res.message
-          })
-        }
+        this.setData({
+          disableService: res.state !== 0,
+          tipNotice: res.message
+        })
       })
   },
   checkCouponDiscountPrice() {

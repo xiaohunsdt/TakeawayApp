@@ -10,7 +10,7 @@
 			</base-panel>
 		</view>
 		<view style="height:{{height}}px" id="goods-content">
-			<goods-side-bar categoryGoods="{{categories}}" pageSettings="{{pageSettings}}" />
+			<goods-side-bar categoryGoods="{{categories}}" pageSettings="{{pageSettings}}" store="{{store}}"/>
 		</view>
 	</view>
 </view>

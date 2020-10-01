@@ -109,7 +109,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public int getOrderCount(Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(day, deliveryType);
+        return this.baseMapper.getOrderCount(null,day, deliveryType);
+    }
+
+    @Override
+    public int getOrderCount(Long storeId, Date day, DeliveryType deliveryType) {
+        return this.baseMapper.getOrderCount(storeId,day, deliveryType);
     }
 
     @Override
@@ -156,32 +161,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
-        // 设置优惠
-        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-            Goods gift = null;
-//            if (order.getRealPrice() >= 18000) {
-//                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
-//                    gift = gifts.get(randomInt);
-//                }
-//            } else if (order.getRealPrice() >= 12000 && (From.YONSEI.equals(order.getFrom()) || From.SOGANG.equals(order.getFrom()))) {
-//                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
-//                    gift = gifts.get(randomInt);
-//                }
-//            }
-            if (goodsStockService.checkStock(gifts.get(0), 1)) {
-                gift = gifts.get(0);
-            }
-            if (gift != null) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setGoodsId(gift.getId());
-                orderItem.setGoodsName("中秋福利-" + gift.getName());
-                orderItem.setGoodsThumb(gift.getThumb());
-                orderItem.setGoodsPrice(0);
-                orderItem.setGoodsCount(1);
-                orderItemList.add(orderItem);
-                order.setGoodsCount(order.getGoodsCount() + 1);
-            }
-        }
 //        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
 //            Goods gift = null;
 //            if (order.getRealPrice() >= 40000) {
@@ -216,10 +195,10 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int number;
         if (order.getAppointmentDate() == null) {
             // 一般订单
-            number = this.getOrderCount(new Date(), DeliveryType.NORMAL) + 1;
+            number = this.getOrderCount(order.getStoreId(),new Date(), DeliveryType.NORMAL) + 1;
         } else {
             // 预约订单
-            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getStoreId(),order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
         }
         order.setNumber(number);
 
