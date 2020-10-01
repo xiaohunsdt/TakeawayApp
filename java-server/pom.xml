@@ -41,9 +41,9 @@
         <java.version>11</java.version>
         <mybatis-plus.version>3.4.0</mybatis-plus.version>
         <jwt.version>0.11.0</jwt.version>
-        <hutool.version>5.4.0</hutool.version>
-        <fastjson.version>1.2.71</fastjson.version>
-        <druid.version>1.1.22</druid.version>
+        <hutool.version>5.4.3</hutool.version>
+        <fastjson.version>1.2.73</fastjson.version>
+        <druid.version>1.1.24</druid.version>
         <ehcache.version>2.10.6</ehcache.version>
         <wx-java.version>3.7.0</wx-java.version>
     </properties>

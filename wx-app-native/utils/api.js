@@ -122,6 +122,12 @@ const api = {
     storeId
   }),
 
+  // 获取指定域的指定设置
+  getSettingByName: (storeId, key, scope) => request.post('setting/getSettingByName', {
+    storeId,
+    key,
+    scope
+  }),
   // 获取指定域的设置
   getSettingsByScope: (storeId, scope) => request.post('setting/getSettingsByScope', {
     storeId,

@@ -86,7 +86,14 @@ export function getPaymentSettings(storeId) {
 }
 
 export function getGoodsPageSettings() {
-  return api.getGoodsPageSettings(getApp().globalData.currentStoreId,)
+  return api.getGoodsPageSettings(getApp().globalData.currentStoreId)
+}
+
+export function getSettingByName(storeId, key, scope) {
+  if(!storeId){
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getSettingByName(storeId, key, scope)
 }
 
 export default {
@@ -94,5 +101,6 @@ export default {
   getStoreSettings,
   getExpressSettings,
   getPaymentSettings,
-  getGoodsPageSettings
+  getGoodsPageSettings,
+  getSettingByName
 }

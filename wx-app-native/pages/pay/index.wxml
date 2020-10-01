@@ -23,10 +23,16 @@
 			</view>
 		</base-panel>
 		<order-card order="{{order}}" show-operation="{{false}}" wx:if="{{order}}" />
-
 		<base-panel>
-			<button open-type="contact" style="margin-top: .5rem" type="primary">联系客服</button>
+			<button style="margin-top: .5rem" type="primary" bind:tap="openContactDialog">联系客服</button>
 		</base-panel>
+		<van-dialog use-slot show="{{ showContactDialog }}" bind:confirm="copyStoreWxContact" theme="round-button">
+			<view style="padding: 1rem">
+				<view>请到微信页面联系微信客服</view>
+				<view>点击确认自动复制微信号到剪切板</view>
+				<view>微信号: {{storeWxContact}}</view>
+			</view>
+		</van-dialog>
 
 		<base-panel wx:if="{{order && order.paymentWay==='ALI_PAY'}}">
 			<view class="pay-way-title">

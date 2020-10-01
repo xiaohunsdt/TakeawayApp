@@ -414,13 +414,7 @@ export default {
               message: '打印成功',
               type: 'success'
             })
-            order.payState = 'PAID'
-          })
-          .catch(err => {
-            this.$message({
-              message: err,
-              type: 'error'
-            })
+            // order.payState = 'PAID'
           })
           .finally(() => {
             loading.close()
@@ -450,7 +444,6 @@ export default {
               type: 'success'
             })
             order.orderState = 'PRODUCING'
-            this.onPrintOrder(order)
           })
     },
     onDeliveryOrder(order) {

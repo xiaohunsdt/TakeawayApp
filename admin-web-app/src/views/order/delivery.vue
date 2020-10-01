@@ -18,12 +18,12 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-              v-model="formData.formDate"
-              end-placeholder="end date"
-              format="yyyy-MM-dd"
-              start-placeholder="start date"
-              type="daterange"
-              value-format="yyyy-MM-dd">
+            v-model="formData.formDate"
+            end-placeholder="end date"
+            format="yyyy-MM-dd"
+            start-placeholder="start date"
+            type="daterange"
+            value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -33,67 +33,78 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-          v-loading="listLoading"
-          :data="tableData"
-          class="tb-edit"
-          element-loading-text="正在加载中..."
-          highlight-current-row
-          stripe
-          style="width: 100%">
+        v-loading="listLoading"
+        :data="tableData"
+        class="tb-edit"
+        element-loading-text="正在加载中..."
+        highlight-current-row
+        stripe
+        style="width: 100%">
         <el-table-column
-            align="center"
-            label="管理员"
-            prop="adminName">
+          align="center"
+          label="管理员"
+          prop="adminName">
         </el-table-column>
         <el-table-column
-            align="center"
-            label="订单编号"
-            prop="number">
+          align="center"
+          label="订单编号"
+          prop="number">
         </el-table-column>
         <el-table-column
-            align="center"
-            label="支付方式">
+          align="center"
+          label="支付方式">
           <template v-slot="scope">
             <el-tag>{{ scope.row.paymentWay | paymentWayFormat }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="订单日期"
-            prop="orderCreateDate"
-            width="100">
-        </el-table-column>
-        <el-table-column
-            align="center"
-            label="配送日期"
-            prop="createDate"
-            width="100">
-        </el-table-column>
-        <el-table-column
-            align="center"
-            label="订单完成时间">
-          <template v-slot="props">
-            <el-tag :type="props.row.orderFinishMinute!=='未完成'?'success':'warning'">{{props.row.orderFinishMinute}} {{props.row.orderFinishMinute!=='未完成'?'分钟' : ''}}</el-tag>
+          align="center"
+          label="金额">
+          <template v-slot="scope">
+            {{ scope.row.money && scope.row.money.toLocaleString() }}
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="配送完成时间">
+          align="center"
+          label="订单日期"
+          prop="orderCreateDate"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="配送日期"
+          prop="createDate"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="订单完成时间">
           <template v-slot="props">
-            <el-tag :type="props.row.deliveryFinishMinute!=='未完成'?'success':'warning'">{{props.row.deliveryFinishMinute}} {{props.row.deliveryFinishMinute!=='未完成'?' 分钟' : ''}}</el-tag>
+            <el-tag :type="props.row.orderFinishMinute!=='未完成'?'success':'warning'">{{ props.row.orderFinishMinute }}
+              {{ props.row.orderFinishMinute !== '未完成' ? '分钟' : '' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="配送完成时间">
+          <template v-slot="props">
+            <el-tag :type="props.row.deliveryFinishMinute!=='未完成'?'success':'warning'">
+              {{ props.row.deliveryFinishMinute }} {{ props.row.deliveryFinishMinute !== '未完成' ? ' 分钟' : '' }}
+            </el-tag>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-          :current-page="page.current"
-          :page-size="page.size"
-          :page-sizes="[15, 50, 100]"
-          :total="page.total"
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          style="margin-top: 15px"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange">
+        :current-page="page.current"
+        :page-size="page.size"
+        :page-sizes="[15, 50, 100]"
+        :total="page.total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top: 15px"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
   </div>
@@ -150,13 +161,13 @@ export default {
       params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
       deliveryApi.getDeliveryListByPage(this.page, params)
-          .then(response => {
-            this.tableData = response.records
-            this.page.total = parseInt(response.total)
-          })
-          .finally(() => {
-            this.listLoading = false
-          })
+        .then(response => {
+          this.tableData = response.records
+          this.page.total = parseInt(response.total)
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     handleSizeChange(val) {
       this.page.size = val

@@ -409,6 +409,7 @@ Page({
           }
         },
         fail(res) {
+          console.log(res)
           $this.setData({
             submitLoading: false
           })

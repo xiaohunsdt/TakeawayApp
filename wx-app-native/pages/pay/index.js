@@ -5,6 +5,8 @@ Page({
   data: {
     orderId: null,
     order: null,
+    showContactDialog: false,
+    storeWxContact: '',
     bank: '',
     account: '',
     accountName: ''
@@ -52,5 +54,28 @@ Page({
           })
       }
     })
+  },
+  openContactDialog() {
+    settingService.getSettingByName(this.data.order.storeId, 'store_wx_account', 'STORE')
+      .then(res => {
+        wx.showLoading({
+          title: '正在加载中...'
+        })
+        const storeWxContact = res.value || ''
+        this.setData({
+          storeWxContact,
+          showContactDialog: true
+        })
+      })
+      .finally(() => {
+        wx.hideLoading()
+      })
+  },
+  copyStoreWxContact() {
+    if (this.data.storeWxContact !== '') {
+      wx.setClipboardData({
+        data: this.data.storeWxContact
+      });
+    }
   }
 })
