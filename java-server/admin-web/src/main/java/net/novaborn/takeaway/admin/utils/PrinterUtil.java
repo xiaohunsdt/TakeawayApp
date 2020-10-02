@@ -1,13 +1,14 @@
 package net.novaborn.takeaway.admin.utils;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.utils.OrderFormatUtil;
+import net.novaborn.takeaway.store.entity.Store;
+import net.novaborn.takeaway.store.service.impl.StoreService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -36,6 +37,9 @@ public class PrinterUtil {
     private PrintService service = new PrintService();
 
     @Autowired
+    private StoreService storeService;
+
+    @Autowired
     private OrderItemService orderItemService;
 
     @Autowired
@@ -45,6 +49,7 @@ public class PrinterUtil {
     private SettingService settingService;
 
     public void print(Order order) {
+        Store store = storeService.getById(order.getStoreId());
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
         Address address = addressService.getById(order.getAddressId());
         Setting sn = settingService.getSettingByName("sn", SettingScope.PRINTER);
@@ -57,7 +62,7 @@ public class PrinterUtil {
         StringBuffer sf = new StringBuffer();
         sf.append(String.format("<BOLD><B2><C>#%d\n", order.getNumber()));
         sf.append("<BR>");
-        sf.append("<B><C>川香苑-新村店\n");
+        sf.append(String.format("<B><C>%s\n", store.getName()));
         sf.append("<BR>");
         if (order.getAppointmentDate() != null) {
             sf.append("<B><C>预约订单\n");
@@ -86,7 +91,7 @@ public class PrinterUtil {
         sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
         sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
 
-        if(temperature1!=null && StrUtil.isNotBlank(temperature1.getValue())){
+        if (temperature1 != null && StrUtil.isNotBlank(temperature1.getValue())) {
             Setting temperature2 = settingService.getSettingByName("temperature2", SettingScope.PRINTER);
             Setting temperature3 = settingService.getSettingByName("temperature3", SettingScope.PRINTER);
             Setting temperature4 = settingService.getSettingByName("temperature4", SettingScope.PRINTER);
@@ -95,19 +100,19 @@ public class PrinterUtil {
             sf.append("<N><BOLD>--------------------------------<BR><BR>");
             sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "厨师", temperature1.getValue()));
 
-            if(temperature2!=null && StrUtil.isNotBlank(temperature2.getValue())){
+            if (temperature2 != null && StrUtil.isNotBlank(temperature2.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "外卖员", temperature2.getValue()));
             }
 
-            if(temperature3!=null && StrUtil.isNotBlank(temperature3.getValue())) {
+            if (temperature3 != null && StrUtil.isNotBlank(temperature3.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "老板", temperature3.getValue()));
             }
 
-            if(temperature4!=null && StrUtil.isNotBlank(temperature4.getValue())) {
+            if (temperature4 != null && StrUtil.isNotBlank(temperature4.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "接单员", temperature4.getValue()));
             }
 
-            sf.append("<BR><N><BOLD>川香苑提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!川香苑与您一起共度难关!");
+            sf.append(String.format("<BR><N><BOLD>%s提示您!疫情期间请尽量待在家中,出门或与外卖员接触请佩戴口罩!%s与您一起共度难关!", store.getName(), store.getName()));
         }
 
         PrintRequest request = new PrintRequest();
@@ -169,8 +174,8 @@ public class PrinterUtil {
         }
 
         if (subStrings.size() > 0) {
-            for(String item : subStrings){
-                inputStr = inputStr.replace(item,String.format("<lk>%s<lc>", item));
+            for (String item : subStrings) {
+                inputStr = inputStr.replace(item, String.format("<lk>%s<lc>", item));
             }
         }
         return inputStr;
