@@ -41,7 +41,7 @@ public class UserController extends BaseController {
     @PostMapping("updateUser")
     public Tip updateUser(User user) {
         Optional<User> tempUser = Optional.ofNullable(userService.getById(user.getId()));
-        if (!tempUser.isPresent()) {
+        if (tempUser.isEmpty()) {
             return new ErrorTip(-1, "没有此用户!");
         }
 

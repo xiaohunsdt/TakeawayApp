@@ -73,7 +73,7 @@ public class ActivityController extends BaseController {
     @PostMapping("updateActivity")
     public Tip updateActivity(Activity activity) {
         Optional<Activity> targetActivity = Optional.ofNullable(activityService.getById(activity.getId()));
-        if (!targetActivity.isPresent()) {
+        if (targetActivity.isEmpty()) {
             return new ErrorTip(-1, "没有此活动!");
         }
 
@@ -90,7 +90,7 @@ public class ActivityController extends BaseController {
     @PostMapping("changeIsShow")
     public Tip changeIsShow(@RequestParam String id, @RequestParam Boolean isShow) {
         Optional<Activity> targetActivity = Optional.ofNullable(activityService.getById(id));
-        if (!targetActivity.isPresent()) {
+        if (targetActivity.isEmpty()) {
             return new ErrorTip(-1, "没有此活动!");
         }
 

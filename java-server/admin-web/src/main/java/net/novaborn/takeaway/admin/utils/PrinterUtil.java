@@ -169,8 +169,12 @@ public class PrinterUtil {
         List<String> subStrings = new ArrayList<>();
 
         final Matcher matcher = pattern.matcher(inputStr);
-        while (matcher.find()) { //此处find（）每次被调用后，会偏移到下一个匹配
-            subStrings.add(matcher.group());//获取当前匹配的值
+        while (matcher.find()) {
+            String temp = matcher.group();
+            if (temp == null || temp.isBlank()) {
+                continue;
+            }
+            subStrings.add(temp);
         }
 
         if (subStrings.size() > 0) {

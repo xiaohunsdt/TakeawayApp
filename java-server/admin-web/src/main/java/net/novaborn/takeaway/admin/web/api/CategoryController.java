@@ -62,7 +62,7 @@ public class CategoryController extends BaseController {
     @PostMapping("updateCategory")
     public Tip updateCategory(Category category) {
         Optional<Category> tempCategory = Optional.ofNullable(categoryService.getById(category.getId()));
-        if (!tempCategory.isPresent()) {
+        if (tempCategory.isEmpty()) {
             return new ErrorTip(-1, "没有此分类名!");
         }
 

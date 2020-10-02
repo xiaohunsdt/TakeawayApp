@@ -47,14 +47,14 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     private SettingService settingService;
 
-    @Setter
-    protected List<Goods> gifts;
+//    @Setter
+//    protected List<Goods> gifts;
 
-    @PostConstruct
-    public void init() {
-        gifts = new ArrayList<>();
-        gifts.add(goodsService.getById(1308791764220502017L));
-    }
+//    @PostConstruct
+//    public void init() {
+//        gifts = new ArrayList<>();
+//        gifts.add(goodsService.getById(1308791764220502017L));
+//    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
@@ -183,6 +183,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
 //                    gift = gifts.get("川香卤蛋");
 //                }
+//            }
+//            if (gift != null) {
+//                OrderItem orderItem = new OrderItem();
+//                orderItem.setGoodsId(gift.getId());
+//                orderItem.setGoodsName("中秋福利-" + gift.getName());
+//                orderItem.setGoodsThumb(gift.getThumb());
+//                orderItem.setGoodsPrice(0);
+//                orderItem.setGoodsCount(1);
+//                orderItemList.add(orderItem);
+//                order.setGoodsCount(order.getGoodsCount() + 1);
 //            }
 //        }
 

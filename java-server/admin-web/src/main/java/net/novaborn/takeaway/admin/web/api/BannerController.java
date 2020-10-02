@@ -66,7 +66,7 @@ public class BannerController extends BaseController {
     @PostMapping("updateBanner")
     public Tip updateBanner(Banner banner) {
         Optional<Banner> targetBanner = Optional.ofNullable(bannerService.getById(banner.getId()));
-        if (!targetBanner.isPresent()) {
+        if (targetBanner.isEmpty()) {
             return new ErrorTip(-1, "没有此展示项!");
         }
 
@@ -83,7 +83,7 @@ public class BannerController extends BaseController {
     @PostMapping("changeIsShow")
     public Tip changeIsShow(@RequestParam String id, @RequestParam Boolean isShow) {
         Optional<Banner> targetBanner = Optional.ofNullable(bannerService.getById(id));
-        if (!targetBanner.isPresent()) {
+        if (targetBanner.isEmpty()) {
             return new ErrorTip(-1, "没有此活动!");
         }
 

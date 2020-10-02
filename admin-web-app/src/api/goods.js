@@ -93,7 +93,7 @@ export function updateGoodsThumb(id, imageUrl) {
 
 export function deleteGoods(id) {
   return request({
-    url: '/goods/delteGoods',
+    url: '/goods/deleteGoods',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: {
