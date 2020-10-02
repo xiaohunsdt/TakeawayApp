@@ -81,6 +81,7 @@ Page({
     submitLoading: false,
     showOrderTip: false,
     disableService: false,
+    disableNotice: '',
     tipNotice: '',
     fromNotice: null,
     signNotice: null,
@@ -449,14 +450,14 @@ Page({
     })
   },
   checkExpressState(addressId, allPrice) {
-    this.setData({
-      disableService: false
-    })
+    // this.setData({
+    //   disableService: false
+    // })
     indexService.getExpressServiceState(addressId, allPrice)
       .then(res => {
         this.setData({
           disableService: res.state !== 0,
-          tipNotice: res.message
+          disableNotice: res.message
         })
       })
   },

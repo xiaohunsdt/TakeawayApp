@@ -125,7 +125,7 @@
 			</base-panel>
 		</view>
 		<view id="footer">
-			<goods-submit-bar decimal-length="{{0}}" disabled="{{submitLoading || disableService}}" loading="{{submitLoading}}" price="{{realPrice}}" tip="{{tipNotice}}" bind:submit="onSubmitOrder" button-text="立刻支付" currency="₩">
+			<goods-submit-bar decimal-length="{{0}}" disabled="{{submitLoading || disableService}}" loading="{{submitLoading}}" price="{{realPrice}}" tip="{{disableNotice || tipNotice}}" bind:submit="onSubmitOrder" button-text="立刻支付" currency="₩">
 				<view class="order-bar-left-content">
 					<image src="/static/images/order/cart.png" />
 					<view style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
