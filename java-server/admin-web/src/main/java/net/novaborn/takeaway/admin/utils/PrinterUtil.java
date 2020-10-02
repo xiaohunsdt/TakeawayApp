@@ -1,7 +1,6 @@
 package net.novaborn.takeaway.admin.utils;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
@@ -86,7 +85,7 @@ public class PrinterUtil {
         sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
         sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
 
-        if(temperature1!=null && StrUtil.isNotBlank(temperature1.getValue())){
+        if (temperature1 != null && StrUtil.isNotBlank(temperature1.getValue())) {
             Setting temperature2 = settingService.getSettingByName("temperature2", SettingScope.PRINTER);
             Setting temperature3 = settingService.getSettingByName("temperature3", SettingScope.PRINTER);
             Setting temperature4 = settingService.getSettingByName("temperature4", SettingScope.PRINTER);
@@ -95,15 +94,15 @@ public class PrinterUtil {
             sf.append("<N><BOLD>--------------------------------<BR><BR>");
             sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "厨师", temperature1.getValue()));
 
-            if(temperature2!=null && StrUtil.isNotBlank(temperature2.getValue())){
+            if (temperature2 != null && StrUtil.isNotBlank(temperature2.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "外卖员", temperature2.getValue()));
             }
 
-            if(temperature3!=null && StrUtil.isNotBlank(temperature3.getValue())) {
+            if (temperature3 != null && StrUtil.isNotBlank(temperature3.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "老板", temperature3.getValue()));
             }
 
-            if(temperature4!=null && StrUtil.isNotBlank(temperature4.getValue())) {
+            if (temperature4 != null && StrUtil.isNotBlank(temperature4.getValue())) {
                 sf.append(String.format("<N><BOLD><L>%s\t   \t%s℃\n", "接单员", temperature4.getValue()));
             }
 
@@ -164,13 +163,17 @@ public class PrinterUtil {
         List<String> subStrings = new ArrayList<>();
 
         final Matcher matcher = pattern.matcher(inputStr);
-        while (matcher.find()) { //此处find（）每次被调用后，会偏移到下一个匹配
-            subStrings.add(matcher.group());//获取当前匹配的值
+        while (matcher.find()) {
+            String temp = matcher.group();
+            if (temp == null || temp.isBlank()) {
+                continue;
+            }
+            subStrings.add(temp);
         }
 
         if (subStrings.size() > 0) {
-            for(String item : subStrings){
-                inputStr = inputStr.replace(item,String.format("<lk>%s<lc>", item));
+            for (String item : subStrings) {
+                inputStr = inputStr.replace(item, String.format("<lk>%s<lc>", item));
             }
         }
         return inputStr;
