@@ -454,12 +454,10 @@ Page({
     })
     indexService.getExpressServiceState(addressId, allPrice)
       .then(res => {
-        if (res.state !== 0) {
-          this.setData({
-            disableService: true,
-            tipNotice: res.message
-          })
-        }
+        this.setData({
+          disableService: res.state !== 0,
+          tipNotice: res.message
+        })
       })
   },
   checkCouponDiscountPrice() {
@@ -489,7 +487,6 @@ Page({
     const {
       value
     } = event.detail
-    console.log(value)
 
     const days = Object.keys(times)
     const day = days[value[0]]
