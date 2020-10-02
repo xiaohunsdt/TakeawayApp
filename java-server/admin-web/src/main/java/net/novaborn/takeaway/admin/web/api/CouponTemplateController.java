@@ -88,7 +88,7 @@ public class CouponTemplateController extends BaseController {
     @PostMapping("updateTemplate")
     public Tip updateTemplate(CouponTemplate couponTemplate) {
         Optional<CouponTemplate> targetTemplate = Optional.ofNullable(couponTemplateService.getById(couponTemplate.getId()));
-        if (!targetTemplate.isPresent()) {
+        if (targetTemplate.isEmpty()) {
             return new ErrorTip(-1, "没有此优惠卷模板!");
         }
 

@@ -88,7 +88,7 @@ public class GoodsController extends BaseController {
     @PostMapping("updateGoods")
     public Tip updateGoods(Goods goods, Integer stock) {
         Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
-        if (!targetGoods.isPresent()) {
+        if (targetGoods.isEmpty()) {
             return new ErrorTip(-1, "没有此商品名!");
         }
 
