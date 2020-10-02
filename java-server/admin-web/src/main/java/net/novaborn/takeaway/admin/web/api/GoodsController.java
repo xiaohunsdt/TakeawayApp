@@ -17,6 +17,7 @@ import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.exception.GoodsStockExceptionEnum;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -96,15 +97,18 @@ public class GoodsController extends BaseController {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
-        if (goods.getState().equals(GoodsState.SHORTAGE)) {
+        if (!goods.getState().equals(GoodsState.ON)) {
             stock = 0;
-        } else if (goods.getState().equals(GoodsState.ON) && stock == 0) {
-            return new ErrorTip(-1, "修改失败! 请设置库存后重新!");
+        }
+
+        if (goods.getState().equals(GoodsState.ON) && stock == 0) {
+            stock = -1;
+//            return new ErrorTip(-1, "修改失败! 请设置库存后重新!");
         }
 
         BeanUtil.copyProperties(goods, targetGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
         if (goodsService.updateById(targetGoods.get())) {
-            this.updateStock(goods.getId(), stock);
+            ((GoodsController) AopContext.currentProxy()).updateStock(goods.getId(), stock);
             return new SuccessTip("修改成功!");
         } else {
             return new ErrorTip(-1, "修改失败!");
@@ -116,36 +120,34 @@ public class GoodsController extends BaseController {
     @PostMapping("updateStock")
     public Tip updateStock(Long goodsId, int stock) {
         Optional<GoodsStock> targetGoodsStock = goodsStockService.getByGoodsId(goodsId);
-        if (!targetGoodsStock.isPresent()) {
+        if (targetGoodsStock.isEmpty()) {
             return new ErrorTip(-1, "没有此商品的库存信息!");
         }
 
         targetGoodsStock.get().setStock(stock);
-        if (goodsStockService.updateById(targetGoodsStock.get())) {
-            // 更新商品信息
-            Goods goods = goodsService.getById(goodsId);
-            if (targetGoodsStock.get().getStock() == 0) {
-                if (goods.getState().equals(GoodsState.ON)) {
-                    goods.setState(GoodsState.SHORTAGE);
-                    goodsService.updateById(goods);
-                }
-            } else {
-                if (goods.getState().equals(GoodsState.SHORTAGE)) {
-                    goods.setState(GoodsState.ON);
-                    goodsService.updateById(goods);
-                }
+        goodsStockService.updateById(targetGoodsStock.get());
+
+        // 更新商品信息
+        Goods goods = goodsService.getById(goodsId);
+        if (targetGoodsStock.get().getStock() == 0 || targetGoodsStock.get().getStock() < -1) {
+            if (goods.getState().equals(GoodsState.ON)) {
+                goods.setState(GoodsState.SHORTAGE);
+                goodsService.updateById(goods);
             }
-            return new SuccessTip("修改成功!");
-        } else {
-            return new ErrorTip(-1, "修改失败!请重试");
+        } else if (targetGoodsStock.get().getStock() == -1 || targetGoodsStock.get().getStock() > 0) {
+            if (goods.getState().equals(GoodsState.SHORTAGE)) {
+                goods.setState(GoodsState.ON);
+                goodsService.updateById(goods);
+            }
         }
+        return new SuccessTip("修改成功!");
     }
 
     @ResponseBody
     @PostMapping("updateGoodsThumb")
     public Tip updateGoodsThumb(String id, String imageUrl) {
         Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(id));
-        if (!tempGoods.isPresent()) {
+        if (tempGoods.isEmpty()) {
             return new ErrorTip(-1, "没有此商品名!");
         }
 
@@ -159,8 +161,8 @@ public class GoodsController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("delteGoods")
-    public Tip delteGoods(String id) {
+    @PostMapping("deleteGoods")
+    public Tip deleteGoods(String id) {
         if (goodsService.removeById(id)) {
             return new SuccessTip("删除成功!");
         } else {

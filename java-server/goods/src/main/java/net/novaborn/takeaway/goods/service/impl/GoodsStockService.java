@@ -78,11 +78,9 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
         targetGoodsStock.get().setStock(targetGoodsStock.get().getStock() - count);
         this.updateById(targetGoodsStock.get());
 
-        if (targetGoodsStock.get().getStock() == 0) {
-            if (goods.getState().equals(GoodsState.ON)) {
-                goods.setState(GoodsState.SHORTAGE);
-                goodsService.updateById(goods);
-            }
+        if (targetGoodsStock.get().getStock() == 0 && goods.getState().equals(GoodsState.ON)) {
+            goods.setState(GoodsState.SHORTAGE);
+            goodsService.updateById(goods);
         }
     }
 

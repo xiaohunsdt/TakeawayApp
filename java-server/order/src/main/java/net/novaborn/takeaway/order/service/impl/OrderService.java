@@ -47,14 +47,14 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     private SettingService settingService;
 
-    @Setter
-    protected List<Goods> gifts;
+//    @Setter
+//    protected List<Goods> gifts;
 
-    @PostConstruct
-    public void init() {
-        gifts = new ArrayList<>();
-        gifts.add(goodsService.getById(1308791764220502017L));
-    }
+//    @PostConstruct
+//    public void init() {
+//        gifts = new ArrayList<>();
+//        gifts.add(goodsService.getById(1308791764220502017L));
+//    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
@@ -157,8 +157,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
         // 设置优惠
-        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-            Goods gift = null;
+//        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+//            Goods gift = null;
 //            if (order.getRealPrice() >= 18000) {
 //                if (goodsStockService.checkStock(gifts.get(randomInt), 1)) {
 //                    gift = gifts.get(randomInt);
@@ -168,20 +168,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                    gift = gifts.get(randomInt);
 //                }
 //            }
-            if (goodsStockService.checkStock(gifts.get(0), 1)) {
-                gift = gifts.get(0);
-            }
-            if (gift != null) {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setGoodsId(gift.getId());
-                orderItem.setGoodsName("中秋福利-" + gift.getName());
-                orderItem.setGoodsThumb(gift.getThumb());
-                orderItem.setGoodsPrice(0);
-                orderItem.setGoodsCount(1);
-                orderItemList.add(orderItem);
-                order.setGoodsCount(order.getGoodsCount() + 1);
-            }
-        }
+//            if (gift != null) {
+//                OrderItem orderItem = new OrderItem();
+//                orderItem.setGoodsId(gift.getId());
+//                orderItem.setGoodsName("中秋福利-" + gift.getName());
+//                orderItem.setGoodsThumb(gift.getThumb());
+//                orderItem.setGoodsPrice(0);
+//                orderItem.setGoodsCount(1);
+//                orderItemList.add(orderItem);
+//                order.setGoodsCount(order.getGoodsCount() + 1);
+//            }
+//        }
 //        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
 //            Goods gift = null;
 //            if (order.getRealPrice() >= 40000) {
