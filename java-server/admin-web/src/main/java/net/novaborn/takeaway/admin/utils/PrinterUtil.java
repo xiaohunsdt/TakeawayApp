@@ -30,10 +30,11 @@ import java.util.regex.Pattern;
 public class PrinterUtil {
     // 芯烨云注册用户帐号，注意不是开发者ID
     private final String USER_NAME = "825292796@qq.com";
+
     // 开发者密钥
     private final String USER_KEY = "bf5e349900b44e928fd5e63cceb4e136";
-    // 打印机编号
 
+    // 打印机编号
     private PrintService service = new PrintService();
 
     @Autowired

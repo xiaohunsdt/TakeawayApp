@@ -49,7 +49,7 @@ public class PayService implements IPayService {
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setOpenid(openId);
-        request.setBody("支付-川香苑外卖");
+        request.setBody("支付-聚韩外卖");
         request.setOutTradeNo(orderId.toString());
         // 精确到分
         request.setTotalFee(getOrderPrice(order.get()));

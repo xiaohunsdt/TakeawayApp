@@ -78,7 +78,7 @@ public class WxServiceTest {
         List<WxMaSubscribeMessage.Data> dataList = new ArrayList();
         dataList.add(new WxMaSubscribeMessage.Data("character_string1", "#11"));
         dataList.add(new WxMaSubscribeMessage.Data("time2", "2020-05-05 12:23:10"));
-        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您选择川香苑!"));
+        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您选择聚韩外卖!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
         subscribeMessage.setToUser("o9UA_5abDk-kn7KSaMAoriIlvg6c");
