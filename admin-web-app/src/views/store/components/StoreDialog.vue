@@ -12,6 +12,31 @@
       <el-form-item label="店铺名" label-width="70px">
         <el-input v-model="formData.name" :disabled="storeId!==null && storeId!==undefined"></el-input>
       </el-form-item>
+      <el-form-item label="店铺地址">
+        <el-select
+            v-model="formData.address"
+            :loading="searchLoading"
+            :remote-method="onSearch"
+            filterable
+            placeholder="请输入关键词"
+            remote
+            reserve-keyword
+            style="display: block;"
+            @change="onSelect">
+          <el-option
+              v-for="item in addressList"
+              :key="item.address"
+              :label="item.address"
+              :value="item.address">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="地址经度">
+        <el-input v-model="formData.x" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="地址纬度">
+        <el-input v-model="formData.y" disabled></el-input>
+      </el-form-item>
       <el-form-item label="支付方式" label-width="70px">
         <el-select v-model="formData.paymentWay" placeholder="请选择关键字">
           <el-option label="免费" value="FREE"/>
@@ -38,8 +63,9 @@
 </template>
 
 <script>
-import storeApi from '@/api/store'
+import storeApi from '@a/store'
 import permission from '@/directive/permission/index.js'
+import addressApi from '@a/address'
 
 export default {
   name: 'StoreDialog',
@@ -51,11 +77,16 @@ export default {
       formData: {
         id: null,
         name: null,
+        address: '',
+        x: null,
+        y: null,
         paymentWay: null,
         expireDate: null,
         state: null
       },
-      loading: false
+      loading: false,
+      searchLoading: false,
+      addressList: []
     }
   },
   watch: {
@@ -76,9 +107,8 @@ export default {
       storeApi.getStoreById(this.storeId)
           .then(res => {
             this.formData = res
-            this.loading = false
           })
-          .catch(res => {
+          .finally(() => {
             this.loading = false
           })
     },
@@ -105,7 +135,30 @@ export default {
             })
             this.$emit('updated-store', this.formData)
           })
-    }
+    },
+    onSearch(query) {
+      if (query !== '') {
+        this.searchLoading = true
+        addressApi.searchAddress(query)
+            .then(res => {
+              this.addressList = res
+            })
+            .catch(() => {
+              this.addressList = []
+            })
+            .finally(() => {
+              this.searchLoading = false
+            })
+      } else {
+        this.addressList = []
+      }
+    },
+    onSelect(address) {
+      const temp = this.addressList.find(item => item.address === address)
+      this.formData.address = temp.address
+      this.formData.x = temp.x
+      this.formData.y = temp.y
+    },
   }
 }
 </script>

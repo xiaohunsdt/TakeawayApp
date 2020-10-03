@@ -7,6 +7,8 @@ import net.novaborn.takeaway.admin.utils.PrinterUtil;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.store.entity.Store;
+import net.novaborn.takeaway.store.service.impl.StoreService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.exception.SettingExceptionEnum;
@@ -31,6 +33,8 @@ import java.util.TimeZone;
 @RequestMapping("/api/admin/setting")
 public class SettingController extends BaseController {
     private SettingService settingService;
+
+    private StoreService storeService;
 
     private PrinterUtil printerUtil;
 
@@ -117,12 +121,17 @@ public class SettingController extends BaseController {
                 }
             }
 
+            if("max_delivery_distance".equals(key)){
+                Store store = storeService.getById(sysContext.getCurrentStoreId());
+                store.setMaxDeliveryDistance(Integer.valueOf((String) value));
+                store.updateById();
+            }
+
             setting.setKey(key);
             setting.setScope(settingScope);
             setting.setValue(value.toString());
             setting.insertOrUpdate();
         });
-
 
         return new SuccessTip();
     }

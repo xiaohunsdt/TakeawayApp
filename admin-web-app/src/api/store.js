@@ -1,17 +1,17 @@
 import request from '@/utils/request'
 import Qs from 'qs'
 
-// export function getStoreById(storeId) {
-//     return request({
-//         url: '/store/getStoreById',
-//         method: 'post',
-//         data: { storeId },
-//         transformRequest: [function(data) {
-//             data = Qs.stringify(data)
-//             return data
-//         }]
-//     })
-// }
+export function getStoreById(storeId) {
+    return request({
+        url: '/store/getStoreById',
+        method: 'post',
+        data: { storeId },
+        transformRequest: [function(data) {
+            data = Qs.stringify(data)
+            return data
+        }]
+    })
+}
 
 export function getStoreQRcode() {
     return request({
@@ -58,7 +58,7 @@ export function update(admin) {
 }
 
 export default {
-    // getStoreById,
+    getStoreById,
     getStoreQRcode,
     getListByPage,
     create,

@@ -3,6 +3,7 @@ package net.novaborn.takeaway.store.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import net.novaborn.takeaway.store.enums.PaymentWay;
 import net.novaborn.takeaway.store.enums.State;
@@ -21,6 +22,21 @@ public class Store extends Model<Store> {
 
     @NotBlank(message = "店名必须设置")
     private String name;
+
+    private String address;
+
+    /**
+     * 经度
+     */
+    private Double x;
+
+    /**
+     * 纬度
+     */
+    private Double y;
+
+    @JSONField(serialize = false)
+    private Integer maxDeliveryDistance;
 
     @NotNull(message = "计费方式不能为空")
     private PaymentWay paymentWay;

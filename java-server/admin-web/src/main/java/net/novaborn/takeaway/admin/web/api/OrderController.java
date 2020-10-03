@@ -198,7 +198,7 @@ public class OrderController extends BaseController {
 
         orderSubscribeMessageSender.send(order.get());
         printerUtil.print(order.get());
-        wechatAutoTask.orderShow(order.get());
+//        wechatAutoTask.orderShow(order.get());
         return new SuccessTip();
     }
 

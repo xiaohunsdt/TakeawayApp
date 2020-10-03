@@ -83,7 +83,7 @@ public class AdminController extends BaseController {
         Admin parent = adminService.getById(adminId);
 
         if (parent.getLevel().getCode() >= admin.getLevel().getCode()) {
-            throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+            throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
         }
 
         Optional<Admin> temp = adminService.getBaseMapper().selectByName(admin.getUserName());
@@ -96,7 +96,7 @@ public class AdminController extends BaseController {
 
         if (!parent.getLevel().equals(Level.SUPER_MANAGER) && admin.getStoreId() != null) {
             if (!parent.getStoreId().equals(admin.getStoreId())) {
-                throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+                throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
             }
         }
 
@@ -125,14 +125,14 @@ public class AdminController extends BaseController {
             for (String parentStr : target.getParentIds().split(",")) {
                 Admin parentTemp = adminService.getById(parentStr);
                 if (parentTemp.getLevel().getCode() >= admin.getLevel().getCode()) {
-                    throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+                    throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
                 }
             }
         }
 
         if (!parent.getLevel().equals(Level.SUPER_MANAGER) && admin.getStoreId() != null) {
             if (!parent.getStoreId().equals(admin.getStoreId())) {
-                throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+                throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
             }
         }
 

@@ -79,31 +79,6 @@
                 range-separator="至"
                 start-placeholder="开门时间"/>
             </el-form-item>
-            <el-form-item label="店铺地址">
-              <el-select
-                v-model="storeSetting.store_address"
-                :loading="searchLoading"
-                :remote-method="onSearch"
-                filterable
-                placeholder="请输入关键词"
-                remote
-                reserve-keyword
-                style="display: block;"
-                @change="onSelect">
-                <el-option
-                  v-for="item in addressList"
-                  :key="item.address"
-                  :label="item.address"
-                  :value="item.address">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="地址经度">
-              <el-input v-model="storeSetting.store_address_x" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="地址纬度">
-              <el-input v-model="storeSetting.store_address_y" disabled></el-input>
-            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveSetting('STORE')">保存设置</el-button>
             </el-form-item>
@@ -118,7 +93,7 @@
             </el-form-item>
             <el-form-item label="最远配送距离">
               <el-tooltip content="最远配送距离，单位为米" placement="right">
-                <el-input v-model.number="expressSetting.max_express_distance"></el-input>
+                <el-input v-model.number="expressSetting.max_delivery_distance"></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="配送费">
@@ -246,16 +221,6 @@ export default {
     BaseCard,
     DynamicInput
   },
-  computed: {
-    authHeader() {
-      return {
-        Authorization: `Bearer ${getToken()}`
-      }
-    }
-  },
-  created() {
-    this.init(0)
-  },
   data() {
     return {
       saveLoading: false,
@@ -272,10 +237,7 @@ export default {
         store_logo: '',
         store_open_date: [],
         store_open_time: null,
-        store_close_time: null,
-        store_address: '',
-        store_address_x: null,
-        store_address_y: null
+        store_close_time: null
       },
       expressSetting: {
         lowest_order_price: 0,
@@ -284,7 +246,7 @@ export default {
         base_express_time: 0,
         average_express_time: 0,
         deliverier_count: 0,
-        max_express_distance: 0
+        max_delivery_distance: 0
       },
       paymentSetting: {
         bank: null,
@@ -298,10 +260,18 @@ export default {
         temperature2: '',
         temperature3: '',
         temperature4: ''
-      },
-      searchLoading: false,
-      addressList: []
+      }
     }
+  },
+  computed: {
+    authHeader() {
+      return {
+        Authorization: `Bearer ${getToken()}`
+      }
+    }
+  },
+  created() {
+    this.init(0)
   },
   methods: {
     init() {
@@ -391,29 +361,6 @@ export default {
         .finally(() => {
           this.saveLoading = false
         })
-    },
-    onSearch(query) {
-      if (query !== '') {
-        this.searchLoading = true
-        addressApi.searchAddress(query)
-          .then(res => {
-            this.addressList = res
-          })
-          .catch(() => {
-            this.addressList = []
-          })
-          .finally(() => {
-            this.searchLoading = false
-          })
-      } else {
-        this.addressList = []
-      }
-    },
-    onSelect(address) {
-      const temp = this.addressList.find(item => item.address === address)
-      this.storeSetting.store_address = temp.address
-      this.storeSetting.store_address_x = temp.x
-      this.storeSetting.store_address_y = temp.y
     },
     onDownloadQrCode() {
       storeApi.getStoreQRcode().then(res => {

@@ -28,7 +28,7 @@ public class StoreWrapper extends BaseControllerWrapper {
         StoreService storeService = SpringContextHolder.getBean(StoreService.class);
         SettingService settingService = SpringContextHolder.getBean(SettingService.class);
 
-        Setting address = settingService.getSettingByName((Long) map.get("id"), "store_address", SettingScope.STORE);
+//        Setting address = settingService.getSettingByName((Long) map.get("id"), "store_address", SettingScope.STORE);
         Setting storeLogo = settingService.getSettingByName((Long) map.get("id"), "store_logo", SettingScope.STORE);
         ServiceStateDto storeState = storeService.getServiceState((Long) map.get("id"));
 
@@ -39,7 +39,6 @@ public class StoreWrapper extends BaseControllerWrapper {
         if (storeLogo != null) {
             map.put("logo", systemProperties.getUploadServerUrl() + storeLogo.getValue());
         }
-        map.put("address", address.getValue());
         map.put("serviceState", storeState.getState());
     }
 }

@@ -70,7 +70,7 @@ public class StoreController extends BaseController {
         Admin admin = adminService.getById(adminId);
 
         if (!admin.getLevel().equals(Level.SUPER_MANAGER)) {
-            throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+            throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
         }
 
         store.insert();
@@ -84,7 +84,7 @@ public class StoreController extends BaseController {
         Admin admin = adminService.getById(adminId);
 
         if (!admin.getLevel().equals(Level.SUPER_MANAGER)) {
-            throw new SysException(AdminExceptionEnum.LEVEL_ERROR);
+            throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
         }
 
         Store target = storeService.getById(store.getId());
