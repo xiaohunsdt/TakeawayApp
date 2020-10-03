@@ -82,10 +82,10 @@
 			<base-panel>
 				<view>支付方式</view>
 				<view class="pay-way-btns">
-					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary">微信支付
+					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary" wx:if="{{address}}">微信支付
 					</van-button>
 					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付</van-button>
-					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" v-if="address">支付宝支付
+					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" wx:if="{{address}}">支付宝支付
 					</van-button>
 					<van-button color="{{payWay==='TRANSFER'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
 					</van-button>
