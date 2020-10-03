@@ -67,16 +67,16 @@ public class ControlService extends AccessibilityService {
 
         try {
             //返回键并点击：防止在其他页面查找不到搜索按钮
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/du");
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dw");
             Thread.sleep(1000);
 
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cuq", 2);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cyk", 2);
             Thread.sleep(1000);
 
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/e7x", 0);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/ebj", 0);
             Thread.sleep(3000);
 
-            AccessibilityNodeInfo cameraBtn = WechatUtils.findViewId(this, "com.tencent.mm:id/cq", 0);
+            AccessibilityNodeInfo cameraBtn = WechatUtils.findViewId(this, "com.tencent.mm:id/cs", 0);
 //            if (cameraBtn == null) {
 //                return;
 //            }
@@ -93,17 +93,17 @@ public class ControlService extends AccessibilityService {
                 Thread.sleep(2000);
 
                 //选择图片按钮
-                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/guk", 1), AccessibilityNodeInfo.ACTION_CLICK);
+                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/fud", 1), AccessibilityNodeInfo.ACTION_CLICK);
                 Thread.sleep(3000);
 
                 //选择图片
                 for (int i = 0; i < autoMessage.getImgUrlList().size(); i++) {
-                    WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/e4i", i), AccessibilityNodeInfo.ACTION_CLICK);
+                    WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/e8y", i), AccessibilityNodeInfo.ACTION_CLICK);
                     Thread.sleep(1000);
                 }
 
                 //完成按钮
-                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/co", 0), AccessibilityNodeInfo.ACTION_CLICK);
+                WechatUtils.performAction(WechatUtils.findViewId(this, "com.tencent.mm:id/cq", 0), AccessibilityNodeInfo.ACTION_CLICK);
                 Thread.sleep(2500);
             } else {
                 //没图片
@@ -111,7 +111,7 @@ public class ControlService extends AccessibilityService {
                 Thread.sleep(3000);
             }
 
-            AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/g_c", 0);
+            AccessibilityNodeInfo editInput = WechatUtils.findViewId(this, "com.tencent.mm:id/gfp", 0);
 //            if (editInput == null) {
 //                return;
 //            }
@@ -125,15 +125,15 @@ public class ControlService extends AccessibilityService {
             }
 
             // 发布
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/co");
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cq");
             Thread.sleep(3000);
 
             //返回键并点击：防止在其他页面查找不到搜索按钮
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/du");
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/dw");
             Thread.sleep(1000);
 
             //回主页
-            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cuq", 0);
+            WechatUtils.findViewIdAndClick(this, "com.tencent.mm:id/cyk", 0);
             Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
