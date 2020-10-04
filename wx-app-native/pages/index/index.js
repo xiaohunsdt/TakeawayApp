@@ -7,6 +7,7 @@ const watch = require("../../utils/watch.js")
 Page({
   watch: {
     currentAddress(newVal) {
+      console.log(newVal.x)
       if (newVal.x === 0 || newVal.y === 0) {
         return;
       }
@@ -31,6 +32,9 @@ Page({
   },
   onLoad: function (option) {
     watch.setWatcher(this)
+    this.setData({
+      statusBarHeight: wx.getSystemInfoSync()['statusBarHeight']
+    })
     if (option.from) {
       app.globalData.from = option.from
     }
@@ -55,9 +59,6 @@ Page({
     }
   },
   init() {
-    this.setData({
-      statusBarHeight: wx.getSystemInfoSync()['statusBarHeight']
-    })
     indexService.getBannersList().then(res => {
       this.setData({
         bannerList: res

@@ -1,8 +1,14 @@
 package net.novaborn.takeaway.user.web.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.spatial4j.core.context.SpatialContext;
+import com.spatial4j.core.distance.DistanceUtils;
+import com.spatial4j.core.shape.Rectangle;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.utils.MapDistanceUtil;
 import net.novaborn.takeaway.store.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.store.entity.Store;
 import net.novaborn.takeaway.store.enums.State;
@@ -30,6 +36,7 @@ import java.util.stream.Collectors;
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/user/store")
 public class StoreController extends BaseController {
+    private final int MAX_RADIUS = 5;
 
     StoreService storeService;
 
@@ -46,8 +53,16 @@ public class StoreController extends BaseController {
     @ResponseBody
     @PostMapping("getAvailableStoreList")
     public Object getAvailableStoreList(@Validated Coordinate coordinate) {
-        List<Store> storeList = storeService.list().stream()
-                .filter(item -> !item.getState().equals(State.OFF))
+        SpatialContext geo = SpatialContext.GEO;
+        Rectangle rectangle = geo.getDistCalc().calcBoxByDistFromPt(geo.makePoint(coordinate.getX(), coordinate.getY()), MAX_RADIUS * DistanceUtils.KM_TO_DEG, geo, null);
+
+        LambdaQueryWrapper<Store> query = Wrappers.lambdaQuery();
+        query.eq(Store::getState, State.ON)
+                .between(Store::getX, rectangle.getMinX(), rectangle.getMaxX())
+                .between(Store::getY, rectangle.getMinY(), rectangle.getMaxY());
+
+        List<Store> storeList = storeService.list(query).stream()
+                .filter(store -> MapDistanceUtil.getDistance(coordinate.getX(), coordinate.getY(), store.getX(), store.getY()) < store.getMaxDeliveryDistance())
                 .sorted(Comparator.comparing(Store::getCreateDate).reversed())
                 .collect(Collectors.toList());
         return new StoreWrapper(storeList).warp();
@@ -56,8 +71,10 @@ public class StoreController extends BaseController {
     @ResponseBody
     @GetMapping("getAllStoreList")
     public Object getAllStoreList() {
-        List<Store> storeList = storeService.list().stream()
-                .filter(item -> !item.getState().equals(State.OFF))
+        LambdaQueryWrapper<Store> query = Wrappers.lambdaQuery();
+        query.eq(Store::getState, State.ON);
+
+        List<Store> storeList = storeService.list(query).stream()
                 .sorted(Comparator.comparing(Store::getCreateDate).reversed())
                 .collect(Collectors.toList());
         return new StoreWrapper(storeList).warp();
