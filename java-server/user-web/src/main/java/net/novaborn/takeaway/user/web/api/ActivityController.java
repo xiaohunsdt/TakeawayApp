@@ -3,7 +3,9 @@ package net.novaborn.takeaway.user.web.api;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.activity.entity.Activity;
+import net.novaborn.takeaway.activity.exception.ActivityExceptionEnum;
 import net.novaborn.takeaway.activity.service.impl.ActivityService;
+import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.user.web.wrapper.ActivityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class ActivityController extends BaseController {
     @GetMapping("getActivityById")
     public ResponseEntity getActivityById(String id) {
         Activity activity = activityService.getById(id);
+        if (activity == null) {
+            throw new SysException(ActivityExceptionEnum.NOT_FOUND);
+        }
         return ResponseEntity.ok(new ActivityWrapper(activity).warp());
     }
 

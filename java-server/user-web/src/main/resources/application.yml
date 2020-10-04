@@ -74,8 +74,8 @@ logging:
     net.novaborn: info
 
 ---
-sys:
-  upload-server-url: http://localhost:8080
+#sys:
+#  upload-server-url: http://localhost:8080
 
 spring:
   profiles: dev
