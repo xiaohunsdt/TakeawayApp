@@ -146,20 +146,20 @@ Page({
           wx.hideLoading()
         })
     } else {
-      // if (!getApp().globalData.currentAddress) {
-      //   addressService.getDefaultAddress().then(res => {
-      //     if (res.address) {
-      //       getApp().globalData.currentAddress = res
-      //       this.setData({
-      //         address: getApp().globalData.currentAddress
-      //       })
-      //     }
-      //   })
-      // } else if (getApp().globalData.currentAddress !== this.data.address) {
-      //   this.setData({
-      //     address: getApp().globalData.currentAddress
-      //   })
-      // }
+      if (!getApp().globalData.currentAddress) {
+        addressService.getDefaultAddress().then(res => {
+          if (res.address) {
+            getApp().globalData.currentAddress = res
+            this.setData({
+              address: getApp().globalData.currentAddress
+            })
+          }
+        })
+      } else if (getApp().globalData.currentAddress !== this.data.address) {
+        this.setData({
+          address: getApp().globalData.currentAddress
+        })
+      }
 
       if (getApp().globalData.currentCoupon !== this.data.coupon) {
         this.setData({
