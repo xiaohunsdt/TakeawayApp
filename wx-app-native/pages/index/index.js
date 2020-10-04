@@ -81,8 +81,8 @@ Page({
               $this.setData({
                 currentAddress: {
                   address: '附近地址',
-                  x: latitude,
-                  y: longitude
+                  x: longitude,
+                  y: latitude
                 }
               })
             },
