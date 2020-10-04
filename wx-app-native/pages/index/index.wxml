@@ -3,8 +3,8 @@
 	<!-- <view class="gradientview"></view> -->
 	<view id="navigation" style="padding-top:{{statusBarHeight + 10}}px;">
 		<view id="title" data-page-path="/pages/my/address/index" bind:tap="gotoPage">
-			<van-icon name="location" wx:if="{{currentAddress.address !=='加载中...'}}"/>
-			<van-loading color="#000000" size="16px" wx:else/>
+			<van-icon name="location" wx:if="{{currentAddress.address !=='加载中...'}}" />
+			<van-loading color="#000000" size="16px" wx:else />
 			<view id="address" bind:tap="selectAddress">
 				{{currentAddress.address}}
 			</view>
@@ -18,7 +18,8 @@
 				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true"
 					style="max-height: 10rem;overflow:hidden">
 					<swiper-item wx:key="id" wx:for="{{bannerList}}" wx:for-item="banner">
-						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg" mode="widthFix" />
+						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg"
+							mode="widthFix" />
 					</swiper-item>
 				</swiper>
 			</view>
@@ -26,6 +27,7 @@
 		<!-- <food-panel foodList="{{newGoodsList}}" title="新品" /> -->
 		<!-- <food-panel foodList="{{hotGoodsList}}" title="热门" /> -->
 		<view class="store-cards">
+			<van-empty wx:if="{{storeList.length === 0}}" class="custom-image" image="/static/images/status/no_load.png" description="附近没有店铺, 敬请期待!" />
 			<store-card store="{{item}}" wx:for="{{storeList}}" wx:key="id" />
 		</view>
 	</view>
