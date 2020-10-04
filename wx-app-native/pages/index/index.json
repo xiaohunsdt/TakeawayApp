@@ -1,5 +1,7 @@
 {
   "enablePullDownRefresh": true,
+  "navigationStyle": "custom",
+  "backgroundColor": "#F0F0F0",
   "usingComponents": {
     "search-bar": "/components/search-bar/index",
     "food-panel": "./components/food-panel/index",

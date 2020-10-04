@@ -1,9 +1,45 @@
+#navigation {
+  /* box-sizing: border-box; */
+  padding-left: 15rpx;
+  background: #FFD200;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 130rpx;
+}
+
+#navigation #title{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  background-color: rgba(251, 140, 0, 0.2);
+  border-radius: 40rpx;
+  padding: 10rpx 15rpx;
+  overflow: hidden;
+  max-width: 68%;
+}
+
+#navigation #title #address{
+  margin-left: 5rpx;
+  max-height: 21px;
+  overflow: hidden;
+}
+
+.container-contain {
+  /* background-color: blue; */
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  overflow: hidden;
+  position: relative;
+}
+
 .itemImg {
   width: 100%;
 }
 
-
-.store-cards{
+.store-cards {
   margin-top: 25rpx;
   padding: 20rpx;
   background-color: white;

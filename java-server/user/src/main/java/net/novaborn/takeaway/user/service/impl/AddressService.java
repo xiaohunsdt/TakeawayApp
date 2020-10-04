@@ -56,10 +56,12 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
         Optional<Address> defaultAddress = addressService.selectDefaultAddressByUserId(userId);
 
         //如果数据库中的默认地址不等于当前地址，将数据库中的默认地址设置成一般地址
-        if (!defaultAddress.get().getId().equals(addressId)) {
-            defaultAddress.get().setIsDefault(false);
-            defaultAddress.get().updateById();
-        }
+        defaultAddress.ifPresent((address)->{
+            if (!address.getId().equals(addressId)) {
+                address.setIsDefault(false);
+                address.updateById();
+            }
+        });
 
         // 把参数实例设置成默认地址
         Address target = addressService.getById(addressId);

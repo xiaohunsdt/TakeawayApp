@@ -44,7 +44,7 @@ public class Address extends Model<Address> {
     private Double x;
 
     /**
-     * latitude 纬度
+     * 0 纬度
      */
     private Double y;
 

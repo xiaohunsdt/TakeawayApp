@@ -1,13 +1,25 @@
 <!--index.wxml-->
-<view class="container">
-	<view class="gradientview"></view>
+<view class="container" style="padding-top:{{statusBarHeight + 50}}px;">
+	<!-- <view class="gradientview"></view> -->
+	<view id="navigation" style="padding-top:{{statusBarHeight + 10}}px;">
+		<view id="title" data-page-path="/pages/my/address/index" bind:tap="gotoPage">
+			<van-icon name="location" wx:if="{{currentAddress.address !=='加载中...'}}"/>
+			<van-loading color="#000000" size="16px" wx:else/>
+			<view id="address" bind:tap="selectAddress">
+				{{currentAddress.address}}
+			</view>
+			<van-icon name="arrow" />
+		</view>
+	</view>
 	<view class="container-contain">
 		<view id="banner">
-			<search-bar bind:search="onSearch" background="#FFD200"></search-bar>
+			<search-bar bind:search="onSearch" background="#ffffff"></search-bar>
 			<view id="scrollImg">
-				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true" style="height: 10rem">
+				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true"
+					style="height: 10rem">
 					<swiper-item wx:key="id" wx:for="{{bannerList}}" wx:for-item="banner">
-						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg" mode="widthFix" />
+						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg"
+							mode="widthFix" />
 					</swiper-item>
 				</swiper>
 			</view>
@@ -15,7 +27,7 @@
 		<!-- <food-panel foodList="{{newGoodsList}}" title="新品" /> -->
 		<!-- <food-panel foodList="{{hotGoodsList}}" title="热门" /> -->
 		<view class="store-cards">
-			<store-card store="{{item}}" wx:for="{{storeList}}" wx:key="id"/>
+			<store-card store="{{item}}" wx:for="{{storeList}}" wx:key="id" />
 		</view>
 	</view>
 </view>

@@ -8,9 +8,11 @@ import net.novaborn.takeaway.store.entity.Store;
 import net.novaborn.takeaway.store.enums.State;
 import net.novaborn.takeaway.store.exception.StoreExceptionEnum;
 import net.novaborn.takeaway.store.service.impl.StoreService;
+import net.novaborn.takeaway.user.entity.Coordinate;
 import net.novaborn.takeaway.user.web.wrapper.StoreWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +41,16 @@ public class StoreController extends BaseController {
             throw new SysException(StoreExceptionEnum.STORE_NOT_EXIST);
         }
         return new StoreWrapper(store).warp();
+    }
+
+    @ResponseBody
+    @PostMapping("getAvailableStoreList")
+    public Object getAvailableStoreList(@Validated Coordinate coordinate) {
+        List<Store> storeList = storeService.list().stream()
+                .filter(item -> !item.getState().equals(State.OFF))
+                .sorted(Comparator.comparing(Store::getCreateDate).reversed())
+                .collect(Collectors.toList());
+        return new StoreWrapper(storeList).warp();
     }
 
     @ResponseBody
