@@ -17,7 +17,7 @@ server:
 
 spring:
   profiles:
-    active: test
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -31,6 +31,18 @@ spring:
     username: root
     password: wy1996
     type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      stat-view-servlet:
+        enabled: true
+        login-username: xiaohun
+        login-password: wy1996
+        url-pattern: /druid/*
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: /static/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid,/druid/*
+      aop-patterns: net.novaborn.takeaway.*.service.*
+      filters: stat,wall
   redis:
     #数据库索引
     database: 0

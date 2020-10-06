@@ -144,30 +144,26 @@ export const asyncRoutes = [
         component: Layout,
         redirect: '/goods/index',
         meta: {
+            title: '商品管理',
+            icon: 'goods',
             roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
         },
-        children: [{
-            path: 'index',
-            name: 'GoodsManagement',
-            // props: true,
-            component: () => import('@/views/goods/index'),
-            meta: { title: '商品管理', icon: 'goods' }
-        }]
-    },
-    {
-        path: '/category',
-        component: Layout,
-        redirect: '/category/index',
-        meta: {
-            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
-        },
-        children: [{
-            path: 'index',
-            name: 'CategoryManagement',
-            // props: true,
-            component: () => import('@/views/category/index'),
-            meta: { title: '分类管理', icon: 'tree' }
-        }]
+        children: [
+            {
+                path: 'index',
+                name: 'GoodsManagement',
+                // props: true,
+                component: () => import('@/views/goods/index'),
+                meta: { title: '商品管理', icon: 'goods' }
+            },
+            {
+                path: 'category',
+                name: 'CategoryManagement',
+                // props: true,
+                component: () => import('@/views/category/index'),
+                meta: { title: '分类管理', icon: 'tree' }
+            }
+        ]
     },
     {
         path: '/coupon',

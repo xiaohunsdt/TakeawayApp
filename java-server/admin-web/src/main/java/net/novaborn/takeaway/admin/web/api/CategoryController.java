@@ -1,5 +1,9 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +35,14 @@ public class CategoryController extends BaseController {
 
     @GetMapping("getAllCategory")
     public ResponseEntity getAllCategory() {
-        List<Category> categoryList = categoryService.list();
+        LambdaQueryWrapper<Category> query = Wrappers.lambdaQuery();
+        query.orderByDesc(Category::getIndex);
+        List<Category> categoryList = categoryService.list(query);
         return ResponseEntity.ok(new CategoryWrapper(categoryList).warp());
     }
 
     @PostMapping("getCategoryListByPage")
     public ResponseEntity getCategoryListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-//        page.setOptimizeCountSql(false);
         page = (Page) categoryService.getCategoryListByPage(page, args);
         page.setRecords((List) new CategoryWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
@@ -61,15 +66,13 @@ public class CategoryController extends BaseController {
     @ResponseBody
     @PostMapping("updateCategory")
     public Tip updateCategory(Category category) {
-        Optional<Category> tempCategory = Optional.ofNullable(categoryService.getById(category.getId()));
-        if (tempCategory.isEmpty()) {
+        Optional<Category> target = Optional.ofNullable(categoryService.getById(category.getId()));
+        if (target.isEmpty()) {
             return new ErrorTip(-1, "没有此分类名!");
         }
 
-        //修改名称
-        tempCategory.get().setName(category.getName());
-
-        if (categoryService.updateById(tempCategory.get())) {
+        BeanUtil.copyProperties(category, target.get(), CopyOptions.create().setIgnoreNullValue(true));
+        if (categoryService.updateById(target.get())) {
             return new SuccessTip("修改成功!");
         } else {
             return new ErrorTip(-1, "修改失败!");

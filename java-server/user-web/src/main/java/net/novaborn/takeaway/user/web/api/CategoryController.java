@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.user.web.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.category.entity.Category;
@@ -28,10 +30,9 @@ public class CategoryController extends BaseController {
 
     @GetMapping("getAllCategory")
     public ResponseEntity getAllCategory() {
-        List<Category> categoryList = categoryService.list();
-        categoryList = categoryList.stream()
-                .sorted(Comparator.comparing(Category::getCreateDate))
-                .collect(Collectors.toList());
+        LambdaQueryWrapper<Category> query = Wrappers.lambdaQuery();
+        query.orderByDesc(Category::getIndex);
+        List<Category> categoryList = categoryService.list(query);
         return ResponseEntity.ok(new CategoryWrapper(categoryList).warp());
     }
 }

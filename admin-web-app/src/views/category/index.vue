@@ -32,8 +32,7 @@
             prop="id"
             width="350">
         </el-table-column>
-        <el-table-column
-            label="名称">
+        <el-table-column label="名称">
           <template v-slot="scope">
             <el-input
                 v-model="scope.row.name"
@@ -41,6 +40,16 @@
                 size="small"
                 @change="onEdit(scope.$index, scope.row)"></el-input>
             <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优先级">
+          <template v-slot="scope">
+            <el-input
+                v-model="scope.row.index"
+                placeholder="请输入优先级"
+                size="small"
+                @change="onEdit(scope.$index, scope.row)"></el-input>
+            <span>{{ scope.row.index }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -91,6 +100,9 @@ export default {
       tableData: []
     }
   },
+  created() {
+    this.onSearch()
+  },
   methods: {
     getList() {
       this.listLoading = true
@@ -123,7 +135,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        categoryApi.delteCategory(id)
+        categoryApi.deleteCategory(id)
             .then(() => {
               this.getList()
             })
@@ -137,9 +149,6 @@ export default {
       this.page.current = val
       this.getList()
     }
-  },
-  created() {
-    this.onSearch()
   }
 }
 </script>
