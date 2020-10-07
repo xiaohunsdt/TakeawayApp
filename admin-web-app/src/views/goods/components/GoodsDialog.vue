@@ -99,7 +99,7 @@
           </el-row>
         </base-card>
       </el-form>
-      <div v-if="active===3">
+      <div v-if="active===2">
         <base-card>
           <el-table style="width: 100%">
             <el-table-column label="规格">
@@ -162,34 +162,52 @@ export default {
       }
     },
     active(newVal) {
-      if (newVal === 3) {
-        const allCount = this.specData.selected.map(item => item.params.length).reduce((prev, curr) => {
-          return prev * curr
+      if (newVal === 2) {
+        this.goodsList = []
+        let sku = []
+        const array = this.specData.selected.map(spec => spec.params.map(item => {
+          return { k: spec.id, v: item.value }
+        }))
+        if (array.length < 2) {
+          sku = array[0] || []
+        }
+
+        sku = array.reduce((total, currentValue) => {
+          const res = []
+          total.forEach(t => {
+            currentValue.forEach(cv => {
+              if (t instanceof Array) {
+                res.push([...t, cv])
+              } else {
+                res.push([t, cv])
+              }
+            })
+          })
+          return res
         })
 
-        for (let i = 0; i < this.specData.selected.length; i++) {
+        for (let i = 0; i < sku.length; i++) {
           const indexes = []
-          for (let j = 0; j < this.specData.selected.length; j++) {
-            indexes.push(0)
+          for (let j = 0; j < sku[i].length; j++) {
+            console.log(sku[i])
+            console.log(sku[i][j])
+            const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j].v)
+            indexes[j] = index
           }
-
-          for (let j = 0; j < this.specData.selected.length; j++) {
-            if (i === j) {
-              continue
-            }
-            if(++indexes[j] < this.specData.selected[j].params.length){
-              for (let k = 0; k < ; k++) {
-
-              }
-            }
-          }
+          const goodsData = {}
+          goodsData.ownSpecs = sku[i]
+          goodsData.indexes = indexes.join('_')
+          goodsData.price = 0
+          goodsData.stock = 0
+          goodsData.state = 0
+          this.goodsList.push(goodsData)
         }
       }
     }
   },
   data() {
     return {
-      dialogVisible: false,
+      dialogVisible: true,
       sendLoading: false,
       active: 0,
       goods: null,
