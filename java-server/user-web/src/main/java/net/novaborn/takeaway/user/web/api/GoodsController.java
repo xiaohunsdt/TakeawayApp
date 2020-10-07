@@ -3,7 +3,7 @@ package net.novaborn.takeaway.user.web.api;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.user.web.dto.GoodsListDto;
 import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
@@ -41,7 +41,7 @@ public class GoodsController extends BaseController {
 
         // 筛选有效商品
         goodsList = goodsList.stream()
-                .filter(item -> !item.getState().equals(GoodsState.OFF))
+                .filter(item -> !item.getState().equals(ProduceState.OFF))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new GoodsWrapper(goodsList).warp());
@@ -50,7 +50,7 @@ public class GoodsController extends BaseController {
     @GetMapping("getAllGoodsList")
     public ResponseEntity getAllGoodsList() {
         List<Goods> goodsList = goodsService.list().stream()
-                .filter(item -> !item.getState().equals(GoodsState.OFF))
+                .filter(item -> !item.getState().equals(ProduceState.OFF))
                 .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName).thenComparing(Goods::getIndex).reversed())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new GoodsListDto(goodsList));

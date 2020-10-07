@@ -2,8 +2,6 @@ package net.novaborn.takeaway.user.entity;
 
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import net.novaborn.takeaway.admin.AdminApplication;
-import net.novaborn.takeaway.goods.enums.GoodsState;
-import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

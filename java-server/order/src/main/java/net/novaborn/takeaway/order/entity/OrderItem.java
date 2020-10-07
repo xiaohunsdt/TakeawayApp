@@ -24,6 +24,8 @@ public class OrderItem extends Model<OrderItem> {
 
     private Long orderId;
 
+    private Long produceId;
+
     private Long goodsId;
 
     @NotBlank

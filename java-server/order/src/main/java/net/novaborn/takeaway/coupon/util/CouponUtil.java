@@ -5,6 +5,7 @@ import net.novaborn.takeaway.category.service.impl.CategoryService;
 import net.novaborn.takeaway.common.SpringContextHolder;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,32 +47,32 @@ public class CouponUtil {
         return couponRules;
     }
 
-    public static boolean isDiscount(Goods goods, Map<String, List<String>> couponRules) {
+    public static boolean isDiscount(Produce produce, Map<String, List<String>> couponRules) {
         boolean result = true;
 
         if (!couponRules.get("limitCategory").isEmpty()) {
-            result = !couponRules.get("limitCategory").contains(goods.getCategoryId().toString());
+            result = !couponRules.get("limitCategory").contains(produce.getCategoryId().toString());
             if (!result) {
                 return result;
             }
         }
 
         if (!couponRules.get("limitGoods").isEmpty()) {
-            result = !couponRules.get("limitGoods").contains(goods.getName());
+            result = !couponRules.get("limitGoods").contains(produce.getName());
             if (!result) {
                 return false;
             }
         }
 
         if (!couponRules.get("allowCategory").isEmpty()) {
-            result = couponRules.get("allowCategory").contains(goods.getCategoryId().toString());
+            result = couponRules.get("allowCategory").contains(produce.getCategoryId().toString());
             if (!result) {
                 return false;
             }
         }
 
         if (!couponRules.get("allowGoods").isEmpty()) {
-            result = couponRules.get("allowGoods").contains(goods.getName());
+            result = couponRules.get("allowGoods").contains(produce.getName());
             if (!result) {
                 return false;
             }

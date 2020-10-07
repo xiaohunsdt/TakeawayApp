@@ -14,7 +14,7 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
@@ -76,7 +76,7 @@ public class IndexController extends BaseController {
 
         // 筛选有效商品
         goodsList = goodsList.stream()
-                .filter(item -> !item.getState().equals(GoodsState.OFF))
+                .filter(item -> !item.getState().equals(ProduceState.OFF))
                 .collect(Collectors.toList());
 
         return new GoodsWrapper(goodsList).warp();

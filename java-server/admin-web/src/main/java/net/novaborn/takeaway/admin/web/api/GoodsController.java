@@ -13,10 +13,13 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.exception.GoodsStockExceptionEnum;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +41,8 @@ import java.util.Optional;
 public class GoodsController extends BaseController {
 
     GoodsService goodsService;
+
+    ProduceService produceService;
 
     GoodsStockService goodsStockService;
 
@@ -97,11 +102,11 @@ public class GoodsController extends BaseController {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
-        if (!goods.getState().equals(GoodsState.ON)) {
+        if (!goods.getState().equals(ProduceState.ON)) {
             stock = 0;
         }
 
-        if (goods.getState().equals(GoodsState.ON) && stock == 0) {
+        if (goods.getState().equals(ProduceState.ON) && stock == 0) {
             stock = -1;
 //            return new ErrorTip(-1, "修改失败! 请设置库存后重新!");
         }
@@ -146,14 +151,14 @@ public class GoodsController extends BaseController {
     @ResponseBody
     @PostMapping("updateGoodsThumb")
     public Tip updateGoodsThumb(String id, String imageUrl) {
-        Optional<Goods> tempGoods = Optional.ofNullable(goodsService.getById(id));
-        if (tempGoods.isEmpty()) {
+        Optional<Produce> target = Optional.ofNullable(produceService.getById(id));
+        if (target.isEmpty()) {
             return new ErrorTip(-1, "没有此商品名!");
         }
 
-        tempGoods.get().setThumb(imageUrl);
+        target.get().setThumb(imageUrl);
 
-        if (goodsService.updateById(tempGoods.get())) {
+        if (produceService.updateById(target.get())) {
             return new SuccessTip("上传成功!");
         } else {
             return new ErrorTip(-1, "上传失败!");

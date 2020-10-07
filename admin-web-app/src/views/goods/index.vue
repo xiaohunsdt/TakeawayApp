@@ -132,12 +132,7 @@
           @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
-    <goods-dialog
-        :category-list="categoryList"
-        :dialog-visible.sync="dialogVisible"
-        :goods-data.sync="currentGoods"
-        @event-success="onSearch"
-    />
+    <goods-dialog ref="goods-dialog" @event-success="onSearch"/>
     <goods-image-dialog
         :dialogVisible.sync="imageUploaderVisible"
         :goodsData.sync="currentGoods"/>
@@ -203,8 +198,7 @@ export default {
       this.getList()
     },
     onEdit(row) {
-      this.currentGoods = row
-      this.dialogVisible = true
+      this.$refs['goods-dialog'].openWindow(row, this.categoryList)
     },
     onDelete(id) {
       this.$confirm('是否确定删除此商品?', '提示', {
@@ -219,7 +213,7 @@ export default {
       })
     },
     onCreateNewGoods() {
-      this.dialogVisible = true
+      this.$refs['goods-dialog'].openWindow(null, this.categoryList)
     },
     onUploadImg(currentGoods) {
       this.currentGoods = currentGoods

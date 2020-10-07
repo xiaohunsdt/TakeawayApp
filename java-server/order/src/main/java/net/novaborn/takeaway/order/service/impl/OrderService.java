@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
@@ -40,6 +42,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     private OrderItemService orderItemService;
 
     private GoodsService goodsService;
+
+    private ProduceService produceService;
 
     private GoodsStockService goodsStockService;
 
@@ -127,9 +131,9 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int realPrice = orderItemList.parallelStream()
                 .filter(orderItem -> orderItem.getGoodsId() != null)
                 .map(orderItem -> {
-                    Goods goods = goodsService.getById(orderItem.getGoodsId());
+                    Produce produce = produceService.getById(orderItem.getProduceId());
                     // 鸭货除外
-                    if (goods.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
+                    if (produce.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
                     } else {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
