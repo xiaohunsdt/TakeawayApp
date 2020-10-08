@@ -160,9 +160,16 @@ export const asyncRoutes = [
                 path: 'category',
                 name: 'CategoryManagement',
                 // props: true,
-                component: () => import('@/views/category/index'),
+                component: () => import('@/views/goods/category/index'),
                 meta: { title: '分类管理', icon: 'tree' }
-            }
+            },
+          {
+            path: 'specs',
+            name: 'SpecManagement',
+            // props: true,
+            component: () => import('@/views/goods/spec/index'),
+            meta: { title: '规格管理', icon: 'tree' }
+          }
         ]
     },
     {

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import categoryApi from '@/api/category'
+import categoryApi from '@a/category'
 
 export default {
   name: 'AddCategoryDialog',
