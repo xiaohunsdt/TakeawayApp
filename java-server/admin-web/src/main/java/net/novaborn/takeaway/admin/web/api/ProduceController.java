@@ -75,7 +75,7 @@ public class ProduceController extends BaseController {
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
     @PostMapping("update")
-    public Tip update(Produce produce) {
+    public Tip update(@RequestBody @Validated ProduceDto produceDto) {
 //        Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
 //        if (targetGoods.isEmpty()) {
 //            return new ErrorTip(-1, "没有此商品名!");

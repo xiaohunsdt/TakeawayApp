@@ -15,6 +15,7 @@ public class ProduceDto implements Serializable {
 
     private ProduceSpec specs;
 
+    @Valid
     @NotNull(message = "商品列表必须设置")
     private List<GoodsDto> goodsList;
 }
