@@ -283,11 +283,8 @@ export default {
 
       this.sendLoading = true
       goodsApi.createNewGoods(this.produceData)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then(res => {
+            this.$message.success(res.message)
             this.$emit('event-success')
             this.closeWindow()
           })
@@ -300,11 +297,8 @@ export default {
 
       this.sendLoading = true
       goodsApi.updateGoods(this.produceData)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then(res => {
+            this.$message.success(res.message)
             this.$emit('event-success')
             this.closeWindow()
           })

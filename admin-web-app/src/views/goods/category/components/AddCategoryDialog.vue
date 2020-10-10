@@ -50,21 +50,14 @@ export default {
     },
     handleCreateNewCategory() {
       if (this.formData.name === null || this.formData.name === '') {
-        this.$message({
-          showClose: true,
-          message: '请输入分类名称',
-          type: 'error'
-        })
+        this.$message.error('请输入分类名称')
         return
       }
       this.createLoading = true
       categoryApi.createNewCategory(this.formData)
-          .then(response => {
+          .then(res => {
             this.dialogVisible = false
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             this.$emit('createSuccess')
           })
           .finally(() => {

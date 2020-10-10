@@ -47,7 +47,7 @@ public class SpecController extends BaseController {
     public Tip create(Specification specification) {
         Optional<Specification> tempSpecification = specificationService.selectByKey(specification.getKey());
         if (tempSpecification.isPresent()) {
-            return new ErrorTip(-1, "存在同名分类!");
+            return new ErrorTip(-1, "存在同名规格!");
         }
 
         if (specificationService.save(specification)) {
@@ -74,8 +74,8 @@ public class SpecController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("deleteSpecification")
-    public Tip deleteSpecification(String id) {
+    @PostMapping("delete")
+    public Tip delete(String id) {
         if (specificationService.removeById(id)) {
             return new SuccessTip("删除成功!");
         } else {

@@ -8,10 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.goods.dao.IGoodsDao;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
+import net.novaborn.takeaway.goods.entity.ProduceSpec;
 import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
 import net.novaborn.takeaway.goods.exception.GoodsStockExceptionEnum;
 import net.novaborn.takeaway.goods.service.IGoodsService;
 import net.novaborn.takeaway.goods.entity.Goods;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,31 +34,7 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGoodsService {
     @Override
-    public boolean updateById(Goods entity) {
-        if (!super.updateById(entity)) {
-            throw new SysException(GoodsExceptionEnum.UPDATE_FAILED);
-        }
-
-        return true;
-    }
-
-    @Override
-    public Optional<Goods> selectByName(String name) {
-        return this.baseMapper.selectByName(name);
-    }
-
-    @Override
-    public List<Goods> getGoodsListByCategoryId(Long categoryId) {
-        return this.baseMapper.getGoodsListByCategoryId(categoryId);
-    }
-
-    @Override
-    public List<Goods> getGoodsListByFlag(String flag) {
-        return this.baseMapper.getGoodsListByFlag(flag);
-    }
-
-    @Override
-    public IPage<Goods> getGoodsListByPage(Page page, Map args) {
-        return this.baseMapper.getGoodsListByPage(page, args);
+    public List<Goods> getByProduceId(Long produceId) {
+        return this.baseMapper.getByProduceId(produceId);
     }
 }

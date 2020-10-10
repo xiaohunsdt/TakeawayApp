@@ -411,17 +411,11 @@ export default {
       })
       orderApi.printOrder(order)
           .then(res => {
-            this.$message({
-              message: '打印成功',
-              type: 'success'
-            })
+            this.$message.success('打印成功')
             order.payState = 'PAID'
           })
           .catch(err => {
-            this.$message({
-              message: err,
-              type: 'error'
-            })
+            this.$message.error(err)
           })
           .finally(() => {
             loading.close()
@@ -435,10 +429,7 @@ export default {
       }).then(() => {
         orderApi.confirmPay(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.payState = 'PAID'
             })
       })
@@ -446,10 +437,7 @@ export default {
     onReceiveOrder(order) {
       orderApi.receiveOrder(order.id)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             order.orderState = 'PRODUCING'
             this.onPrintOrder(order)
           })
@@ -457,10 +445,7 @@ export default {
     onDeliveryOrder(order) {
       orderApi.deliveryOrder(order.id)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             order.orderState = 'DELIVERING'
           })
     },
@@ -472,10 +457,7 @@ export default {
       }).then(() => {
         orderApi.finishOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.orderState = 'FINISHED'
             })
       })
@@ -488,10 +470,7 @@ export default {
       }).then(() => {
         orderApi.refundOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.orderState = 'REFUND'
             })
       })
@@ -504,10 +483,7 @@ export default {
       }).then(() => {
         orderApi.deleteOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               this.getList()
             })
       })

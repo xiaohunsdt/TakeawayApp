@@ -153,10 +153,7 @@
                 if (!this.formData.id) {
                   this.init()
                 }
-                this.$message({
-                  message: res.message,
-                  type: 'success'
-                })
+                this.$message.success(res.message)
               })
           }
         })

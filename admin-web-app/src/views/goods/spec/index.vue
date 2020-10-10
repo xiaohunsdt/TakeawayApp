@@ -13,8 +13,7 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <add-category-dialog
-              @createSuccess="onSearch"/>
+          <el-button size="mini" type="success" @click="onCreate">添加新规格</el-button>
         </el-col>
       </el-row>
     </base-card>
@@ -39,7 +38,7 @@
                 placeholder="请输入内容"
                 size="small"
                 @change="onEdit(scope.$index, scope.row)"></el-input>
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.key }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -108,17 +107,25 @@ export default {
       this.page.current = 1
       this.getList()
     },
+    onCreate() {
+      this.$prompt('请输入规格', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        specApi.create(value).then(res => {
+          this.$message.success(res.message)
+          this.onSearch()
+        })
+      })
+    },
     onEdit(index, row) {
       specApi.update(row)
-          .then((response) => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then((res) => {
+            this.$message.success(res.message)
           })
     },
     onDelete(id) {
-      this.$confirm('是否确定删除此分类?', '提示', {
+      this.$confirm('是否确定删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

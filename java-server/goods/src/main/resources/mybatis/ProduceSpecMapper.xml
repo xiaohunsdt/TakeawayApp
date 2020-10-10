@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.novaborn.takeaway.goods.dao.IGoodsDao">
-    <select id="getByProduceId" resultType="Goods">
-        SELECT * FROM `goods`
+<mapper namespace="net.novaborn.takeaway.goods.dao.IProduceSpecDao">
+    <select id="getListByProduceId" resultType="ProduceSpec">
+        SELECT * FROM `produce`
         <where>
             `produce_id` = #{produceId}
-            AND deleted = 0
         </where>
     </select>
 </mapper>

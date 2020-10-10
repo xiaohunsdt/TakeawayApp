@@ -136,11 +136,8 @@ export default {
     },
     onIsShowChange(banner) {
       bannerApi.changeIsShow(banner.id, banner.isShow)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then(res => {
+            this.$message.success(res.message)
           })
     },
     onEdit(id) {

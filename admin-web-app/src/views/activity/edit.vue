@@ -106,11 +106,8 @@
             params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
             activityApi.createNewActivity(params)
-              .then(response => {
-                this.$message({
-                  message: response.message,
-                  type: 'success'
-                })
+              .then(res => {
+                this.$message.success(res.message)
               })
           }
         })

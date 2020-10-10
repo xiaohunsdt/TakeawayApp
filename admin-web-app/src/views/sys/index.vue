@@ -365,10 +365,7 @@ export default {
           break
         case 'PRINTER':
           if (this.printerSetting.sn === '') {
-            this.$message({
-              message: '请填写设备号!',
-              type: 'warning'
-            })
+            this.$message.warning('请输入设备号')
             return
           }
           settings = Object.assign({}, this.printerSetting)
@@ -378,10 +375,7 @@ export default {
       this.saveLoading = true
       settingApi.updateSetting(settings, scope)
         .then(res => {
-          this.$message({
-            message: res.message,
-            type: 'success'
-          })
+          this.$message.success(res.message)
         })
         .finally(() => {
           this.saveLoading = false

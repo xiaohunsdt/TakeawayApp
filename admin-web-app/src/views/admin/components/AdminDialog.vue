@@ -88,20 +88,14 @@ export default {
     onEdit() {
       adminApi.updateAdmin(this.formData)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             this.$emit('updated-admin', this.formData)
           })
     },
     onSave() {
       adminApi.createNewSubAdmin(this.formData)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             this.$emit('updated-admin', this.formData)
           })
     }

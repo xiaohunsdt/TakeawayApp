@@ -146,11 +146,8 @@ export default {
     },
     onIsShowChange(activity) {
       activityApi.changeIsShow(activity.id, activity.isShow)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then(res => {
+            this.$message.success(res.message)
           })
     },
     onEdit(id) {

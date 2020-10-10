@@ -1,5 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.novaborn.takeaway.goods.dao.IProduceDao">
+    <select id="selectByName" resultType="Produce">
+        SELECT * FROM `produce`
+        <where>
+            `name` = #{name}
+            AND deleted = 0
+        </where>
+    </select>
 
+    <select id="getListByCategoryId" resultType="Produce">
+        SELECT * FROM `produce`
+        <where>
+            `category_id` = #{categoryId}
+            AND deleted = 0
+        </where>
+        ORDER BY `index` DESC, `create_date` ASC
+    </select>
+
+    <select id="getListByFlag" resultType="Produce">
+        SELECT * FROM `produce`
+        <where>
+            `flags` like '%${flag}%'
+            AND deleted = 0
+        </where>
+        ORDER BY `index` DESC, `create_date` ASC
+    </select>
+
+    <select id="getListByPage" resultType="Produce">
+        SELECT * FROM `produce`
+        <where>
+            <if test="args.name != '' and args.name != null">
+                `name` like '%${args.name}%'
+            </if>
+            <if test="args.categoryId != '' and args.categoryId != null">
+                AND `category_id` = #{args.categoryId}
+            </if>
+            <if test="args.state != '' and args.state != null">
+                AND `state` = #{args.state}
+            </if>
+            AND deleted = 0
+        </where>
+        ORDER BY `index` DESC, `create_date` ASC
+    </select>
 </mapper>

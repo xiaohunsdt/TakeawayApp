@@ -62,11 +62,8 @@ export default {
   methods: {
     onSuccess(response, file, fileList) {
       const thumb = `/upload/images/${response.message}`
-      goodsApi.updateGoodsThumb(this.goodsData.id, thumb).then(response => {
-        this.$message({
-          message: '上传成功',
-          type: 'success'
-        })
+      goodsApi.updateGoodsThumb(this.goodsData.id, thumb).then(res => {
+        this.$message.success('上传成功')
       })
     },
     handleRemove(file, fileList) {

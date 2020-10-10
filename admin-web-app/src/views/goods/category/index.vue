@@ -122,11 +122,8 @@ export default {
     },
     onEdit(index, row) {
       categoryApi.updateCategory(row)
-          .then((response) => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then((res) => {
+            this.$message.success(res.message)
           })
     },
     onDelete(id) {

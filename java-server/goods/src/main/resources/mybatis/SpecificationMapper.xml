@@ -4,7 +4,7 @@
     <select id="selectByKey" resultType="Specification">
         SELECT * FROM `specification`
         <where>
-            `key` = #{args.key}
+            `key` = #{key}
         </where>
     </select>
 
