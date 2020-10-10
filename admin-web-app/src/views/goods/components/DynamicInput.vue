@@ -47,7 +47,6 @@
         this.$emit('update:modelArray', this.modelArray)
       },
       addModel() {
-        console.log(this.ruleModelName)
         this.modelArray.push({
           key: new Date().getTime(),
           value: ''

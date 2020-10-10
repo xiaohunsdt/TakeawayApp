@@ -12,10 +12,9 @@
       <el-step title="基本信息"></el-step>
       <el-step title="规格设置"></el-step>
       <el-step title="SKU设置"></el-step>
-      <el-step title="追加商品"></el-step>
     </el-steps>
     <div style="margin-top:50px">
-      <el-form v-if="active===0" :model="produceData" :rules="rules" size="mini" status-icon>
+      <el-form v-if="active===0" ref="form1" :model="produceData" :rules="rules" size="mini" status-icon>
         <base-card>
           <el-form-item label="商品名称" prop="name">
             <el-input v-model="produceData.name" autocomplete="off"/>
@@ -101,10 +100,22 @@
       </el-form>
       <div v-if="active===2">
         <base-card>
-          <el-table style="width: 100%">
-            <el-table-column label="规格">
+          <el-table :data="goodsList" max-height="600px" style="width: 100%">
+            <el-table-column v-for="spec in specData.selected" :key="spec.key" :label="spec.key">
               <template v-slot="scope">
-                {{ scope.row.key }}
+                {{ scope.row.ownSpecs[spec.id] }}
+              </template>
+            </el-table-column>
+            <el-table-column label="价格">
+              <template v-slot="scope">
+                <el-input v-model.number="scope.row.price" placeholder="请输入价格" size="small"/>
+              </template>
+            </el-table-column>
+            <el-table-column label="库存">
+              <template v-slot="scope">
+                <el-tooltip content="-1表示无限库存" placement="right">
+                  <el-input v-model.number="scope.row.stock" placeholder="请输入库存" size="small"/>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column label="可用">
@@ -120,13 +131,13 @@
     </div>
     <div slot="footer" class="dialog-footer">
       <el-button @click="closeWindow">取 消</el-button>
-      <el-button v-if="active!==0" type="primary" @click="active--">
+      <el-button v-if="active!==0" type="primary" @click="previous()">
         上一步
       </el-button>
-      <el-button v-if="active!==3" type="primary" @click="active++">
+      <el-button v-if="active!==2" type="primary" @click="next()">
         下一步
       </el-button>
-      <el-button v-if="active===3" v-loading.fullscreen.lock="sendLoading" type="primary" @click="handleCreateNewGoods">
+      <el-button v-if="active===2" v-loading.fullscreen.lock="sendLoading" type="primary" @click="handleCreateNewGoods">
         <div v-if="goods===null">创建</div>
         <div v-else>修改</div>
       </el-button>
@@ -136,6 +147,7 @@
 
 <script>
 import goodsApi from '@/api/goods'
+import specApi from '@/api/spec'
 import DynamicInput from './DynamicInput'
 import BaseCard from '@c/BaseCard'
 
@@ -166,37 +178,54 @@ export default {
         this.goodsList = []
         let sku = []
         const array = this.specData.selected.map(spec => spec.params.map(item => {
-          return { k: spec.id, v: item.value }
+          const obj = {}
+          obj[spec.id] = item.value
+          return obj
         }))
         if (array.length < 2) {
           sku = array[0] || []
+        } else {
+          sku = array.reduce((total, currentValue) => {
+            const res = []
+            total.forEach(t => {
+              currentValue.forEach(cv => {
+                if (t instanceof Array) {
+                  res.push([...t, cv])
+                } else {
+                  res.push([t, cv])
+                }
+              })
+            })
+            return res
+          })
         }
 
-        sku = array.reduce((total, currentValue) => {
-          const res = []
-          total.forEach(t => {
-            currentValue.forEach(cv => {
-              if (t instanceof Array) {
-                res.push([...t, cv])
-              } else {
-                res.push([t, cv])
-              }
-            })
-          })
-          return res
-        })
+        if (sku.length > 0) {
+          for (let i = 0; i < sku.length; i++) {
+            const indexes = []
+            for (let j = 0; j < sku[i].length; j++) {
+              const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j].v)
+              indexes[j] = index
+            }
 
-        for (let i = 0; i < sku.length; i++) {
-          const indexes = []
-          for (let j = 0; j < sku[i].length; j++) {
-            console.log(sku[i])
-            console.log(sku[i][j])
-            const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j].v)
-            indexes[j] = index
+            let targetSku = sku[i]
+            if (targetSku instanceof Array) {
+              targetSku = targetSku.reduce((previous, next) => {
+                return Object.assign(previous, next)
+              }, {})
+            }
+            const goodsData = {}
+            goodsData.ownSpecs = targetSku
+            goodsData.indexes = indexes.join('_')
+            goodsData.price = 0
+            goodsData.stock = 0
+            goodsData.state = 0
+            this.goodsList.push(goodsData)
           }
+        } else {
           const goodsData = {}
-          goodsData.ownSpecs = sku[i]
-          goodsData.indexes = indexes.join('_')
+          goodsData.ownSpecs = null
+          goodsData.indexes = null
           goodsData.price = 0
           goodsData.stock = 0
           goodsData.state = 0
@@ -212,27 +241,7 @@ export default {
       active: 0,
       goods: null,
       categoryList: [],
-      specList: [{
-        id: 1,
-        key: '颜色',
-        params: []
-      },
-        {
-          id: 2,
-          key: '尺寸',
-          params: []
-        },
-        {
-          id: 3,
-          key: '口味',
-          params: []
-        },
-        {
-          id: 4,
-          key: '測試',
-          params: []
-        }
-      ],
+      specList: [],
       produceData: {},
       specData: {
         currentSpec: null,
@@ -310,6 +319,12 @@ export default {
       this.goods = goods
       this.categoryList = categoryList
       this.dialogVisible = true
+      specApi.getAll().then(res => {
+        res.forEach(item => {
+          item.params = []
+        })
+        this.specList = res
+      })
     },
     closeWindow() {
       this.dialogVisible = false
@@ -342,6 +357,20 @@ export default {
       console.log(index)
       if (index >= 0) {
         this.specData.selected.splice(index, 1)
+      }
+    },
+    previous() {
+      this.active--
+    },
+    next() {
+      if (this.active === 0) {
+        this.$refs['form1'].validate((valid) => {
+          if (valid) {
+            this.active++
+          }
+        })
+      } else {
+        this.active++
       }
     }
   }
