@@ -3,6 +3,7 @@ package net.novaborn.takeaway.admin.web.api;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.web.dto.ProduceDto;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -53,16 +56,9 @@ public class ProduceController extends BaseController {
         return ResponseEntity.ok(page);
     }
 
-    @GetMapping("getStockByGoodsId")
-    public ResponseEntity getStockByGoodsId(Long id) {
-        GoodsStock goodsStock = goodsStockService.getByGoodsId(id)
-                .orElseThrow(() -> new SysException(GoodsStockExceptionEnum.STOCK_NOT_FOUND));
-        return ResponseEntity.ok(goodsStock.getStock());
-    }
-
     @ResponseBody
     @PostMapping("create")
-    public Tip create(Produce produce) {
+    public Tip create(@RequestBody @Validated ProduceDto produceDto) {
 //        Optional<Goods> tempGoods = goodsService.selectByName(goods.getName());
 //        if (tempGoods.isPresent()) {
 //            return new ErrorTip(-1, "存在同名商品!");
@@ -78,7 +74,7 @@ public class ProduceController extends BaseController {
 
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    @PostMapping("updateGoods")
+    @PostMapping("update")
     public Tip update(Produce produce) {
 //        Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
 //        if (targetGoods.isEmpty()) {
@@ -156,8 +152,8 @@ public class ProduceController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping("deleteGoods")
-    public Tip deleteGoods(String id) {
+    @PostMapping("delete")
+    public Tip delete(String id) {
 //        if (goodsService.removeById(id)) {
 //            return new SuccessTip("删除成功!");
 //        } else {

@@ -14,7 +14,7 @@
       <el-step title="SKU设置"></el-step>
     </el-steps>
     <div style="margin-top:50px">
-      <el-form v-if="active===0" ref="form1" :model="produceData" :rules="rules" size="mini" status-icon>
+      <el-form v-if="active===0" ref="produce-form" :model="produceData" :rules="rules" size="mini" status-icon>
         <base-card>
           <el-form-item label="商品名称" prop="name">
             <el-input v-model="produceData.name" autocomplete="off"/>
@@ -45,7 +45,6 @@
             <el-select v-model="produceData.state" placeholder="选择分类">
               <el-option label="下架" value="OFF"/>
               <el-option label="上架" value="ON"/>
-              <el-option label="缺货" value="SHORTAGE"/>
             </el-select>
           </el-form-item>
         </base-card>
@@ -120,9 +119,11 @@
             </el-table-column>
             <el-table-column label="可用">
               <template v-slot="scope">
-                <el-button size="mini" style="margin-left: 10px" type="primary" @click="deleteSpec(scope.row)">
-                  可用
-                </el-button>
+                <el-select v-model="scope.row.state" placeholder="选择状态">
+                  <el-option label="上架" value="ON"></el-option>
+                  <el-option label="下架" value="OFF"></el-option>
+                  <el-option label="缺货" value="SHORTAGE"></el-option>
+                </el-select>
               </template>
             </el-table-column>
           </el-table>
@@ -146,7 +147,7 @@
 </template>
 
 <script>
-import goodsApi from '@/api/goods'
+import produceApi from '@/api/produce'
 import specApi from '@/api/spec'
 import DynamicInput from './DynamicInput'
 import BaseCard from '@c/BaseCard'
@@ -162,14 +163,14 @@ export default {
       if (newVal) {
         if (this.goods != null) {
           this.sendLoading = true
-          goodsApi.getByGoodsId(this.goods.id)
-              .then(response => {
-                this.produceData = response
-                this.flagSelected = this.produceData.flags.split(',')
-              })
-              .finally(() => {
-                this.sendLoading = false
-              })
+          // produceApi.getById(this.goods.id)
+          //     .then(response => {
+          //       this.produceData = response
+          //       this.flagSelected = this.produceData.flags.split(',')
+          //     })
+          //     .finally(() => {
+          //       this.sendLoading = false
+          //     })
         }
       }
     },
@@ -218,7 +219,7 @@ export default {
             goodsData.ownSpecs = targetSku
             goodsData.indexes = indexes.join('_')
             goodsData.price = 0
-            goodsData.stock = 0
+            goodsData.stock = -1
             goodsData.state = 0
             this.goodsList.push(goodsData)
           }
@@ -227,7 +228,7 @@ export default {
           goodsData.ownSpecs = null
           goodsData.indexes = null
           goodsData.price = 0
-          goodsData.stock = 0
+          goodsData.stock = -1
           goodsData.state = 0
           this.goodsList.push(goodsData)
         }
@@ -236,7 +237,7 @@ export default {
   },
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: false,
       sendLoading: false,
       active: 0,
       goods: null,
@@ -274,24 +275,17 @@ export default {
   },
   methods: {
     handleCreateNewGoods() {
-      this.$refs.formRef.validate((valid) => {
-        if (valid) {
-          if (this.goods === null) {
-            this.createGoods()
-          } else {
-            this.updateGoods()
-          }
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      if (this.goods === null) {
+        this.createGoods()
+      } else {
+        this.updateGoods()
+      }
     },
     createGoods() {
       this.produceData.flags = this.flagSelected.join()
 
       this.sendLoading = true
-      goodsApi.createNewGoods(this.produceData)
+      produceApi.create(this.produceData, this.specData.selected, this.goodsList)
           .then(res => {
             this.$message.success(res.message)
             this.$emit('event-success')
@@ -305,7 +299,7 @@ export default {
       this.produceData.flags = this.flagSelected.join()
 
       this.sendLoading = true
-      goodsApi.updateGoods(this.produceData)
+      produceApi.update(this.produceData)
           .then(res => {
             this.$message.success(res.message)
             this.$emit('event-success')
@@ -364,7 +358,7 @@ export default {
     },
     next() {
       if (this.active === 0) {
-        this.$refs['form1'].validate((valid) => {
+        this.$refs['produce-form'].validate((valid) => {
           if (valid) {
             this.active++
           }
