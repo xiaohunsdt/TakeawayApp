@@ -5,7 +5,6 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.activity.signin.entity.SignIn;
 import net.novaborn.takeaway.activity.signin.service.impl.SignInService;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
@@ -41,6 +40,7 @@ public class OrderSignInReceiver {
     private SignInService signInService;
 
     private CouponService couponService;
+
     private CouponTemplateService couponTemplateService;
 
     @SneakyThrows
@@ -51,17 +51,36 @@ public class OrderSignInReceiver {
 
         try {
             Date current = new Date();
+            CouponTemplate couponTemplate;
             signInService.signIn(order.getUserId(), order.getCreateDate());
-            int signInedCount = signInService.getSignInedCount(order.getUserId(), current, Calendar.WEEK_OF_MONTH);
-            if (signInedCount >= 7) {
-                int weekOfMonth = DateUtil.weekOfMonth(current);
-                SignIn signIn = signInService.getSignIn(order.getUserId(), current).get();
-                CouponTemplate couponTemplate = couponTemplateService.getById("968f9d2cf1eedd6f798f05bfbdb5d0a7");
-                if (couponTemplate != null && !signIn.getWeekExchangedList().contains(weekOfMonth)) {
-                    couponService.generateCoupon(couponTemplate, signIn.getUserId());
-                    signIn.getWeekExchangedList().add(weekOfMonth);
-                    signInService.saveSignIn(signIn.getUserId(), signIn.getCreateDate(), signIn);
-                }
+            int signInedCount = signInService.getSignInedCount(order.getUserId(), current, Calendar.MONTH);
+//            if (signInedCount == 7) {
+//                int weekOfMonth = DateUtil.weekOfMonth(current);
+//                SignIn signIn = signInService.getSignIn(order.getUserId(), current).get();
+//                CouponTemplate couponTemplate = couponTemplateService.getById("968f9d2cf1eedd6f798f05bfbdb5d0a7");
+//                if (couponTemplate != null && !signIn.getWeekExchangedList().contains(weekOfMonth)) {
+//                    couponService.generateCoupon(couponTemplate, signIn.getUserId());
+//                    signIn.getWeekExchangedList().add(weekOfMonth);
+//                    signInService.saveSignIn(signIn.getUserId(), signIn.getCreateDate(), signIn);
+//                }
+//            }
+            switch (signInedCount) {
+                case 7:
+                    couponTemplate = couponTemplateService.getById(1301898254461513729L);
+                    break;
+                case 14:
+                    couponTemplate = couponTemplateService.getById(1315330201966731266L);
+                    break;
+                case 20:
+                    couponTemplate = couponTemplateService.getById(1315330495601565698L);
+                    break;
+                default:
+                    couponTemplate = null;
+                    break;
+            }
+
+            if (couponTemplate != null) {
+                couponService.generateCoupon(couponTemplate, order.getUserId());
             }
         } catch (Exception e) {
             log.error("订单ID: {},设置订单签到失败!重新方式队列中!!", order.getId());

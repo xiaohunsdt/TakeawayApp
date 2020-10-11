@@ -1,13 +1,11 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -22,7 +20,6 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -129,7 +126,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 .map(orderItem -> {
                     Goods goods = goodsService.getById(orderItem.getGoodsId());
                     // 鸭货除外
-                    if (goods.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
+                    if (goods.getCategoryId() == 1301894880743731201L) {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
                     } else {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
@@ -207,6 +204,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         //设置 优惠卷折扣
         if (couponId != null) {
             this.setDiscount(order, orderItemList, couponId);
+        } else {
+            this.setDiscount(order, orderItemList, 88);
         }
 
         //填写订单信息
