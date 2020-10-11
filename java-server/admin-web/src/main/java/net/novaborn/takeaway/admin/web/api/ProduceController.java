@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.dto.ProduceDto;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author xiaohun
@@ -58,23 +60,20 @@ public class ProduceController extends BaseController {
 
     @ResponseBody
     @PostMapping("create")
+    @Transactional(rollbackFor = Exception.class)
     public Tip create(@RequestBody @Validated ProduceDto produceDto) {
-//        Optional<Goods> tempGoods = goodsService.selectByName(goods.getName());
-//        if (tempGoods.isPresent()) {
-//            return new ErrorTip(-1, "存在同名商品!");
-//        }
-//
-//        if (goodsService.save(goods) && goodsStockService.createGoodStock(goods, null)) {
-//            return new SuccessTip("创建成功!");
-//        } else {
-//            return new ErrorTip(-1, "创建失败!");
-//        }
+        Optional<Produce> tempGoods = produceService.selectByName(produceDto.getProduce().getName());
+        if (tempGoods.isPresent()) {
+            return new ErrorTip(-1, "存在同名商品!");
+        }
+
+        produceService.save(produceDto.getProduce());
         return null;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @ResponseBody
     @PostMapping("update")
+    @Transactional(rollbackFor = Exception.class)
     public Tip update(@RequestBody @Validated ProduceDto produceDto) {
 //        Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
 //        if (targetGoods.isEmpty()) {
