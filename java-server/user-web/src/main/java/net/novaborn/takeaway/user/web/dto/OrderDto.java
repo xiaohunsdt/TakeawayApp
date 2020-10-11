@@ -19,6 +19,7 @@ public class OrderDto {
 
     @Valid
     @Size(min = 1, message = "没有订单产品信息")
+    @NotNull(message = "没有订单产品信息")
     private List<OrderItem> orderItems;
 
     private Long couponId;

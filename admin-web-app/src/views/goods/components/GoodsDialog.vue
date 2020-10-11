@@ -120,8 +120,8 @@
             <el-table-column label="可用">
               <template v-slot="scope">
                 <el-select v-model="scope.row.state" placeholder="选择状态">
-                  <el-option label="上架" value="ON"></el-option>
-                  <el-option label="下架" value="OFF"></el-option>
+                  <el-option label="可用" value="ON"></el-option>
+                  <el-option label="不可用" value="OFF"></el-option>
                   <el-option label="缺货" value="SHORTAGE"></el-option>
                 </el-select>
               </template>
@@ -204,9 +204,16 @@ export default {
         if (sku.length > 0) {
           for (let i = 0; i < sku.length; i++) {
             const indexes = []
-            for (let j = 0; j < sku[i].length; j++) {
-              const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j].v)
-              indexes[j] = index
+            if (sku[i] instanceof Array) {
+              for (let j = 0; j < sku[i].length; j++) {
+                const key = this.specData.selected[j]['id']
+                const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j][key])
+                indexes[j] = index
+              }
+            } else {
+              const key = this.specData.selected[0]['id']
+              const index = this.specData.selected[0].params.findIndex(item => item.value === sku[i][key])
+              indexes[0] = index
             }
 
             let targetSku = sku[i]
@@ -220,7 +227,7 @@ export default {
             goodsData.indexes = indexes.join('_')
             goodsData.price = 0
             goodsData.stock = -1
-            goodsData.state = 0
+            goodsData.state = 'OFF'
             this.goodsList.push(goodsData)
           }
         } else {
@@ -229,7 +236,7 @@ export default {
           goodsData.indexes = null
           goodsData.price = 0
           goodsData.stock = -1
-          goodsData.state = 0
+          goodsData.state = 'OFF'
           this.goodsList.push(goodsData)
         }
       }

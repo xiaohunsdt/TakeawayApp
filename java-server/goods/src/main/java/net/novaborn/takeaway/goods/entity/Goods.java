@@ -41,7 +41,7 @@ public class Goods extends Model<Goods> {
     /**
      * 特有属性
      */
-    private String ownSpec;
+    private String ownSpecs;
 
     /**
      * 状态

@@ -7,8 +7,9 @@ import lombok.Data;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,6 +29,7 @@ public class Produce extends Model<Produce> {
     /**
      * 名称
      */
+    @NotBlank(message = "名称必须设置")
     private String name;
 
     /**
@@ -49,6 +51,7 @@ public class Produce extends Model<Produce> {
     /**
      * 所属类目
      */
+    @NotNull(message = "分类必须设置")
     private Long categoryId;
 
     /**

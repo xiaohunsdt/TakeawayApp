@@ -34,35 +34,18 @@ export function create(produce, specs, goodsList) {
         url: '/produce/create',
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        data: { produce, specs: formatSpecs(specs), goodsList }
+        data: { produce, specs: formatSpecs(specs), goodsList: formatGoodsList(goodsList) }
     })
 }
 
-export function update(data) {
+export function update(produce, specs, goodsList) {
     return request({
         url: '/produce/update',
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        data,
-        transformRequest: [function(data) {
-            data = Qs.stringify(data)
-            return data
-        }]
+        data: { produce, specs: formatSpecs(specs), goodsList: formatGoodsList(goodsList) }
     })
 }
-
-// export function updateStock(goodsId, stock) {
-//   return request({
-//     url: '/produce/updateStock',
-//     method: 'post',
-//     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//     data: { goodsId, stock },
-//     transformRequest: [function(data) {
-//       data = Qs.stringify(data)
-//       return data
-//     }]
-//   })
-// }
 
 export function updateGoodsThumb(id, imageUrl) {
     return request({
@@ -101,6 +84,18 @@ function formatSpecs(specs) {
         obj[item.id] = item.params.map(item => item.value).join(',')
     })
     return { options: JSON.stringify(obj) }
+}
+
+function formatGoodsList(goodsList) {
+    const target = []
+    goodsList.forEach(item => {
+        const obj = Object.assign({}, item)
+        if (obj.ownSpecs) {
+            obj.ownSpecs = JSON.stringify(obj.ownSpecs)
+        }
+        target.push(obj)
+    })
+    return target
 }
 
 export default {
