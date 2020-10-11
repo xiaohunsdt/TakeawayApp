@@ -91,14 +91,14 @@ public class WechatAutoTask {
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
 
-//        sysJob = new SysJob();
-//        sysJob.setJobId(3L);
-//        sysJob.setJobGroup(jobGroup);
-//        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
-//        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
-//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-//        sysJob.setConcurrent(false);
-//        sysJobService.insertJob(sysJob);
+        sysJob = new SysJob();
+        sysJob.setJobId(3L);
+        sysJob.setJobGroup(jobGroup);
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
+        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+        sysJob.setConcurrent(false);
+        sysJobService.insertJob(sysJob);
     }
 
     public void goodsShow() {
@@ -169,13 +169,12 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "月饼还剩一点五仁哦！[拥抱][拥抱][拥抱]\n"+
-                        "今天点餐继续送一块月饼哦！！小伙伴们抓紧时间点餐!\n"
+                "川香苑一周年店庆活动来了哦！！！[社会社会][社会社会]\n新厨师新口味！！88折大优惠，大家一起冲鸭[拥抱][拥抱]~~~"
         );
         autoMessage.setImgUrlList(
                 Arrays.asList(
-                        "https://admin.cxy.novaborn.net/upload/images/activity/ae4e1ef3057a4752993184c7ca296650.png",
-                        "https://admin.cxy.novaborn.net/upload/images/ebd8dedc55d246a7ba04dd931dcaa113.jpeg"
+                        "https://admin.cxy.novaborn.net/upload/images/activity/2e2539e5de1c48a099d164ee311ede26.png",
+                        "https://admin.cxy.novaborn.net/upload/images/activity/8ca7dcc252e048bcae415e94441d930a.png"
                 )
         );
 
