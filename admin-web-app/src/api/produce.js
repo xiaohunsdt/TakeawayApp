@@ -8,6 +8,13 @@ export function getById(id) {
     })
 }
 
+export function getDetailById(id) {
+    return request({
+        url: '/produce/getDetailById',
+        params: { id }
+    })
+}
+
 export function getAll() {
     return request({
         url: '/produce/getAll',
@@ -47,9 +54,9 @@ export function update(produce, specs, goodsList) {
     })
 }
 
-export function updateGoodsThumb(id, imageUrl) {
+export function updateThumb(id, imageUrl) {
     return request({
-        url: '/produce/updateGoodsThumb',
+        url: '/produce/updateThumb',
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         data: {
@@ -100,9 +107,10 @@ function formatGoodsList(goodsList) {
 
 export default {
     getById,
+    getDetailById,
     getAll,
     getListByPage,
     create,
-    updateGoodsThumb,
+    updateThumb,
     del
 }

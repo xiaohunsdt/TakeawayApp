@@ -8,4 +8,12 @@
             AND deleted = 0
         </where>
     </select>
+
+    <select id="getCountByProduceId" resultType="int">
+        SELECT count(*) FROM `goods`
+        <where>
+            `produce_id` = #{produceId}
+            AND deleted = 0
+        </where>
+    </select>
 </mapper>

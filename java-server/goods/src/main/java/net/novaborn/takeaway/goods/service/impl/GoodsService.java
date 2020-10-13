@@ -37,4 +37,9 @@ public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGood
     public List<Goods> getByProduceId(Long produceId) {
         return this.baseMapper.getByProduceId(produceId);
     }
+
+    @Override
+    public int getCountByProduceId(Long produceId) {
+        return this.baseMapper.getCountByProduceId(produceId);
+    }
 }

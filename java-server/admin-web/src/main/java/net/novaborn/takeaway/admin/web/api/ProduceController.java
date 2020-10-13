@@ -1,18 +1,25 @@
 package net.novaborn.takeaway.admin.web.api;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.web.dto.GoodsDto;
 import net.novaborn.takeaway.admin.web.dto.ProduceDto;
-import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.admin.web.wrapper.ProduceWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
 import net.novaborn.takeaway.goods.entity.Produce;
-import net.novaborn.takeaway.goods.exception.GoodsStockExceptionEnum;
+import net.novaborn.takeaway.goods.entity.ProduceSpec;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
+import net.novaborn.takeaway.goods.service.impl.ProduceSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,10 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author xiaohun
@@ -36,13 +43,31 @@ public class ProduceController extends BaseController {
 
     ProduceService produceService;
 
+    ProduceSpecService produceSpecService;
+
+    GoodsService goodsService;
+
     GoodsStockService goodsStockService;
 
     @ResponseBody
     @GetMapping("getById")
-    public Object getById(String id) {
+    public Object getById(Long id) {
         Produce produce = produceService.getById(id);
         return produce;
+    }
+
+    @ResponseBody
+    @GetMapping("getDetailById")
+    public Object getDetailById(Long id) {
+        Produce produce = produceService.getById(id);
+        ProduceSpec produceSpec = produceSpecService.getById(id);
+        List<GoodsDto> goodsDtoList = goodsService.getByProduceId(id).stream().map(item -> {
+            GoodsDto goodsDto = new GoodsDto();
+            BeanUtil.copyProperties(item, goodsDto);
+            goodsDto.setStock(goodsStockService.getByGoodsId(item.getId()).get().getStock());
+            return goodsDto;
+        }).collect(Collectors.toList());
+        return new ProduceDto(produce, produceSpec, goodsDtoList);
     }
 
     @GetMapping("getAll")
@@ -54,7 +79,7 @@ public class ProduceController extends BaseController {
     @PostMapping("getListByPage")
     public ResponseEntity getListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page = (Page) produceService.getListByPage(page, args);
-//        page.setRecords((List) new GoodsWrapper(page.getRecords()).warp());
+        page.setRecords((List) new ProduceWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
@@ -62,13 +87,23 @@ public class ProduceController extends BaseController {
     @PostMapping("create")
     @Transactional(rollbackFor = Exception.class)
     public Tip create(@RequestBody @Validated ProduceDto produceDto) {
-        Optional<Produce> tempGoods = produceService.selectByName(produceDto.getProduce().getName());
-        if (tempGoods.isPresent()) {
+        Optional<Produce> tempProduce = produceService.selectByName(produceDto.getProduce().getName());
+        if (tempProduce.isPresent()) {
             return new ErrorTip(-1, "存在同名商品!");
         }
 
         produceService.save(produceDto.getProduce());
-        return null;
+        Long produceId = produceDto.getProduce().getId();
+
+        produceDto.getSpecs().setProduceId(produceId);
+        produceSpecService.save(produceDto.getSpecs());
+
+        produceDto.getGoodsList().forEach(item -> {
+            item.setProduceId(produceId);
+            goodsService.save(item);
+            goodsStockService.createGoodStock(item, item.getStock());
+        });
+        return new SuccessTip("创建成功!");
     }
 
     @ResponseBody
@@ -104,60 +139,40 @@ public class ProduceController extends BaseController {
         return null;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    @PostMapping("updateStock")
-    public Tip updateStock(Long goodsId, int stock) {
-//        Optional<GoodsStock> targetGoodsStock = goodsStockService.getByGoodsId(goodsId);
-//        if (targetGoodsStock.isEmpty()) {
-//            return new ErrorTip(-1, "没有此商品的库存信息!");
-//        }
-//
-//        targetGoodsStock.get().setStock(stock);
-//        goodsStockService.updateById(targetGoodsStock.get());
-//
-//        // 更新商品信息
-//        Goods goods = goodsService.getById(goodsId);
-//        if (targetGoodsStock.get().getStock() == 0 || targetGoodsStock.get().getStock() < -1) {
-//            if (goods.getState().equals(GoodsState.ON)) {
-//                goods.setState(GoodsState.SHORTAGE);
-//                goodsService.updateById(goods);
-//            }
-//        } else if (targetGoodsStock.get().getStock() == -1 || targetGoodsStock.get().getStock() > 0) {
-//            if (goods.getState().equals(GoodsState.SHORTAGE)) {
-//                goods.setState(GoodsState.ON);
-//                goodsService.updateById(goods);
-//            }
-//        }
-        return new SuccessTip("修改成功!");
-    }
+    @PostMapping("updateThumb")
+    public Tip updateThumb(String id, String imageUrl) {
+        Optional<Produce> target = Optional.ofNullable(produceService.getById(id));
+        if (target.isEmpty()) {
+            return new ErrorTip(-1, "没有此产品!");
+        }
 
-    @ResponseBody
-    @PostMapping("updateGoodsThumb")
-    public Tip updateGoodsThumb(String id, String imageUrl) {
-//        Optional<Produce> target = Optional.ofNullable(produceService.getById(id));
-//        if (target.isEmpty()) {
-//            return new ErrorTip(-1, "没有此商品名!");
-//        }
-//
-//        target.get().setThumb(imageUrl);
-//
-//        if (produceService.updateById(target.get())) {
-//            return new SuccessTip("上传成功!");
-//        } else {
-//            return new ErrorTip(-1, "上传失败!");
-//        }
-        return null;
+        target.get().setThumb(imageUrl);
+
+        if (produceService.updateById(target.get())) {
+            return new SuccessTip("上传成功!");
+        } else {
+            return new ErrorTip(-1, "上传失败!");
+        }
     }
 
     @ResponseBody
     @PostMapping("delete")
-    public Tip delete(String id) {
-//        if (goodsService.removeById(id)) {
-//            return new SuccessTip("删除成功!");
-//        } else {
-//            return new ErrorTip(-1, "删除失败!");
-//        }
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public Tip delete(Long id) {
+        List<Long> goodsIdList = goodsService.getByProduceId(id).stream().map(Goods::getId).collect(Collectors.toList());
+
+        LambdaQueryWrapper<GoodsStock> wrapper = Wrappers.lambdaQuery();
+        wrapper.in(GoodsStock::getGoodsId, goodsIdList);
+        List<Long> stockIdList = goodsStockService.list(wrapper).stream().map(GoodsStock::getId).collect(Collectors.toList());
+
+        if (produceSpecService.removeById(id)
+            && goodsService.removeByIds(goodsIdList)
+            && goodsStockService.removeByIds(stockIdList)
+            && produceService.removeById(id)) {
+            return new SuccessTip("删除成功!");
+        } else {
+            return new ErrorTip(-1, "删除失败!");
+        }
     }
 }

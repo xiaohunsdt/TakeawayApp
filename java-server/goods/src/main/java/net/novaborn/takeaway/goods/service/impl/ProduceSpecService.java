@@ -24,8 +24,4 @@ import java.util.Optional;
 @Service
 @Setter(onMethod_ = {@Autowired})
 public class ProduceSpecService extends ServiceImpl<IProduceSpecDao, ProduceSpec> implements IProduceSpecService {
-    @Override
-    public Optional<ProduceSpec> selectByProduceId(Long produceId) {
-        return this.baseMapper.selectByProduceId(produceId);
-    }
 }

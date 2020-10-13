@@ -1,6 +1,8 @@
 package net.novaborn.takeaway.admin.web.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.entity.ProduceSpec;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProduceDto implements Serializable {
 
     @Valid

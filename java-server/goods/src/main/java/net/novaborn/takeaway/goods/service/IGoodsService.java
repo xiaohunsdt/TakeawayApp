@@ -27,4 +27,11 @@ public interface IGoodsService extends IService<Goods> {
      * @return 查询到的产品商品
      */
     List<Goods> getByProduceId(@Param("produceId") Long produceId);
+
+    /**
+     * 根据产品id获取指定产品的商品数量
+     * @param produceId 产品Id
+     * @return 查询到的商品数量
+     */
+    int getCountByProduceId(@Param("produceId") Long produceId);
 }

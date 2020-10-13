@@ -381,6 +381,11 @@ couponStateMap.set('UN_USE', '未使用')
 couponStateMap.set('USED', '已使用')
 couponStateMap.set('EXPIRED', '已过期')
 
+const produceStateMap = new Map()
+produceStateMap.set('ON', '上架')
+produceStateMap.set('OFF', '下架')
+produceStateMap.set('SHORTAGE', '缺货')
+
 export function formatOrderState(orderState) {
   return orderStateMap.get(orderState)
 }
@@ -399,5 +404,9 @@ export function formatCouponType(couponType) {
 
 export function formatCouponState(couponType) {
   return couponStateMap.get(couponType)
+}
+
+export function formatProduceState(produceState) {
+  return produceStateMap.get(produceState)
 }
 

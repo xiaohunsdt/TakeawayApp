@@ -5,7 +5,7 @@
       :visible.sync="dialogVisible"
       style="text-align: left">
     <template v-slot:title>
-      <h3 v-if="goods===null">添加商品</h3>
+      <h3 v-if="produce===null">添加商品</h3>
       <h3 v-else>编辑商品</h3>
     </template>
     <el-steps :active="active" align-center finish-status="success">
@@ -139,7 +139,7 @@
         下一步
       </el-button>
       <el-button v-if="active===2" v-loading.fullscreen.lock="sendLoading" type="primary" @click="handleCreateNewGoods">
-        <div v-if="goods===null">创建</div>
+        <div v-if="produce===null">创建</div>
         <div v-else>修改</div>
       </el-button>
     </div>
@@ -159,86 +159,21 @@ export default {
     DynamicInput
   },
   watch: {
-    dialogVisible(newVal) {
-      if (newVal) {
-        if (this.goods != null) {
-          this.sendLoading = true
-          // produceApi.getById(this.goods.id)
-          //     .then(response => {
-          //       this.produceData = response
-          //       this.flagSelected = this.produceData.flags.split(',')
-          //     })
-          //     .finally(() => {
-          //       this.sendLoading = false
-          //     })
-        }
+    produce(newVal) {
+      if (newVal !== null) {
+        this.sendLoading = true
+        produceApi.getDetailById(newVal.id)
+            .then(res => {
+              this.produceData = res.produce
+            })
+            .finally(() => {
+              this.sendLoading = false
+            })
       }
     },
     active(newVal) {
       if (newVal === 2) {
-        this.goodsList = []
-        let sku = []
-        const array = this.specData.selected.map(spec => spec.params.map(item => {
-          const obj = {}
-          obj[spec.id] = item.value
-          return obj
-        }))
-        if (array.length < 2) {
-          sku = array[0] || []
-        } else {
-          sku = array.reduce((total, currentValue) => {
-            const res = []
-            total.forEach(t => {
-              currentValue.forEach(cv => {
-                if (t instanceof Array) {
-                  res.push([...t, cv])
-                } else {
-                  res.push([t, cv])
-                }
-              })
-            })
-            return res
-          })
-        }
-
-        if (sku.length > 0) {
-          for (let i = 0; i < sku.length; i++) {
-            const indexes = []
-            if (sku[i] instanceof Array) {
-              for (let j = 0; j < sku[i].length; j++) {
-                const key = this.specData.selected[j]['id']
-                const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j][key])
-                indexes[j] = index
-              }
-            } else {
-              const key = this.specData.selected[0]['id']
-              const index = this.specData.selected[0].params.findIndex(item => item.value === sku[i][key])
-              indexes[0] = index
-            }
-
-            let targetSku = sku[i]
-            if (targetSku instanceof Array) {
-              targetSku = targetSku.reduce((previous, next) => {
-                return Object.assign(previous, next)
-              }, {})
-            }
-            const goodsData = {}
-            goodsData.ownSpecs = targetSku
-            goodsData.indexes = indexes.join('_')
-            goodsData.price = 0
-            goodsData.stock = -1
-            goodsData.state = 'OFF'
-            this.goodsList.push(goodsData)
-          }
-        } else {
-          const goodsData = {}
-          goodsData.ownSpecs = null
-          goodsData.indexes = null
-          goodsData.price = 0
-          goodsData.stock = -1
-          goodsData.state = 'OFF'
-          this.goodsList.push(goodsData)
-        }
+        this.formatGoodsList()
       }
     }
   },
@@ -247,7 +182,7 @@ export default {
       dialogVisible: false,
       sendLoading: false,
       active: 0,
-      goods: null,
+      produce: null,
       categoryList: [],
       specList: [],
       produceData: {},
@@ -282,7 +217,7 @@ export default {
   },
   methods: {
     handleCreateNewGoods() {
-      if (this.goods === null) {
+      if (this.produce === null) {
         this.createGoods()
       } else {
         this.updateGoods()
@@ -290,7 +225,11 @@ export default {
     },
     createGoods() {
       this.produceData.flags = this.flagSelected.join()
-
+      this.goodsList.forEach(item => {
+        if (item.state === 'ON' && item.stock === 0) {
+          this.$message.warning('商品可用状态下必须设置库存')
+        }
+      })
       this.sendLoading = true
       produceApi.create(this.produceData, this.specData.selected, this.goodsList)
           .then(res => {
@@ -316,8 +255,8 @@ export default {
             this.sendLoading = false
           })
     },
-    openWindow(goods, categoryList) {
-      this.goods = goods
+    openWindow(produce, categoryList) {
+      this.produce = produce
       this.categoryList = categoryList
       this.dialogVisible = true
       specApi.getAll().then(res => {
@@ -329,16 +268,17 @@ export default {
     },
     closeWindow() {
       this.dialogVisible = false
+
       this.active = 0
+      this.produce = null
       this.produceData = {}
       this.specData = {
         currentSpec: null,
         selected: []
       }
-      this.goodsData = {}
       this.flagSelected = []
       this.$emit('update:dialogVisible', false)
-      this.$emit('update:goods', null)
+      this.$emit('update:produce', null)
     },
     addSpec() {
       if (!this.specData.currentSpec) {
@@ -372,6 +312,71 @@ export default {
         })
       } else {
         this.active++
+      }
+    },
+    formatGoodsList() {
+      this.goodsList = []
+      let sku = []
+      const array = this.specData.selected.map(spec => spec.params.map(item => {
+        const obj = {}
+        obj[spec.id] = item.value
+        return obj
+      }))
+      if (array.length < 2) {
+        sku = array[0] || []
+      } else {
+        sku = array.reduce((total, currentValue) => {
+          const res = []
+          total.forEach(t => {
+            currentValue.forEach(cv => {
+              if (t instanceof Array) {
+                res.push([...t, cv])
+              } else {
+                res.push([t, cv])
+              }
+            })
+          })
+          return res
+        })
+      }
+
+      if (sku.length > 0) {
+        for (let i = 0; i < sku.length; i++) {
+          const indexes = []
+          if (sku[i] instanceof Array) {
+            for (let j = 0; j < sku[i].length; j++) {
+              const key = this.specData.selected[j]['id']
+              const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j][key])
+              indexes[j] = index
+            }
+          } else {
+            const key = this.specData.selected[0]['id']
+            const index = this.specData.selected[0].params.findIndex(item => item.value === sku[i][key])
+            indexes[0] = index
+          }
+
+          let targetSku = sku[i]
+          if (targetSku instanceof Array) {
+            targetSku = targetSku.reduce((previous, next) => {
+              return Object.assign(previous, next)
+            }, {})
+          }
+          const goodsData = {}
+          goodsData.ownSpecs = targetSku
+          goodsData.indexes = indexes.join('_')
+          goodsData.price = 0
+          goodsData.stock = -1
+          goodsData.state = 'OFF'
+          this.goodsList.push(goodsData)
+        }
+      } else {
+        const goodsData = {}
+        goodsData.ownSpecs = null
+        goodsData.indexes = null
+        goodsData.price = 0
+        goodsData.stock = -1
+        goodsData.state = 'OFF'
+        this.goodsList.push(goodsData)
       }
     }
   }

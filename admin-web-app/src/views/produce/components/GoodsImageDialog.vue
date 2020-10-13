@@ -24,7 +24,7 @@
 
 <script>
 import { getToken } from '@/utils/auth'
-import goodsApi from '@/api/goods'
+import produceApi from '@/api/produce'
 
 export default {
   name: 'GoodsImageDialog',
@@ -62,7 +62,7 @@ export default {
   methods: {
     onSuccess(response, file, fileList) {
       const thumb = `/upload/images/${response.message}`
-      goodsApi.updateGoodsThumb(this.goodsData.id, thumb).then(res => {
+      produceApi.updateThumb(this.goodsData.id, thumb).then(res => {
         this.$message.success('上传成功')
       })
     },

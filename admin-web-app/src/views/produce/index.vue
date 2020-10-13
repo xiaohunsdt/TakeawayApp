@@ -57,7 +57,7 @@
         </el-table-column>
         <el-table-column
             align="center"
-            label="缩略图"
+            label="主图"
             width="100">
           <template v-slot="scope">
             <el-button
@@ -87,28 +87,20 @@
         </el-table-column>
         <el-table-column
             align="center"
-            label="价格"
-            prop="price">
-        </el-table-column>
-        <el-table-column
-            align="center"
-            label="月销"
-            prop="monthSale">
+            label="商品数量"
+            prop="goodsCount">
         </el-table-column>
         <el-table-column
             align="center"
             label="优先级"
             prop="index">
         </el-table-column>
-        <!--        <el-table-column-->
-        <!--          label="评分"-->
-        <!--          prop="rate"-->
-        <!--          align="center">-->
-        <!--        </el-table-column>-->
         <el-table-column
             align="center"
-            label="状态"
-            prop="state">
+            label="状态">
+          <template v-slot="scope">
+            {{ scope.row.state | produceStateFormat }}
+          </template>
         </el-table-column>
         <el-table-column
             align="center"
@@ -142,9 +134,10 @@
 <script>
 import BaseCard from '@/components/BaseCard'
 import GoodsImageDialog from './components/GoodsImageDialog'
-import goodsApi from '@/api/goods'
+import produceApi from '@/api/produce'
 import categoryApi from '@/api/category'
 import GoodsDialog from './components/GoodsDialog'
+import { formatProduceState } from '@u/index'
 
 export default {
   name: 'GoodsManagement',
@@ -152,6 +145,11 @@ export default {
     BaseCard,
     GoodsImageDialog,
     GoodsDialog
+  },
+  filters: {
+    produceStateFormat: function(value) {
+      return formatProduceState(value)
+    }
   },
   data() {
     return {
@@ -184,7 +182,7 @@ export default {
     getList() {
       this.listLoading = true
 
-      goodsApi.getGoodsListByPage(this.page, this.formData)
+      produceApi.getListByPage(this.page, this.formData)
           .then(response => {
             this.tableData = response.records
             this.page.total = parseInt(response.total)
@@ -206,7 +204,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        goodsApi.deleteGoods(id)
+        produceApi.del(id)
             .then(() => {
               this.getList()
             })
