@@ -411,7 +411,7 @@ export default {
             goodsData.state = 'OFF'
           }
 
-          goodsData.name = `${this.produceData.name} (${Object.values(targetSku).join(',')})`
+          goodsData.name = `${Object.values(targetSku).join(' ')}`
           this.goodsList.push(goodsData)
         }
       } else {
