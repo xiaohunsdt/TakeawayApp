@@ -14,7 +14,7 @@
       <el-step title="SKU设置"></el-step>
     </el-steps>
     <div style="margin-top:50px">
-      <el-form v-if="active===0" ref="produce-form" :model="produceData" :rules="rules" size="mini" status-icon>
+      <el-form v-show="active===0" ref="produce-form" :model="produceData" :rules="rules" size="mini" status-icon>
         <base-card>
           <el-form-item label="商品名称" prop="name">
             <el-input v-model="produceData.name" autocomplete="off"/>
@@ -49,7 +49,7 @@
           </el-form-item>
         </base-card>
       </el-form>
-      <el-form v-if="active===1" :model="specData" size="mini">
+      <el-form v-show="active===1" :model="specData" size="mini">
         <base-card>
           <h2>设置规格</h2>
           <el-form-item label="规格">
@@ -97,7 +97,7 @@
           </el-row>
         </base-card>
       </el-form>
-      <div v-if="active===2">
+      <div v-show="active===2">
         <base-card>
           <el-table :data="goodsList" max-height="600px" style="width: 100%">
             <el-table-column v-for="spec in specData.selected" :key="spec.key" :label="spec.key">
@@ -159,18 +159,6 @@ export default {
     DynamicInput
   },
   watch: {
-    produce(newVal) {
-      if (newVal !== null) {
-        this.sendLoading = true
-        produceApi.getDetailById(newVal.id)
-            .then(res => {
-              this.produceData = res.produce
-            })
-            .finally(() => {
-              this.sendLoading = false
-            })
-      }
-    },
     active(newVal) {
       if (newVal === 2) {
         this.formatGoodsList()
@@ -225,11 +213,11 @@ export default {
     },
     createGoods() {
       this.produceData.flags = this.flagSelected.join()
-      this.goodsList.forEach(item => {
-        if (item.state === 'ON' && item.stock === 0) {
-          this.$message.warning('商品可用状态下必须设置库存')
-        }
-      })
+      // this.goodsList.forEach(item => {
+      //   if (item.state === 'ON' && item.stock === 0) {
+      //     this.$message.warning('商品可用状态下必须设置库存')
+      //   }
+      // })
       this.sendLoading = true
       produceApi.create(this.produceData, this.specData.selected, this.goodsList)
           .then(res => {
@@ -245,7 +233,7 @@ export default {
       this.produceData.flags = this.flagSelected.join()
 
       this.sendLoading = true
-      produceApi.update(this.produceData)
+      produceApi.update(this.produceData, this.specData.selected, this.goodsList)
           .then(res => {
             this.$message.success(res.message)
             this.$emit('event-success')
@@ -255,16 +243,40 @@ export default {
             this.sendLoading = false
           })
     },
-    openWindow(produce, categoryList) {
-      this.produce = produce
+    async openWindow(produce, categoryList) {
       this.categoryList = categoryList
       this.dialogVisible = true
-      specApi.getAll().then(res => {
+      await specApi.getAll().then(res => {
         res.forEach(item => {
           item.params = []
         })
         this.specList = res
       })
+      if (produce) {
+        this.sendLoading = true
+        produceApi.getDetailById(produce.id)
+            .then(res => {
+              this.produce = res
+              this.produceData = res.produce
+              const specs = JSON.parse(res.specs.options)
+              for (const key in specs) {
+                const index = this.specList.findIndex(item => item.id === key)
+                if (index >= 0) {
+                  const paramsArr = specs[key].split(',').map(item => {
+                    return {
+                      key: new Date().getTime() + Math.floor(Math.random() * 100),
+                      value: item
+                    }
+                  })
+                  this.specList[index].params.push(...paramsArr)
+                  this.specData.selected.push(this.specList[index])
+                }
+              }
+            })
+            .finally(() => {
+              this.sendLoading = false
+            })
+      }
     },
     closeWindow() {
       this.dialogVisible = false
@@ -310,6 +322,26 @@ export default {
             this.active++
           }
         })
+      } else if (this.active === 1) {
+        if (this.specData.selected.length > 0) {
+          for (const item of this.specData.selected) {
+            if (item.params.length === 0) {
+              this.$message.warning('请将规格参数填写完整!')
+              return
+            }
+          }
+        }
+        if (produceApi.formatSpecs(this.specData.selected).options !== this.produce.specs.options) {
+          this.$confirm('此产品的规格参数发生改变,之前设置的sku将全部作废,是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.active++
+          })
+        } else {
+          this.active++
+        }
       } else {
         this.active++
       }
@@ -361,21 +393,40 @@ export default {
               return Object.assign(previous, next)
             }, {})
           }
-          const goodsData = {}
-          goodsData.ownSpecs = targetSku
-          goodsData.indexes = indexes.join('_')
-          goodsData.price = 0
-          goodsData.stock = -1
-          goodsData.state = 'OFF'
+
+          let goodsData
+          const goodsIndex = this.produce.goodsList.findIndex(item => {
+                return item.indexes === indexes.join('_') && item.ownSpecs === JSON.stringify(targetSku)
+              }
+          )
+          if (goodsIndex >= 0) {
+            goodsData = Object.assign({}, this.produce.goodsList[goodsIndex])
+            goodsData.ownSpecs = JSON.parse(goodsData.ownSpecs)
+          } else {
+            goodsData = {}
+            goodsData.ownSpecs = targetSku
+            goodsData.indexes = indexes.join('_')
+            goodsData.price = 0
+            goodsData.stock = -1
+            goodsData.state = 'OFF'
+          }
+
+          goodsData.name = `${this.produceData.name} (${Object.values(targetSku).join(',')})`
           this.goodsList.push(goodsData)
         }
       } else {
-        const goodsData = {}
+        let goodsData
+        if (this.produce.goodsList.length === 1) {
+          goodsData = Object.assign({}, this.produce.goodsList[0])
+        } else {
+          const goodsData = {}
+          goodsData.price = 0
+          goodsData.stock = -1
+          goodsData.state = 'OFF'
+        }
+        goodsData.name = this.produceData.name
         goodsData.ownSpecs = null
         goodsData.indexes = null
-        goodsData.price = 0
-        goodsData.stock = -1
-        goodsData.state = 'OFF'
         this.goodsList.push(goodsData)
       }
     }

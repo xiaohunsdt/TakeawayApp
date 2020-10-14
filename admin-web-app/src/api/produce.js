@@ -85,7 +85,7 @@ export function del(id) {
     })
 }
 
-function formatSpecs(specs) {
+export function formatSpecs(specs) {
     const obj = {}
     specs.forEach(item => {
         obj[item.id] = item.params.map(item => item.value).join(',')
@@ -111,6 +111,8 @@ export default {
     getAll,
     getListByPage,
     create,
+    update,
     updateThumb,
-    del
+    del,
+    formatSpecs
 }

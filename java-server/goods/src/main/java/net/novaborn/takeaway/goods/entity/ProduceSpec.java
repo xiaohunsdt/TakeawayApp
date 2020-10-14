@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 产品的规格
@@ -15,6 +17,8 @@ import lombok.Data;
  */
 @Data
 @TableName("`produce_spec`")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProduceSpec extends Model<ProduceSpec> {
     /**
      * 产品Id

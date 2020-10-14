@@ -1,21 +1,21 @@
 package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.admin.web.dto.GoodsDto;
-import net.novaborn.takeaway.admin.web.dto.ProduceDto;
 import net.novaborn.takeaway.admin.web.wrapper.ProduceWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.goods.dto.GoodsDto;
+import net.novaborn.takeaway.goods.dto.ProduceDto;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.entity.ProduceSpec;
+import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
@@ -58,7 +58,7 @@ public class ProduceController extends BaseController {
 
     @ResponseBody
     @GetMapping("getDetailById")
-    public Object getDetailById(Long id) {
+    public ProduceDto getDetailById(Long id) {
         Produce produce = produceService.getById(id);
         ProduceSpec produceSpec = produceSpecService.getById(id);
         List<GoodsDto> goodsDtoList = goodsService.getByProduceId(id).stream().map(item -> {
@@ -89,7 +89,7 @@ public class ProduceController extends BaseController {
     public Tip create(@RequestBody @Validated ProduceDto produceDto) {
         Optional<Produce> tempProduce = produceService.selectByName(produceDto.getProduce().getName());
         if (tempProduce.isPresent()) {
-            return new ErrorTip(-1, "存在同名商品!");
+            return new ErrorTip(-1, "存在同名产品!");
         }
 
         produceService.save(produceDto.getProduce());
@@ -98,11 +98,7 @@ public class ProduceController extends BaseController {
         produceDto.getSpecs().setProduceId(produceId);
         produceSpecService.save(produceDto.getSpecs());
 
-        produceDto.getGoodsList().forEach(item -> {
-            item.setProduceId(produceId);
-            goodsService.save(item);
-            goodsStockService.createGoodStock(item, item.getStock());
-        });
+        goodsService.saveByProduceId(produceId, produceDto.getGoodsList());
         return new SuccessTip("创建成功!");
     }
 
@@ -110,33 +106,42 @@ public class ProduceController extends BaseController {
     @PostMapping("update")
     @Transactional(rollbackFor = Exception.class)
     public Tip update(@RequestBody @Validated ProduceDto produceDto) {
-//        Optional<Goods> targetGoods = Optional.ofNullable(goodsService.getById(goods.getId()));
-//        if (targetGoods.isEmpty()) {
-//            return new ErrorTip(-1, "没有此商品名!");
-//        }
-//
-//        Optional<Goods> sameNameGoods = goodsService.selectByName(goods.getName());
-//        if (sameNameGoods.isPresent() && !sameNameGoods.get().getId().equals(goods.getId())) {
-//            return new ErrorTip(-1, "存在同名商品!");
-//        }
-//
-//        if (!goods.getState().equals(ProduceState.ON)) {
-//            stock = 0;
-//        }
-//
-//        if (goods.getState().equals(ProduceState.ON) && stock == 0) {
-//            stock = -1;
-////            return new ErrorTip(-1, "修改失败! 请设置库存后重新!");
-//        }
-//
-//        BeanUtil.copyProperties(goods, targetGoods.get(), CopyOptions.create().setIgnoreNullValue(true));
-//        if (goodsService.updateById(targetGoods.get())) {
-//            ((ProduceController) AopContext.currentProxy()).updateStock(goods.getId(), stock);
-//            return new SuccessTip("修改成功!");
-//        } else {
-//            return new ErrorTip(-1, "修改失败!");
-//        }
-        return null;
+        Optional<Produce> targetProduce = Optional.ofNullable(produceService.getById(produceDto.getProduce().getId()));
+        Optional<ProduceSpec> targetProduceSpec = Optional.ofNullable(produceSpecService.getById(produceDto.getProduce().getId()));
+
+        if (targetProduce.isEmpty() || targetProduceSpec.isEmpty()) {
+            return new ErrorTip(-1, "没有此产品或规格!");
+        }
+
+        if (produceDto.getSpecs().getOptions().equals(targetProduceSpec.get().getOptions())) {
+            produceDto.getGoodsList().forEach(goodsDto -> {
+                Goods goods = goodsService.getById(goodsDto.getId());
+                BeanUtil.copyProperties(goodsDto, goods, CopyOptions.create().setIgnoreNullValue(true));
+                goodsService.updateById(goods);
+
+                GoodsStock stock = goodsStockService.getByGoodsId(goods.getId()).get();
+                stock.setStock(goodsDto.getStock());
+
+                if (!goods.getState().equals(GoodsState.ON)) {
+                    stock.setStock(0);
+                }
+                if (goods.getState().equals(GoodsState.ON) && goodsDto.getStock() == 0) {
+                    stock.setStock(-1);
+                }
+                goodsStockService.updateById(stock);
+            });
+        } else {
+            // spec发生变化，删除原有商品，重新生成新商品
+            goodsService.deleteByProduceId(targetProduce.get().getId());
+            goodsService.saveByProduceId(targetProduce.get().getId(), produceDto.getGoodsList());
+        }
+
+        BeanUtil.copyProperties(produceDto.getSpecs(), targetProduceSpec.get(), CopyOptions.create().setIgnoreNullValue(true));
+        BeanUtil.copyProperties(produceDto.getProduce(), targetProduce.get(), CopyOptions.create().setIgnoreNullValue(true));
+
+        produceSpecService.updateById(targetProduceSpec.get());
+        produceService.updateById(targetProduce.get());
+        return new SuccessTip("修改成功!");
     }
 
     @ResponseBody
@@ -160,15 +165,8 @@ public class ProduceController extends BaseController {
     @PostMapping("delete")
     @Transactional(rollbackFor = Exception.class)
     public Tip delete(Long id) {
-        List<Long> goodsIdList = goodsService.getByProduceId(id).stream().map(Goods::getId).collect(Collectors.toList());
-
-        LambdaQueryWrapper<GoodsStock> wrapper = Wrappers.lambdaQuery();
-        wrapper.in(GoodsStock::getGoodsId, goodsIdList);
-        List<Long> stockIdList = goodsStockService.list(wrapper).stream().map(GoodsStock::getId).collect(Collectors.toList());
-
         if (produceSpecService.removeById(id)
-            && goodsService.removeByIds(goodsIdList)
-            && goodsStockService.removeByIds(stockIdList)
+            && goodsService.deleteByProduceId(id)
             && produceService.removeById(id)) {
             return new SuccessTip("删除成功!");
         } else {

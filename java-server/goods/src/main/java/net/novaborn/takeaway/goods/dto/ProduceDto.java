@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.web.dto;
+package net.novaborn.takeaway.goods.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
