@@ -419,7 +419,7 @@ export default {
         if (this.produce.goodsList.length === 1) {
           goodsData = Object.assign({}, this.produce.goodsList[0])
         } else {
-          const goodsData = {}
+          goodsData = {}
           goodsData.price = 0
           goodsData.stock = -1
           goodsData.state = 'OFF'
