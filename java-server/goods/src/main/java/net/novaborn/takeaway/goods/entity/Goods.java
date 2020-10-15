@@ -29,7 +29,7 @@ public class Goods extends Model<Goods> {
 
     private Long produceId;
 
-    private String name;
+    private String title;
 
     private Integer price;
 

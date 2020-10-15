@@ -33,6 +33,13 @@ public interface IGoodsService extends IService<Goods> {
     int getCountByProduceId(Long produceId);
 
     /**
+     * 根据产品id获取指定产品的第一个商品(最低价的商品)
+     * @param produceId
+     * @return
+     */
+    Goods getFirstByProduceId(Long produceId);
+
+    /**
      * 根据产品id生成指定的商品
      * @param produceId
      * @param goodsDtoList

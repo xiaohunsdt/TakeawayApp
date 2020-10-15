@@ -52,6 +52,11 @@ public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGood
     }
 
     @Override
+    public Goods getFirstByProduceId(Long produceId) {
+        return this.baseMapper.getFirstByProduceId(produceId);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveByProduceId(Long produceId, List<GoodsDto> goodsDtoList) {
         goodsDtoList.forEach(item -> {

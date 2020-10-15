@@ -15,11 +15,11 @@ export function getCartAllPrice () {
 }
 
 export function find (goods) {
-  return getCartList().find(item => item.goodsId === goods.id)
+  return getCartList().find(item => item.produce.goods.id === goods.id)
 }
 
 export function findIndex (goods) {
-  return getCartList().findIndex(item => item.goodsId === goods.id)
+  return getCartList().findIndex(item => item.produce.goods.id === goods.id)
 }
 
 export function clearCart () {

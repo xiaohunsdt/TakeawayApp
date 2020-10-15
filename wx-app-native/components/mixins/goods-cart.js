@@ -2,45 +2,50 @@ import cartService from '../../services/cart'
 
 export default Behavior({
   methods: {
+    openSkuDialog(){
+      this.selectComponent('#sku-dialog').openDialog(this.data.food)
+    },
     getCurrentFoodCount() {
       let existData;
       if (this.data.cartList) {
-        existData = this.data.cartList.find(item => item.goodsId === this.data.food.id)
+        existData = this.data.cartList.find(item => item.produce.goods.id === this.data.food.goods.id)
       } else {
-        existData = cartService.find(this.data.food)
+        existData = cartService.find(this.data.food.goods)
       }
       return existData !== undefined ? existData.count : 0
     },
     addCart() {
-      const cartData = {
-        goodsId: this.data.food.id,
-        goods: this.data.food,
-        count: 1
+      let cartData;
+      if (this.data.food.goodsCount === 1) {
+        cartData = {
+          produce: Object.assign({}, this.data.food),
+          count: 1
+        }
+        cartService.getCartList().push(cartData)
+        cartService.getCart().cartAllCount++
+        cartService.getCart().cartAllPrice += cartData.produce.goods.price
+
+        this.setData({
+          currentFoodCount: this.data.currentFoodCount + 1
+        })
+        this.triggerEvent('cart-change', this.data.currentFoodCount)
+      }else {
+        this.openSkuDialog()
       }
-      cartService.getCartList().push(cartData)
-      cartService.getCart().cartAllCount++
-      cartService.getCart().cartAllPrice += this.data.food.price
-
-      this.setData({
-        currentFoodCount: this.data.currentFoodCount + 1
-      })
-
-      this.triggerEvent('cart-change', this.data.currentFoodCount)
     },
     addGoods() {
-      const existData = cartService.find(this.data.food)
-      if (existData !== undefined) {
-        existData.count++
+      let cartData = cartService.find(this.data.food.goods)
+      if (cartData !== undefined) {
+        cartData.count++
       } else {
-        const cartData = {
-          goodsId: this.data.food.id,
-          goods: this.data.food,
+        cartData = {
+          produce: Object.assign({}, this.data.food),
           count: 1
         }
         cartService.getCartList().push(cartData)
       }
       cartService.getCart().cartAllCount++
-      cartService.getCart().cartAllPrice += this.data.food.price
+      cartService.getCart().cartAllPrice += cartData.produce.goods.price
 
       this.setData({
         currentFoodCount: this.data.currentFoodCount + 1
@@ -48,19 +53,19 @@ export default Behavior({
       this.triggerEvent('cart-change', this.data.currentFoodCount)
     },
     reduceGoods() {
-      const index = cartService.findIndex(this.data.food)
+      const index = cartService.findIndex(this.data.food.goods)
       if (index < 0) {
         return
       }
-      const existData = cartService.getCartList()[index]
-      if (existData !== undefined && existData.count > 0) {
-        existData.count--
-        if (existData.count === 0) {
+      const cartData = cartService.getCartList()[index]
+      if (cartData !== undefined && cartData.count > 0) {
+        cartData.count--
+        if (cartData.count === 0) {
           cartService.getCartList().splice(index, 1)
         }
 
         cartService.getCart().cartAllCount--
-        cartService.getCart().cartAllPrice -= this.data.food.price
+        cartService.getCart().cartAllPrice -= cartData.produce.goods.price
       }
 
       this.setData({

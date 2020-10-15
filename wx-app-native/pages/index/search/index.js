@@ -3,7 +3,7 @@ import searchApi from '../../../services/search'
 Page({
   data: {
     keyword: null,
-    goodsList: []
+    produceList: []
   },
   onLoad (option) {
     if (option.keyword) {
@@ -27,7 +27,7 @@ Page({
     })
     searchApi.searchGoods(this.data.keyword).then(res => {
       this.setData({
-        goodsList: res
+        produceList: res
       })
     })
   }

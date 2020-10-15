@@ -52,8 +52,7 @@ public class ProduceController extends BaseController {
     @ResponseBody
     @GetMapping("getById")
     public Object getById(Long id) {
-        Produce produce = produceService.getById(id);
-        return produce;
+        return produceService.getById(id);
     }
 
     @ResponseBody

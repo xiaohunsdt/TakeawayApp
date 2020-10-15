@@ -53,11 +53,11 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
 
             if (goods.get().getState() == GoodsState.SHORTAGE) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
-                sysException.setMessage(goods.get().getName() + ": 当前处于缺货中,无法下单!请下来刷新菜单!");
+                sysException.setMessage(goods.get().getTitle() + ": 当前处于缺货中,无法下单!请下来刷新菜单!");
                 throw sysException;
             } else if (!goodsStockService.checkStock(goods.get(), item.getGoodsCount())) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
-                sysException.setMessage(goods.get().getName() + ": 当前库存不足,请重试!");
+                sysException.setMessage(goods.get().getTitle() + ": 当前库存不足,请重试!");
                 throw sysException;
             }
 

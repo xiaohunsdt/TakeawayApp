@@ -18,7 +18,7 @@ const api = {
   // 获取首页横幅图片
   getBannersList: () => request.get('index/getBannersList'),
   // 获取指定flag的产品列表
-  getSpecificFlagGoodsList: (flag) => request.get('index/getSpecificFlagGoodsList', {
+  getSpecificFlagProduceList: (flag) => request.get('index/getSpecificFlagProduceList', {
     flag
   }),
   // 获取总服务状态
@@ -38,8 +38,8 @@ const api = {
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
   // 根据分类获取商品
-  getAllGoodsList: () => request.get('goods/getAllGoodsList'),
-  getGoodsListByCategoryId: (categoryId) => request.get('goods/getGoodsListByCategoryId', {
+  getAllProduceList: () => request.get('produce/getAllList'),
+  getProduceListByCategoryId: (categoryId) => request.get('produce/getListByCategoryId', {
     categoryId
   }),
 

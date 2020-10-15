@@ -1,9 +1,9 @@
 <view class="simple-goods-card">
 	<view class="name">
-		{{food.name}}
+		{{food.name + ' ' + food.goods.title}}
 	</view>
 	<view class="price">
-		₩ {{food.price}}
+		₩ {{food.goods.price}}
 	</view>
 	<view class="action">
 		<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" />

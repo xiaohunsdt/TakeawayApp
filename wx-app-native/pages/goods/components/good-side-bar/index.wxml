@@ -9,14 +9,14 @@
 	<view class="content">
 		<scroll-view scroll-into-view="{{contentId}}" scroll-y="{{contentId}}" class="content-scroll {{cartAllCount > 0 && 'has-padding'}}" scroll-with-animation="true" style="height: 100%;">
 			<view class="content-container">
-				<view id="xh_{{category.id}}" wx:key="id" class="pesticide" wx:for="{{categoryGoods}}" wx:for-item="category" wx:if="{{category.goodsList.length > 0 && ('xh_' + category.id) === contentId}}">
+				<view id="xh_{{category.id}}" wx:key="id" class="pesticide" wx:for="{{categoryGoods}}" wx:for-item="category" wx:if="{{category.produceList.length > 0 && ('xh_' + category.id) === contentId}}">
 					<view class="type-name">
 						<view class="line"></view>
 						<view class="name">{{category.name}}</view>
 						<view class="line"></view>
 					</view>
 					<view class="pesticide-container">
-						<standard-goods-card cart-list="{{cartList}}" food="{{food}}" wx:key="id" wx:for="{{category.goodsList}}" wx:for-item="food" bind:cart-change="onCartChange" bind:openThumbDialog="onOpenThumbDialog" />
+						<standard-goods-card cart-list="{{cartList}}" food="{{food}}" wx:key="id" wx:for="{{category.produceList}}" wx:for-item="food" bind:cart-change="onCartChange" bind:openThumbDialog="onOpenThumbDialog" />
 					</view>
 					<view class="has-no-more">
 						<view class="line"></view>
@@ -32,7 +32,7 @@
 	</van-dialog>
 	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart" bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
 		<view class="cart-content">
-			<simple-goods-card cart-list="{{cartList}}" food="{{item.goods}}" wx:key="goodsId" wx:for="{{cartList}}" bind:cart-change="onCartChange" />
+			<simple-goods-card cart-list="{{cartList}}" food="{{item.produce}}" wx:key="goodsId" wx:for="{{cartList}}" bind:cart-change="onCartChange" />
 		</view>
 	</van-action-sheet>
 	<view id="footer" wx:if="{{cartAllCount > 0}}">

@@ -38,7 +38,7 @@ public class GoodsTest {
     @Test
     public void updateGoodsTest() {
         Goods goods = goodsService.getById("761b1144c87e8be15d8ab3356c71556b");
-        goods.setName("蒜蓉黄瓜1");
+        goods.setTitle("蒜蓉黄瓜1");
         goods.setState(GoodsState.OFF);
         goods.updateById();
     }

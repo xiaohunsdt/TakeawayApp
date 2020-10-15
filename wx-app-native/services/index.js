@@ -9,11 +9,11 @@ export function getBannersList () {
 }
 
 export function getNewGoodsList () {
-  return api.getSpecificFlagGoodsList('新品')
+  return api.getSpecificFlagProduceList('新品')
 }
 
 export function getHotGoodsList () {
-  return api.getSpecificFlagGoodsList('热门')
+  return api.getSpecificFlagProduceList('热门')
 }
 
 export function getServiceState () {

@@ -16,4 +16,14 @@
             AND deleted = 0
         </where>
     </select>
+
+    <select id="getFirstByProduceId" resultType="Goods">
+        SELECT * FROM `goods`
+        <where>
+            `produce_id` = #{produceId}
+            AND deleted = 0
+        </where>
+        ORDER BY `price` ASC
+        LIMIT 1
+    </select>
 </mapper>

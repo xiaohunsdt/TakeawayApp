@@ -14,8 +14,10 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -23,7 +25,7 @@ import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.web.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.user.web.dto.ServiceStateDto;
 import net.novaborn.takeaway.user.web.wrapper.BannerWrapper;
-import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
+import net.novaborn.takeaway.user.web.wrapper.ProduceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,6 +45,8 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/api/user/index")
 public class IndexController extends BaseController {
+    private ProduceService produceService;
+
     private GoodsService goodsService;
 
     private AddressService addressService;
@@ -69,17 +73,17 @@ public class IndexController extends BaseController {
         return ResponseEntity.ok(new BannerWrapper(activities).warp());
     }
 
-    @GetMapping("getSpecificFlagGoodsList")
+    @GetMapping("getSpecificFlagProduceList")
     @ResponseBody
-    public Object getSpecificFlagGoodsList(String flag) {
-        List<Goods> goodsList = goodsService.getGoodsListByFlag(flag);
+    public Object getSpecificFlagProduceList(String flag) {
+        List<Produce> goodsList = produceService.getListByFlag(flag);
 
         // 筛选有效商品
         goodsList = goodsList.stream()
                 .filter(item -> !item.getState().equals(ProduceState.OFF))
                 .collect(Collectors.toList());
 
-        return new GoodsWrapper(goodsList).warp();
+        return new ProduceWrapper(goodsList).warp();
     }
 
     @GetMapping("getServiceState")

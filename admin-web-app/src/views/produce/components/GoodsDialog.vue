@@ -97,7 +97,7 @@
           </el-row>
         </base-card>
       </el-form>
-      <div v-show="active===2">
+      <div v-if="active===2">
         <base-card>
           <el-table :data="goodsList" max-height="600px" style="width: 100%">
             <el-table-column v-for="spec in specData.selected" :key="spec.key" :label="spec.key">
@@ -331,7 +331,7 @@ export default {
             }
           }
         }
-        if (produceApi.formatSpecs(this.specData.selected).options !== this.produce.specs.options) {
+        if (this.produce && produceApi.formatSpecs(this.specData.selected).options !== this.produce.specs.options) {
           this.$confirm('此产品的规格参数发生改变,之前设置的sku将全部作废,是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -395,14 +395,18 @@ export default {
           }
 
           let goodsData
-          const goodsIndex = this.produce.goodsList.findIndex(item => {
-                return item.indexes === indexes.join('_') && item.ownSpecs === JSON.stringify(targetSku)
-              }
-          )
-          if (goodsIndex >= 0) {
-            goodsData = Object.assign({}, this.produce.goodsList[goodsIndex])
-            goodsData.ownSpecs = JSON.parse(goodsData.ownSpecs)
-          } else {
+          if (this.produce) {
+            const goodsIndex = this.produce.goodsList.findIndex(item => {
+                  return item.indexes === indexes.join('_') && item.ownSpecs === JSON.stringify(targetSku)
+                }
+            )
+            if (goodsIndex >= 0) {
+              goodsData = Object.assign({}, this.produce.goodsList[goodsIndex])
+              goodsData.ownSpecs = JSON.parse(goodsData.ownSpecs)
+            }
+          }
+
+          if (!goodsData) {
             goodsData = {}
             goodsData.ownSpecs = targetSku
             goodsData.indexes = indexes.join('_')
@@ -410,13 +414,12 @@ export default {
             goodsData.stock = -1
             goodsData.state = 'OFF'
           }
-
-          goodsData.name = `${Object.values(targetSku).join(' ')}`
+          goodsData.title = Object.values(targetSku).join(' ')
           this.goodsList.push(goodsData)
         }
       } else {
         let goodsData
-        if (this.produce.goodsList.length === 1) {
+        if (this.produce && this.produce.goodsList.length === 1) {
           goodsData = Object.assign({}, this.produce.goodsList[0])
         } else {
           goodsData = {}
@@ -424,7 +427,7 @@ export default {
           goodsData.stock = -1
           goodsData.state = 'OFF'
         }
-        goodsData.name = this.produceData.name
+        goodsData.title = null
         goodsData.ownSpecs = null
         goodsData.indexes = null
         this.goodsList.push(goodsData)
