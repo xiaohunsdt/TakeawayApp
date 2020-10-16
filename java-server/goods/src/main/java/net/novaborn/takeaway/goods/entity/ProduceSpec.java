@@ -26,6 +26,8 @@ public class ProduceSpec extends Model<ProduceSpec> {
     @TableId(type = IdType.INPUT)
     private Long produceId;
 
+    private String selectedSpecs;
+
     /**
      * 参数数组,json格式
      */

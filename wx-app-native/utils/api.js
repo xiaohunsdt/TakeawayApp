@@ -37,6 +37,10 @@ const api = {
 
   // 获取所有分类
   getAllCategory: () => request.get('category/getAllCategory'),
+  // 获取产品详细(包含spec，goods列表等)
+  getProduceDetailById: (id) => request.get('produce/getDetailById', {
+    id
+  }),
   // 根据分类获取商品
   getAllProduceList: () => request.get('produce/getAllList'),
   getProduceListByCategoryId: (categoryId) => request.get('produce/getListByCategoryId', {

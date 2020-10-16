@@ -2,7 +2,7 @@ import cartService from '../../services/cart'
 
 export default Behavior({
   methods: {
-    openSkuDialog(){
+    openSkuDialog() {
       this.selectComponent('#sku-dialog').openDialog(this.data.food)
     },
     getCurrentFoodCount() {
@@ -29,7 +29,7 @@ export default Behavior({
           currentFoodCount: this.data.currentFoodCount + 1
         })
         this.triggerEvent('cart-change', this.data.currentFoodCount)
-      }else {
+      } else {
         this.openSkuDialog()
       }
     },

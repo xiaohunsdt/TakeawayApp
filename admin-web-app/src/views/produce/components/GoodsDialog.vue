@@ -262,7 +262,7 @@ export default {
               for (const key in specs) {
                 const index = this.specList.findIndex(item => item.id === key)
                 if (index >= 0) {
-                  const paramsArr = specs[key].split(',').map(item => {
+                  const paramsArr = specs[key].map(item => {
                     return {
                       key: new Date().getTime() + Math.floor(Math.random() * 100),
                       value: item

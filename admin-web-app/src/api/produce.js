@@ -86,11 +86,16 @@ export function del(id) {
 }
 
 export function formatSpecs(specs) {
-    const obj = {}
+    const options = {}
+    const selectedSpecs = {}
     specs.forEach(item => {
-        obj[item.id] = item.params.map(item => item.value).join(',')
+        selectedSpecs[item.id] = item.key
+        options[item.id] = item.params.map(item => item.value)
     })
-    return { options: JSON.stringify(obj) }
+    return {
+        selectedSpecs: JSON.stringify(selectedSpecs),
+        options: JSON.stringify(options)
+    }
 }
 
 function formatGoodsList(goodsList) {

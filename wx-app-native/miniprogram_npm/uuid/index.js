@@ -4,7 +4,7 @@ var __DEFINE__ = function(modId, func, req) { var m = { exports: {}, _tempexport
 var __REQUIRE__ = function(modId, source) { if(!__MODS__[modId]) return require(source); if(!__MODS__[modId].status) { var m = __MODS__[modId].m; m._exports = m._tempexports; var desp = Object.getOwnPropertyDescriptor(m, "exports"); if (desp && desp.configurable) Object.defineProperty(m, "exports", { set: function (val) { if(typeof val === "object" && val !== m._exports) { m._exports.__proto__ = val.__proto__; Object.keys(val).forEach(function (k) { m._exports[k] = val[k]; }); } m._tempexports = val }, get: function () { return m._tempexports; } }); __MODS__[modId].status = 1; __MODS__[modId].func(__MODS__[modId].req, m, m.exports); } return __MODS__[modId].m.exports; };
 var __REQUIRE_WILDCARD__ = function(obj) { if(obj && obj.__esModule) { return obj; } else { var newObj = {}; if(obj != null) { for(var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k)) newObj[k] = obj[k]; } } newObj.default = obj; return newObj; } };
 var __REQUIRE_DEFAULT__ = function(obj) { return obj && obj.__esModule ? obj.default : obj; };
-__DEFINE__(1596825360333, function(require, module, exports) {
+__DEFINE__(1602836352757, function(require, module, exports) {
 var v1 = require('./v1');
 var v4 = require('./v4');
 
@@ -14,8 +14,8 @@ uuid.v4 = v4;
 
 module.exports = uuid;
 
-}, function(modId) {var map = {"./v1":1596825360334,"./v4":1596825360337}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1596825360334, function(require, module, exports) {
+}, function(modId) {var map = {"./v1":1602836352758,"./v4":1602836352761}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1602836352758, function(require, module, exports) {
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -126,8 +126,8 @@ function v1(options, buf, offset) {
 
 module.exports = v1;
 
-}, function(modId) { var map = {"./lib/rng":1596825360335,"./lib/bytesToUuid":1596825360336}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1596825360335, function(require, module, exports) {
+}, function(modId) { var map = {"./lib/rng":1602836352759,"./lib/bytesToUuid":1602836352760}; return __REQUIRE__(map[modId], modId); })
+__DEFINE__(1602836352759, function(require, module, exports) {
 // Unique ID creation requires a high quality random # generator.  In node.js
 // this is pretty straight-forward - we use the crypto API.
 
@@ -138,7 +138,7 @@ module.exports = function nodeRNG() {
 };
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1596825360336, function(require, module, exports) {
+__DEFINE__(1602836352760, function(require, module, exports) {
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -167,7 +167,7 @@ function bytesToUuid(buf, offset) {
 module.exports = bytesToUuid;
 
 }, function(modId) { var map = {}; return __REQUIRE__(map[modId], modId); })
-__DEFINE__(1596825360337, function(require, module, exports) {
+__DEFINE__(1602836352761, function(require, module, exports) {
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -198,7 +198,7 @@ function v4(options, buf, offset) {
 
 module.exports = v4;
 
-}, function(modId) { var map = {"./lib/rng":1596825360335,"./lib/bytesToUuid":1596825360336}; return __REQUIRE__(map[modId], modId); })
-return __REQUIRE__(1596825360333);
+}, function(modId) { var map = {"./lib/rng":1602836352759,"./lib/bytesToUuid":1602836352760}; return __REQUIRE__(map[modId], modId); })
+return __REQUIRE__(1602836352757);
 })()
 //# sourceMappingURL=index.js.map
