@@ -16,7 +16,7 @@
 						<view class="line"></view>
 					</view>
 					<view class="pesticide-container">
-						<standard-goods-card cart-list="{{cartList}}" food="{{food}}" wx:key="id" wx:for="{{category.produceList}}" wx:for-item="food" bind:cart-change="onCartChange" bind:openThumbDialog="onOpenThumbDialog" />
+						<standard-goods-card cart-list="{{cartList}}" produce="{{food}}" wx:key="id" wx:for="{{category.produceList}}" wx:for-item="food" bind:cart-change="onCartChange" bind:openThumbDialog="onOpenThumbDialog" />
 					</view>
 					<view class="has-no-more">
 						<view class="line"></view>
@@ -32,7 +32,7 @@
 	</van-dialog>
 	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart" bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
 		<view class="cart-content">
-			<simple-goods-card cart-list="{{cartList}}" food="{{item.produce}}" wx:key="goodsId" wx:for="{{cartList}}" bind:cart-change="onCartChange" />
+			<simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="goodsId" wx:for="{{cartList}}" bind:cart-change="onCartChange" />
 		</view>
 	</van-action-sheet>
 	<view id="footer" wx:if="{{cartAllCount > 0}}">

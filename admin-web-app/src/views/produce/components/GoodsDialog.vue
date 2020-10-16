@@ -427,7 +427,7 @@ export default {
           goodsData.stock = -1
           goodsData.state = 'OFF'
         }
-        goodsData.title = null
+        goodsData.title = ''
         goodsData.ownSpecs = null
         goodsData.indexes = null
         this.goodsList.push(goodsData)

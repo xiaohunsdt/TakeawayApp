@@ -1,44 +1,44 @@
 <view class="goods-card">
 	<view class="card-thumb" bind:tap="onOpenThumbDialog">
-		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
+		<image src="{{produce.thumb?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 	</view>
 	<view class="card-content">
 		<view class="title">
-			{{food.name}}
+			{{produce.name}}
 			<image class="flag-img" wx:if="{{isHot}}" src="/static/images/store/shop_hot.png"></image>
 			<image class="flag-img" wx:if="{{isNew}}" src="/static/images/store/shop_new.png"></image>
 		</view>
 		<view class="card-desc">
 			<view class="desc">
 				<van-icon name="label" />
-				{{ food.desc }}
+				{{ produce.desc }}
 			</view>
 			<view class="comment">
 				<view>
-					月销 {{ food.monthSale }}
+					月销 {{ produce.monthSale }}
 				</view>
 				<view class="viewidLine"></view>
 				<view>评分 </view>
-				<view style="color: #FFD200">{{ food.rate }}</view>
+				<view style="color: #FFD200">{{ produce.rate }}</view>
 			</view>
 		</view>
 		<view class="card-price">
-			<view class="currency">₩</view>{{food.goods.price}}
+			<view class="currency">₩</view>{{produce.goods.price}}
 		</view>
 		<view class="card-order-btn">
-			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount > 0}}" />
-			<van-button disabled="{{food.state !== 'ON'}}" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" wx:else>
-				<span wx:if="{{food.state === 'ON'}}">
+			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{produce.goodsCount===1 && currentFoodCount > 0}}" />
+			<van-button disabled="{{produce.state !== 'ON'}}" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" wx:else>
+				<span wx:if="{{produce.state === 'ON'}}">
 					下单
 				</span>
-				<span wx:elif="{{food.state === 'SHORTAGE'}}">
+				<span wx:elif="{{produce.state === 'SHORTAGE'}}">
 					缺货
 				</span>
 			</van-button>
 		</view>
 	</view>
 	<van-dialog use-slot show="{{ showThumbDialog }}" showConfirmButton="{{false}}" closeOnClickOverlay width="90%">
-		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="display:block; width: 100%; height:600rpx" lazy-load />
+		<image src="{{produce.thumb?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="display:block; width: 100%; height:600rpx" lazy-load />
 	</van-dialog>
-	<sku-dialog id="sku-dialog" wx:if="{{food.goodsCount > 1}}"/>
+	<sku-dialog id="sku-dialog" wx:if="{{produce.goodsCount > 1}}" bind:cart-change="onCartChange"/>
 </view>
