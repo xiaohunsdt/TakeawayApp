@@ -1,9 +1,9 @@
 <template>
   <el-dialog
-      :close-on-click-modal="false"
-      :show-close="false"
-      :visible.sync="dialogVisible"
-      style="text-align: left">
+    :close-on-click-modal="false"
+    :show-close="false"
+    :visible.sync="dialogVisible"
+    style="text-align: left">
     <template v-slot:title>
       <h3 v-if="produce===null">添加商品</h3>
       <h3 v-else>编辑商品</h3>
@@ -25,10 +25,10 @@
           <el-form-item label="所属分类" prop="categoryId">
             <el-select v-model="produceData.categoryId" placeholder="选择分类">
               <el-option
-                  v-for="item in categoryList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"/>
+                v-for="item in categoryList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"/>
             </el-select>
           </el-form-item>
           <el-form-item label="商品标记">
@@ -55,10 +55,10 @@
           <el-form-item label="规格">
             <el-select v-model="specData.currentSpec" placeholder="规格" value-key="id">
               <el-option
-                  v-for="item in specList"
-                  :key="item.id"
-                  :label="item.key"
-                  :value="item">
+                v-for="item in specList"
+                :key="item.id"
+                :label="item.key"
+                :value="item">
               </el-option>
             </el-select>
             <el-button style="margin-left: 10px" type="primary" @click="addSpec()">
@@ -66,8 +66,8 @@
             </el-button>
           </el-form-item>
           <el-table
-              :data="specData.selected"
-              style="width: 100%">
+            :data="specData.selected"
+            style="width: 100%">
             <el-table-column label="规格">
               <template v-slot="scope">
                 {{ scope.row.key }}
@@ -86,13 +86,13 @@
           <h2>设置参数</h2>
           <el-row :gutter="20">
             <el-col
-                v-for="(spec, index) in specData.selected"
-                :key="spec.id"
-                :span="8">
+              v-for="(spec, index) in specData.selected"
+              :key="spec.id"
+              :span="8">
               <dynamic-input
-                  :label="spec.key"
-                  :model-array="spec.params"
-                  :rule-model-name="`selected.${index}.params`"/>
+                :label="spec.key"
+                :model-array="spec.params"
+                :rule-model-name="`selected.${index}.params`"/>
             </el-col>
           </el-row>
         </base-card>
@@ -151,6 +151,8 @@ import produceApi from '@/api/produce'
 import specApi from '@/api/spec'
 import DynamicInput from './DynamicInput'
 import BaseCard from '@c/BaseCard'
+
+import { isObjectValueEqual } from '@u/index'
 
 export default {
   name: 'GoodsDialog',
@@ -220,28 +222,28 @@ export default {
       // })
       this.sendLoading = true
       produceApi.create(this.produceData, this.specData.selected, this.goodsList)
-          .then(res => {
-            this.$message.success(res.message)
-            this.$emit('event-success')
-            this.closeWindow()
-          })
-          .finally(() => {
-            this.sendLoading = false
-          })
+        .then(res => {
+          this.$message.success(res.message)
+          this.$emit('event-success')
+          this.closeWindow()
+        })
+        .finally(() => {
+          this.sendLoading = false
+        })
     },
     updateGoods() {
       this.produceData.flags = this.flagSelected.join()
 
       this.sendLoading = true
       produceApi.update(this.produceData, this.specData.selected, this.goodsList)
-          .then(res => {
-            this.$message.success(res.message)
-            this.$emit('event-success')
-            this.closeWindow()
-          })
-          .finally(() => {
-            this.sendLoading = false
-          })
+        .then(res => {
+          this.$message.success(res.message)
+          this.$emit('event-success')
+          this.closeWindow()
+        })
+        .finally(() => {
+          this.sendLoading = false
+        })
     },
     async openWindow(produce, categoryList) {
       this.categoryList = categoryList
@@ -255,27 +257,30 @@ export default {
       if (produce) {
         this.sendLoading = true
         produceApi.getDetailById(produce.id)
-            .then(res => {
-              this.produce = res
-              this.produceData = res.produce
-              const specs = JSON.parse(res.specs.options)
-              for (const key in specs) {
-                const index = this.specList.findIndex(item => item.id === key)
-                if (index >= 0) {
-                  const paramsArr = specs[key].map(item => {
-                    return {
-                      key: new Date().getTime() + Math.floor(Math.random() * 100),
-                      value: item
-                    }
-                  })
-                  this.specList[index].params.push(...paramsArr)
-                  this.specData.selected.push(this.specList[index])
-                }
+          .then(res => {
+            res.goodsList.forEach(goods => {
+              goods.ownSpecs = JSON.parse(goods.ownSpecs)
+            })
+            this.produce = res
+            this.produceData = res.produce
+            const specs = JSON.parse(res.specs.options)
+            for (const key in specs) {
+              const index = this.specList.findIndex(item => item.id === key)
+              if (index >= 0) {
+                const paramsArr = specs[key].map(item => {
+                  return {
+                    key: new Date().getTime() + Math.floor(Math.random() * 100),
+                    value: item
+                  }
+                })
+                this.specList[index].params.push(...paramsArr)
+                this.specData.selected.push(this.specList[index])
               }
-            })
-            .finally(() => {
-              this.sendLoading = false
-            })
+            }
+          })
+          .finally(() => {
+            this.sendLoading = false
+          })
       }
     },
     closeWindow() {
@@ -374,42 +379,28 @@ export default {
 
       if (sku.length > 0) {
         for (let i = 0; i < sku.length; i++) {
-          const indexes = []
-          if (sku[i] instanceof Array) {
-            for (let j = 0; j < sku[i].length; j++) {
-              const key = this.specData.selected[j]['id']
-              const index = this.specData.selected[j].params.findIndex(item => item.value === sku[i][j][key])
-              indexes[j] = index
-            }
-          } else {
-            const key = this.specData.selected[0]['id']
-            const index = this.specData.selected[0].params.findIndex(item => item.value === sku[i][key])
-            indexes[0] = index
-          }
-
           let targetSku = sku[i]
           if (targetSku instanceof Array) {
             targetSku = targetSku.reduce((previous, next) => {
               return Object.assign(previous, next)
             }, {})
           }
-
           let goodsData
           if (this.produce) {
             const goodsIndex = this.produce.goodsList.findIndex(item => {
-                  return item.indexes === indexes.join('_') && item.ownSpecs === JSON.stringify(targetSku)
-                }
+                return isObjectValueEqual(item.ownSpecs, targetSku)
+              }
             )
+
             if (goodsIndex >= 0) {
               goodsData = Object.assign({}, this.produce.goodsList[goodsIndex])
-              goodsData.ownSpecs = JSON.parse(goodsData.ownSpecs)
             }
           }
 
           if (!goodsData) {
             goodsData = {}
             goodsData.ownSpecs = targetSku
-            goodsData.indexes = indexes.join('_')
+            // goodsData.indexes = indexes.join('_')
             goodsData.price = 0
             goodsData.stock = -1
             goodsData.state = 'OFF'
@@ -419,7 +410,8 @@ export default {
         }
       } else {
         let goodsData
-        if (this.produce && this.produce.goodsList.length === 1) {
+        if (this.produce && this.produce.goodsList.length === 1
+        ) {
           goodsData = Object.assign({}, this.produce.goodsList[0])
         } else {
           goodsData = {}
@@ -429,7 +421,7 @@ export default {
         }
         goodsData.title = ''
         goodsData.ownSpecs = null
-        goodsData.indexes = null
+// goodsData.indexes = null
         this.goodsList.push(goodsData)
       }
     }

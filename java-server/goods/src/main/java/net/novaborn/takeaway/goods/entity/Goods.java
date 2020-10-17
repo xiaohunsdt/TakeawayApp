@@ -34,11 +34,6 @@ public class Goods extends Model<Goods> {
     private Integer price;
 
     /**
-     * 坐标
-     */
-    private String indexes;
-
-    /**
      * 特有属性
      */
     private String ownSpecs;
