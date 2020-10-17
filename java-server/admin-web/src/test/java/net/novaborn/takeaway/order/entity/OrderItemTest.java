@@ -27,7 +27,7 @@ public class OrderItemTest {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrderId(defaultIdentifierGenerator.nextId(orderItem));
         orderItem.setGoodsId(defaultIdentifierGenerator.nextId(orderItem));
-        orderItem.setGoodsName("松花蛋豆腐");
+        orderItem.setProduceName("松花蛋豆腐");
         orderItem.setGoodsPrice(6000);
         orderItem.setGoodsCount(3);
         orderItem.insert();

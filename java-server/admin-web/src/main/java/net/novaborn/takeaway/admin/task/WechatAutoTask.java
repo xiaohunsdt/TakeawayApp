@@ -215,7 +215,7 @@ public class WechatAutoTask {
     }
 
     public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
-        String names = selectedOrderItems.stream().map(OrderItem::getGoodsName).collect(Collectors.joining(", "));
+        String names = selectedOrderItems.stream().map(OrderItem::getProduceName).collect(Collectors.joining(", "));
         String desc = selectedOrderItems.stream()
                 .map(orderItem -> {
                     Produce produce = produceService.getById(orderItem.getProduceId());

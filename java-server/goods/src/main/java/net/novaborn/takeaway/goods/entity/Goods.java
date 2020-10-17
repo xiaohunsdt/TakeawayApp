@@ -31,6 +31,8 @@ public class Goods extends Model<Goods> {
 
     private String title;
 
+    private String thumb;
+
     private Integer price;
 
     /**

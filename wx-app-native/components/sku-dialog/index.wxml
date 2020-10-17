@@ -1,7 +1,7 @@
 <van-popup show="{{ isShow }}" closeable round position="bottom" bind:close="onClose" z-index="99999999">
 	<view class="sku-header van-hairline--bottom">
 		<view class="sku-image">
-			<image src="{{produce.thumb?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load
+			<image src="{{ (produce.selectedGoods && produce.selectedGoods.thumb !== '') ? produce.selectedGoods.thumb : (produce.thumb !== '' ? produce.thumb : '/static/images/no_image.gif') }}" mode="aspectFill" lazy-load
 				style="height: 100%;width: 100%" />
 		</view>
 		<view class="goods-info">

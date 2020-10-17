@@ -1,6 +1,6 @@
 <view class="goods-card">
 	<view class="card-thumb" bind:tap="onOpenThumbDialog">
-		<image src="{{produce.thumb?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
+		<image src="{{produce.thumb!==''?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" style="height: 100%;width: 100%" lazy-load />
 	</view>
 	<view class="card-content">
 		<view class="title">

@@ -38,7 +38,7 @@ Page({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    deliveryPrice(newVal){
+    deliveryPrice(newVal) {
       const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
@@ -180,12 +180,15 @@ Page({
       .filter(item => item.count > 0)
       .forEach(item => {
         let orderItem = {}
-        orderItem.goodsId = item.goodsId
-        orderItem.goodsName = item.goods.name
-        orderItem.goodsThumb = item.goods.thumb
-        orderItem.goodsPrice = item.goods.price
+        orderItem.produceId = item.produce.id
+        orderItem.goodsId = item.produce.selectedGoods.id
+        orderItem.produceName = item.produce.name
+        orderItem.goodsTitle = item.produce.selectedGoods.title
+        orderItem.goodsThumb = item.produce.selectedGoods.thumb !== '' ? item.produce.selectedGoods.thumb : (item.produce.thumb !== '' ? item.produce.thumb : '')
+        orderItem.goodsPrice = item.produce.selectedGoods.price
         orderItem.goodsCount = item.count
         temp.push(orderItem)
+        console.log(orderItem)
       })
 
     // watch 监听，需要单独拿出来设置数据
@@ -216,11 +219,11 @@ Page({
     })
 
     indexService.getDeliveryPrice()
-    .then(res => {
-      this.setData({
-        deliveryPrice: res
+      .then(res => {
+        this.setData({
+          deliveryPrice: res
+        })
       })
-    })
 
     // 获取预约时间项
     indexService.getAppointmentTimes()
@@ -305,7 +308,7 @@ Page({
         title: '请选择商品!!',
         image: '/static/images/error.png'
       })
-      return 
+      return
     }
 
     this.setData({

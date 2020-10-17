@@ -111,13 +111,13 @@ public class OrderServiceTest {
                     List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
                     boolean isExist = false;
                     for (OrderItem orderItem : orderItems) {
-                        if (orderItem.getGoodsName().contains("鸭脖")
-                                || orderItem.getGoodsName().contains("鸭锁骨")
-                                || orderItem.getGoodsName().contains("鸭翅")
-                                || orderItem.getGoodsName().contains("鸭头")
-                                || orderItem.getGoodsName().contains("鸭肠")
-                                || orderItem.getGoodsName().contains("鸭舌")
-                                || orderItem.getGoodsName().contains("鸭胗")
+                        if (orderItem.getProduceName().contains("鸭脖")
+                                || orderItem.getProduceName().contains("鸭锁骨")
+                                || orderItem.getProduceName().contains("鸭翅")
+                                || orderItem.getProduceName().contains("鸭头")
+                                || orderItem.getProduceName().contains("鸭肠")
+                                || orderItem.getProduceName().contains("鸭舌")
+                                || orderItem.getProduceName().contains("鸭胗")
                         ) {
                             isExist = true;
                             break;

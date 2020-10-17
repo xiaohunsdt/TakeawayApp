@@ -71,7 +71,7 @@ public class PrinterUtil {
         sf.append("<BOLD>--------------菜品--------------\n");
         for (OrderItem item : orderItemList) {
             sf.append("<BR>");
-            sf.append(String.format("<BOLD><L>%s  x%d\n", item.getGoodsName(), item.getGoodsCount()));
+            sf.append(String.format("<BOLD><L>%s  x%d\n", item.getProduceName(), item.getGoodsCount()));
         }
         sf.append("<BR><BOLD>--------------------------------\n");
         sf.append(String.format("<R><BOLD>合计: %d 韩元\n", order.getRealPrice()));

@@ -1,14 +1,14 @@
-<van-cell>
-	<view slot="title">
-		<image src="{{itemDetail.goodsThumb}}" mode="aspectFill" class="goods-thumb" lazy-load/>
-		<view class="goods-name">
-			{{itemDetail.goodsName}}
-		</view>
-		<view class="goods-price">
-			₩ {{itemDetail.goodsPrice}}
-		</view>
-		<view class="goods-count">
-			x {{itemDetail.goodsCount}}
-		</view>
+<view class="order-item van-hairline--bottom">
+	<image src="{{itemDetail.goodsThumb!==''?itemDetail.goodsThumb:'/static/images/no_image.gif'}}" mode="aspectFill"
+		class="goods-thumb" lazy-load />
+	<view class="goods-name">
+		<view class="produce-name">{{itemDetail.produceName}}</view>
+		<view class="goods-title">{{itemDetail.goodsTitle}}</view>
 	</view>
-</van-cell>
+	<view class="goods-price">
+		₩ {{itemDetail.goodsPrice}}
+	</view>
+	<view class="goods-count">
+		x {{itemDetail.goodsCount}}
+	</view>
+</view>

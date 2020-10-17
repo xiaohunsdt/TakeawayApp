@@ -248,10 +248,10 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 .forEach(order -> {
                     orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
                         Integer count = orderItem.getGoodsCount();
-                        if (goodsSale.containsKey(orderItem.getGoodsName())) {
-                            count += goodsSale.get(orderItem.getGoodsName());
+                        if (goodsSale.containsKey(orderItem.getProduceName())) {
+                            count += goodsSale.get(orderItem.getProduceName());
                         }
-                        goodsSale.put(orderItem.getGoodsName(), count);
+                        goodsSale.put(orderItem.getProduceName(), count);
                     });
                 });
 

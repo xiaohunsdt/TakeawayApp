@@ -49,7 +49,7 @@
 
 .order-stepper-input {
   background-color: transparent !important;
-  width: 40rpx !important;
+  width: 50rpx !important;
   font-weight: 600 !important;
 }
 

@@ -1,23 +1,50 @@
+@import "/miniprogram_npm/@vant/weapp/common/index.wxss";
+
+.order-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
 .goods-thumb {
   width: 70rpx;
   height: 70rpx;
   border-radius: 10rpx;
 }
 
-.goods-name, .goods-count, .goods-price {
+.goods-name {
   font-weight: bolder;
-  padding-left: 20rpx;
+  width: 40%;
+  overflow: hidden;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  line-height: unset !important;
+}
+.goods-name .produce-name{
+  margin-right: 10rpx
+}
+
+.goods-name .goods-title{
+  font-size: 26rpx;
+  color: gray;
+}
+
+.goods-count,
+.goods-price {
+  font-weight: bolder;
   display: inline-block;
   line-height: 70rpx;
 }
 
-.goods-thumb, .goods-name {
-  float: left;
+.goods-price {
+  min-width: 160rpx;
+  text-align: right;
 }
 
-.goods-count, .goods-price {
-  float: right;
-}
-.goods-price{
-  margin-left: 30rpx;
+.goods-count{
+  min-width: 80rpx;
+  text-align: right;
 }
