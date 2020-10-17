@@ -1,0 +1,56 @@
+<van-popup show="{{ isShow }}" closeable round position="bottom" bind:close="onClose" z-index="99999999">
+	<view class="sku-header van-hairline--bottom">
+		<view class="sku-image">
+			<image src="{{produce.thumb?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load
+				style="height: 100%;width: 100%" />
+		</view>
+		<view class="goods-info">
+			<view class="goods-name">
+				{{produce.name}}
+			</view>
+			<view class="goods-price">
+				<view class="price-symbol">₩ </view>
+				<view class="price">{{produce.selectedGoods?produce.selectedGoods.price:produce.goods.price}}</view>
+			</view>
+			<view class="goods-spec-info">
+				<view class="spec">{{ needselectSpecsStr }}</view>
+			</view>
+		</view>
+	</view>
+	<view class="sku-body">
+		<view class="spec-container">
+			<view class="sku-row van-hairline--bottom" wx:for="{{ produceDetail.specs.selectedSpecs }}" wx:for-index="key"
+				wx:for-item="value" wx:key="key">
+				<view class="row-title">{{ value }}</view>
+				<block wx:for="{{ produceDetail.specs.options[key] }}" wx:for-item="item" wx:key="index">
+					<button
+						class="row-item {{disableSpecOptionView[key][item] ? 'disabled':''}} {{selectedSpec[key] === item ? 'active':''}}"
+						disabled="{{disableSpecOptionView[key][item]}}" bind:tap="chooseSku" data-spec-id="{{key}}"
+						data-option="{{item}}">
+						<view class="item-name">{{item}}</view>
+					</button>
+				</block>
+				<!-- <view class="row-item active disabled">
+					<view class="item-name">小</view>
+				</view> -->
+			</view>
+		</view>
+	</view>
+	<view class="stepper-stock">
+		<view class="cart-steper" wx:if="{{currentFoodCount > 0}}">
+			<view style="font-weight:bolder">购物车数量</view>
+			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root"
+				disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus"
+				plus-class="order-stepper-plus" />
+		</view>
+		<van-button style="width:100%" disabled="{{!isAllSelected}}" bind:click="addCart" custom-class="cart-btn"
+			icon="goods-collect" round size="small" type="primary" wx:else>
+			<view wx:if="{{produce.state === 'ON'}}">
+				下单
+			</view>
+			<view wx:elif="{{produce.state === 'SHORTAGE'}}">
+				缺货
+			</view>
+		</van-button>
+	</view>
+</van-popup>
