@@ -74,7 +74,7 @@ public class WxSubscrubeMessageUtil {
         List<WxMaSubscribeMessage.Data> dataList = new ArrayList<>();
         dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber()));
         dataList.add(new WxMaSubscribeMessage.Data("time2", DateUtil.formatDateTime(order.getUpdateDate())));
-        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您选择川香苑!"));
+        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,请到门口查看!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
         subscribeMessage.setToUser(user.getOpenId());

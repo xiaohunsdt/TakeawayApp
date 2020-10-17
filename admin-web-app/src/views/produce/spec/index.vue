@@ -176,8 +176,4 @@ $bg: #F3F3F9;
     display: none
   }
 }
-
-.el-form-item {
-  margin-bottom: unset !important;
-}
 </style>

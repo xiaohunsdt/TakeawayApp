@@ -67,13 +67,12 @@
           <template v-slot="props">
             <div v-if="props.row.detail.hasOwnProperty('address')" class="order-expand">
               <base-card>
-                <el-table
-                    :data="props.row.detail.orderItemList"
-                    :show-header="false"
-                    stripe
-                    style="width: 100%">
-                  <el-table-column
-                      prop="goodsName">
+                <el-table :data="props.row.detail.orderItemList" :show-header="false" stripe style="width: 100%">
+                  <el-table-column>
+                    <template v-slot="scope">
+                      {{scope.row.produceName}}
+                      <el-tag v-if="scope.row.goodsTitle!==''" size="mini" effect="dark">{{scope.row.goodsTitle}}</el-tag>
+                    </template>
                   </el-table-column>
                   <el-table-column>
                     <template v-slot="scope">

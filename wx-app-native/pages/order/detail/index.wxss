@@ -7,11 +7,11 @@
   padding: 30rpx 10rpx;
 }
 
-.order-items{
+.order-items {
   margin-bottom: 22rpx;
 }
 
-.delivery-price-view{
+.delivery-price-view {
   display: flex;
   justify-content: flex-end;
   padding-bottom: 16rpx;
@@ -19,12 +19,13 @@
   font-size: 25rpx;
 }
 
-.delivery-price-view .delivery-str,.delivery-price-view .delivery-price{
-  display:inline-block;
+.delivery-price-view .delivery-str,
+.delivery-price-view .delivery-price {
+  display: inline-block;
   line-height: 20rpx;
 }
 
-.delivery-price-view .delivery-price{
+.delivery-price-view .delivery-price {
   color: #FFD200
 }
 
@@ -41,6 +42,8 @@
 
 .order-row {
   display: flex;
+  justify-content: start;
+  align-items: baseline;
   font-size: 25rpx;
   margin: 20rpx 0;
 }
@@ -50,27 +53,36 @@
   width: 150rpx;
 }
 
+.order-row .content {
+  color: gray;
+  width: calc(100% - 150rpx);
+}
+
 .order-header {
   display: flex;
   justify-content: space-between;
 }
 
-.order-number, .estimated-arrival-time {
+.order-number,
+.estimated-arrival-time {
   text-align: center;
   padding: 10rpx 30rpx;
 }
 
-.order-number .number, .estimated-arrival-time .time {
+.order-number .number,
+.estimated-arrival-time .time {
   font-weight: bolder;
 }
 
-.order-number .text, .estimated-arrival-time .text {
+.order-number .text,
+.estimated-arrival-time .text {
   font-size: 28rpx;
   display: flex;
   justify-content: center;
 }
 
-.order-number .text .text-img, .estimated-arrival-time .text .text-img {
+.order-number .text .text-img,
+.estimated-arrival-time .text .text-img {
   margin-right: 10rpx;
   margin-top: 5rpx;
   width: 30rpx;

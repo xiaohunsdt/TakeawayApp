@@ -259,10 +259,13 @@ export default {
         produceApi.getDetailById(produce.id)
           .then(res => {
             res.goodsList.forEach(goods => {
-              goods.ownSpecs = JSON.parse(goods.ownSpecs)
+              if (goods.ownSpecs !== '') {
+                goods.ownSpecs = JSON.parse(goods.ownSpecs)
+              }
             })
             this.produce = res
             this.produceData = res.produce
+            this.flagSelected = res.produce.flags.split(',')
             const specs = JSON.parse(res.specs.options)
             for (const key in specs) {
               const index = this.specList.findIndex(item => item.id === key)

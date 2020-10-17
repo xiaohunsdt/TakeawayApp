@@ -41,12 +41,12 @@
         </el-form-item>
         <el-form-item label="预约日期">
           <el-date-picker
-              v-model="formData.formDate"
-              end-placeholder="end date"
-              format="yyyy-MM-dd"
-              start-placeholder="start date"
-              type="daterange"
-              value-format="yyyy-MM-dd"/>
+            v-model="formData.formDate"
+            end-placeholder="end date"
+            format="yyyy-MM-dd"
+            start-placeholder="start date"
+            type="daterange"
+            value-format="yyyy-MM-dd"/>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSearch">查询</el-button>
@@ -55,32 +55,36 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-          v-loading="listLoading"
-          :data="tableData"
-          class="tb-edit"
-          element-loading-text="正在加载中..."
-          highlight-current-row
-          stripe
-          style="width: 100%"
-          @expand-change="getOrderDetail">
+        v-loading="listLoading"
+        :data="tableData"
+        class="tb-edit"
+        element-loading-text="正在加载中..."
+        highlight-current-row
+        stripe
+        style="width: 100%"
+        @expand-change="getOrderDetail">
         <el-table-column type="expand">
           <template v-slot="props">
             <div v-if="props.row.detail.hasOwnProperty('address')" class="order-expand">
               <base-card>
                 <el-table
-                    :data="props.row.detail.orderItemList"
-                    :show-header="false"
-                    stripe
-                    style="width: 100%">
-                  <el-table-column
-                      prop="goodsName">
+                  :data="props.row.detail.orderItemList"
+                  :show-header="false"
+                  stripe
+                  style="width: 100%">
+                  <el-table-column>
+                    <template v-slot="scope">
+                      {{ scope.row.produceName }}
+                      <el-tag v-if="scope.row.goodsTitle!==''" effect="dark" size="mini">{{ scope.row.goodsTitle }}
+                      </el-tag>
+                    </template>
                   </el-table-column>
                   <el-table-column>
                     <template v-slot="scope">
                       <img
-                          v-if="scope.row.goodsThumb!==''"
-                          :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
-                          style="height: 30px;width: auto;"/>
+                        v-if="scope.row.goodsThumb!==''"
+                        :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
+                        style="height: 30px;width: auto;"/>
                     </template>
                   </el-table-column>
                   <el-table-column>
@@ -137,58 +141,58 @@
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="预约号"
-            prop="number"
-            width="80">
+          align="center"
+          label="预约号"
+          prop="number"
+          width="80">
         </el-table-column>
         <el-table-column
-            align="center"
-            label="用户">
+          align="center"
+          label="用户">
           <template v-slot="props">
             <div>{{ props.row.userName }}</div>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="商品数量"
-            prop="goodsCount"
-            width="80">
+          align="center"
+          label="商品数量"
+          prop="goodsCount"
+          width="80">
         </el-table-column>
         <el-table-column
-            align="center"
-            label="总金额"
-            prop="allPrice">
+          align="center"
+          label="总金额"
+          prop="allPrice">
           <template v-slot="scope">
             <div>₩ {{ scope.row.allPrice.toLocaleString() }}</div>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="折扣/抵扣金额"
-            width="160">
+          align="center"
+          label="折扣/抵扣金额"
+          width="160">
           <template v-slot="scope">
             <div v-if="scope.row.discount > 0">{{ scope.row.discount }}折</div>
             <div v-if="scope.row.discountedPrices > 0">₩ {{ scope.row.discountedPrices.toLocaleString() }}</div>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="实际金额">
+          align="center"
+          label="实际金额">
           <template v-slot="scope">
             <div>₩ {{ scope.row.realPrice.toLocaleString() }}</div>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="支付方式">
+          align="center"
+          label="支付方式">
           <template v-slot="scope">
             <el-tag>{{ scope.row.paymentWay | paymentWayFormat }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="支付状态">
+          align="center"
+          label="支付状态">
           <template v-slot="scope">
             <el-tag v-if="scope.row.payState === 'PAID'" type="success">
               {{ scope.row.payState | payStateFormat }}
@@ -202,8 +206,8 @@
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="订单状态">
+          align="center"
+          label="订单状态">
           <template v-slot="scope">
             <el-tag v-if="scope.row.orderState === 'FINISHED'" type="success">
               {{ scope.row.orderState | orderStateFormat }}
@@ -223,66 +227,66 @@
           </template>
         </el-table-column>
         <el-table-column
-            align="center"
-            label="预约时间"
-            prop="appointmentDate">
+          align="center"
+          label="预约时间"
+          prop="appointmentDate">
         </el-table-column>
         <el-table-column
-            align="center"
-            label="操作"
-            width="170">
+          align="center"
+          label="操作"
+          width="170">
           <template v-slot="scope">
             <div class="action-btns">
               <el-button
-                  v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'"
-                  size="mini"
-                  type="primary"
-                  @click="onEditOrder(scope.row.id)">编辑
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='PAID'"
+                size="mini"
+                type="primary"
+                @click="onEditOrder(scope.row.id)">编辑
               </el-button>
               <el-button
-                  v-if="(scope.row.paymentWay==='WEIXIN_PAY'||scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'"
-                  size="mini"
-                  type="success"
-                  @click="onConfirmPay(scope.row)">
+                v-if="(scope.row.paymentWay==='WEIXIN_PAY'||scope.row.paymentWay==='TRANSFER'||scope.row.paymentWay==='ALI_PAY') && scope.row.payState==='UN_PAY' && scope.row.orderState==='WAITING_RECEIVE'"
+                size="mini"
+                type="success"
+                @click="onConfirmPay(scope.row)">
                 确认收款
               </el-button>
               <el-button
-                  v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')"
-                  size="mini"
-                  type="success"
-                  @click="onPrintOrder(scope.row)">
+                v-if="scope.row.payState!=='UN_PAY' && (scope.row.orderState==='PRODUCING' || scope.row.orderState==='DELIVERING')"
+                size="mini"
+                type="success"
+                @click="onPrintOrder(scope.row)">
                 打印
               </el-button>
               <el-button
-                  v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'"
-                  size="mini"
-                  type="success"
-                  @click="onReceiveOrder(scope.row)">接单
+                v-if="scope.row.orderState==='WAITING_RECEIVE' && scope.row.payState!=='UN_PAY'"
+                size="mini"
+                type="success"
+                @click="onReceiveOrder(scope.row)">接单
               </el-button>
               <el-button
-                  v-if="scope.row.orderState==='PRODUCING'"
-                  size="mini"
-                  type="success"
-                  @click="onDeliveryOrder(scope.row)">配送
+                v-if="scope.row.orderState==='PRODUCING'"
+                size="mini"
+                type="success"
+                @click="onDeliveryOrder(scope.row)">配送
               </el-button>
               <el-button
-                  v-if="scope.row.orderState==='DELIVERING'"
-                  size="mini"
-                  type="success"
-                  @click="onFinishOrder(scope.row)">完成
+                v-if="scope.row.orderState==='DELIVERING'"
+                size="mini"
+                type="success"
+                @click="onFinishOrder(scope.row)">完成
               </el-button>
               <el-button
-                  v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
-                  size="mini"
-                  type="danger"
-                  @click="onRefundOrder(scope.row)">
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
+                size="mini"
+                type="danger"
+                @click="onRefundOrder(scope.row)">
                 退款
               </el-button>
               <el-button
-                  v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
-                  size="mini"
-                  type="danger"
-                  @click="onDeleteOrder(scope.row)">
+                v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
+                size="mini"
+                type="danger"
+                @click="onDeleteOrder(scope.row)">
                 删除
               </el-button>
             </div>
@@ -290,15 +294,15 @@
         </el-table-column>
       </el-table>
       <el-pagination
-          :current-page="page.current"
-          :page-size="page.size"
-          :page-sizes="[15, 50, 100]"
-          :total="page.total"
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          style="margin-top: 15px"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange">
+        :current-page="page.current"
+        :page-size="page.size"
+        :page-sizes="[15, 50, 100]"
+        :total="page.total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top: 15px"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
     <edit-order-dialog ref="edit-order-dialog"/>
@@ -369,26 +373,26 @@ export default {
       params.appointmentEndDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
       orderApi.getOrderListByPage(this.page, params)
-          .then(response => {
-            const datas = response.records
-            datas.forEach(item => {
-              item.detail = {}
-            })
-            this.tableData = datas
-            this.page.total = parseInt(response.total)
+        .then(response => {
+          const datas = response.records
+          datas.forEach(item => {
+            item.detail = {}
           })
-          .finally(() => {
-            this.listLoading = false
-          })
+          this.tableData = datas
+          this.page.total = parseInt(response.total)
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     async getOrderDetail(row, expandedRows) {
       const currentRow = expandedRows.find(item => item.id === row.id)
       // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
       if (currentRow !== undefined) {
         await orderApi.getOrderDetail(row.id)
-            .then(response => {
-              this.$set(currentRow, 'detail', response)
-            })
+          .then(response => {
+            this.$set(currentRow, 'detail', response)
+          })
       }
     },
     handleSizeChange(val) {
@@ -405,21 +409,20 @@ export default {
     onPrintOrder(order) {
       const loading = this.$loading({
         lock: true,
-        text: '打印中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        fullscreen: true,
+        text: '打印中...'
       })
       orderApi.printOrder(order)
-          .then(res => {
-            this.$message.success('打印成功')
-            order.payState = 'PAID'
-          })
-          .catch(err => {
-            this.$message.error(err)
-          })
-          .finally(() => {
-            loading.close()
-          })
+        .then(res => {
+          this.$message.success('打印成功')
+          order.payState = 'PAID'
+        })
+        .catch(err => {
+          this.$message.error(err)
+        })
+        .finally(() => {
+          loading.close()
+        })
     },
     onConfirmPay(order) {
       this.$confirm('确定此账户已付款?', '提示', {
@@ -428,26 +431,33 @@ export default {
         type: 'warning'
       }).then(() => {
         orderApi.confirmPay(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.payState = 'PAID'
-            })
+          .then(res => {
+            this.$message.success(res.message)
+            order.payState = 'PAID'
+          })
       })
     },
     onReceiveOrder(order) {
+      const loading = this.$loading({
+        lock: true,
+        fullscreen: true,
+        text: '正在处理,请稍等...'
+      })
       orderApi.receiveOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'PRODUCING'
-            this.onPrintOrder(order)
-          })
+        .then(res => {
+          this.$message.success(res.message)
+          order.orderState = 'PRODUCING'
+        })
+        .finally(() => {
+          loading.close()
+        })
     },
     onDeliveryOrder(order) {
       orderApi.deliveryOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'DELIVERING'
-          })
+        .then(res => {
+          this.$message.success(res.message)
+          order.orderState = 'DELIVERING'
+        })
     },
     onFinishOrder(order) {
       this.$confirm('确定当前订单已完成?', '提示', {
@@ -456,10 +466,10 @@ export default {
         type: 'warning'
       }).then(() => {
         orderApi.finishOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.orderState = 'FINISHED'
-            })
+          .then(res => {
+            this.$message.success(res.message)
+            order.orderState = 'FINISHED'
+          })
       })
     },
     onRefundOrder(order) {
@@ -469,10 +479,10 @@ export default {
         type: 'warning'
       }).then(() => {
         orderApi.refundOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.orderState = 'REFUND'
-            })
+          .then(res => {
+            this.$message.success(res.message)
+            order.orderState = 'REFUND'
+          })
       })
     },
     onDeleteOrder(order) {
@@ -482,10 +492,10 @@ export default {
         type: 'warning'
       }).then(() => {
         orderApi.deleteOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              this.getList()
-            })
+          .then(res => {
+            this.$message.success(res.message)
+            this.getList()
+          })
       })
     }
   }

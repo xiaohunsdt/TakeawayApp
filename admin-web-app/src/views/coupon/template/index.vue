@@ -244,10 +244,6 @@ $bg: #F3F3F9;
   overflow: hidden;
 }
 
-.el-form-item {
-  margin-bottom: unset !important;
-}
-
 .action-bar {
   display: flex;
   justify-content: flex-end;

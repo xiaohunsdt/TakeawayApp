@@ -197,7 +197,7 @@
               <el-input v-model="printerSetting.sn"></el-input>
             </el-form-item>
             <el-form-item label="语音类型">
-              <el-select v-model.number="printerSetting.voiceType" placeholder="请选择语言类型">
+              <el-select v-model="printerSetting.voiceType" placeholder="请选择语言类型">
                 <el-option value="0" label="真人语音 (大)"/>
                 <el-option value="1" label="真人语音 (中)"/>
                 <el-option value="2" label="真人语音 (小)"/>
