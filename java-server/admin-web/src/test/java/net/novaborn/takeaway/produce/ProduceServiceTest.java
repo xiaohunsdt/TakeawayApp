@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.goods.entity.services;
+package net.novaborn.takeaway.produce;
 
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.goods.entity.ProduceSpec;
@@ -15,8 +15,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {AdminApplication.class})
-public class GoodsServiceTest {
+public class ProduceServiceTest {
     @Autowired
-    GoodsService goodsService;
+    ProduceService produceService;
+
+    @Autowired
+    ProduceSpecService produceSpecService;
+
+    @Test
+    public void getGoodsTest() {
+        produceService.list().forEach(produce -> {
+            ProduceSpec produceSpec = produceSpecService.getById(produce.getId());
+            if (produceSpec == null) {
+                produceSpec = new ProduceSpec(produce.getId(),"{}","{}");
+                produceSpec.insert();
+            }
+        });
+    }
 }
 
