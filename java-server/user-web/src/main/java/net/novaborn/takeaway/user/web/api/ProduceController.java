@@ -69,8 +69,8 @@ public class ProduceController extends BaseController {
 
         // 筛选有效商品
         produceList = produceList.stream()
-                .filter(item -> !item.getState().equals(ProduceState.OFF))
-                .collect(Collectors.toList());
+            .filter(item -> !item.getState().equals(ProduceState.OFF))
+            .collect(Collectors.toList());
 
         return ResponseEntity.ok(new ProduceWrapper(produceList).warp());
     }
@@ -78,9 +78,15 @@ public class ProduceController extends BaseController {
     @GetMapping("getAllList")
     public ResponseEntity getAllList() {
         List<Produce> produceList = produceService.list().stream()
-                .filter(item -> !item.getState().equals(ProduceState.OFF))
-                    .sorted(Comparator.comparing(Produce::getCreateDate).reversed().thenComparing(Produce::getName).thenComparing(Produce::getIndex).reversed())
-                .collect(Collectors.toList());
+            .filter(item -> {
+                if (item.getState() == null) {
+                    item.deleteById();
+                    return false;
+                }
+                return !item.getState().equals(ProduceState.OFF);
+            })
+            .sorted(Comparator.comparing(Produce::getCreateDate).reversed().thenComparing(Produce::getName).thenComparing(Produce::getIndex).reversed())
+            .collect(Collectors.toList());
         return ResponseEntity.ok(new ProduceListDto(produceList));
     }
 }

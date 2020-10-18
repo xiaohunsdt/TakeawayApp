@@ -38,6 +38,7 @@
   font-size: 32rpx;
   vertical-align: bottom;
   padding-bottom: 5rpx;
+  margin-right: 10rpx;
 }
 
 .goods-info .goods-price .price {

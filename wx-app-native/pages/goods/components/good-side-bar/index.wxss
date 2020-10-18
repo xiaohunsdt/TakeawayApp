@@ -7,7 +7,7 @@
 }
 
 .container-side-bar .nav {
-  width: 160rpx;
+  width: 250rpx;
   background: #F2F2F2;
 }
 
@@ -32,7 +32,6 @@
 }
 
 .container-side-bar .content {
-  flex: 1;
   background: #fff;
   height: 100%;
 }
@@ -42,8 +41,12 @@
   height: inherit;
 }
 
-.container-side-bar .content .content-scroll {
+/* .container-side-bar .content .content-scroll {
   overflow: hidden;
+} */
+
+.container-side-bar .pesticide{
+  height: initial;
 }
 
 .container-side-bar .pesticide .type-name {

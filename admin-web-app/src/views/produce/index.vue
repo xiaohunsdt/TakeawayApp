@@ -20,10 +20,9 @@
             </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="formData.state" placeholder="选择状态">
-                <el-option label=" " value=""></el-option>
+                <el-option label="全部" :value="null"></el-option>
                 <el-option label="上架" value="1"></el-option>
                 <el-option label="下架" value="0"></el-option>
-                <el-option label="缺货" value="-1"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>

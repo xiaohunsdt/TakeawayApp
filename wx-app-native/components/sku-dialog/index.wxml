@@ -9,7 +9,7 @@
 				{{produce.name}}
 			</view>
 			<view class="goods-price">
-				<view class="price-symbol">₩ </view>
+				<view class="price-symbol">₩</view>
 				<view class="price">{{produce.selectedGoods?produce.selectedGoods.price:produce.goods.price}}</view>
 			</view>
 			<view class="goods-spec-info">
