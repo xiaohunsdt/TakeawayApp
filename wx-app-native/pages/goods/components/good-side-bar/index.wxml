@@ -1,7 +1,7 @@
 <view class="container-side-bar">
-	<view class="nav {{cartAllCount > 0 && 'has-padding'}}">
+	<view class="nav {{cartAllCount > 0 ? 'has-padding' : ''}}">
 		<scroll-view class="nav-scroll" scroll-y="true" style="height: 100%;">
-			<view class="nav-item {{currentId === category.id && 'active'}}" wx:key="id" data-category-id="{{category.id}}"
+			<view class="nav-item {{currentId === category.id ? 'active' : ''}}" wx:key="id" data-category-id="{{category.id}}"
 				bind:tap="chooseType" wx:for="{{categoryGoods}}" wx:for-item="category">
 				{{category.name}}
 			</view>
@@ -9,9 +9,9 @@
 	</view>
 	<view class="content">
 		<scroll-view scroll-into-view="{{contentId}}" scroll-y="{{contentId}}"
-			class="content-scroll {{cartAllCount > 0 && 'has-padding'}}" scroll-with-animation="true" style="height: 100%;">
+			class="content-scroll {{cartAllCount > 0 ? 'has-padding' : ''}}" scroll-with-animation="true" style="height: 100%;">
 			<view class="content-container">
-				<view id="xh_{{category.id}}" wx:key="id" class="pesticide" wx:for="{{categoryGoods}}" wx:for-item="category">
+				<view id="xh_{{category.id}}" wx:key="id" class="pesticide" wx:for="{{categoryGoods}}" wx:for-item="category" wx:if="{{category.produceList.length > 0 && ('xh_' + category.id) === contentId}}">
 					<view class="type-name">
 						<view class="line"></view>
 						<view class="name">{{category.name}}</view>
@@ -20,7 +20,8 @@
 					<view class="pesticide-container">
 						<standard-goods-card cart-list="{{cartList}}" produce="{{food}}" wx:key="id"
 							wx:for="{{category.produceList}}" wx:for-item="food" bind:cart-change="onCartChange"
-							bind:openThumbDialog="onOpenThumbDialog" />
+							bind:openThumbDialog="onOpenThumbDialog" 
+							bind:openSkuDialog="onOpenSkuDialog"/>
 					</view>
 					<view class="has-no-more" wx:if="{{category.produceList.length === 0}}">
 						<view class="line"></view>
@@ -35,6 +36,7 @@
 		<image src="{{selectedFood.thumb!==''?selectedFood.thumb:'/static/images/no_image.gif'}}" mode="aspectFill"
 			style="display:block; width: 100%; height:600rpx" lazy-load />
 	</van-dialog>
+	<sku-dialog id="sku-dialog" bind:cart-change="onCartChange" />
 	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart"
 		bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
 		<view class="cart-content">

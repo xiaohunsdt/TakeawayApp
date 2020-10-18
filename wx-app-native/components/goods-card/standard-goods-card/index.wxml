@@ -26,5 +26,4 @@
 			</van-button>
 		</view>
 	</view>
-	<sku-dialog id="sku-dialog" wx:if="{{produce.goodsCount > 1}}" bind:cart-change="onCartChange"/>
 </view>

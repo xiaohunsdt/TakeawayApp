@@ -90,6 +90,10 @@ Component({
         selectedFood: food,
         showThumbDialog: true
       })
-    }
+    },
+    onOpenSkuDialog(event){
+      const produce = event.detail
+      this.selectComponent('#sku-dialog').openDialog(produce)
+    },
   }
 })

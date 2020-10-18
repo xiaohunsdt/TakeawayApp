@@ -1,6 +1,4 @@
 {
   "component": true,
-  "usingComponents": {
-    "sku-dialog": "../../sku-dialog/index"
-  }
+  "usingComponents": {}
 }

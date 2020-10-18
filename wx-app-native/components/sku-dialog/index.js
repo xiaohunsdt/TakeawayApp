@@ -8,7 +8,7 @@ Component({
   behaviors: [myBehavior],
   observers: {
     'produce': function (newVal) {
-      console.log(newVal)
+      //console.log(newVal)
       if (newVal && newVal.selectedGoods) {
         this.setData({
           currentFoodCount: this.getCurrentFoodCount()
@@ -94,7 +94,7 @@ Component({
   methods: {
     openDialog(produce) {
       produce.selectedGoods = null
-      if (this.data.produceDetail === null || this.data.produce === null) {
+      if (this.data.produceDetail === null || this.data.produce !== produce) {
         wx.showLoading({
           title: '正在加载...'
         })

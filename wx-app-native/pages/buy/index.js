@@ -207,15 +207,9 @@ Page({
       })
     }
     userService.getSignInedCount().then(res => {
-      if (res === 7) {
-        this.setData({
-          signNotice: `本周您已获得7000现金优惠卷(无门槛), 下周继续努力哦!`
-        })
-      } else {
-        this.setData({
-          signNotice: `本周您已经签到${res}次, 再签到${7 - res}次即可获得7000现金优惠卷(无门槛)`
-        })
-      }
+      this.setData({
+        signNotice: `本月您已经签到${res}次, 达到规定签到数后，系统自动下发优惠券! 请到我的优惠券查看您的获奖优惠券!(订单完成后可查看)`
+      })
     })
 
     indexService.getDeliveryPrice()

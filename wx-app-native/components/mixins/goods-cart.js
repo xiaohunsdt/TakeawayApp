@@ -3,7 +3,12 @@ import cartService from '../../services/cart'
 export default Behavior({
   methods: {
     openSkuDialog() {
-      this.selectComponent('#sku-dialog').openDialog(this.data.produce)
+      const node = this.selectComponent('#sku-dialog')
+      if (node) {
+        node.openDialog(this.data.produce)
+      } else {
+        this.triggerEvent('openSkuDialog', this.data.produce)
+      }
     },
     getCurrentFoodCount() {
       let existData;
