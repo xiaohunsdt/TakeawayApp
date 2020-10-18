@@ -135,6 +135,45 @@ public class ProduceController extends BaseController {
             goodsService.saveByProduceId(targetProduce.get().getId(), produceDto.getGoodsList());
         }
 
+//        Optional<ProduceSpec> targetProduceSpec = Optional.ofNullable(produceSpecService.getById(produceDto.getProduce().getId()))
+//            .or(() -> {
+//                ProduceSpec produceSpec = new ProduceSpec(produceDto.getProduce().getId(), "{}", "{}");
+//                produceSpecService.save(produceSpec);
+//                return Optional.of(produceSpec);
+//            });
+//
+//        if (targetProduce.isEmpty()) {
+//            return new ErrorTip(-1, "没有此产品!");
+//        }
+//
+//        if (produceDto.getSpecs().getOptions().equals(targetProduceSpec.get().getOptions())) {
+//            produceDto.getGoodsList().forEach(goodsDto -> {
+//                Goods goods = goodsService.getById(goodsDto.getId());
+//                if (goods == null) {
+//                    goodsService.saveByProduceId(produceDto.getProduce().getId(), List.of(goodsDto));
+//                } else {
+//                    BeanUtil.copyProperties(goodsDto, goods, CopyOptions.create().setIgnoreNullValue(true));
+//                    goodsService.updateById(goods);
+//
+//                    GoodsStock stock = goodsStockService.getByGoodsId(goods.getId()).get();
+//                    stock.setStock(goodsDto.getStock());
+//
+//                    if (!goods.getState().equals(GoodsState.ON)) {
+//                        stock.setStock(0);
+//                    }
+//                    if (goods.getState().equals(GoodsState.ON) && goodsDto.getStock() == 0) {
+//                        stock.setStock(-1);
+//                    }
+//                    goodsStockService.updateById(stock);
+//                }
+//
+//            });
+//        } else {
+//            // spec发生变化，删除原有商品，重新生成新商品
+//            goodsService.deleteByProduceId(targetProduce.get().getId());
+//            goodsService.saveByProduceId(targetProduce.get().getId(), produceDto.getGoodsList());
+//        }
+
         BeanUtil.copyProperties(produceDto.getSpecs(), targetProduceSpec.get(), CopyOptions.create().setIgnoreNullValue(true));
         BeanUtil.copyProperties(produceDto.getProduce(), targetProduce.get(), CopyOptions.create().setIgnoreNullValue(true));
 
