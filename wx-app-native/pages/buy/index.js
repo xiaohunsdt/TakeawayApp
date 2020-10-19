@@ -188,7 +188,7 @@ Page({
         orderItem.goodsPrice = item.produce.selectedGoods.price
         orderItem.goodsCount = item.count
         temp.push(orderItem)
-        console.log(orderItem)
+        // console.log(orderItem)
       })
 
     // watch 监听，需要单独拿出来设置数据

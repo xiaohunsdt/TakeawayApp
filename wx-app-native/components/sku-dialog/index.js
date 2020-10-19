@@ -114,11 +114,12 @@ Component({
           .finally(() => {
             wx.hideLoading()
           })
+      } else {
+        this.setData({
+          produce,
+          isShow: true
+        })
       }
-      this.setData({
-        produce,
-        isShow: true
-      })
     },
     onClose() {
       this.setData({
