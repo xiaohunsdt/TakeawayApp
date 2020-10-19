@@ -112,7 +112,7 @@ public class ProduceController extends BaseController {
             return new ErrorTip(-1, "没有此产品或规格!");
         }
 
-        if (produceDto.getGoodsList().size() == 1 && produceDto.getGoodsList().get(0).getState() == GoodsState.OFF) {
+        if (produceDto.getGoodsList().stream().noneMatch(goodsDto -> goodsDto.getState() != GoodsState.OFF)) {
             return new ErrorTip(-1, "产品必须有一个可用的sku!!");
         }
 
