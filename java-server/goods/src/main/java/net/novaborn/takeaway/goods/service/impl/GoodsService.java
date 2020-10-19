@@ -52,6 +52,11 @@ public class GoodsService extends ServiceImpl<IGoodsDao, Goods> implements IGood
     }
 
     @Override
+    public int getAvailableCountByProduceId(Long produceId) {
+        return this.baseMapper.getAvailableCountByProduceId(produceId);
+    }
+
+    @Override
     public Goods getFirstByProduceId(Long produceId) {
         return this.baseMapper.getFirstByProduceId(produceId);
     }

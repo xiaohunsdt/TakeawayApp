@@ -47,4 +47,10 @@ public interface IProduceService extends IService<Produce> {
      * @return 产品列表
      */
     IPage<Produce> getListByPage(Page page, Map args);
+
+    /**
+     * 当sku更新或库存更新时,产品的状态也要发生变化
+     * @param produceId
+     */
+    void updateProduceState(Long produceId);
 }

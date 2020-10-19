@@ -4,6 +4,8 @@ import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
 import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.user.config.properties.SystemProperties;
 
@@ -36,13 +38,21 @@ public class ProduceWrapper extends BaseControllerWrapper {
             category = categoryService.getById((Long) map.get("categoryId"));
         }
 
-        map.put("category", category.getName());
-        map.put("goods",goodsService.getFirstByProduceId((Long) map.get("id")));
-        map.put("goodsCount", goodsService.getCountByProduceId((Long) map.get("id")));
+        Goods firstGoods = goodsService.getFirstByProduceId((Long) map.get("id"));
+        if(firstGoods!=null){
+            map.put("goods", firstGoods);
+        }
+
         if (map.get("thumb") != null){
             map.put("thumb", systemProperties.getUploadServerUrl() + map.get("thumb"));
         }
 
+        if(map.get("state") == ProduceState.PART_SHORTAGE){
+            map.put("state","ON");
+        }
+
+        map.put("category", category.getName());
+        map.put("goodsCount", goodsService.getCountByProduceId((Long) map.get("id")));
         map.remove("categoryId");
         map.remove("createDate");
         map.remove("updateDate");

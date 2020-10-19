@@ -13,6 +13,16 @@
         SELECT count(*) FROM `goods`
         <where>
             `produce_id` = #{produceId}
+            AND `state` &lt;&gt; 0
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="getAvailableCountByProduceId" resultType="int">
+        SELECT count(*) FROM `goods`
+        <where>
+            `produce_id` = #{produceId}
+            AND `state` = 1
             AND deleted = 0
         </where>
     </select>
@@ -21,6 +31,7 @@
         SELECT * FROM `goods`
         <where>
             `produce_id` = #{produceId}
+            AND `state` &lt;&gt; 0
             AND deleted = 0
         </where>
         ORDER BY `price` ASC

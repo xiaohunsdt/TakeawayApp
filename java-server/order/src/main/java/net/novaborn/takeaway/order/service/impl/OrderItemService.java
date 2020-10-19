@@ -51,13 +51,17 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
             Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
             goods.orElseThrow(() -> new SysException(GoodsExceptionEnum.GOODS_NOT_FOUND));
 
-            if (goods.get().getState() == GoodsState.SHORTAGE) {
+            if (goods.get().getState() == GoodsState.OFF) {
+                SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_OFF);
+                sysException.setMessage(item.getProduceName() + item.getGoodsTitle() + ": 当前不可用,无法下单!请下来刷新菜单!");
+                throw sysException;
+            } else if (goods.get().getState() == GoodsState.SHORTAGE) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
-                sysException.setMessage(goods.get().getTitle() + ": 当前处于缺货中,无法下单!请下来刷新菜单!");
+                sysException.setMessage(item.getProduceName() + item.getGoodsTitle() + ": 当前处于缺货中,无法下单!请下来刷新菜单!");
                 throw sysException;
             } else if (!goodsStockService.checkStock(goods.get(), item.getGoodsCount())) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_SHORTAGE);
-                sysException.setMessage(goods.get().getTitle() + ": 当前库存不足,请重试!");
+                sysException.setMessage(item.getProduceName() + item.getGoodsTitle() + ": 当前库存不足,请重试!");
                 throw sysException;
             }
 

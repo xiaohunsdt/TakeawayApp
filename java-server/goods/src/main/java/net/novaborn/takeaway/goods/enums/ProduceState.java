@@ -6,6 +6,16 @@ import lombok.Getter;
 @Getter
 public enum ProduceState {
     /**
+     * 部分缺货
+     */
+    PART_SHORTAGE(-2),
+
+    /**
+     * 缺货
+     */
+    SHORTAGE(-1),
+
+    /**
      * 下架
      */
     OFF(0),

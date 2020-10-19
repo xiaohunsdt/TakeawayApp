@@ -57,7 +57,7 @@ public class ProduceController extends BaseController {
         List<GoodsDto> goodsDtoList = goodsService.getByProduceId(id).stream().map(item -> {
             GoodsDto goodsDto = new GoodsDto();
             BeanUtil.copyProperties(item, goodsDto);
-            goodsDto.setStock(goodsStockService.getByGoodsId(item.getId()).get().getStock());
+//            goodsDto.setStock(goodsStockService.getByGoodsId(item.getId()).get().getStock());
             return goodsDto;
         }).collect(Collectors.toList());
         return new ProduceDto(produce, produceSpec, goodsDtoList);
@@ -78,13 +78,7 @@ public class ProduceController extends BaseController {
     @GetMapping("getAllList")
     public ResponseEntity getAllList() {
         List<Produce> produceList = produceService.list().stream()
-            .filter(item -> {
-                if (item.getState() == null) {
-                    item.deleteById();
-                    return false;
-                }
-                return !item.getState().equals(ProduceState.OFF);
-            })
+            .filter(item -> !item.getState().equals(ProduceState.OFF))
             .sorted(Comparator.comparing(Produce::getCreateDate).reversed().thenComparing(Produce::getName).thenComparing(Produce::getIndex).reversed())
             .collect(Collectors.toList());
         return ResponseEntity.ok(new ProduceListDto(produceList));

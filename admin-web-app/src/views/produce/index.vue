@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item label="分类">
               <el-select v-model="formData.categoryId" placeholder="选择分类">
-                <el-option label=" " value=""></el-option>
+                <el-option label="全部" :value="null"></el-option>
                 <el-option
                     v-for="item in categoryList"
                     :key="item.id"
@@ -23,6 +23,8 @@
                 <el-option label="全部" :value="null"></el-option>
                 <el-option label="上架" value="1"></el-option>
                 <el-option label="下架" value="0"></el-option>
+                <el-option label="缺货" value="-1"></el-option>
+                <el-option label="部分缺货" value="-2"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>

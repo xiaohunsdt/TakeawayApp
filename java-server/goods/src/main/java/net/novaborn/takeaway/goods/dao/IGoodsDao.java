@@ -30,6 +30,12 @@ public interface IGoodsDao extends BaseMapper<Goods> {
      */
     int getCountByProduceId(@Param("produceId") Long produceId);
 
+    /**
+     * 根据产品id获取指定产品的可用商品数量
+     * @param produceId
+     * @return 查询到的可用商品数量
+     */
+    int getAvailableCountByProduceId(@Param("produceId") Long produceId);
 
     Goods getFirstByProduceId(@Param("produceId") Long produceId);
 }

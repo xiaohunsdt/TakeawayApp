@@ -402,6 +402,7 @@ const produceStateMap = new Map()
 produceStateMap.set('ON', '上架')
 produceStateMap.set('OFF', '下架')
 produceStateMap.set('SHORTAGE', '缺货')
+produceStateMap.set('PART_SHORTAGE', '部分缺货')
 
 export function formatOrderState(orderState) {
     return orderStateMap.get(orderState)

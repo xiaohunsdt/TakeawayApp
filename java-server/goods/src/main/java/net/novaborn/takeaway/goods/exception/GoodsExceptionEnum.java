@@ -24,7 +24,12 @@ public enum GoodsExceptionEnum implements ServiceExceptionEnum {
     /**
      * 商品缺货
      */
-    GOODS_IS_SHORTAGE(500, "商品缺货!");
+    GOODS_IS_SHORTAGE(500, "商品缺货!"),
+
+    /**
+     * 商品不可用
+     */
+    GOODS_IS_OFF(500, "商品不可用!");
 
     GoodsExceptionEnum(int code, String message) {
         this.code = code;

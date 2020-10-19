@@ -106,67 +106,32 @@ public class ProduceController extends BaseController {
     @Transactional(rollbackFor = Exception.class)
     public Tip update(@RequestBody @Validated ProduceDto produceDto) {
         Optional<Produce> targetProduce = Optional.ofNullable(produceService.getById(produceDto.getProduce().getId()));
-//        Optional<ProduceSpec> targetProduceSpec = Optional.ofNullable(produceSpecService.getById(produceDto.getProduce().getId()));
-//
-//        if (targetProduce.isEmpty() || targetProduceSpec.isEmpty()) {
-//            return new ErrorTip(-1, "没有此产品或规格!");
-//        }
-//
-//        if (produceDto.getSpecs().getOptions().equals(targetProduceSpec.get().getOptions())) {
-//            produceDto.getGoodsList().forEach(goodsDto -> {
-//                Goods goods = goodsService.getById(goodsDto.getId());
-//                BeanUtil.copyProperties(goodsDto, goods, CopyOptions.create().setIgnoreNullValue(true));
-//                goodsService.updateById(goods);
-//
-//                GoodsStock stock = goodsStockService.getByGoodsId(goods.getId()).get();
-//                stock.setStock(goodsDto.getStock());
-//
-//                if (!goods.getState().equals(GoodsState.ON)) {
-//                    stock.setStock(0);
-//                }
-//                if (goods.getState().equals(GoodsState.ON) && goodsDto.getStock() == 0) {
-//                    stock.setStock(-1);
-//                }
-//                goodsStockService.updateById(stock);
-//            });
-//        } else {
-//            // spec发生变化，删除原有商品，重新生成新商品
-//            goodsService.deleteByProduceId(targetProduce.get().getId());
-//            goodsService.saveByProduceId(targetProduce.get().getId(), produceDto.getGoodsList());
-//        }
+        Optional<ProduceSpec> targetProduceSpec = Optional.ofNullable(produceSpecService.getById(produceDto.getProduce().getId()));
 
-        Optional<ProduceSpec> targetProduceSpec = Optional.ofNullable(produceSpecService.getById(produceDto.getProduce().getId()))
-            .or(() -> {
-                ProduceSpec produceSpec = new ProduceSpec(produceDto.getProduce().getId(), "{}", "{}");
-                produceSpecService.save(produceSpec);
-                return Optional.of(produceSpec);
-            });
+        if (targetProduce.isEmpty() || targetProduceSpec.isEmpty()) {
+            return new ErrorTip(-1, "没有此产品或规格!");
+        }
 
-        if (targetProduce.isEmpty()) {
-            return new ErrorTip(-1, "没有此产品!");
+        if (produceDto.getGoodsList().size() == 1 && produceDto.getGoodsList().get(0).getState() == GoodsState.OFF) {
+            return new ErrorTip(-1, "产品必须有一个可用的sku!!");
         }
 
         if (produceDto.getSpecs().getOptions().equals(targetProduceSpec.get().getOptions())) {
             produceDto.getGoodsList().forEach(goodsDto -> {
                 Goods goods = goodsService.getById(goodsDto.getId());
-                if (goods == null) {
-                    goodsService.saveByProduceId(produceDto.getProduce().getId(), List.of(goodsDto));
-                } else {
-                    BeanUtil.copyProperties(goodsDto, goods, CopyOptions.create().setIgnoreNullValue(true));
-                    goodsService.updateById(goods);
+                BeanUtil.copyProperties(goodsDto, goods, CopyOptions.create().setIgnoreNullValue(true));
+                goodsService.updateById(goods);
 
-                    GoodsStock stock = goodsStockService.getByGoodsId(goods.getId()).get();
-                    stock.setStock(goodsDto.getStock());
+                GoodsStock stock = goodsStockService.getByGoodsId(goods.getId()).get();
+                stock.setStock(goodsDto.getStock());
 
-                    if (!goods.getState().equals(GoodsState.ON)) {
-                        stock.setStock(0);
-                    }
-                    if (goods.getState().equals(GoodsState.ON) && goodsDto.getStock() == 0) {
-                        stock.setStock(-1);
-                    }
-                    goodsStockService.updateById(stock);
+                if (!goods.getState().equals(GoodsState.ON)) {
+                    stock.setStock(0);
                 }
-
+                if (goods.getState().equals(GoodsState.ON) && stock.getStock() == 0) {
+                    stock.setStock(-1);
+                }
+                goodsStockService.updateById(stock);
             });
         } else {
             // spec发生变化，删除原有商品，重新生成新商品
@@ -179,6 +144,7 @@ public class ProduceController extends BaseController {
 
         produceSpecService.updateById(targetProduceSpec.get());
         produceService.updateById(targetProduce.get());
+        produceService.updateProduceState(targetProduce.get().getId());
         return new SuccessTip("修改成功!");
     }
 
