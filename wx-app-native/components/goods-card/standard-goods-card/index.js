@@ -55,7 +55,7 @@ Component({
       })
     },
     onOpenThumbDialog() {
-      this.triggerEvent('openThumbDialog', this.data.food)
+      this.triggerEvent('openThumbDialog', this.data.produce)
       // this.setData({
       //   showThumbDialog: true
       // })
