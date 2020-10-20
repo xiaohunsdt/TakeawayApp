@@ -59,8 +59,8 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
         return targetGoodsStock.get().getStock() >= count;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void reduceStock(Goods goods, int count) {
         Optional<GoodsStock> targetGoodsStock = this.getByGoodsId(goods.getId());
 
@@ -76,8 +76,9 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
         ((GoodsStockService) AopContext.currentProxy()).updateById(goods, targetGoodsStock.get());
     }
 
-    @Transactional(rollbackFor = Exception.class)
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void recoverStock(Goods goods, int count) {
         Optional<GoodsStock> targetGoodsStock = this.getByGoodsId(goods.getId());
 
