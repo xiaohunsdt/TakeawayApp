@@ -18,7 +18,7 @@ public enum GoodsStockExceptionEnum implements ServiceExceptionEnum {
     /**
      * 不存在
      */
-    STOCK_HAD_NONE(500, "已经没有没有库存了!"),
+    STOCK_HAD_NONE(500, "已经没有库存了!"),
 
     /**
      * 更新商品库存失败

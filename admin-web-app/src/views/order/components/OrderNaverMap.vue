@@ -192,10 +192,7 @@ export default {
       }).then(() => {
         orderApi.finishOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               this.isOpen = false
               if (!this.allOrder) {
                 this.getWaitEatOrderList()

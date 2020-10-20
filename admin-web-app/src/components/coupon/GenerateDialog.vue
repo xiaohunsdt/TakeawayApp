@@ -74,10 +74,7 @@
       generateCoupon() {
         couponApi.generateCoupon(this.formData)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
           })
       },
       onTemplateChange(event) {

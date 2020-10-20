@@ -11,8 +11,11 @@ import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.mq.dto.AutoMessage;
 import net.novaborn.takeaway.mq.sender.WechatAutoSender;
 import net.novaborn.takeaway.order.entity.Order;
@@ -34,6 +37,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class WechatAutoTask {
+    private final String jobGroup = "wechat-auto";
+
     @Autowired
     SysContext sysContext;
 
@@ -42,6 +47,9 @@ public class WechatAutoTask {
 
     @Autowired
     GoodsService goodsService;
+
+    @Autowired
+    ProduceService produceService;
 
     @Autowired
     SettingService settingService;
@@ -61,9 +69,7 @@ public class WechatAutoTask {
 
     DateTime storeCloseTime;
 
-    private final String jobGroup = "wechat-auto";
-
-    private List<Goods> goodsList = new ArrayList<>();
+    private List<Produce> produceList = new ArrayList<>();
 
     @SneakyThrows
     @PostConstruct
@@ -125,27 +131,27 @@ public class WechatAutoTask {
             return;
         }
 
-        List<Goods> selectedGoods = new ArrayList<>();
-        if (goodsList.size() == 0) {
-            goodsList = goodsService.list().parallelStream()
-                    .filter(goods -> goods.getState() == GoodsState.ON)
-                    .sorted(Comparator.comparing(Goods::getCategoryId))
+        List<Produce> selectedProduces = new ArrayList<>();
+        if (produceList.size() == 0) {
+            produceList = produceService.list().parallelStream()
+                    .filter(produce -> produce.getState() == ProduceState.ON)
+                    .sorted(Comparator.comparing(Produce::getCategoryId))
                     .collect(Collectors.toList());
         }
 
-        int index = RandomUtil.randomInt(goodsList.size());
-        selectedGoods.add(goodsList.remove(index));
+        int index = RandomUtil.randomInt(produceList.size());
+        selectedProduces.add(produceList.remove(index));
 
         for (int i = 1; i <= RandomUtil.randomInt(2, 4); i++) {
-            if (index + i < goodsList.size()) {
-                selectedGoods.add(goodsList.remove(index + i));
-            } else if (index - i >= 0 && index - i < goodsList.size()) {
-                selectedGoods.add(goodsList.remove(index - i));
+            if (index + i < produceList.size()) {
+                selectedProduces.add(produceList.remove(index + i));
+            } else if (index - i >= 0 && index - i < produceList.size()) {
+                selectedProduces.add(produceList.remove(index - i));
             }
         }
 
-        if (selectedGoods.size() > 0) {
-            sendAutoMessage(selectedGoods);
+        if (selectedProduces.size() > 0) {
+            sendAutoMessage(selectedProduces);
         }
     }
 
@@ -178,7 +184,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "月饼还剩一点五仁哦！[拥抱][拥抱][拥抱]\n"+
+                "月饼还剩一点五仁哦！[拥抱][拥抱][拥抱]\n" +
                         "今天点餐继续送一块月饼哦！！小伙伴们抓紧时间点餐!\n"
         );
         autoMessage.setImgUrlList(
@@ -218,14 +224,16 @@ public class WechatAutoTask {
     }
 
     public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
-        String names = selectedOrderItems.stream().map(OrderItem::getGoodsName).collect(Collectors.joining(", "));
+        String names = selectedOrderItems.stream().map(OrderItem::getProduceName).collect(Collectors.joining(", "));
         String desc = selectedOrderItems.stream()
                 .map(orderItem -> {
-                    Goods goods = goodsService.getById(orderItem.getGoodsId());
-                    if (StrUtil.isBlank(goods.getDesc())) {
-                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
+                    Produce produce = produceService.getById(orderItem.getProduceId());
+                    if (StrUtil.isBlank(produce.getDesc())) {
+//                        return StrUtil.format("{}, {}\uD83D\uDCB0", produce.getName(), goods.getPrice());
+                        return StrUtil.format("{}", produce.getName());
                     } else {
-                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
+//                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", produce.getName(), goods.getPrice(), produce.getDesc());
+                        return StrUtil.format("{}, {}", produce.getName(), produce.getDesc());
                     }
                 })
                 .collect(Collectors.joining("\r\n"));
@@ -253,18 +261,20 @@ public class WechatAutoTask {
         log.info("WechatAuto: 已发送给队列 {}", autoMessage);
     }
 
-    public void sendAutoMessage(List<Goods> selectedGoods) {
-        String names = selectedGoods.stream().map(Goods::getName).collect(Collectors.joining(", "));
-        String desc = selectedGoods.stream()
+    public void sendAutoMessage(List<Produce> selectedProduces) {
+        String names = selectedProduces.stream().map(Produce::getName).collect(Collectors.joining(", "));
+        String desc = selectedProduces.stream()
                 .map(goods -> {
                     if (StrUtil.isBlank(goods.getDesc())) {
-                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
+//                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
+                        return StrUtil.format("{}", goods.getName());
                     } else {
-                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
+                        return StrUtil.format("{}, {}", goods.getName(), goods.getDesc());
+//                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
                     }
                 })
                 .collect(Collectors.joining("\r\n"));
-        List<String> imgs = selectedGoods.stream()
+        List<String> imgs = selectedProduces.stream()
                 .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
                 .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
                 .collect(Collectors.toList());

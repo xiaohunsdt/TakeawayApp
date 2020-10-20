@@ -28,6 +28,9 @@ public class Category extends Model<Category> {
 
     private Long storeId;
 
+    @TableField(value = "`index`")
+    private Integer index;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 

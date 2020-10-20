@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.nio.charset.Charset;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class PrinterUtilTest {
@@ -18,11 +20,19 @@ class PrinterUtilTest {
 
     @Test
     void test() {
-        printerUtil.print(orderService.getById(1311604674017746945L));
+        printerUtil.print(orderService.getById(1317384242112397313L));
     }
 
     @Test
     void test2() {
-        printerUtil.setVoiceType("05SBD7NDCE6834B",3);
+        printerUtil.setVoiceType("05SBD7NDCE6834B",0);
+    }
+
+    @Test
+    void test3() {
+        System.out.println(" 1");
+        System.out.println("我");
+        System.out.println("1");
+        System.out.println("t");
     }
 }

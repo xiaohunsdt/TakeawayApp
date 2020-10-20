@@ -46,6 +46,10 @@
   overflow: hidden;
 }
 
+.container-side-bar .pesticide{
+  height: initial;
+}
+
 .container-side-bar .pesticide .type-name {
   display: flex;
   justify-content: center;

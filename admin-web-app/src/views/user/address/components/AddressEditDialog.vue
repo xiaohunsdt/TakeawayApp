@@ -85,10 +85,7 @@ export default {
     onEdit() {
       addressApi.updateAddress(this.formData)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             this.$emit('updated-address', this.formData)
           })
     },

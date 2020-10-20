@@ -11,6 +11,7 @@ import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.statistics.entity.UserConsumption;
+import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -57,32 +59,43 @@ public class OrderServiceTest {
     @Test
     public void getOrderListByDateTest() {
         Date start = DateUtil.parseDateTime("2020-06-26 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-06-30 23:00:00");
+        Date end = DateUtil.parseDateTime("2020-10-11 23:00:00");
 
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
 
-        List<Order> orderList = orderService.getOrderList(args).parallelStream()
-                .filter(order -> DateUtil.isIn(order.getCreateDate(), start, end))
-//                .filter(order -> userIds.add(order.getUserId()))
-                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 50)
-                .filter(order -> order.getAppointmentDate() == null)
+        Set<Long> userIds = new CopyOnWriteArraySet<>();
+        List<Order> orderList = orderService.getOrderList(args);
+        System.out.println(orderList.size());
+        orderList = orderList.parallelStream()
+                .filter(order -> userIds.add(order.getUserId()))
+//                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 50)
+//                .filter(order -> order.getAppointmentDate() == null)
                 .collect(Collectors.toList());
-        orderList.forEach(order -> System.out.println(order.getUserId()));
-        System.out.println(orderList.stream()
-                .map(order -> addressService.getById(order.getAddressId()).getPhone())
-                .collect(Collectors.joining(",")));
-//        System.out.println(orderList.size());
-//        for (int i = 0; i < orderList.size(); i += 20) {
-//            int temp = Math.min(i + 20, orderList.size());
-//
-//            System.out.println(orderList.subList(i, temp).stream()
-//                    .map(order -> addressService.getById(order.getAddressId()).getPhone())
-//                    .collect(Collectors.joining(",")));
-//            System.out.println("a------------------------");
-//        }
+
+//        orderList.forEach(order -> System.out.println(order.getUserId()));
+//        System.out.println(orderList.stream()
+//                .map(order -> addressService.getById(order.getAddressId()).getPhone())
+//                .collect(Collectors.joining(",")));
+
+        List<String> phones = orderList.stream()
+                .map(order -> addressService.getById(order.getAddressId()))
+                .distinct()
+                .filter(Objects::nonNull)
+                .map(Address::getPhone)
+                .filter(item -> !item.equals("01000000000"))
+                .collect(Collectors.toList());
+        System.out.println(phones.size());
+        System.out.println(userIds.size());
+        System.out.println(orderList.size());
+
+        for (int i = 0; i < phones.size(); i += 20) {
+            System.out.println(String.format("%d------------------------", i / 20 + 1));
+            int temp = Math.min(i + 20, phones.size());
+            System.out.println(String.join(",", phones.subList(i, temp)));
+        }
     }
 
     @Test
@@ -98,13 +111,13 @@ public class OrderServiceTest {
                     List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
                     boolean isExist = false;
                     for (OrderItem orderItem : orderItems) {
-                        if (orderItem.getGoodsName().contains("鸭脖")
-                                || orderItem.getGoodsName().contains("鸭锁骨")
-                                || orderItem.getGoodsName().contains("鸭翅")
-                                || orderItem.getGoodsName().contains("鸭头")
-                                || orderItem.getGoodsName().contains("鸭肠")
-                                || orderItem.getGoodsName().contains("鸭舌")
-                                || orderItem.getGoodsName().contains("鸭胗")
+                        if (orderItem.getProduceName().contains("鸭脖")
+                                || orderItem.getProduceName().contains("鸭锁骨")
+                                || orderItem.getProduceName().contains("鸭翅")
+                                || orderItem.getProduceName().contains("鸭头")
+                                || orderItem.getProduceName().contains("鸭肠")
+                                || orderItem.getProduceName().contains("鸭舌")
+                                || orderItem.getProduceName().contains("鸭胗")
                         ) {
                             isExist = true;
                             break;

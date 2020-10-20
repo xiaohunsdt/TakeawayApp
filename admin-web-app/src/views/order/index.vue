@@ -67,13 +67,12 @@
           <template v-slot="props">
             <div v-if="props.row.detail.hasOwnProperty('address')" class="order-expand">
               <base-card>
-                <el-table
-                    :data="props.row.detail.orderItemList"
-                    :show-header="false"
-                    stripe
-                    style="width: 100%">
-                  <el-table-column
-                      prop="goodsName">
+                <el-table :data="props.row.detail.orderItemList" :show-header="false" stripe style="width: 100%">
+                  <el-table-column>
+                    <template v-slot="scope">
+                      {{scope.row.produceName}}
+                      <el-tag v-if="scope.row.goodsTitle!==''" size="mini" effect="dark">{{scope.row.goodsTitle}}</el-tag>
+                    </template>
                   </el-table-column>
                   <el-table-column>
                     <template v-slot="scope">
@@ -410,10 +409,7 @@ export default {
       })
       orderApi.printOrder(order)
           .then(res => {
-            this.$message({
-              message: '打印成功',
-              type: 'success'
-            })
+            this.$message.success('打印成功')
             // order.payState = 'PAID'
           })
           .finally(() => {
@@ -428,10 +424,7 @@ export default {
       }).then(() => {
         orderApi.confirmPay(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.payState = 'PAID'
             })
       })
@@ -439,20 +432,14 @@ export default {
     onReceiveOrder(order) {
       orderApi.receiveOrder(order.id)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             order.orderState = 'PRODUCING'
           })
     },
     onDeliveryOrder(order) {
       orderApi.deliveryOrder(order.id)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
             order.orderState = 'DELIVERING'
           })
     },
@@ -464,10 +451,7 @@ export default {
       }).then(() => {
         orderApi.finishOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.orderState = 'FINISHED'
             })
       })
@@ -480,10 +464,7 @@ export default {
       }).then(() => {
         orderApi.refundOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               order.orderState = 'REFUND'
             })
       })
@@ -496,10 +477,7 @@ export default {
       }).then(() => {
         orderApi.deleteOrder(order.id)
             .then(res => {
-              this.$message({
-                message: res.message,
-                type: 'success'
-              })
+              this.$message.success(res.message)
               this.getList()
             })
       })

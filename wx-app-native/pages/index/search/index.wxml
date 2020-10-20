@@ -1,13 +1,13 @@
 <view>
     <search-bar bind:search="onSearchEvent" background="#FFD200"></search-bar>
-    <view class="container-contain" wx:if="{{goodsList.length > 0}}">
+    <view class="container-contain" wx:if="{{produceList.length > 0}}">
       <main-goods-card
-        food="{{food}}"
+        produce="{{food}}"
         wx:key="id"
-        wx:for="{{goodsList}}"
+        wx:for="{{produceList}}"
         wx:for-item="food"/>
     </view>
-    <view class="none-content-view" wx:if="{{goodsList.length === 0}}">
+    <view class="none-content-view" wx:if="{{produceList.length === 0}}">
       <image mode="aspectFit" src="/static/images/none/no_search.png" style="width: 10rem" />
       <view style="margin-top: .5rem">没有搜索到您想要的商品</view>
     </view>

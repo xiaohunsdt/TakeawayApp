@@ -56,6 +56,6 @@ public class UserController extends BaseController {
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        return signInService.getSignInedCount(user.get().getId(), new Date(), Calendar.WEEK_OF_MONTH);
+        return signInService.getSignInedCount(user.get().getId(), new Date(), Calendar.MONTH);
     }
 }

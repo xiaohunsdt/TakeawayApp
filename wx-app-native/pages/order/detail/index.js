@@ -48,14 +48,14 @@ Page({
         payStateStr: indexUtil.formatPayState(res.payState),
         paymentWayStr: indexUtil.formatPaymentWay(res.paymentWay)
       })
-      if (res.discountedPrices) {
-        couponService.getCouponLogByOrderId(this.data.orderId)
-          .then(res => {
+      couponService.getCouponLogByOrderId(this.data.orderId)
+        .then(res => {
+          if (res.length > 0) {
             this.setData({
               couponName: res[0].couponName
             })
-          })
-      }
+          }
+        })
       if ((this.data.order.orderState === 'PRODUCING' || this.data.order.orderState === 'DELIVERING') && this.data.order.payState !== 'UN_PAY') {
         // 获取预计送达时间
         orderService.getDeliveryArriveTime(this.data.order.storeId, this.data.orderId)
@@ -67,10 +67,10 @@ Page({
       }
     })
   },
-  payNow(){
+  payNow() {
     payService.payOrder(this.data.orderId, this.data.order.paymentWay)
   },
-  comment(){
+  comment() {
     wx.navigateTo({
       url: `/pages/order/comment/index?orderId=${this.data.orderId}`
     })

@@ -28,7 +28,7 @@ Component({
     cartList: [],
     cartAllCount: 0,
     cartAllPrice: 0,
-    selectedFood: null,
+    selectedProduce: null,
     showThumbDialog: false
   },
   pageLifetimes: {
@@ -86,11 +86,15 @@ Component({
       })
     },
     onOpenThumbDialog(event){
-      const food = event.detail
+      const produce = event.detail
       this.setData({
-        selectedFood: food,
+        selectedProduce: produce,
         showThumbDialog: true
       })
-    }
+    },
+    onOpenSkuDialog(event){
+      const produce = event.detail
+      this.selectComponent('#sku-dialog').openDialog(produce)
+    },
   }
 })

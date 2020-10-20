@@ -6,24 +6,24 @@ export function getCart () {
   return getApp().globalData.cart[storeId]
 }
 
-export function getCartList () {
+export function getCartList() {
   return getCart().cartList
 }
 
-export function getCartAllCount () {
+export function getCartAllCount() {
   return getCart().cartAllCount
 }
 
-export function getCartAllPrice () {
+export function getCartAllPrice() {
   return getCart().cartAllPrice
 }
 
-export function find (goods) {
-  return getCartList().find(item => item.goodsId === goods.id)
+export function find(goods) {
+  return goods ? getCartList().find(item => item.produce.selectedGoods.id === goods.id) : undefined
 }
 
-export function findIndex (goods) {
-  return getCartList().findIndex(item => item.goodsId === goods.id)
+export function findIndex(goods) {
+  return goods ? getCartList().findIndex(item => item.produce.selectedGoods.id === goods.id) : -1
 }
 
 export function clearCart () {

@@ -54,10 +54,7 @@
       editOrder() {
         orderApi.editOrder(this.formData)
           .then(res => {
-            this.$message({
-              message: res.message,
-              type: 'success'
-            })
+            this.$message.success(res.message)
           })
       }
     }

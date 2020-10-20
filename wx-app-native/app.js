@@ -40,6 +40,17 @@ App({
         })
       }
     }
+    if(!Array.prototype.contains){
+      Array.prototype.contains = function (obj) {
+        var i = this.length;
+        while (i--) {
+            if (this[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+      }
+    }
   },
   globalData: {
     cart: {

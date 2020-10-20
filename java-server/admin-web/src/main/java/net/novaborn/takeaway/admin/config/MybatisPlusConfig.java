@@ -38,7 +38,7 @@ public class MybatisPlusConfig {
 
         // 多租户插件
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
-            final List<String> ignoreTable = List.of("`admin`", "`user`", "`address`", "`activity`", "`banner`", "`goods_stock`", "`order_item`", "`store`");
+            final List<String> ignoreTable = List.of("`admin`", "`user`", "`address`", "`activity`", "`banner`", "`specification`", "`produce_spec`", "`goods`", "`goods_stock`", "`order_item`", "`store`");
 
             @Override
             public Expression getTenantId() {

@@ -136,11 +136,8 @@ export default {
     },
     onIsShowChange(banner) {
       bannerApi.changeIsShow(banner.id, banner.isShow)
-          .then(response => {
-            this.$message({
-              message: response.message,
-              type: 'success'
-            })
+          .then(res => {
+            this.$message.success(res.message)
           })
     },
     onEdit(id) {
@@ -173,9 +170,5 @@ $bg: #F3F3F9;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-}
-
-.el-form-item {
-  margin-bottom: unset !important;
 }
 </style>

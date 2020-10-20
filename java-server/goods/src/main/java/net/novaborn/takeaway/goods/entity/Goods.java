@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -27,51 +26,19 @@ public class Goods extends Model<Goods> {
     @Id
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
-    /**
-     * 名称
-     */
-    private String name;
 
-    /**
-     * 简介
-     */
-    @TableField(value = "`desc`")
-    private String desc;
+    private Long produceId;
 
-    /**
-     * 缩略图
-     */
+    private String title;
+
     private String thumb;
-
-    /**
-     * 标记 热门 新品
-     */
-    private String flags;
-
-    private Long storeId;
-
-    /**
-     * 所属类目
-     */
-    private Long categoryId;
 
     private Integer price;
 
     /**
-     * 月销
+     * 特有属性
      */
-    private Integer monthSale;
-
-    /**
-     * 评分
-     */
-    private Integer rate;
-
-    /**
-     * 排序
-     */
-    @TableField(value = "`index`")
-    private Integer index;
+    private String ownSpecs;
 
     /**
      * 状态

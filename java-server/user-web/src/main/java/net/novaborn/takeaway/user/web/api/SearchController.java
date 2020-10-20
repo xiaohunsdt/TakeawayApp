@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.enums.GoodsState;
+import net.novaborn.takeaway.goods.entity.Produce;
+import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
-import net.novaborn.takeaway.user.web.wrapper.GoodsWrapper;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
+import net.novaborn.takeaway.user.web.wrapper.ProduceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,15 +27,15 @@ import java.util.stream.Collectors;
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/user/search")
 public class SearchController extends BaseController {
-    private GoodsService goodsService;
+    private ProduceService produceService;
 
     @PostMapping("searchGoods")
     @ResponseBody
     public List searchGoods(String keyword) {
-        QueryWrapper<Goods> queryWrapper = new QueryWrapper<Goods>().like("name", keyword);
-        List<Goods> goodsList = goodsService.list(queryWrapper).stream().filter(item -> !item.getState().equals(GoodsState.OFF))
-                .sorted(Comparator.comparing(Goods::getCreateDate).reversed().thenComparing(Goods::getName).thenComparing(Goods::getIndex).reversed())
+        QueryWrapper<Produce> queryWrapper = new QueryWrapper<Produce>().like("name", keyword);
+        List<Produce> produceList = produceService.list(queryWrapper).stream().filter(item -> !item.getState().equals(ProduceState.OFF))
+                .sorted(Comparator.comparing(Produce::getCreateDate).reversed().thenComparing(Produce::getName).thenComparing(Produce::getIndex).reversed())
                 .collect(Collectors.toList());
-        return (List) new GoodsWrapper(goodsList).warp();
+        return (List) new ProduceWrapper(produceList).warp();
     }
 }

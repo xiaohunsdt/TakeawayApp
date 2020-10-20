@@ -69,6 +69,6 @@ public class AuthController extends BaseController {
         //删除旧的token
         redisTemplate.delete(jwtTokenUtil.getRedisKey(jwtTokenUtil.getToken(request)));
         redisTemplate.opsForValue().set(jwtTokenUtil.getRedisKey(newToken), request.getRemoteHost(), jwtProperties.getExpiration(), TimeUnit.SECONDS);
-        return new AuthResponse(newToken, null);
+        return new AuthResponse(newToken, jwtTokenUtil.getMd5KeyFromToken(newToken));
     }
 }

@@ -6,7 +6,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    food: Object,
+    produce: Object,
     cartList: {
       type: Array,
       value: null,
@@ -14,24 +14,27 @@ Component({
     }
   },
   behaviors: [myBehavior],
-  /**
-   * 组件的初始数据
-   */
+  observers: {
+    "produce": function (newValue) {
+      if (newValue) {
+        if(newValue.goodsCount === 1 && !newValue.selectedGoods){
+          newValue.selectedGoods =  newValue.goods
+          this.setData({
+            produce: newValue
+          })
+        }
+        this.setData({
+          isHot: newValue.flags.indexOf('热门') > -1,
+          isNew: newValue.flags.indexOf('新品') > -1
+        })
+      }
+    }
+  },
   data: {
     currentFoodCount: 0,
     showThumbDialog: false,
     isHot: false,
     isNew: false
-  },
-  observers: {
-    "food": function (newFood) {
-      if (newFood) {
-        this.setData({
-          isHot: newFood.flags.indexOf('热门') > -1,
-          isNew: newFood.flags.indexOf('新品') > -1
-        })
-      }
-    }
   },
   lifetimes: {
     attached: function () {

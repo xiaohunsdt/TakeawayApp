@@ -24,10 +24,14 @@ public class OrderItem extends Model<OrderItem> {
 
     private Long orderId;
 
+    private Long produceId;
+
     private Long goodsId;
 
     @NotBlank
-    private String goodsName;
+    private String produceName;
+
+    private String goodsTitle;
 
     private String goodsThumb;
 

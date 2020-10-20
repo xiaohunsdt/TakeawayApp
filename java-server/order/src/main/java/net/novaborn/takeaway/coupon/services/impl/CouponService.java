@@ -20,7 +20,9 @@ import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
 import net.novaborn.takeaway.coupon.services.ICouponService;
 import net.novaborn.takeaway.coupon.util.CouponUtil;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.PaymentWay;
@@ -45,6 +47,8 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements ICouponService {
+
+    private ProduceService produceService;
 
     private GoodsService goodsService;
 
@@ -153,8 +157,8 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
                     if (orderItem.getGoodsId() == null || orderItem.getGoodsPrice() <= 0) {
                         return false;
                     }
-                    Goods goods = goodsService.getById(orderItem.getGoodsId());
-                    return CouponUtil.isDiscount(goods, couponRules);
+                    Produce produce = produceService.getById(orderItem.getProduceId());
+                    return CouponUtil.isDiscount(produce, couponRules);
                 })
                 .map(orderItem -> orderItem.getGoodsPrice() * orderItem.getGoodsCount())
                 .reduce(0, (x, y) -> x + y);

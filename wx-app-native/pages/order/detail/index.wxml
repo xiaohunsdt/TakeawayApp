@@ -117,6 +117,18 @@
 				<view class="title">优惠金额</view>
 				<view class="content">{{order.discountedPrices}}</view>
 			</view>
+			<view class="order-row">
+				<view class="title">配送地址</view>
+				<view class="content">{{order.address.address}} {{order.address.detail}}</view>
+			</view>
+			<view class="order-row">
+				<view class="title">联系方式</view>
+				<view class="content">{{order.address.phone}}</view>
+			</view>
+			<view class="order-row">
+				<view class="title">备注</view>
+				<view class="content">{{order.ps !== '' ? order.ps : '无'}}</view>
+			</view>
 		</base-panel>
 	</view>
 </view>

@@ -29,6 +29,21 @@ export function formatDate (date) {
   return t1
 }
 
+export function isObjectValueEqual(a, b) {
+  var aProps = Object.getOwnPropertyNames(a);
+  var bProps = Object.getOwnPropertyNames(b);
+  if (aProps.length != bProps.length) {
+      return false;
+  }
+  for (var i = 0; i < aProps.length; i++) {
+      var propName = aProps[i];
+      if (a[propName] !== b[propName]) {
+          return false;
+      }
+  }
+  return true;
+}
+
 let orderStateMap = new Map()
 orderStateMap.set('WAITING_RECEIVE', '等待接单')
 orderStateMap.set('PRODUCING', '制作中')
@@ -89,6 +104,7 @@ export default {
   formatNumber,
   formatDate,
   formatDateTime,
+  isObjectValueEqual,
   formatOrderState,
   formatPayState,
   formatPaymentWay,

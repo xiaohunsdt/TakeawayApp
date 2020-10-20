@@ -1,7 +1,7 @@
 <view class="container">
 	<view class="gradientview"></view>
 	<view class="container-contain">
-		<search-bar bind:search="onSearch" />
+		<search-bar placeholder="请输入您的地址" bind:search="onSearch" />
 		<base-panel wx:if="{{addressList.length > 0}}" wx:for="{{addressList}}" wx:key="address">
 			<view bind:tap="onSelect" data-address="{{item}}">
 				<van-cell title="{{item.jibunAddress}}" center wx:if="{{item.jibunAddress && item.jibunAddress!==''}}">

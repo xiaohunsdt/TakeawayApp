@@ -1,18 +1,29 @@
 .simple-goods-card {
-  height: 100rpx;
+  /* height: 100rpx; */
   display: flex;
   justify-content: space-between;
+  margin-bottom: 12rpx;
 }
 
 .name {
   width: 40%;
   overflow: hidden;
+  flex-wrap: wrap;
+  line-height: unset !important;
+}
+.name .produce-name{
+  margin-right: 10rpx
+}
+
+.name .goods-title{
+  font-size: 26rpx;
+  color: gray;
 }
 
 .name, .price, .action {
   font-weight: bolder;
-  line-height: 70rpx;
-  display: table-column;
+  display: flex;
+  align-items: center;
 }
 
 .action {
@@ -38,7 +49,7 @@
 
 .order-stepper-input {
   background-color: transparent !important;
-  width: 40rpx !important;
+  width: 50rpx !important;
   font-weight: 600 !important;
 }
 

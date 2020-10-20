@@ -1,4 +1,5 @@
-import goodsService from '../../services/goods'
+
+import produceService from '../../services/produce'
 import storeService from '../../services/store'
 import settingService from '../../services/setting'
 
@@ -60,7 +61,7 @@ Page({
     wx.showLoading({
       title: '正在加载中...'
     })
-    goodsService.getAllGoodsList()
+    produceService.getAllList()
       .then(res => {
         this.setData({
           categories: res.categoryGoods

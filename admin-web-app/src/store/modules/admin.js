@@ -63,9 +63,11 @@ const actions = {
     refreshToken({ commit, state }) {
         return new Promise((resolve, reject) => {
             refreshToken().then(response => {
-                const { token } = response
+                const { randomKey, token } = response
                 authUtil.setToken(token)
+                authUtil.setRandomKey(randomKey)
                 commit('SET_TOKEN', token)
+                commit('SET_RANDOM_KEY', randomKey)
                 resolve()
             }).catch(error => {
                 reject(error)

@@ -144,34 +144,37 @@ export const asyncRoutes = [
         ]
     },
     {
-        path: '/goods',
+        path: '/produce',
         component: Layout,
-        redirect: '/goods/index',
+        redirect: '/produce/index',
         meta: {
-            roles: ['SHOP_MANAGER']
+            title: '产品管理',
+            icon: 'goods',
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
         },
-        children: [{
-            path: 'index',
-            name: 'GoodsManagement',
+        children: [
+            {
+                path: 'index',
+                name: 'GoodsManagement',
+                // props: true,
+                component: () => import('@/views/produce/index'),
+                meta: { title: '产品管理', icon: 'goods' }
+            },
+            {
+                path: 'category',
+                name: 'CategoryManagement',
+                // props: true,
+                component: () => import('@/views/produce/category/index'),
+                meta: { title: '分类管理', icon: 'tree' }
+            },
+          {
+            path: 'specs',
+            name: 'SpecManagement',
             // props: true,
-            component: () => import('@/views/goods/index'),
-            meta: { title: '商品管理', icon: 'goods' }
-        }]
-    },
-    {
-        path: '/category',
-        component: Layout,
-        redirect: '/category/index',
-        meta: {
-            roles: ['SHOP_MANAGER']
-        },
-        children: [{
-            path: 'index',
-            name: 'CategoryManagement',
-            // props: true,
-            component: () => import('@/views/category/index'),
-            meta: { title: '分类管理', icon: 'tree' }
-        }]
+            component: () => import('@/views/produce/spec/index'),
+            meta: { title: '规格管理', icon: 'tree' }
+          }
+        ]
     },
     {
         path: '/coupon',

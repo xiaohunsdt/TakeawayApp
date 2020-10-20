@@ -18,13 +18,8 @@ import java.util.Optional;
  * @since 2019-09-20
  */
 public interface IGoodsStockService extends IService<GoodsStock> {
-    /**
-     * 根据产品ID获取指定库存
-     *
-     * @param goodsId 产品ID
-     * @return 查询到的产品库存
-     */
-    Optional<GoodsStock> getByGoodsId(Long goodsId);
+
+    boolean updateById(Goods goods, GoodsStock entity);
 
     /**
      * 创建一个商品库存
@@ -33,6 +28,14 @@ public interface IGoodsStockService extends IService<GoodsStock> {
      * @param stock 库存数量,可NULL
      */
     boolean createGoodStock(Goods goods, Integer stock);
+
+    /**
+     * 根据产品ID获取指定库存
+     *
+     * @param goodsId 产品ID
+     * @return 查询到的产品库存
+     */
+    Optional<GoodsStock> getByGoodsId(Long goodsId);
 
     /**
      * 检查库存是否足够

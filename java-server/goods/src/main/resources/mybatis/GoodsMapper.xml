@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-    <mapper namespace="net.novaborn.takeaway.goods.dao.IGoodsDao" >
-
-    <select id="selectByName" resultType="Goods">
+<mapper namespace="net.novaborn.takeaway.goods.dao.IGoodsDao">
+    <select id="getByProduceId" resultType="Goods">
         SELECT * FROM `goods`
         <where>
-            `name` = #{name}
+            `produce_id` = #{produceId}
             AND deleted = 0
         </where>
     </select>
 
-    <select id="getGoodsListByCategoryId" resultType="Goods">
-        SELECT * FROM `goods`
+    <select id="getCountByProduceId" resultType="int">
+        SELECT count(*) FROM `goods`
         <where>
-            `category_id` = #{categoryId}
+            `produce_id` = #{produceId}
+            AND `state` &lt;&gt; 0
             AND deleted = 0
         </where>
-        ORDER BY `index` DESC, `create_date` ASC
     </select>
 
-    <select id="getGoodsListByFlag" resultType="Goods">
-        SELECT * FROM `goods`
+    <select id="getAvailableCountByProduceId" resultType="int">
+        SELECT count(*) FROM `goods`
         <where>
-            `flags` like '%${flag}%'
+            `produce_id` = #{produceId}
+            AND `state` = 1
             AND deleted = 0
         </where>
-        ORDER BY `index` DESC, `create_date` ASC
     </select>
 
-    <select id="getGoodsListByPage" resultType="Goods">
+    <select id="getFirstByProduceId" resultType="Goods">
         SELECT * FROM `goods`
         <where>
-            <if test="args.name != '' and args.name != null">
-                `name` like '%${args.name}%'
-            </if>
-            <if test="args.categoryId != '' and args.categoryId != null">
-                AND `category_id` = #{args.categoryId}
-            </if>
-            <if test="args.state != '' and args.state != null">
-                AND `state` = #{args.state}
-            </if>
+            `produce_id` = #{produceId}
+            AND `state` &lt;&gt; 0
             AND deleted = 0
         </where>
-        ORDER BY `index` DESC, `create_date` ASC
+        ORDER BY `price` ASC
+        LIMIT 1
     </select>
 </mapper>

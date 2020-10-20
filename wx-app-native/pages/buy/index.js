@@ -182,12 +182,15 @@ Page({
       .filter(item => item.count > 0)
       .forEach(item => {
         let orderItem = {}
-        orderItem.goodsId = item.goodsId
-        orderItem.goodsName = item.goods.name
-        orderItem.goodsThumb = item.goods.thumb
-        orderItem.goodsPrice = item.goods.price
+        orderItem.produceId = item.produce.id
+        orderItem.goodsId = item.produce.selectedGoods.id
+        orderItem.produceName = item.produce.name
+        orderItem.goodsTitle = item.produce.selectedGoods.title
+        orderItem.goodsThumb = item.produce.selectedGoods.thumb !== '' ? item.produce.selectedGoods.thumb : (item.produce.thumb !== '' ? item.produce.thumb : '')
+        orderItem.goodsPrice = item.produce.selectedGoods.price
         orderItem.goodsCount = item.count
         temp.push(orderItem)
+        // console.log(orderItem)
       })
 
     // watch 监听，需要单独拿出来设置数据
@@ -207,15 +210,9 @@ Page({
       })
     }
     userService.getSignInedCount().then(res => {
-      if (res === 7) {
-        this.setData({
-          signNotice: `本周您已获得7000现金优惠卷(无门槛), 下周继续努力哦!`
-        })
-      } else {
-        this.setData({
-          signNotice: `本周您已经签到${res}次, 再签到${7 - res}次即可获得7000现金优惠卷(无门槛)`
-        })
-      }
+      this.setData({
+        signNotice: `本月您已经签到${res}次, 达到规定签到数后，系统自动下发优惠券! 请到我的优惠券查看您的获奖优惠券!(订单完成后可查看)`
+      })
     })
 
     storeService.getDeliveryPrice()
@@ -456,7 +453,7 @@ Page({
     // this.setData({
     //   disableService: false
     // })
-    indexService.getExpressServiceState(addressId, allPrice)
+    storeService.getExpressServiceState(addressId, allPrice)
       .then(res => {
         this.setData({
           disableService: res.state !== 0,

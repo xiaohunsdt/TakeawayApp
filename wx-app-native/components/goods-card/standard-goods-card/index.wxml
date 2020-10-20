@@ -1,26 +1,26 @@
 <view class="goods-card-root">
 	<view class="goods-card-thumb" bind:tap="onOpenThumbDialog">
-		<image src="{{food.thumb?food.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load style="height: 100%;width: 100%" />
+		<image src="{{produce.thumb!==''?produce.thumb:'/static/images/no_image.gif'}}" mode="aspectFill" lazy-load style="height: 100%;width: 100%" />
 	</view>
 	<view class="goods-card-content">
 		<view class="goods-card-title">
-			{{food.name}}
+			{{produce.name}}
 			<image class="flag-img" wx:if="{{isHot}}" src="/static/images/store/shop_hot.png"></image>
 			<image class="flag-img" wx:if="{{isNew}}" src="/static/images/store/shop_new.png"></image>
 		</view>
 		<view class="goods-card-desc">
 			<van-icon name="label" />
-			{{ food.desc }}
+			{{ produce.desc }}
 		</view>
-		<!--      <view class="goods-card-origin-price">₩ {{ food.price }}</view>-->
-		<span class="goods-card-price">₩ {{ food.price }}</span>
+		<!--      <view class="goods-card-origin-price">₩ {{ produce.price }}</view>-->
+		<span class="goods-card-price">₩ {{ produce.goods.price }}</span>
 		<view style="height: 0">
-			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{currentFoodCount>0}}" />
-			<van-button disabled="{{food.state!=='ON'}}" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" wx:else>
-				<span wx:if="{{food.state==='ON'}}">
+			<van-stepper async-change value="{{currentFoodCount}}" bind:change="onChange" custom-class="order-stepper-root" disable-input="true" input-class="order-stepper-input" min="0" minus-class="order-stepper-minus" plus-class="order-stepper-plus" wx:if="{{produce.goodsCount===1 && currentFoodCount>0}}" />
+			<van-button disabled="{{produce.state!=='ON'}}" bind:click="addCart" custom-class="order-btn" icon="goods-collect" round size="small" type="primary" wx:else>
+				<span wx:if="{{produce.state==='ON'}}">
 					下单
 				</span>
-				<span wx:elif="{{food.state==='SHORTAGE'}}">
+				<span wx:elif="{{produce.state==='SHORTAGE'}}">
 					缺货
 				</span>
 			</van-button>
