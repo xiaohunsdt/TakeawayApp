@@ -8,7 +8,7 @@ export function payOrder (orderId, payWay) {
     .then(res => {
       if (res.payState === 'PAID') {
         wx.reLaunch({
-          url: '/pages/order/main?state=WAIT_EAT'
+          url: '/pages/order/index?state=WAIT_EAT'
         })
         return
       }

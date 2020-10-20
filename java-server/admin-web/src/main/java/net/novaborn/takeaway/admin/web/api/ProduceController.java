@@ -91,6 +91,10 @@ public class ProduceController extends BaseController {
             return new ErrorTip(-1, "存在同名产品!");
         }
 
+        if (produceDto.getGoodsList().stream().noneMatch(goodsDto -> goodsDto.getState() != GoodsState.OFF)) {
+            return new ErrorTip(-1, "产品必须有一个可用的sku!!");
+        }
+
         produceService.save(produceDto.getProduce());
         Long produceId = produceDto.getProduce().getId();
 

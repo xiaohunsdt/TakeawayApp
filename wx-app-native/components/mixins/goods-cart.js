@@ -30,7 +30,7 @@ export default Behavior({
           })
           return
         }
-      } else {
+      } else if(this.data.produce.goodsCount > 1){
         if (!this.data.isShow) {
           this.openSkuDialog()
           return
