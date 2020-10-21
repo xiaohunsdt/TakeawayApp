@@ -5,6 +5,9 @@
         SELECT * FROM `specification`
         <where>
             `key` = #{key}
+            <if test="storeId != null">
+                AND (`store_id` = #{storeId} OR `store_id` = 0)
+            </if>
         </where>
     </select>
 
@@ -12,7 +15,10 @@
         SELECT * FROM `specification`
         <where>
             <if test="args.key != '' and args.key != null">
-                `key` = #{args.key}
+                AND `key` = #{args.key}
+            </if>
+            <if test="args.store_id != null">
+                AND (`store_id` = #{args.store_id} OR `store_id` = 0)
             </if>
         </where>
         ORDER BY `create_date` DESC

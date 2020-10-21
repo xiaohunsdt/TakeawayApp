@@ -29,9 +29,18 @@ public interface ISpecificationService extends IService<Specification> {
     Optional<Specification> selectByKey(String key);
 
     /**
+     * 根据key获取指定规格
+     *
+     * @param key 规格名称
+     * @return 查询到的规格
+     */
+    Optional<Specification> selectByKey(String key,Long storeId);
+
+    /**
      * 分页获取列表
      * @param page   分页实例
      * @param args   key
+     *               store_id
      * @return 结果列表
      */
     IPage<Specification> getListByPage(Page page, Map args);

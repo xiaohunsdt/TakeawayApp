@@ -43,8 +43,7 @@ public class AdminController extends BaseController {
     @GetMapping("getAdminInfo")
     @ResponseBody
     public Admin getAdminInfo() {
-        String adminId = jwtTokenUtil.getUserIdFromToken(request);
-        Optional<Admin> admin = Optional.ofNullable(adminService.getById(adminId));
+        Optional<Admin> admin = Optional.ofNullable(adminService.getById(sysContext.getCurrentAdminId()));
         admin.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         return admin.get();
@@ -53,8 +52,7 @@ public class AdminController extends BaseController {
     @PostMapping("getAdminInfoById")
     @ResponseBody
     public Admin getAdminInfoById(String adminId) {
-        String myId = jwtTokenUtil.getUserIdFromToken(request);
-        Optional<Admin> me = Optional.ofNullable(adminService.getById(myId));
+        Optional<Admin> me = Optional.ofNullable(adminService.getById(sysContext.getCurrentAdminId()));
         me.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         Optional<Admin> target = Optional.ofNullable(adminService.getById(adminId));
@@ -70,7 +68,7 @@ public class AdminController extends BaseController {
     @PostMapping("getSubAdminByPage")
     @ResponseBody
     public ResponseEntity<Page> getSubAdminByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
-        args.put("parentId", jwtTokenUtil.getUserIdFromToken(request));
+        args.put("parentId", sysContext.getCurrentAdminId());
         page = (Page) adminService.getSubAdminListByPage(page, args);
         page.setRecords((List) new AdminWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
@@ -79,8 +77,7 @@ public class AdminController extends BaseController {
     @PostMapping("createNewSubAdmin")
     @ResponseBody
     public Tip createNewSubAdmin(@Validated Admin admin) {
-        String adminId = jwtTokenUtil.getUserIdFromToken(request);
-        Admin parent = adminService.getById(adminId);
+        Admin parent = adminService.getById(sysContext.getCurrentAdminId());
 
         if (parent.getLevel().getCode() >= admin.getLevel().getCode()) {
             throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
@@ -92,7 +89,7 @@ public class AdminController extends BaseController {
         });
 
         String parentStr = StrUtil.isNotBlank(parent.getParentIds()) ? parent.getParentIds() + "," : "";
-        parentStr += adminId;
+        parentStr += sysContext.getCurrentAdminId();
 
         if (!parent.getLevel().equals(Level.SUPER_MANAGER) && admin.getStoreId() != null) {
             if (!parent.getStoreId().equals(admin.getStoreId())) {

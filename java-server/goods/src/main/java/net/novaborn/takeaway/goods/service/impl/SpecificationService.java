@@ -29,7 +29,12 @@ import java.util.Optional;
 public class SpecificationService extends ServiceImpl<ISpecificationDao, Specification> implements ISpecificationService {
     @Override
     public Optional<Specification> selectByKey(String key) {
-        return this.baseMapper.selectByKey(key);
+        return this.baseMapper.selectByKey(key,null);
+    }
+
+    @Override
+    public Optional<Specification> selectByKey(String key, Long storeId) {
+        return this.baseMapper.selectByKey(key,storeId);
     }
 
     @Override

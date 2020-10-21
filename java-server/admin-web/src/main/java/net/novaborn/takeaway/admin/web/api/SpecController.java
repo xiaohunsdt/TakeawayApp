@@ -2,6 +2,8 @@ package net.novaborn.takeaway.admin.web.api;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +34,15 @@ public class SpecController extends BaseController {
 
     @GetMapping("getAll")
     public ResponseEntity getAll() {
-        List<Specification> categoryList = specificationService.list();
+        LambdaQueryWrapper<Specification> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(Specification::getStoreId, sysContext.getCurrentStoreId()).or().eq(Specification::getStoreId, 0L);
+        List<Specification> categoryList = specificationService.list(wrapper);
         return ResponseEntity.ok(categoryList);
     }
 
     @PostMapping("getListByPage")
     public ResponseEntity getListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
+        args.put("store_id", sysContext.getCurrentStoreId());
         page = (Page) specificationService.getListByPage(page, args);
         return ResponseEntity.ok(page);
     }
@@ -45,11 +50,12 @@ public class SpecController extends BaseController {
     @ResponseBody
     @PostMapping("create")
     public Tip create(Specification specification) {
-        Optional<Specification> tempSpecification = specificationService.selectByKey(specification.getKey());
+        Optional<Specification> tempSpecification = specificationService.selectByKey(specification.getKey(), sysContext.getCurrentStoreId());
         if (tempSpecification.isPresent()) {
             return new ErrorTip(-1, "存在同名规格!");
         }
 
+        specification.setStoreId(sysContext.getCurrentStoreId());
         if (specificationService.save(specification)) {
             return new SuccessTip("创建成功!");
         } else {

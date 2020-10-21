@@ -27,6 +27,8 @@ public class Specification extends Model<Specification> {
     @TableField(value = "`key`")
     private String key;
 
+    private Long storeId;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 }
