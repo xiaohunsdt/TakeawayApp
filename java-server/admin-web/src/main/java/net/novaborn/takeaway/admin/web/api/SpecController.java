@@ -11,6 +11,7 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Specification;
+import net.novaborn.takeaway.goods.service.impl.ProduceSpecService;
 import net.novaborn.takeaway.goods.service.impl.SpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/admin/spec")
 public class SpecController extends BaseController {
+    ProduceSpecService produceSpecService;
 
     SpecificationService specificationService;
 
@@ -81,7 +83,10 @@ public class SpecController extends BaseController {
 
     @ResponseBody
     @PostMapping("delete")
-    public Tip delete(String id) {
+    public Tip delete(Long id) {
+        if (produceSpecService.checkSpecBeUsed(id)) {
+            return new ErrorTip(-1, "此规格正在被使用中!请取消使用后再删除!");
+        }
         if (specificationService.removeById(id)) {
             return new SuccessTip("删除成功!");
         } else {
