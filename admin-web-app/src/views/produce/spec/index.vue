@@ -45,7 +45,7 @@
             label="操作"
             width="150">
           <template v-slot="scope">
-            <el-button size="mini" type="danger" @click="onDelete(scope.row.id)">删除</el-button>
+            <el-button v-if="scope.row.storeId === userData.storeId" size="mini" type="danger" @click="onDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -67,11 +67,17 @@
 <script>
 import BaseCard from '@c/BaseCard/index'
 import specApi from '@a/spec'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CategoryManagement',
   components: {
     BaseCard
+  },
+  computed: {
+    ...mapGetters([
+      'userData'
+    ])
   },
   data() {
     return {
