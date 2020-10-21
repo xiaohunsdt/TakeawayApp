@@ -17,4 +17,10 @@ import java.util.Optional;
  * @since 2019-09-20
  */
 public interface IProduceSpecService extends IService<ProduceSpec> {
+    /**
+     * 检查指定spec是否被使用
+     * @param specId
+     * @return
+     */
+    boolean checkSpecBeUsed(Long specId);
 }

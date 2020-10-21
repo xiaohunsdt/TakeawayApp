@@ -13,4 +13,17 @@ import java.util.Optional;
  * @since 2019-09-20
  */
 public interface IProduceSpecDao extends BaseMapper<ProduceSpec> {
+    /**
+     * 返回包含specId的产品规格
+     * @param specId
+     * @return
+     */
+    List<ProduceSpec> getByspecId(@Param("specId") Long specId);
+
+    /**
+     * 返回包含specId的产品规格数量
+     * @param specId
+     * @return
+     */
+    int getCountByspecId(@Param("specId") Long specId);
 }

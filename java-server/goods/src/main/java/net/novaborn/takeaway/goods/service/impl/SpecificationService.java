@@ -12,6 +12,7 @@ import net.novaborn.takeaway.goods.service.ISpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 

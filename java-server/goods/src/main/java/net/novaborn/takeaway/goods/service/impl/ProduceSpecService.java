@@ -9,9 +9,6 @@ import net.novaborn.takeaway.goods.service.IProduceSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * <p>
  * 服务实现类
@@ -24,4 +21,8 @@ import java.util.Optional;
 @Service
 @Setter(onMethod_ = {@Autowired})
 public class ProduceSpecService extends ServiceImpl<IProduceSpecDao, ProduceSpec> implements IProduceSpecService {
+    @Override
+    public boolean checkSpecBeUsed(Long specId) {
+        return this.baseMapper.getCountByspecId(specId) > 0;
+    }
 }
