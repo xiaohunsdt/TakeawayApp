@@ -9,7 +9,7 @@ import net.novaborn.takeaway.store.constant.EventTypeText;
 import java.util.Date;
 
 @Data
-@TableName("`store_balance_kog`")
+@TableName("`store_balance_log`")
 public class BalanceLog extends Model<BalanceLog> {
 
     @TableId(type = IdType.ASSIGN_ID)
@@ -29,10 +29,6 @@ public class BalanceLog extends Model<BalanceLog> {
 
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;
-
-    @Version
-    @JSONField(serialize = false)
-    private Integer version;
 
     @TableLogic
     @JSONField(serialize = false)

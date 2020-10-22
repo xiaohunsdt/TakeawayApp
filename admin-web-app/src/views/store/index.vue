@@ -42,6 +42,11 @@
             prop="paymentWay"
             width="200"/>
         <el-table-column
+          align="center"
+          label="余额"
+          prop="balance"
+          width="200"/>
+        <el-table-column
             align="center"
             label="到期时间"
             prop="expireDate"

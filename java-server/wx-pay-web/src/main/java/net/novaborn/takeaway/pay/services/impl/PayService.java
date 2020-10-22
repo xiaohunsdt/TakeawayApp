@@ -9,14 +9,16 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
+import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.exception.PayExceptionEnum;
-import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.pay.services.IPayService;
+import net.novaborn.takeaway.store.service.impl.BalanceLogService;
+import net.novaborn.takeaway.store.service.impl.BalanceService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -30,7 +32,13 @@ import java.util.Optional;
 @Service
 @Setter(onMethod_ = {@Autowired})
 public class PayService implements IPayService {
+    private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
+
     private OrderService orderService;
+
+    private BalanceService balanceService;
+
+    private BalanceLogService balanceLogService;
 
     private SettingService settingService;
 
@@ -39,8 +47,6 @@ public class PayService implements IPayService {
     private OrderPayStatusSender orderPayStatusSender;
 
     private WxPayService wxPayService;
-
-    private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
 
     @Override
     public WxPayMpOrderResult createPayInfo(String openId, Long orderId, String ipAddr) {
@@ -109,6 +115,11 @@ public class PayService implements IPayService {
         } else {
             throw new SysException(PayExceptionEnum.PAY_ERROR, state);
         }
+
+        // 设置店铺资金和记录
+        long money = order.get().getRealPrice().longValue();
+        long afterMoney = balanceService.add(order.get().getStoreId(), money);
+        balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), money);
 
         // 系统是否允许自动接单
         Setting orderAutoReceive = settingService.getSettingByName(order.get().getStoreId(), "auto_receive_order", SettingScope.SYSTEM);

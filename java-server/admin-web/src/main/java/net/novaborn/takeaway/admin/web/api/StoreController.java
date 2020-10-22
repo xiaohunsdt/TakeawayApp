@@ -14,17 +14,21 @@ import net.novaborn.takeaway.admin.entity.Admin;
 import net.novaborn.takeaway.admin.enums.Level;
 import net.novaborn.takeaway.admin.exception.AdminExceptionEnum;
 import net.novaborn.takeaway.admin.service.impl.AdminService;
+import net.novaborn.takeaway.admin.web.wrapper.StoreWrapper;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.store.entity.Balance;
 import net.novaborn.takeaway.store.entity.Store;
 import net.novaborn.takeaway.store.service.impl.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -59,12 +63,13 @@ public class StoreController extends BaseController {
     @ResponseBody
     public ResponseEntity<Page> getListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page = (Page) storeService.getListByPage(page, args);
-//        page.setRecords((List) new AdminWrapper(page.getRecords()).warp());
+        page.setRecords((List) new StoreWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
     @PostMapping("create")
     @ResponseBody
+    @Transactional(rollbackFor = RuntimeException.class)
     public Tip create(@Validated Store store) {
         String adminId = jwtTokenUtil.getUserIdFromToken(request);
         Admin admin = adminService.getById(adminId);
@@ -73,7 +78,11 @@ public class StoreController extends BaseController {
             throw new SysException(AdminExceptionEnum.PERMISSION_ERROR);
         }
 
-        store.insert();
+        if (store.insert()) {
+            Balance balance = new Balance();
+            balance.setStoreId(store.getId());
+            balance.insert();
+        }
         return new SuccessTip();
     }
 

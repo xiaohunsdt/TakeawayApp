@@ -29,6 +29,8 @@ import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.DeliveryService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.store.service.impl.BalanceLogService;
+import net.novaborn.takeaway.store.service.impl.BalanceService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -62,6 +64,10 @@ public class OrderController extends BaseController {
 
     private OrderItemService orderItemService;
 
+    private BalanceService balanceService;
+
+    private BalanceLogService balanceLogService;
+
     private SettingService settingService;
 
     private WechatAutoTask wechatAutoTask;
@@ -84,8 +90,8 @@ public class OrderController extends BaseController {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
-                    .map(User::getId)
-                    .collect(Collectors.toList());
+                .map(User::getId)
+                .collect(Collectors.toList());
             if (ids.size() > 0) {
                 args.put("userIds", ids);
             } else {
@@ -117,8 +123,8 @@ public class OrderController extends BaseController {
     @PostMapping("getTodayOrderList")
     public ResponseEntity getTodayOrderList() {
         List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
-                .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
-                .collect(Collectors.toList());
+            .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
     }
 
@@ -241,8 +247,8 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getOrderState() == OrderState.FINISHED
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
@@ -250,6 +256,16 @@ public class OrderController extends BaseController {
         if (!order.get().updateById()) {
             return new ErrorTip(-1, "操作失败!");
         }
+
+        // 设置店铺资金和记录
+        long money;
+        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
+            money = (long) (order.get().getRealPrice().longValue() * 0.02) + 300L;
+        } else {
+            money = 500;
+        }
+        long afterMoney = balanceService.sub(order.get().getStoreId(), money);
+        balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
 
         // 签到
         if (order.get().getPaymentWay() != PaymentWay.CREDIT_CARD && order.get().getRealPrice() >= 12000) {
@@ -272,8 +288,8 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getPayState() == PayState.UN_PAY
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 

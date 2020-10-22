@@ -16,7 +16,7 @@ import java.util.Date;
 @TableName("`store_balance`")
 public class Balance extends Model<Balance> {
 
-    @TableId(type = IdType.ASSIGN_ID)
+    @TableId(type = IdType.INPUT)
     private Long storeId;
 
     private Long money;

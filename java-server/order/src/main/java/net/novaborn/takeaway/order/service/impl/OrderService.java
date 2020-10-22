@@ -1,15 +1,12 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
@@ -24,7 +21,6 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -113,12 +109,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public int getOrderCount(Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(null,day, deliveryType);
+        return this.baseMapper.getOrderCount(null, day, deliveryType);
     }
 
     @Override
     public int getOrderCount(Long storeId, Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(storeId,day, deliveryType);
+        return this.baseMapper.getOrderCount(storeId, day, deliveryType);
     }
 
     @Override
@@ -134,17 +130,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-                .filter(orderItem -> orderItem.getGoodsId() != null)
-                .map(orderItem -> {
-                    Produce produce = produceService.getById(orderItem.getProduceId());
-                    // 鸭货除外
-                    if (produce.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                    } else {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                    }
-                })
-                .reduce(0, (x, y) -> x + y);
+            .filter(orderItem -> orderItem.getGoodsId() != null)
+            .map(orderItem -> {
+                Produce produce = produceService.getById(orderItem.getProduceId());
+                // 鸭货除外
+                if (produce.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                } else {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                }
+            })
+            .reduce(0, (x, y) -> x + y);
 
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
@@ -211,10 +207,10 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int number;
         if (order.getAppointmentDate() == null) {
             // 一般订单
-            number = this.getOrderCount(order.getStoreId(),new Date(), DeliveryType.NORMAL) + 1;
+            number = this.getOrderCount(order.getStoreId(), new Date(), DeliveryType.NORMAL) + 1;
         } else {
             // 预约订单
-            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getStoreId(),order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getStoreId(), order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
         }
         order.setNumber(number);
 
@@ -238,16 +234,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         TreeMap<String, Integer> goodsSale = new TreeMap<>();
 
         orderList.stream()
-                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
-                .forEach(order -> {
-                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                        Integer count = orderItem.getGoodsCount();
-                        if (goodsSale.containsKey(orderItem.getProduceName())) {
-                            count += goodsSale.get(orderItem.getProduceName());
-                        }
-                        goodsSale.put(orderItem.getProduceName(), count);
-                    });
+            .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
+            .forEach(order -> {
+                orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                    Integer count = orderItem.getGoodsCount();
+                    if (goodsSale.containsKey(orderItem.getProduceName())) {
+                        count += goodsSale.get(orderItem.getProduceName());
+                    }
+                    goodsSale.put(orderItem.getProduceName(), count);
                 });
+            });
 
         List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
         Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));

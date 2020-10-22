@@ -33,7 +33,6 @@ public class UserController extends BaseController {
     public ResponseEntity getUserListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         page.setOptimizeCountSql(false);
         page = (Page) userService.getUserListByPage(page, args);
-//        page.setRecords((List) new CategoryWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 
