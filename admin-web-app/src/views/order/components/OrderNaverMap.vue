@@ -1,13 +1,17 @@
 <template>
-  <naver-maps :height="height" :initLayers="initLayers" :mapOptions="mapOptions" @load="onLoad"
-              v-if="mapOptions.lat && mapOptions.lng">
+  <naver-maps
+    v-if="mapOptions.lat && mapOptions.lng"
+    :height="height"
+    :initLayers="initLayers"
+    :mapOptions="mapOptions"
+    @load="onLoad">
     <map-info-window
-        :isOpen="isOpen"
-        :marker="marker"
-        @load="onWindowLoad"
-        class="info-window"
-        ref="info-window">
-      <div class="info-window-container" v-if="selectedOrder">
+      ref="info-window"
+      :isOpen="isOpen"
+      :marker="marker"
+      class="info-window"
+      @load="onWindowLoad">
+      <div v-if="selectedOrder" class="info-window-container">
         <base-card>
           <div>
             {{ selectedOrder.address.address }} {{ selectedOrder.address.detail }}
@@ -16,21 +20,13 @@
           </div>
           <div style="margin-top: 8px">
             <el-button-group>
-              <!--                                <el-button-->
-              <!--                                    size="mini"-->
-              <!--                                    type="primary"-->
-              <!--                                    v-clipboard:copy="`${selectedOrder.address.address} ${selectedOrder.address.detail}`"-->
-              <!--                                    v-clipboard:error="onCopyError"-->
-              <!--                                    v-clipboard:success="onCopySuccess">-->
-              <!--                                    复制地址-->
-              <!--                                </el-button>-->
               <el-button size="mini" type="primary">
                 <a :href="`nmap://search?appname=http://admin.cxy.novaborn.net&query=${selectedOrder.address.address}`">打开地图</a>
               </el-button>
               <el-button size="mini" type="primary">
                 <a :href="'tel:' + selectedOrder.address.phone">拨打手机</a>
               </el-button>
-              <el-button @click="onFinishOrder(selectedOrder)" size="mini" type="success">
+              <el-button size="mini" type="success" @click="onFinishOrder(selectedOrder)">
                 完成订单
               </el-button>
             </el-button-group>
@@ -40,15 +36,15 @@
     </map-info-window>
     <map-marker :lat="mapOptions.lat" :lng="mapOptions.lng" @click="onMarkerClicked" @load="onMarkerLoaded"/>
     <map-marker
-        :icon="{content:`<div class='pin-number'>${order.number}</div><div class='pin ${order.orderState}'></div><div class='pulse'></div>`}"
-        :key="order.id"
-        :lat="order.address.y"
-        :lng="order.address.x"
-        :order="order"
-        @click="onMarkerClicked"
-        @load="onMarkerLoaded"
-        v-for="order in orderList"/>
-    <naver-circle :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key" v-for="item in distancePriceArr"/>
+      v-for="order in orderList"
+      :key="order.id"
+      :icon="{content:`<div class='pin-number'>${order.number}</div><div class='pin ${order.orderState}'></div><div class='pulse'></div>`}"
+      :lat="order.address.y"
+      :lng="order.address.x"
+      :order="order"
+      @click="onMarkerClicked"
+      @load="onMarkerLoaded"/>
+    <naver-circle v-for="item in distancePriceArr" :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key"/>
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>-->
@@ -114,19 +110,25 @@ export default {
       this.getAllTodayOrderList()
     }
     settingApi.getSettingByKey('store_address_x', 'STORE')
-        .then(res => {
-          this.mapOptions.lng = parseFloat(res.value)
-        })
+      .then(res => {
+        this.mapOptions.lng = parseFloat(res.value)
+      })
     settingApi.getSettingByKey('store_address_y', 'STORE')
-        .then(res => {
-          this.mapOptions.lat = parseFloat(res.value)
-        })
+      .then(res => {
+        this.mapOptions.lat = parseFloat(res.value)
+      })
     settingApi.getSettingByKey('distance_price_arr', 'EXPRESS')
-        .then(res => {
-          if (res) {
-            this.distancePriceArr.push(...JSON.parse(res.value))
-          }
-        })
+      .then(res => {
+        if (res) {
+          this.distancePriceArr.push(...JSON.parse(res.value))
+        }
+      })
+    settingApi.getSettingByKey('max_delivery_distance', 'EXPRESS')
+      .then(res => {
+        if (res) {
+          this.distancePriceArr.push({ key: res.value })
+        }
+      })
   },
   methods: {
     onLoad(vue) {
@@ -191,15 +193,15 @@ export default {
         type: 'warning'
       }).then(() => {
         orderApi.finishOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              this.isOpen = false
-              if (!this.allOrder) {
-                this.getWaitEatOrderList()
-              } else {
-                this.getAllTodayOrderList()
-              }
-            })
+          .then(res => {
+            this.$message.success(res.message)
+            this.isOpen = false
+            if (!this.allOrder) {
+              this.getWaitEatOrderList()
+            } else {
+              this.getAllTodayOrderList()
+            }
+          })
       })
     }
   },

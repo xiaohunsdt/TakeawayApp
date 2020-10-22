@@ -45,8 +45,8 @@
             <el-select v-model="produceData.state" placeholder="选择分类">
               <el-option label="下架" value="OFF"/>
               <el-option label="上架" value="ON"/>
-              <el-option label="缺货" value="缺货"/>
-              <el-option label="部分缺货" value="部分缺货"/>
+              <el-option label="缺货" value="SHORTAGE"/>
+              <el-option label="部分缺货" value="PART_SHORTAGE"/>
             </el-select>
           </el-form-item>
         </base-card>

@@ -133,7 +133,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 .map(orderItem -> {
                     Produce produce = produceService.getById(orderItem.getProduceId());
                     // 鸭货除外
-                    if (produce.getCategoryId().equals("b6db18e5f06d02f119411d0ca4776df2")) {
+                    if (produce.getCategoryId().equals(1301894880743731201L)) {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
                     } else {
                         return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
