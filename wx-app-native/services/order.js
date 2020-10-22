@@ -84,8 +84,11 @@ export function getDeliveryArriveTime(storeId, orderId) {
   return api.getDeliveryArriveTime(storeId, orderId)
 }
 
-export function getCanOrderNow() {
-  return api.getCanOrderNow(getApp().globalData.currentStoreId)
+export function getCanOrderNow(storeId) {
+  if (!storeId) {
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getCanOrderNow(storeId)
 }
 
 export default {

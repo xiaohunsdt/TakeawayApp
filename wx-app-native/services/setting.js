@@ -5,10 +5,10 @@ import api from '../utils/api'
 
 export function getSystemSettings(storeId) {
   return new Promise((resolve, reject) => {
-    if(!storeId){
+    if (!storeId) {
       storeId = getApp().globalData.currentStoreId
     }
-    api.getSettingsByScope(storeId,'SYSTEM')
+    api.getSettingsByScope(storeId, 'SYSTEM')
       .then(res => {
         let data = {}
         res.forEach(item => {
@@ -30,10 +30,10 @@ export function getSystemSettings(storeId) {
 
 export function getStoreSettings(storeId) {
   return new Promise((reslove, reject) => {
-    if(!storeId){
+    if (!storeId) {
       storeId = getApp().globalData.currentStoreId
     }
-    api.getSettingsByScope(storeId,'STORE')
+    api.getSettingsByScope(storeId, 'STORE')
       .then(res => {
         let result = {}
         res.forEach(item => {
@@ -49,10 +49,10 @@ export function getStoreSettings(storeId) {
 
 export function getExpressSettings(storeId) {
   return new Promise((reslove, reject) => {
-    if(!storeId){
+    if (!storeId) {
       storeId = getApp().globalData.currentStoreId
     }
-    api.getSettingsByScope(storeId,'EXPRESS')
+    api.getSettingsByScope(storeId, 'EXPRESS')
       .then(res => {
         let result = {}
         res.forEach(item => {
@@ -68,10 +68,10 @@ export function getExpressSettings(storeId) {
 
 export function getPaymentSettings(storeId) {
   return new Promise((reslove, reject) => {
-    if(!storeId){
+    if (!storeId) {
       storeId = getApp().globalData.currentStoreId
     }
-    api.getSettingsByScope(storeId,'PAYMENT')
+    api.getSettingsByScope(storeId, 'PAYMENT')
       .then(res => {
         let result = {}
         res.forEach(item => {
@@ -85,12 +85,15 @@ export function getPaymentSettings(storeId) {
   })
 }
 
-export function getGoodsPageSettings() {
-  return api.getGoodsPageSettings(getApp().globalData.currentStoreId)
+export function getGoodsPageSettings(storeId) {
+  if (!storeId) {
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getGoodsPageSettings(storeId)
 }
 
 export function getSettingByName(storeId, key, scope) {
-  if(!storeId){
+  if (!storeId) {
     storeId = getApp().globalData.currentStoreId
   }
   return api.getSettingByName(storeId, key, scope)

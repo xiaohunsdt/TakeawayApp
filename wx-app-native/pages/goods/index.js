@@ -1,4 +1,3 @@
-
 import produceService from '../../services/produce'
 import storeService from '../../services/store'
 import settingService from '../../services/setting'
@@ -22,7 +21,8 @@ Page({
       storeId = decodeURIComponent(options.scene)
     }
     getApp().globalData.currentStoreId = storeId
-    
+    console.log(getApp().globalData.currentStoreId)
+
     storeService.getStoreById(storeId).then(res => {
       getApp().globalData.currentStore = res
       this.setData({

@@ -18,8 +18,11 @@ export function getListByCategoryId (categoryId) {
 /**
  * 获取所有商品
  */
-export function getAllList () {
-  return api.getAllProduceList(getApp().globalData.currentStoreId)
+export function getAllList (storeId) {
+  if (!storeId) {
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getAllProduceList(storeId)
 }
 
 export default {
