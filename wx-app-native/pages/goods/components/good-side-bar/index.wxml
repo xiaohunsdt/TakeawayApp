@@ -40,7 +40,7 @@
 	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart"
 		bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
 		<view class="cart-content">
-			<simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="goodsId" wx:for="{{cartList}}"
+			<simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="item.produce.selectedGoods.id" wx:for="{{cartList}}"
 				bind:cart-change="onCartChange" />
 		</view>
 	</van-action-sheet>
