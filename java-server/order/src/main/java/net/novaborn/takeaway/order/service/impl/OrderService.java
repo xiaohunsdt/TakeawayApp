@@ -211,8 +211,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         //设置 优惠卷折扣
         if (couponId != null) {
             this.setDiscount(order, orderItemList, couponId);
-        } else {
-            this.setDiscount(order, orderItemList, 88);
         }
 
         //填写订单信息

@@ -96,7 +96,8 @@
 .order-bar-left-content {
   padding-left: 20rpx;
   padding-top: 20rpx;
-  display: flex;
+  display: inline-flex;
+  justify-content: baseline;
 }
 
 .order-bar-left-content image {

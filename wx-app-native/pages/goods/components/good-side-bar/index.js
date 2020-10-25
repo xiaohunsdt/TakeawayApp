@@ -23,7 +23,6 @@ Component({
     currentId: '',
     contentId: '',
     containerH: 0,
-    showCart: false,
     cartList: [],
     cartAllCount: 0,
     cartAllPrice: 0,
@@ -75,13 +74,8 @@ Component({
         })
     },
     onOpenCart() {
-      this.setData({
-        showCart: true
-      })
-    },
-    onCloseCart() {
-      this.setData({
-        showCart: false
+      wx.navigateTo({
+        url: '/pages/goods/cart/index'
       })
     },
     onOpenThumbDialog(event){

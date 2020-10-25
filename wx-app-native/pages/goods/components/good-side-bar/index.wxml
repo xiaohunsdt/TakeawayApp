@@ -37,20 +37,13 @@
 			style="display:block; width: 100%; height:600rpx" lazy-load />
 	</van-dialog>
 	<sku-dialog id="sku-dialog" bind:cart-change="onCartChange" />
-	<van-action-sheet show="{{showCart}}" z-index="99999" bind:cancel="onCloseCart" bind:click-overlay="onCloseCart"
-		bind:close="onCloseCart" close-on-click-overlay overlay title="购物车">
-		<view class="cart-content">
-			<simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="item.produce.selectedGoods.id" wx:for="{{cartList}}"
-				bind:cart-change="onCartChange" />
-		</view>
-	</van-action-sheet>
 	<view id="footer" wx:if="{{cartAllCount > 0}}">
 		<goods-submit-bar decimal-length="{{0}}" disabled="{{pageSettings.disableService}}" price="{{cartAllPrice * 100}}"
 			tip="{{pageSettings.disableServiceNotice}}" bind:submit="onSubmitOrder" button-text="提交订单" currency="₩">
 			<view class="order-bar-left-content" bindtap="onOpenCart">
 				<image src="/static/images/order/cart.png" />
 				<view
-					style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
+					style="font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;">
 					{{ cartAllCount }}
 				</view>
 			</view>

@@ -1,5 +1,6 @@
 import { VantComponent } from '../common/component';
 import { pickerProps } from '../picker/shared';
+import { requestAnimationFrame } from '../common/utils';
 const COLUMNSPLACEHOLDERCODE = '000000';
 VantComponent({
   classes: ['active-class', 'toolbar-class', 'column-class'],
@@ -44,9 +45,9 @@ VantComponent({
     typeToColumnsPlaceholder: {},
   },
   mounted() {
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       this.setValues();
-    }, 0);
+    });
   },
   methods: {
     getPicker() {
@@ -166,18 +167,19 @@ VantComponent({
       }
       const stack = [];
       const indexes = [];
-      if (this.data.columnsNum >= 1) {
+      const { columnsNum } = this.data;
+      if (columnsNum >= 1) {
         stack.push(picker.setColumnValues(0, province, false));
         indexes.push(this.getIndex('province', code));
       }
-      if (this.data.columnsNum >= 2) {
+      if (columnsNum >= 2) {
         stack.push(picker.setColumnValues(1, city, false));
-        indexes.push(this.getIndex('province', code));
+        indexes.push(this.getIndex('city', code));
         if (city.length && code.slice(2, 4) === '00') {
           [{ code }] = city;
         }
       }
-      if (this.data.columnsNum === 3) {
+      if (columnsNum === 3) {
         stack.push(
           picker.setColumnValues(
             2,
@@ -185,6 +187,7 @@ VantComponent({
             false
           )
         );
+        indexes.push(this.getIndex('county', code));
       }
       return Promise.all(stack)
         .catch(() => {})
