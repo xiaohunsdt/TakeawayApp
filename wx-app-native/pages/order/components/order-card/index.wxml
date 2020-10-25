@@ -3,7 +3,7 @@
 		<view class="order-header">
 			<view class="header-left">
 				<view class="store-info">
-					<van-image class="store-logo" round fit="cover" width="90rpx" height="90rpx" lazy-load src="{{order.storeLogo}}" />
+					<van-image class="store-logo" round fit="cover" width="75rpx" height="75rpx" lazy-load src="{{order.storeLogo}}" />
 					<view class="info">
 						<view class="name">{{order.storeName}}</view>
 						<view class="address">{{order.storeAddress}}</view>

@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.user.web.dto;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.Data;
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
@@ -19,7 +21,11 @@ public class ProduceListDto {
 
     public ProduceListDto(List<Produce> produceList) {
         CategoryService categoryService = SpringContextHolder.getBean(CategoryService.class);
-        produceList.stream().map(Produce::getCategoryId).distinct().map(categoryId -> categoryService.getById(categoryId))
+
+        LambdaQueryWrapper<Category> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.in(Category::getId, produceList.stream().map(Produce::getCategoryId).distinct().collect(Collectors.toList()));
+
+        categoryService.list(queryWrapper).stream()
             .sorted(Comparator.comparing(Category::getCreateDate))
             .forEach(category -> {
                 List<Map> goodsWrapperExList = produceList.parallelStream()

@@ -59,7 +59,7 @@
 		<view class="{{showOrderTip?'show-order-tip':''}}" id="buy-content">
 			<base-panel>
 				<view class="store-info">
-					<van-image class="store-logo" round fit="cover" width="90rpx" height="90rpx" lazy-load src="{{store.logo}}" />
+					<van-image class="store-logo" round fit="cover" width="75rpx" height="75rpx" lazy-load src="{{store.logo}}" />
 					<view class="info">
 						<view class="name">{{store.name}}</view>
 						<view class="address">{{store.address}}</view>
