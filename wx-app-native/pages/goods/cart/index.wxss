@@ -1,3 +1,24 @@
-.cart-content {
-  padding: 20rpx;
+@import '/miniprogram_npm/@vant/weapp/common/index.wxss';
+
+.store-info {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 10rpx;
+  padding-bottom: 12rpx;
+}
+
+.store-info .info {
+  margin-top: 2rpx;
+  margin-left: 20rpx;
+}
+
+.store-info .info .name{
+  font-weight: bolder;
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.store-info .info .address{
+  color: #999999;
+  font-size: 26rpx;
 }
