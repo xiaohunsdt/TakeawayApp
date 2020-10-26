@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   mysql:
-    image: ibex/debian-mysql-server-5.7
+    image: biarms/mysql:5.7.30
     environment:
       MYSQL_ROOT_PASSWORD: wy1996
       MYSQL_USER: takeaway
