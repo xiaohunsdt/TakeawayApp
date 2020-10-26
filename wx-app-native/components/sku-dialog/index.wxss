@@ -61,7 +61,7 @@
 
 .spec-container {
   padding-top: 24rpx;
-  max-height: 360rpx;
+  max-height: 550rpx;
   overflow: scroll;
 }
 

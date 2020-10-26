@@ -4,7 +4,7 @@ services:
   mysql:
     image: xiaohunsdt/mysql-seoul:5.7.22
     environment:
-      MYSQL_ROOT_PASSWORD: wy1996
+      MYSQL_ROOT_PASSWORD: wy19960921!
       MYSQL_USER: takeaway
       MYSQL_DATABASE: takeaway_b2b
       MYSQL_PASSWORD: takeaway123!

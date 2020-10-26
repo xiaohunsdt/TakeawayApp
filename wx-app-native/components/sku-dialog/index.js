@@ -8,7 +8,6 @@ Component({
   behaviors: [myBehavior],
   observers: {
     'produce': function (newVal) {
-      //console.log(newVal)
       if (newVal && newVal.selectedGoods) {
         this.setData({
           currentFoodCount: this.getCurrentFoodCount()
@@ -44,7 +43,7 @@ Component({
       if (isAllSelected) {
         const produce = this.data.produce
         produce.selectedGoods = this.data.produceDetail.goodsList.find(goods => isObjectValueEqual(goods.ownSpecs, newVal))
-        console.log(produce)
+        // console.log(produce)
         this.setData({
           produce,
           needselectSpecsStr: selectedArr.join(' ')
@@ -93,37 +92,37 @@ Component({
   },
   methods: {
     openDialog(produce) {
-      produce.selectedGoods = null
-      if (this.data.produceDetail === null || this.data.produce !== produce) {
-        wx.showLoading({
-          title: '正在加载...'
-        })
-        produceService.getDetailById(produce.id)
-          .then(res => {
-            res.specs.selectedSpecs = JSON.parse(res.specs.selectedSpecs)
-            res.specs.options = JSON.parse(res.specs.options)
-            res.goodsList.forEach(goods => {
-              goods.ownSpecs = JSON.parse(goods.ownSpecs)
-            })
-            this.setData({
-              produce,
-              produceDetail: res,
-              isShow: true
-            })
+      wx.showLoading({
+        title: '正在加载...'
+      })
+      produceService.getDetailById(produce.id)
+        .then(res => {
+          res.specs.selectedSpecs = JSON.parse(res.specs.selectedSpecs)
+          res.specs.options = JSON.parse(res.specs.options)
+          res.goodsList.forEach(goods => {
+            goods.ownSpecs = JSON.parse(goods.ownSpecs)
           })
-          .finally(() => {
-            wx.hideLoading()
+          this.setData({
+            produce,
+            produceDetail: res,
+            isShow: true
           })
-      } else {
-        this.setData({
-          produce,
-          isShow: true
         })
-      }
+        .finally(() => {
+          wx.hideLoading()
+        })
     },
     onClose() {
       this.setData({
-        isShow: false
+        isShow: false,
+        needselectSpecsStr: null,
+        selectedSpec: {},
+        disableGoodsList: [],
+        initDisableSpecOption: {},
+        disableSpecOption: {},
+        disableSpecOptionView: {},
+        isAllSelected: false,
+        currentFoodCount: 0
       })
     },
     chooseSku(event) {
@@ -172,24 +171,44 @@ Component({
     },
     checkStock(selectedSpec) {
       let result = true
+      let specsObj = this.data.produceDetail.specs.options
+      let filterSkuGoodsList = function (goodsList, selectedSpec) {
+        return goodsList.filter(goods => {
+          let result = true
+          for (const specId in selectedSpec) {
+            const option = selectedSpec[specId]
+            if (option !== null) {
+              result = goods.ownSpecs[specId] === selectedSpec[specId]
+              if (!result) {
+                break;
+              }
+            }
+          }
+          return result;
+        })
+      }
       const disableSpecOption = Object.assign({}, this.data.initDisableSpecOption)
       for (const specId in selectedSpec) {
         const option = selectedSpec[specId]
-        this.data.disableGoodsList
-          .filter(goods => goods.ownSpecs[specId] === option)
-          .forEach(goods => {
-            for (const tempSpecId in goods.ownSpecs) {
-              if (tempSpecId === specId) {
-                continue;
+        if (option === null) {
+          const tempSelectedSpec = Object.assign({}, selectedSpec)
+          for (const specVal of specsObj[specId]) {
+            let useAble = false
+            tempSelectedSpec[specId] = specVal
+            filterSkuGoodsList(this.data.produceDetail.goodsList, tempSelectedSpec)
+              .forEach(goods => {
+                if (goods.state === 'ON') {
+                  useAble = true
+                }
+              })
+            if (!useAble) {
+              if (!disableSpecOption[specId]) {
+                disableSpecOption[specId] = []
               }
-              if (!disableSpecOption[tempSpecId]) {
-                disableSpecOption[tempSpecId] = []
-              }
-              if (!disableSpecOption[tempSpecId].contains(goods.ownSpecs[tempSpecId])) {
-                disableSpecOption[tempSpecId].push(goods.ownSpecs[tempSpecId])
-              }
+              disableSpecOption[specId].push(specVal)
             }
-          })
+          }
+        }
       }
 
       // 检测当前的选择项中是否存在不允许的选择项
