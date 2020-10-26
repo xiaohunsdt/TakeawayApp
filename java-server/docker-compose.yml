@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: wy1996
       MYSQL_USER: takeaway
-      MYSQL_DATABASE: takeaway
+      MYSQL_DATABASE: takeaway_b2b
       MYSQL_PASSWORD: takeaway123!
       TZ: Asia/Seoul
     restart: always
