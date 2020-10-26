@@ -13,8 +13,8 @@ Component({
       value: 'transparent'
     }
   },
-  observers:{
-    'defaultValue':function(newVal){
+  observers: {
+    'defaultValue': function (newVal) {
       if (newVal !== '') {
         this.setData({
           searchValue: newVal
@@ -25,10 +25,6 @@ Component({
   data: {
     searchValue: ''
   },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
     searchChanged(event) {
       this.setData({
