@@ -258,14 +258,20 @@ public class OrderController extends BaseController {
         }
 
         // 设置店铺资金和记录
-        long money;
+        long money = 0;
         if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
-            money = (long) (order.get().getRealPrice().longValue() * 0.02) + 300L;
-        } else {
-            money = 500;
+            money = (long) (order.get().getRealPrice().longValue() * 0.02);
         }
-        long afterMoney = balanceService.sub(order.get().getStoreId(), money);
-        balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
+//        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
+//            money = (long) (order.get().getRealPrice().longValue() * 0.02) + 300L;
+//        } else {
+//            money = 500;
+//        }
+
+        if (money != 0) {
+            long afterMoney = balanceService.sub(order.get().getStoreId(), money);
+            balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
+        }
 
         // 签到
         if (order.get().getPaymentWay() != PaymentWay.CREDIT_CARD && order.get().getRealPrice() >= 12000) {
