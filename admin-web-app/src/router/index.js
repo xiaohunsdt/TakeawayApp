@@ -291,13 +291,13 @@ export const asyncRoutes = [
                 path: 'log',
                 name: 'BalanceLog',
                 component: () => import('@/views/balance/balance-log'),
-                meta: { title: '资金记录', icon: 'setting' }
+                meta: { title: '资金记录', icon: 'setting', roles: ['SHOP_MANAGER'] }
             },
             {
                 path: 'withdraw',
                 name: 'WithdrawManagement',
                 component: () => import('@/views/balance/withdraw'),
-                meta: { title: '提现管理', icon: 'setting' }
+                meta: { title: '提现管理', icon: 'setting', roles: ['SHOP_MANAGER'] }
             }
         ]
     },
