@@ -3,6 +3,7 @@
       placeholder="{{placeholder}}"
       use-action-slot
       shape="round"
+      value="{{ searchValue }}"
       input-align="center"
       background="{{background}}"
       bind:change="searchChanged">

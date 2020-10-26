@@ -5,7 +5,7 @@
 		<view id="title" data-page-path="/pages/my/address/index" bind:tap="gotoPage">
 			<van-icon name="location" wx:if="{{currentAddress.address !=='加载中...'}}" />
 			<van-loading color="#000000" size="16px" wx:else />
-			<view id="address" bind:tap="selectAddress">
+			<view id="address" class="van-ellipsis" bind:tap="selectAddress">
 				{{currentAddress.address}}
 			</view>
 			<van-icon name="arrow" />
@@ -13,7 +13,7 @@
 	</view>
 	<view class="container-contain">
 		<view id="banner">
-			<search-bar bind:search="onSearch" background="#ffffff"></search-bar>
+			<search-bar bind:search="onSearch" background="#ffffff" placeholder="请输入菜名"></search-bar>
 			<view id="scrollImg">
 				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true"
 					style="max-height: 10rem;overflow:hidden">

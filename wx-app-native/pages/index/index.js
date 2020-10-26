@@ -53,8 +53,8 @@ Page({
   },
   onShareAppMessage: function () {
     return {
-      title: '川香苑',
-      desc: '川香苑品牌中餐厅',
+      title: '聚韩外卖',
+      desc: '最好吃, 最方便, 服务最好的外卖就在聚韩外卖!',
       path: '/pages/index/index'
     }
   },

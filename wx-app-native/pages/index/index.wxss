@@ -1,3 +1,5 @@
+@import '/miniprogram_npm/@vant/weapp/common/index.wxss';
+
 #navigation {
   /* box-sizing: border-box; */
   padding-left: 15rpx;
@@ -23,8 +25,7 @@
 
 #navigation #title #address{
   margin-left: 5rpx;
-  max-height: 21px;
-  overflow: hidden;
+  max-width: 300rpx;
 }
 
 .container-contain {
