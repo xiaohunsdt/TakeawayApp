@@ -209,7 +209,7 @@ Page({
         })
       })
     }
-    userService.getSignInedCount().then(res => {
+    userService.getSignInedCount(getApp().globalData.currentStoreId).then(res => {
       this.setData({
         signNotice: `本月您已经签到${res}次, 达到规定签到数后，系统自动下发优惠券! 请到我的优惠券查看您的获奖优惠券!(订单完成后可查看)`
       })

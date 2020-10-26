@@ -277,6 +277,31 @@ export const asyncRoutes = [
         ]
     },
     {
+        path: '/balance',
+        component: Layout,
+        redirect: '/balance/log',
+        meta: {
+            title: '资金管理',
+            icon: 'money',
+            affix: true,
+            roles: ['SUPER_MANAGER', 'SHOP_MANAGER']
+        },
+        children: [
+            {
+                path: 'log',
+                name: 'BalanceLog',
+                component: () => import('@/views/balance/balance-log'),
+                meta: { title: '资金记录', icon: 'setting' }
+            },
+            {
+                path: 'withdraw',
+                name: 'WithdrawManagement',
+                component: () => import('@/views/balance/withdraw'),
+                meta: { title: '提现管理', icon: 'setting' }
+            }
+        ]
+    },
+    {
         path: '/admin',
         component: Layout,
         redirect: '/admin/index',

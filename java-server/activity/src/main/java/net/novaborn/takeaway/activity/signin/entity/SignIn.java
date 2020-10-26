@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SignIn {
 
+    Long storeId;
+
     Long userId;
 
     /**
@@ -31,8 +33,9 @@ public class SignIn {
 
     Date createDate;
 
-    public SignIn(Long userId) {
-        this.userId = userId;
+    public SignIn(Long storeId, Long userId) {
+        this.setStoreId(storeId);
+        this.setUserId(userId);
         this.setRecord(0);
         this.setCreateDate(new Date());
         this.setWeekExchangedList(new ArrayList<>());

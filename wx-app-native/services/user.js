@@ -72,12 +72,12 @@ function checkLogin () {
   })
 }
 
-function getSignInDays () {
-  return api.getSignInDays()
+function getSignInDays (storeId) {
+  return api.getSignInDays(storeId)
 }
 
-function getSignInedCount () {
-  return api.getSignInedCount()
+function getSignInedCount (storeId) {
+  return api.getSignInedCount(storeId)
 }
 
 export default {

@@ -47,8 +47,8 @@ public class CouponController extends BaseController {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
-                    .map(User::getId)
-                    .collect(Collectors.toList());
+                .map(User::getId)
+                .collect(Collectors.toList());
             if (ids.size() > 0) {
                 args.put("userIds", ids);
             } else {
@@ -73,9 +73,9 @@ public class CouponController extends BaseController {
         }
         userIdArray.removeAll(Arrays.asList(0L, null));
         if (userIdArray.size() > 0) {
-            couponService.generateCoupon(couponTemplate.get(), userIdArray, expireDays, count);
+            couponService.generateCoupon(couponTemplate.get(), null, userIdArray, expireDays, count);
         } else {
-            couponService.generateCoupon(couponTemplate.get(), expireDays, count);
+            couponService.generateCoupon(couponTemplate.get(), null, -1L, expireDays, count);
         }
         return new SuccessTip();
     }

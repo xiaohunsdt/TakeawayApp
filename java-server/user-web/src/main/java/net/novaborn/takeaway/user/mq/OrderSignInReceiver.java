@@ -5,7 +5,6 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.activity.signin.entity.SignIn;
 import net.novaborn.takeaway.activity.signin.service.impl.SignInService;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
@@ -52,8 +51,8 @@ public class OrderSignInReceiver {
         try {
             Date current = new Date();
             CouponTemplate couponTemplate;
-            signInService.signIn(order.getUserId(), order.getCreateDate());
-            int signInedCount = signInService.getSignInedCount(order.getUserId(), current, Calendar.MONTH);
+            signInService.signIn(order.getStoreId(), order.getUserId(), order.getCreateDate());
+            int signInedCount = signInService.getSignInedCount(order.getStoreId(), order.getUserId(), current, Calendar.MONTH);
 //            if (signInedCount == 7) {
 //                int weekOfMonth = DateUtil.weekOfMonth(current);
 //                SignIn signIn = signInService.getSignIn(order.getUserId(), current).get();
@@ -80,7 +79,7 @@ public class OrderSignInReceiver {
             }
 
             if (couponTemplate != null) {
-                couponService.generateCoupon(couponTemplate, order.getUserId());
+                couponService.generateCoupon(couponTemplate, order.getStoreId(), order.getUserId());
             }
         } catch (Exception e) {
             log.error("订单ID: {},设置订单签到失败!重新方式队列中!!", order.getId());

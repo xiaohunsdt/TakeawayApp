@@ -23,22 +23,22 @@ public class WeeklyTest {
 
     @Test
     public void getTest() {
-        System.out.println(signInService.getSignIn(111L, new Date()));
+        System.out.println(signInService.getSignIn(111L,222L, new Date()));
     }
 
     @Test
     public void signInTest() {
-        signInService.signIn(111L, DateUtil.parseDate("2020-07-27"));
+        signInService.signIn(111L,222L, DateUtil.parseDate("2020-07-27"));
     }
 
     @Test
     public void checkTest() {
-        System.out.println(signInService.checkSignIn(111L, DateUtil.parseDate("2020-07-24"), Calendar.DAY_OF_MONTH));
+        System.out.println(signInService.checkSignIn(111L,222L, DateUtil.parseDate("2020-07-24"), Calendar.DAY_OF_MONTH));
     }
 
     @Test
     public void signInedCountTest() {
-        System.out.println(signInService.getSignInedCount(111L, DateUtil.parseDate("2020-07-27"), Calendar.WEEK_OF_MONTH));
+        System.out.println(signInService.getSignInedCount(111L,222L, DateUtil.parseDate("2020-07-27"), Calendar.WEEK_OF_MONTH));
     }
 
     @Test

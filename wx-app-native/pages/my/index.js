@@ -9,8 +9,7 @@ Page({
       waitEat: 0,
       waitComment: 0,
       refund: 0
-    },
-    signInDays: null
+    }
   },
   onShow: function () {
     this.init()
@@ -44,22 +43,6 @@ Page({
     orderService.getOrderCountByState('REFUND').then(res => {
       this.setData({
         "orderCount.refund": res
-      })
-    })
-    userService.getSignInDays().then(res => {
-      let signInedDay = []
-      if (res.signInedDay) {
-        res.signInedDay.forEach(item => {
-          signInedDay.push(parseInt(item))
-        })
-      }
-
-      res.beginOfMonth = parseInt(res.beginOfMonth)
-      res.endOfMonth = parseInt(res.endOfMonth)
-      res.signInedDay = signInedDay
-
-      this.setData({
-        "signInDays": res
       })
     })
   },

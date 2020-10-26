@@ -28,7 +28,7 @@
         currentDate="{{ currentDate }}"
         showSubtitle="{{ showSubtitle }}"
         allowSameDay="{{ allowSameDay }}"
-        showMonthTitle="{{ index !== 0 || !showSubtitle }}"
+        showMonthTitle="{{ index !== 0 || showSubtitle }}"
         bind:click="onClickDay"
       />
 

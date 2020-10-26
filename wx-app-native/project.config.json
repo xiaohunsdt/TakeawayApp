@@ -50,12 +50,6 @@
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
     "plugin": {
       "list": []
     },
@@ -149,6 +143,11 @@
           "name": "pages/pay/index",
           "pathName": "pages/pay/index",
           "query": "orderId=1310998025942855682",
+          "scene": null
+        },
+        {
+          "name": "pages/my/signin/index",
+          "pathName": "pages/my/signin/index",
           "scene": null
         }
       ]

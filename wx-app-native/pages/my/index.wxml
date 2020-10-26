@@ -62,13 +62,6 @@
 				</van-row>
 			</base-panel>
 		</view>
-		<view class="my-sign-in">
-			<base-panel wx:if="{{signInDays}}">
-				<view class="title">我的签到</view>
-				<van-calendar default-date="{{signInDays.signInedDay}}" max-date="{{signInDays.endOfMonth}}" min-date="{{signInDays.beginOfMonth}}" poppable="{{false}}" row-height="{{26}}" show-confirm="{{false}}" show-subtitle="{{false}}" show-title="{{false}}" class="calendar" color="#FFD200" type="multiple" />
-			</base-panel>
-		</view>
-
 		<view class="my-profile">
 			<van-cell clickable custom-class="profile-cell" is-link>
 				<view class="profile-title" slot="title">
@@ -83,6 +76,14 @@
 					<image class="title-image" src="/static/images/address/icon-location.png" />
 					<view>
 						我的地址
+					</view>
+				</view>
+			</van-cell>
+			<van-cell clickable custom-class="profile-cell" is-link url="/pages/my/signin/index">
+				<view class="profile-title" slot="title">
+					<image class="title-image" src="/static/images/profile/onlineservice.png" />
+					<view>
+						我的签到
 					</view>
 				</view>
 			</van-cell>

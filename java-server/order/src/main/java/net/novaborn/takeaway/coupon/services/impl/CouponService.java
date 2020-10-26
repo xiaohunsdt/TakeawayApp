@@ -5,7 +5,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,7 +18,6 @@ import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
 import net.novaborn.takeaway.coupon.services.ICouponService;
 import net.novaborn.takeaway.coupon.util.CouponUtil;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
@@ -63,45 +61,46 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<Long> userIds) {
-        this.generateCoupon(template, userIds, 1);
+    public void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds) {
+        this.generateCoupon(template, storeId, userIds, 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<Long> userIds, Integer count) {
-        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, count));
+    public void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds, Integer count) {
+        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, storeId, userId, count));
     }
 
     @Override
     public void generateCoupon(CouponTemplate template, Integer expireDays, Integer count) {
-        this.generateCoupon(template, -1L, expireDays, count);
+        this.generateCoupon(template, 0L, -1L, expireDays, count);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, List<Long> userIds, Integer expireDays, Integer count) {
-        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, userId, expireDays, count));
+    public void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds, Integer expireDays, Integer count) {
+        userIds.parallelStream().forEach(userId -> this.generateCoupon(template, storeId, userId, expireDays, count));
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, Long userId) {
-        this.generateCoupon(template, userId, 1);
+    public void generateCoupon(CouponTemplate template, Long storeId, Long userId) {
+        this.generateCoupon(template, storeId, userId, 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, Long userId, Integer count) {
-        this.generateCoupon(template, userId, template.getExpireDays(), 1);
+    public void generateCoupon(CouponTemplate template, Long storeId, Long userId, Integer count) {
+        this.generateCoupon(template, storeId, userId, template.getExpireDays(), 1);
     }
 
     @Override
-    public void generateCoupon(CouponTemplate template, Long userId, Integer expireDays, Integer count) {
+    public void generateCoupon(CouponTemplate template, Long storeId, Long userId, Integer expireDays, Integer count) {
         for (int i = 0; i < count; i++) {
             Coupon target = new Coupon();
             BeanUtil.copyProperties(template, target, CopyOptions.create().setIgnoreNullValue(true));
 
             target.setId(null);
+            target.setStoreId(storeId);
             target.setCreateDate(null);
             target.setDeleted(null);
-            if(userId != -1L){
+            if (userId != -1L) {
                 target.setUserId(userId);
             }
             if (expireDays != null && expireDays > 0) {
@@ -153,15 +152,15 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         Map<String, List<String>> couponRules = CouponUtil.getCouponRule(coupon.get());
         int allPrice = order.getAllPrice();
         int needDisCountPrice = orderItems.parallelStream()
-                .filter(orderItem -> {
-                    if (orderItem.getGoodsId() == null || orderItem.getGoodsPrice() <= 0) {
-                        return false;
-                    }
-                    Produce produce = produceService.getById(orderItem.getProduceId());
-                    return CouponUtil.isDiscount(produce, couponRules);
-                })
-                .map(orderItem -> orderItem.getGoodsPrice() * orderItem.getGoodsCount())
-                .reduce(0, (x, y) -> x + y);
+            .filter(orderItem -> {
+                if (orderItem.getGoodsId() == null || orderItem.getGoodsPrice() <= 0) {
+                    return false;
+                }
+                Produce produce = produceService.getById(orderItem.getProduceId());
+                return CouponUtil.isDiscount(produce, couponRules);
+            })
+            .map(orderItem -> orderItem.getGoodsPrice() * orderItem.getGoodsCount())
+            .reduce(0, (x, y) -> x + y);
 
         // 设置折扣
         int discount = 0;

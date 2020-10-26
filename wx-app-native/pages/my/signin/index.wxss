@@ -1,0 +1,6 @@
+.my-sign-in .title {
+  margin-left: 20rpx;
+  margin-bottom: 20rpx;
+  font-size: 45rpx;
+  font-weight: bolder;
+}

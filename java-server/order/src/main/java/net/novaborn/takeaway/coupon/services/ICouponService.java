@@ -8,7 +8,6 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
@@ -50,13 +49,13 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userIds  用户ID列表
      */
-    void generateCoupon(CouponTemplate template, List<Long> userIds);
+    void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds);
 
-    void generateCoupon(CouponTemplate template, List<Long> userIds, Integer count);
+    void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds, Integer count);
 
     void generateCoupon(CouponTemplate template, Integer expireDays, Integer count);
 
-    void generateCoupon(CouponTemplate template, List<Long> userIds, Integer expireDays, Integer count);
+    void generateCoupon(CouponTemplate template, Long storeId, List<Long> userIds, Integer expireDays, Integer count);
 
     /**
      * 生成优惠卷
@@ -64,14 +63,15 @@ public interface ICouponService extends IService<Coupon> {
      * @param template 优惠卷模板
      * @param userId   用户ID
      */
-    void generateCoupon(CouponTemplate template, Long userId);
+    void generateCoupon(CouponTemplate template, Long storeId, Long userId);
 
-    void generateCoupon(CouponTemplate template, Long userId, Integer count);
+    void generateCoupon(CouponTemplate template, Long storeId, Long userId, Integer count);
 
-    void generateCoupon(CouponTemplate template, Long userId, Integer expireDays, Integer count);
+    void generateCoupon(CouponTemplate template, Long storeId, Long userId, Integer expireDays, Integer count);
 
     /**
      * 绑定优惠卷
+     *
      * @param userId
      * @param couponId
      * @return

@@ -37,25 +37,25 @@ public class UserController extends BaseController {
 
     @GetMapping("getSignInDays")
     @ResponseBody
-    public Object getSignInDays() {
+    public Object getSignInDays(Long storeId) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        SignIn signIn = signInService.getSignIn(user.get().getId(), new Date()).orElse(null);
+        SignIn signIn = signInService.getSignIn(storeId, user.get().getId(), new Date()).orElse(null);
         if (signIn == null) {
-            signIn = new SignIn(user.get().getId());
+            signIn = new SignIn(storeId, user.get().getId());
         }
         return new SignInWrapper(signIn).warp();
     }
 
     @GetMapping("getSignInedCount")
     @ResponseBody
-    public Integer getSignInedCount() {
+    public Integer getSignInedCount(Long storeId) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         Optional<User> user = userService.selectByOpenId(openId);
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
-        return signInService.getSignInedCount(user.get().getId(), new Date(), Calendar.MONTH);
+        return signInService.getSignInedCount(storeId, user.get().getId(), new Date(), Calendar.MONTH);
     }
 }

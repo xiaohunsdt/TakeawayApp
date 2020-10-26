@@ -6,9 +6,14 @@ const api = {
     code
   }),
   setUserInfo: (userInfo) => request.post('wx/setUserInfo', userInfo),
+  
   // 获取签到天数
-  getSignInDays: () => request.get('user/getSignInDays'),
-  getSignInedCount: () => request.get('user/getSignInedCount'),
+  getSignInDays: (storeId) => request.get('user/getSignInDays', {
+    storeId
+  }),
+  getSignInedCount: (storeId) => request.get('user/getSignInedCount', {
+    storeId
+  }),
 
   // 搜索商品
   searchGoods: (keyword) => request.post('search/searchGoods', {

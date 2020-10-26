@@ -1,0 +1,11 @@
+<view class="container">
+  <view class="gradientview"></view>
+  <view class="container-contain">
+    <view class="my-sign-in">
+      <base-panel wx:if="{{signInDays}}">
+        <view class="title">川香苑</view>
+        <van-calendar default-date="{{signInDays.signInedDay}}" max-date="{{signInDays.endOfMonth}}"min-date="{{signInDays.beginOfMonth}}" poppable="{{false}}" row-height="{{26}}" show-confirm="{{false}}" show-subtitle="{{false}}" show-title="{{false}}" class="calendar" color="#FFD200" type="multiple" />
+      </base-panel>
+    </view>
+  </view>
+</view>

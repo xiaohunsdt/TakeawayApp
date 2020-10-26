@@ -22,21 +22,21 @@ public class SignInService implements ISignInService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public Optional<SignIn> getSignIn(Long userId, Date date) {
-        String key = getKeyStr(userId, date);
+    public Optional<SignIn> getSignIn(Long storeId, Long userId, Date date) {
+        String key = getKeyStr(storeId, userId, date);
         return Optional.ofNullable((SignIn) redisTemplate.opsForValue().get(key));
     }
 
     @Override
-    public void saveSignIn(Long userId, Date date, SignIn signIn) {
-        String key = getKeyStr(userId, date);
+    public void saveSignIn(Long storeId, Long userId, Date date, SignIn signIn) {
+        String key = getKeyStr(storeId, userId, date);
         redisTemplate.opsForValue().set(key, signIn, 31, TimeUnit.DAYS);
     }
 
     @Override
-    public void signIn(Long userId, Date date) {
-        Optional<SignIn> signIn = getSignIn(userId, date).or(() -> {
-            SignIn temp = new SignIn(userId);
+    public void signIn(Long storeId, Long userId, Date date) {
+        Optional<SignIn> signIn = getSignIn(storeId, userId, date).or(() -> {
+            SignIn temp = new SignIn(storeId, userId);
             return Optional.of(temp);
         });
 
@@ -44,12 +44,12 @@ public class SignInService implements ISignInService {
         record |= 1 << (DateUtil.dayOfMonth(date) - 1);
 
         signIn.get().setRecord(record);
-        this.saveSignIn(userId, date, signIn.get());
+        this.saveSignIn(storeId, userId, date, signIn.get());
     }
 
     @Override
-    public boolean checkSignIn(Long userId, Date date, int dateUnit) {
-        Optional<SignIn> signIn = getSignIn(userId, date);
+    public boolean checkSignIn(Long storeId, Long userId, Date date, int dateUnit) {
+        Optional<SignIn> signIn = getSignIn(storeId, userId, date);
         if (signIn.isEmpty()) {
             return false;
         }
@@ -75,9 +75,9 @@ public class SignInService implements ISignInService {
                 int dayOfWeekEnd = day0fMonth - day0fWeek + 7;
                 for (int i = dayOfWeekStart; i <= dayOfWeekEnd; i++) {
                     if (i <= 0) {
-                        isSignIned = this.checkSignIn(signIn.getUserId(), DateUtil.beginOfMonth(date).offset(DateField.DAY_OF_YEAR, i - 1), Calendar.DAY_OF_MONTH);
+                        isSignIned = this.checkSignIn(signIn.getStoreId(), signIn.getUserId(), DateUtil.beginOfMonth(date).offset(DateField.DAY_OF_YEAR, i - 1), Calendar.DAY_OF_MONTH);
                     } else if (i > dayCountOfMonth) {
-                        isSignIned = this.checkSignIn(signIn.getUserId(), DateUtil.endOfMonth(date).offset(DateField.DAY_OF_YEAR, i - dayCountOfMonth), Calendar.DAY_OF_MONTH);
+                        isSignIned = this.checkSignIn(signIn.getStoreId(), signIn.getUserId(), DateUtil.endOfMonth(date).offset(DateField.DAY_OF_YEAR, i - dayCountOfMonth), Calendar.DAY_OF_MONTH);
                     } else {
                         if ((record & (1 << (i - 1))) <= 0) {
                             isSignIned = false;
@@ -109,8 +109,8 @@ public class SignInService implements ISignInService {
     }
 
     @Override
-    public int getSignInedCount(Long userId, Date date, int dateUnit) {
-        SignIn signIn = getSignIn(userId, date).orElse(null);
+    public int getSignInedCount(Long storeId, Long userId, Date date, int dateUnit) {
+        SignIn signIn = getSignIn(storeId, userId, date).orElse(null);
         if (signIn == null) {
             return 0;
         }
@@ -135,9 +135,9 @@ public class SignInService implements ISignInService {
                 int dayOfWeekEnd = day0fMonth - day0fWeek + 7;
                 for (int i = dayOfWeekStart; i <= dayOfWeekEnd; i++) {
                     if (i <= 0) {
-                        isSignIned = this.checkSignIn(signIn.getUserId(), DateUtil.beginOfMonth(date).offset(DateField.DAY_OF_YEAR, i - 1), Calendar.DAY_OF_MONTH);
+                        isSignIned = this.checkSignIn(signIn.getStoreId(), signIn.getUserId(), DateUtil.beginOfMonth(date).offset(DateField.DAY_OF_YEAR, i - 1), Calendar.DAY_OF_MONTH);
                     } else if (i > dayCountOfMonth) {
-                        isSignIned = this.checkSignIn(signIn.getUserId(), DateUtil.endOfMonth(date).offset(DateField.DAY_OF_YEAR, i - dayCountOfMonth), Calendar.DAY_OF_MONTH);
+                        isSignIned = this.checkSignIn(signIn.getStoreId(), signIn.getUserId(), DateUtil.endOfMonth(date).offset(DateField.DAY_OF_YEAR, i - dayCountOfMonth), Calendar.DAY_OF_MONTH);
                     } else {
                         if ((record & (1 << (i - 1))) <= 0) {
                             isSignIned = false;

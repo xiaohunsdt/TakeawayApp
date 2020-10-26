@@ -17,13 +17,14 @@
     "pages/buy/index",
     "pages/buy/remark/index",
     "pages/pay/index",
-    "pages/goods/cart/index"
+    "pages/goods/cart/index",
+    "pages/my/signin/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FFD200",
     "navigationStyle": "default",
-    "navigationBarTitleText": "川香苑中餐厅",
+    "navigationBarTitleText": "聚韩外卖",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#FFD200"
   },
