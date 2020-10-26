@@ -1,36 +1,38 @@
 // components/search-bar/index.js
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-    placeholder:{
+    defaultValue: {
+      type: String,
+      value: ''
+    },
+    placeholder: {
       type: String,
       value: '请输入搜索关键词'
     },
-    background:{
+    background: {
       type: String,
       value: 'transparent'
     }
   },
-
-  /**
-   * 组件的初始数据
-   */
+  observers: {
+    'defaultValue': function (newVal) {
+      if (newVal !== '') {
+        this.setData({
+          searchValue: newVal
+        })
+      }
+    }
+  },
   data: {
     searchValue: ''
   },
-
-  /**
-   * 组件的方法列表
-   */
   methods: {
-    searchChanged (event) {
+    searchChanged(event) {
       this.setData({
         searchValue: event.detail
       })
     },
-    onSearch () {
+    onSearch() {
       this.triggerEvent('search', this.data.searchValue)
     }
   }

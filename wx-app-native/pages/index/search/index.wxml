@@ -1,5 +1,5 @@
 <view>
-    <search-bar bind:search="onSearchEvent" background="#FFD200"></search-bar>
+    <search-bar default-value="{{initValue}}" bind:search="onSearchEvent" background="#FFD200" placeholder="请输入菜名"></search-bar>
     <view class="container-contain" wx:if="{{produceList.length > 0}}">
       <main-goods-card
         produce="{{food}}"

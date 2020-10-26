@@ -2,11 +2,16 @@ import searchApi from '../../../services/search'
 
 Page({
   data: {
+    initValue: '',
     keyword: null,
     produceList: []
   },
   onLoad (option) {
     if (option.keyword) {
+      this.setData({
+        initValue: option.keyword,
+        keyword: option.keyword
+      })
       this.onSearch(option.keyword)
     }
   },
