@@ -2,7 +2,6 @@
   <view class="gradientview"></view>
   <view class="container-contain"></view>
   <base-panel>
-    <simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="item.produce.selectedGoods.id"
-      wx:for="{{cartList}}"/>
+    <simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" bind:cart-change="onCartChange" wx:key="produce.selectedGoods.id" wx:for="{{cartList}}"/>
   </base-panel>
 </view>
