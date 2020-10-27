@@ -114,16 +114,20 @@ Component({
     },
     onClose() {
       this.setData({
-        isShow: false,
-        needselectSpecsStr: null,
-        selectedSpec: {},
-        disableGoodsList: [],
-        initDisableSpecOption: {},
-        disableSpecOption: {},
-        disableSpecOptionView: {},
-        isAllSelected: false,
-        currentFoodCount: 0
+        isShow: false
       })
+      setTimeout(() => {
+        this.setData({
+          needselectSpecsStr: null,
+          selectedSpec: {},
+          disableGoodsList: [],
+          initDisableSpecOption: {},
+          disableSpecOption: {},
+          disableSpecOptionView: {},
+          isAllSelected: false,
+          currentFoodCount: 0
+        })
+      }, 500)
     },
     chooseSku(event) {
       const selectedSpec = this.data.selectedSpec

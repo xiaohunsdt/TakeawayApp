@@ -14,31 +14,22 @@ Component({
     }
   },
   behaviors: [myBehavior],
-  /**
-   * 组件的初始数据
-   */
+  observers: {
+    "produce": function (newValue) {
+      if (newValue) {
+        this.init()
+      }
+    }
+  },
   data: {
     currentFoodCount: 0
   },
-  lifetimes:{
-    attached: function() {
-      this.init()
-    },
-  },
-  pageLifetimes:{
-    show(){
-      this.init()
+  pageLifetimes: {
+    show() {
+      if(this.data.produce.selectedGoods){
+        this.init()
+      }
     }
   },
-  /**
-   * 组件的方法列表
-   */
-  methods: {
-    init(){
-      let tempVal = this.getCurrentFoodCount()
-      this.setData({
-        currentFoodCount: tempVal
-      })
-    }
-  }
+  methods: {}
 })
