@@ -25,7 +25,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: test
   mvc:
     static-path-pattern: /res/**
     view:
@@ -143,6 +143,10 @@ spring:
     username: xiaohun
     password: wy1996
 
+logging:
+  level:
+    root: info
+    net.novaborn: debug
 
 ---
 spring:

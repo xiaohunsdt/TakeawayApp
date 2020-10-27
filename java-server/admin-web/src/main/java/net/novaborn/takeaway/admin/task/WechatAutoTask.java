@@ -5,14 +5,14 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
 import net.novaborn.takeaway.common.utils.TimeUtil;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
-import net.novaborn.takeaway.goods.enums.GoodsState;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
@@ -133,10 +133,13 @@ public class WechatAutoTask {
 
         List<Produce> selectedProduces = new ArrayList<>();
         if (produceList.size() == 0) {
-            produceList = produceService.list().parallelStream()
-                    .filter(produce -> produce.getState() == ProduceState.ON)
-                    .sorted(Comparator.comparing(Produce::getCategoryId))
-                    .collect(Collectors.toList());
+            LambdaQueryWrapper<Produce> query = Wrappers.lambdaQuery();
+            query.eq(Produce::getStoreId, sysContext.getCurrentStoreId());
+
+            produceList = produceService.list(query).parallelStream()
+                .filter(produce -> produce.getState() == ProduceState.ON || produce.getState() == ProduceState.PART_SHORTAGE)
+                .sorted(Comparator.comparing(Produce::getCategoryId))
+                .collect(Collectors.toList());
         }
 
         int index = RandomUtil.randomInt(produceList.size());
@@ -156,6 +159,9 @@ public class WechatAutoTask {
     }
 
     public void orderShow(Order order) {
+        if (order.getStoreId() != 1302193963869949953L) {
+            return;
+        }
         sysContext.setCurrentStoreId(order.getStoreId());
 
         if (order.getRealPrice() < 18000) {
@@ -184,14 +190,14 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "月饼还剩一点五仁哦！[拥抱][拥抱][拥抱]\n" +
-                        "今天点餐继续送一块月饼哦！！小伙伴们抓紧时间点餐!\n"
+            "月饼还剩一点五仁哦！[拥抱][拥抱][拥抱]\n" +
+                "今天点餐继续送一块月饼哦！！小伙伴们抓紧时间点餐!\n"
         );
         autoMessage.setImgUrlList(
-                Arrays.asList(
-                        "https://admin.cxy.novaborn.net/upload/images/activity/ae4e1ef3057a4752993184c7ca296650.png",
-                        "https://admin.cxy.novaborn.net/upload/images/ebd8dedc55d246a7ba04dd931dcaa113.jpeg"
-                )
+            Arrays.asList(
+                "https://admin.cxy.novaborn.net/upload/images/activity/ae4e1ef3057a4752993184c7ca296650.png",
+                "https://admin.cxy.novaborn.net/upload/images/ebd8dedc55d246a7ba04dd931dcaa113.jpeg"
+            )
         );
 
         wechatAutoSender.send(autoMessage);
@@ -199,6 +205,8 @@ public class WechatAutoTask {
     }
 
     public void appointmentShow() {
+        sysContext.setCurrentStoreId(1302193963869949953L);
+
         Date currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
@@ -212,11 +220,13 @@ public class WechatAutoTask {
         }
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+//        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小程序架构更新!!有任何问题请联系我们微信客服哦~~[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
         autoMessage.setImgUrlList(
-                Arrays.asList(
-                        "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"
-                )
+            Arrays.asList(
+                "https://admin.cxy.novaborn.net/upload/images/banner/75e8d7a1f82346a58ae9ff164e4ca5ac.jpg",
+                "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"
+            )
         );
 
         wechatAutoSender.send(autoMessage);
@@ -226,21 +236,21 @@ public class WechatAutoTask {
     public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
         String names = selectedOrderItems.stream().map(OrderItem::getProduceName).collect(Collectors.joining(", "));
         String desc = selectedOrderItems.stream()
-                .map(orderItem -> {
-                    Produce produce = produceService.getById(orderItem.getProduceId());
-                    if (StrUtil.isBlank(produce.getDesc())) {
+            .map(orderItem -> {
+                Produce produce = produceService.getById(orderItem.getProduceId());
+                if (StrUtil.isBlank(produce.getDesc())) {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0", produce.getName(), goods.getPrice());
-                        return StrUtil.format("{}", produce.getName());
-                    } else {
+                    return StrUtil.format("{}", produce.getName());
+                } else {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", produce.getName(), goods.getPrice(), produce.getDesc());
-                        return StrUtil.format("{}, {}", produce.getName(), produce.getDesc());
-                    }
-                })
-                .collect(Collectors.joining("\r\n"));
+                    return StrUtil.format("{}, {}", produce.getName(), produce.getDesc());
+                }
+            })
+            .collect(Collectors.joining("\r\n"));
         List<String> imgs = selectedOrderItems.stream()
-                .filter(item -> StrUtil.isNotBlank(item.getGoodsThumb()))
-                .map(item -> systemProperties.getUploadServerUrl() + item.getGoodsThumb())
-                .collect(Collectors.toList());
+            .filter(item -> StrUtil.isNotBlank(item.getGoodsThumb()))
+            .map(item -> systemProperties.getUploadServerUrl() + item.getGoodsThumb())
+            .collect(Collectors.toList());
 
         String message;
         message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n同款\uD83C\uDE51安排哦,现在点餐30-40分钟送达[哇][哇][哇]", names, desc);
@@ -264,20 +274,20 @@ public class WechatAutoTask {
     public void sendAutoMessage(List<Produce> selectedProduces) {
         String names = selectedProduces.stream().map(Produce::getName).collect(Collectors.joining(", "));
         String desc = selectedProduces.stream()
-                .map(goods -> {
-                    if (StrUtil.isBlank(goods.getDesc())) {
+            .map(goods -> {
+                if (StrUtil.isBlank(goods.getDesc())) {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
-                        return StrUtil.format("{}", goods.getName());
-                    } else {
-                        return StrUtil.format("{}, {}", goods.getName(), goods.getDesc());
+                    return StrUtil.format("{}", goods.getName());
+                } else {
+                    return StrUtil.format("{}, {}", goods.getName(), goods.getDesc());
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
-                    }
-                })
-                .collect(Collectors.joining("\r\n"));
+                }
+            })
+            .collect(Collectors.joining("\r\n"));
         List<String> imgs = selectedProduces.stream()
-                .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
-                .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
-                .collect(Collectors.toList());
+            .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
+            .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
+            .collect(Collectors.toList());
 
         String message;
         message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n现在点餐30-40分钟送达[哇][哇][哇]");
