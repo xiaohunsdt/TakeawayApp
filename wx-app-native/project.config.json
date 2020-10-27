@@ -36,7 +36,7 @@
     "packNpmRelationList": []
   },
   "compileType": "miniprogram",
-  "libVersion": "2.13.1",
+  "libVersion": "2.12.2",
   "appid": "wx3c0bde366c72ea19",
   "projectname": "wx-app-native",
   "cloudfunctionTemplateRoot": "",
