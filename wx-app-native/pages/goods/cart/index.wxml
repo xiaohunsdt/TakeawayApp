@@ -2,14 +2,14 @@
   <view class="gradientview"></view>
   <view class="container-contain"></view>
   <base-panel>
-  <view class="store-info van-hairline--bottom">
-					<van-image class="store-logo" round fit="cover" width="75rpx" height="75rpx" lazy-load src="{{store.logo}}" />
-					<view class="info">
-						<view class="name">{{store.name}}</view>
-						<view class="address">{{store.address}}</view>
-					</view>
-				</view>
-    <simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" wx:key="item.produce.selectedGoods.id"
-      wx:for="{{cartList}}"/>
+    <view class="store-info van-hairline--bottom">
+      <van-image class="store-logo" round fit="cover" width="75rpx" height="75rpx" lazy-load src="{{store.logo}}" />
+      <view class="info">
+        <view class="name">{{store.name}}</view>
+        <view class="address">{{store.address}}</view>
+      </view>
+    </view>
+    <simple-goods-card cart-list="{{cartList}}" produce="{{item.produce}}" bind:cart-change="onCartChange"
+      wx:key="produce.selectedGoods.id" wx:for="{{cartList}}" />
   </base-panel>
 </view>

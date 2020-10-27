@@ -16,4 +16,9 @@ Page({
       cartAllPrice: cartService.getCartAllPrice()
     })
   },
+  onCartChange() {
+    this.setData({
+      cartList: cartService.getCartList(),
+    })
+  },
 })
