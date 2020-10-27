@@ -10,6 +10,12 @@ export default Behavior({
         this.triggerEvent('openSkuDialog', this.data.produce)
       }
     },
+    init() {
+      let tempVal = this.getCurrentFoodCount()
+      this.setData({
+        currentFoodCount: tempVal
+      })
+    },
     getCurrentFoodCount() {
       let existData;
       if (this.data.cartList) {

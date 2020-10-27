@@ -22,11 +22,13 @@ Component({
           this.setData({
             produce: newValue
           })
+          return
         }
         this.setData({
           isHot: newValue.flags.indexOf('热门') > -1,
           isNew: newValue.flags.indexOf('新品') > -1
         })
+        this.init()
       }
     }
   },
@@ -36,26 +38,14 @@ Component({
     isHot: false,
     isNew: false
   },
-  lifetimes: {
-    attached: function () {
-      this.init()
-    },
-  },
   pageLifetimes: {
     show() {
-      this.init()
+      if(this.data.produce.selectedGoods){
+        this.init()
+      }
     }
   },
-  /**
-   * 组件的方法列表
-   */
   methods: {
-    init() {
-      let tempVal = this.getCurrentFoodCount()
-      this.setData({
-        currentFoodCount: tempVal
-      })
-    },
     onOpenThumbDialog() {
       this.setData({
         showThumbDialog: true
