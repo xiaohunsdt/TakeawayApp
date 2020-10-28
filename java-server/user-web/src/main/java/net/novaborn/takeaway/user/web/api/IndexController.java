@@ -101,7 +101,7 @@ public class IndexController extends BaseController {
     @ResponseBody
     public Object getExpressServiceState(@RequestParam Long addressId, @RequestParam Integer allPrice) {
         int lowestOrderPrice = settingService.getSettingByName("lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
-        int maxExpressDistance = settingService.getSettingByName("max_express_distance", SettingScope.EXPRESS).getValueAsInt();
+        int maxDeliveryDistance = settingService.getSettingByName("max_delivery_distance", SettingScope.EXPRESS).getValueAsInt();
         List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr();
         double distance = addressService.getDistanceWithStore(addressId);
 
@@ -110,7 +110,7 @@ public class IndexController extends BaseController {
             return new ServiceStateDto(-1, String.format("低于%d韩币无法配送!!", lowestOrderPrice));
         }
 
-        if (distance >= maxExpressDistance) {
+        if (distance >= maxDeliveryDistance) {
             return new ServiceStateDto(-1, "您的距离太远，超出了我们的配送范围!!");
         }
 

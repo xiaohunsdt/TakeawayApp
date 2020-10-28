@@ -115,7 +115,7 @@
             </el-form-item>
             <el-form-item label="最远配送距离">
               <el-tooltip content="最远配送距离，单位为米" placement="right">
-                <el-input v-model.number="expressSetting.max_express_distance"></el-input>
+                <el-input v-model.number="expressSetting.max_delivery_distance"></el-input>
               </el-tooltip>
             </el-form-item>
             <el-form-item label="配送费">
