@@ -39,13 +39,13 @@ public class OrderDetailWrapper extends BaseControllerWrapper {
         List<OrderItem> orderItemList = orderItemService.selectByOrderId((Long) map.get("id"));
         Store store = storeService.getById((Long) map.get("storeId"));
         Setting storeLogo = settingService.getSettingByName((Long) map.get("storeId"), "store_logo", SettingScope.STORE);
-        Setting storeAddress = settingService.getSettingByName((Long) map.get("storeId"), "store_address", SettingScope.STORE);
+//        Setting storeAddress = settingService.getSettingByName((Long) map.get("storeId"), "store_address", SettingScope.STORE);
 
         map.put("address", address);
         map.put("orderItemList", new OrderItemWrapper(orderItemList).warp());
         map.put("storeName", store.getName());
         map.put("storeLogo",systemProperties.getUploadServerUrl() + storeLogo.getValue());
-        map.put("storeAddress", storeAddress.getValue());
+        map.put("storeAddress", store.getAddress());
         map.remove("addressId");
     }
 }

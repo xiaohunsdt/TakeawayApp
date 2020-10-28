@@ -79,7 +79,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
             return new ServiceStateDto(State.CLOSED.getCode(), "今日休息!不营业");
         }
 
-        if(!TimeUtil.isBetween(currentDate, store_open_time, store_close_time)){
+        if (!TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
             return new ServiceStateDto(State.CLOSED.getCode(), "当前不在营业时间段!");
         }
 
@@ -89,7 +89,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
     @Override
     public ServiceStateDto getExpressServiceState(Long storeId, Long addressId, Integer allPrice) {
         int lowestOrderPrice = settingService.getSettingByName(storeId, "lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
-        int maxExpressDistance = settingService.getSettingByName(storeId, "max_express_distance", SettingScope.EXPRESS).getValueAsInt();
+        int maxExpressDistance = settingService.getSettingByName(storeId, "max_delivery_distance", SettingScope.EXPRESS).getValueAsInt();
         List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr(storeId);
         double distance = this.getDistanceWithStore(storeId, addressId);
 
@@ -141,18 +141,17 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
             throw new SysException(AddressExceptionEnum.ADDRESS_NO_COORDINATE_ERROR);
         }
 
-        Setting store_coordinate_x = settingService.getSettingByName(storeId, "store_address_x", SettingScope.STORE);
-        Setting store_coordinate_y = settingService.getSettingByName(storeId, "store_address_y", SettingScope.STORE);
+        Store store = this.getById(storeId);
 
-        if (store_coordinate_x == null || store_coordinate_y == null) {
+        if (store.getX() == null || store.getY() == null) {
             throw new SysException(AddressExceptionEnum.STORE_ADDRESS_NO_COORDINATE_ERROR);
         }
 
         return MapDistanceUtil.getDistance(
-                address.get().getX(),
-                address.get().getY(),
-                Double.parseDouble(store_coordinate_x.getValue()),
-                Double.parseDouble(store_coordinate_y.getValue())
+            address.get().getX(),
+            address.get().getY(),
+            store.getX(),
+            store.getY()
         );
     }
 
@@ -169,9 +168,9 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
         for (int i = 0; i < 3; i++) {
             if (i != 0) {
                 currentDate = DateUtil.offsetDay(currentDate, 1)
-                        .setField(DateField.HOUR_OF_DAY, 0)
-                        .setField(DateField.MINUTE, 0)
-                        .setField(DateField.SECOND, 0);
+                    .setField(DateField.HOUR_OF_DAY, 0)
+                    .setField(DateField.MINUTE, 0)
+                    .setField(DateField.SECOND, 0);
             }
             // 指定日期是否营业
             if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
@@ -184,19 +183,19 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
                 // 预定要提前2个小时
                 startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
                 endDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
             } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
                 startDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
-                        .offset(DateField.MINUTE, 30);
+                    .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
+                    .offset(DateField.MINUTE, 30);
                 endDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
 
                 long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
                 if (diffMinutes < 120) {
