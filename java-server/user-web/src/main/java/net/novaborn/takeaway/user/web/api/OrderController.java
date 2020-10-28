@@ -244,9 +244,9 @@ public class OrderController extends BaseController {
         Date deliveryDate;
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
 //        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
-        int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.EXPRESS).getValue());
-        int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.EXPRESS).getValue());
-        int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.EXPRESS).getValue());
+        int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.DELIVERY).getValue());
+        int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.DELIVERY).getValue());
+        int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.DELIVERY).getValue());
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
                 .filter(item -> {

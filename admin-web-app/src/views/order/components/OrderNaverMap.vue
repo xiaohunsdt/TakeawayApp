@@ -117,13 +117,13 @@ export default {
       .then(res => {
         this.mapOptions.lat = parseFloat(res.value)
       })
-    settingApi.getSettingByKey('distance_price_arr', 'EXPRESS')
+    settingApi.getSettingByKey('distance_price_arr', 'DELIVERY')
       .then(res => {
         if (res) {
           this.distancePriceArr.push(...JSON.parse(res.value))
         }
       })
-    settingApi.getSettingByKey('max_delivery_distance', 'EXPRESS')
+    settingApi.getSettingByKey('max_delivery_distance', 'DELIVERY')
       .then(res => {
         if (res) {
           this.distancePriceArr.push({ key: res.value })

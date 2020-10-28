@@ -35,7 +35,7 @@ public class SettingService extends ServiceImpl<ISettingDao, Setting> implements
     @Override
     public List<BaseKVO<Integer, Integer>> getDistancePriceArr() {
         List result = new ArrayList();
-        Setting setting = this.getSettingByName("distance_price_arr", SettingScope.EXPRESS);
+        Setting setting = this.getSettingByName("distance_price_arr", SettingScope.DELIVERY);
         if (setting != null) {
             result.addAll(JSON.parseArray(setting.getValue(), BaseKVO.class));
         }

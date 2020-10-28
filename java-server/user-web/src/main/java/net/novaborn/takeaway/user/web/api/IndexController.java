@@ -100,8 +100,8 @@ public class IndexController extends BaseController {
     @GetMapping("getExpressServiceState")
     @ResponseBody
     public Object getExpressServiceState(@RequestParam Long addressId, @RequestParam Integer allPrice) {
-        int lowestOrderPrice = settingService.getSettingByName("lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
-        int maxDeliveryDistance = settingService.getSettingByName("max_delivery_distance", SettingScope.EXPRESS).getValueAsInt();
+        int lowestOrderPrice = settingService.getSettingByName("lowest_order_price", SettingScope.DELIVERY).getValueAsInt();
+        int maxDeliveryDistance = settingService.getSettingByName("max_delivery_distance", SettingScope.DELIVERY).getValueAsInt();
         List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr();
         double distance = addressService.getDistanceWithStore(addressId);
 
@@ -142,7 +142,7 @@ public class IndexController extends BaseController {
     @GetMapping("getDeliveryPrice")
     @ResponseBody
     public Integer getDeliveryPrice() {
-        return settingService.getSettingByName("delivery_price", SettingScope.EXPRESS).getValueAsInt();
+        return settingService.getSettingByName("delivery_price", SettingScope.DELIVERY).getValueAsInt();
     }
 
     @GetMapping("getAppointmentTimes")
