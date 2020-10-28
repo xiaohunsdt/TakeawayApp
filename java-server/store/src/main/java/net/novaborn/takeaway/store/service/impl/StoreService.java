@@ -88,8 +88,8 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
 
     @Override
     public ServiceStateDto getExpressServiceState(Long storeId, Long addressId, Integer allPrice) {
-        int lowestOrderPrice = settingService.getSettingByName(storeId, "lowest_order_price", SettingScope.EXPRESS).getValueAsInt();
-        int maxExpressDistance = settingService.getSettingByName(storeId, "max_delivery_distance", SettingScope.EXPRESS).getValueAsInt();
+        int lowestOrderPrice = settingService.getSettingByName(storeId, "lowest_order_price", SettingScope.DELIVERY).getValueAsInt();
+        int maxExpressDistance = settingService.getSettingByName(storeId, "max_delivery_distance", SettingScope.DELIVERY).getValueAsInt();
         List<BaseKVO<Integer, Integer>> distancePriceArr = settingService.getDistancePriceArr(storeId);
         double distance = this.getDistanceWithStore(storeId, addressId);
 
@@ -128,7 +128,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
 
     @Override
     public Integer getDeliveryPrice(Long storeId) {
-        return settingService.getSettingByName(storeId, "delivery_price", SettingScope.EXPRESS).getValueAsInt();
+        return settingService.getSettingByName(storeId, "delivery_price", SettingScope.DELIVERY).getValueAsInt();
     }
 
     @Override

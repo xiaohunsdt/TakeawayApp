@@ -7,7 +7,7 @@ import lombok.Getter;
 public enum SettingScope {
     STORE("store"),
 
-    EXPRESS("express"),
+    DELIVERY("delivery"),
 
     SYSTEM("system"),
 

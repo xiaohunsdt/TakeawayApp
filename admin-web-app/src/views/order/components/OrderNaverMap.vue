@@ -44,7 +44,8 @@
       :order="order"
       @click="onMarkerClicked"
       @load="onMarkerLoaded"/>
-    <naver-circle v-for="item in distancePriceArr" :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key"/>
+    <naver-circle v-for="item in distancePriceArr" :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng"
+                  :radius="item.key"/>
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>-->
@@ -64,6 +65,8 @@ import MapMarker from './naver-map/MapMarker'
 
 import orderApi from '@/api/order'
 import settingApi from '@/api/sys-setting'
+import storeApi from '@/api/store'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'NaverMap',
@@ -102,6 +105,11 @@ export default {
       timer: null
     }
   },
+  computed: {
+    ...mapGetters([
+      'userData'
+    ])
+  },
   created() {
     if (!this.allOrder) {
       this.getWaitEatOrderList()
@@ -109,24 +117,21 @@ export default {
     } else {
       this.getAllTodayOrderList()
     }
-    settingApi.getSettingByKey('store_address_x', 'STORE')
-      .then(res => {
-        this.mapOptions.lng = parseFloat(res.value)
-      })
-    settingApi.getSettingByKey('store_address_y', 'STORE')
-      .then(res => {
-        this.mapOptions.lat = parseFloat(res.value)
-      })
-    settingApi.getSettingByKey('distance_price_arr', 'EXPRESS')
+
+    storeApi.getStoreById(this.userData.storeId).then(res => {
+      this.mapOptions.lng = res.x
+      this.mapOptions.lat = res.y
+    })
+    settingApi.getSettingByKey('distance_price_arr', 'DELIVERY')
       .then(res => {
         if (res) {
           this.distancePriceArr.push(...JSON.parse(res.value))
         }
       })
-    settingApi.getSettingByKey('max_delivery_distance', 'EXPRESS')
+    settingApi.getSettingByKey('max_delivery_distance', 'DELIVERY')
       .then(res => {
         if (res) {
-          this.distancePriceArr.push({ key: res.value })
+          this.distancePriceArr.push({ key: parseFloat(res.value) })
         }
       })
   },

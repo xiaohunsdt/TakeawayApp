@@ -63,7 +63,7 @@ public class StoreController extends BaseController {
 
         List<Store> storeList = storeService.list(query).stream()
                 .filter(store -> MapDistanceUtil.getDistance(coordinate.getX(), coordinate.getY(), store.getX(), store.getY()) < store.getMaxDeliveryDistance())
-                .sorted(Comparator.comparing(Store::getCreateDate).reversed())
+                .sorted(Comparator.comparing(Store::getCreateDate))
                 .collect(Collectors.toList());
         return new StoreWrapper(storeList).warp();
     }
