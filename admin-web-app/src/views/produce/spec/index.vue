@@ -19,46 +19,48 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-          v-loading="listLoading"
-          :data="tableData"
-          class="tb-edit"
-          element-loading-text="正在加载中..."
-          highlight-current-row
-          stripe
-          style="width: 100%">
+        v-loading="listLoading"
+        :data="tableData"
+        class="tb-edit"
+        element-loading-text="正在加载中..."
+        highlight-current-row
+        stripe
+        style="width: 100%">
         <el-table-column
-            label="ID"
-            prop="id"
-            width="350">
+          label="ID"
+          prop="id"
+          width="350">
         </el-table-column>
         <el-table-column label="名称">
           <template v-slot="scope">
             <el-input
-                v-model="scope.row.key"
-                placeholder="请输入内容"
-                size="small"
-                @change="onEdit(scope.$index, scope.row)"></el-input>
+              v-model="scope.row.key"
+              placeholder="请输入内容"
+              size="small"
+              @change="onEdit(scope.$index, scope.row)"></el-input>
             <span>{{ scope.row.key }}</span>
           </template>
         </el-table-column>
         <el-table-column
-            label="操作"
-            width="150">
+          label="操作"
+          width="150">
           <template v-slot="scope">
-            <el-button v-if="scope.row.storeId === userData.storeId" size="mini" type="danger" @click="onDelete(scope.row.id)">删除</el-button>
+            <el-button v-if="scope.row.storeId === userData.storeId" size="mini" type="danger" @click="onDelete(scope.row.id)">
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-          :current-page="page.current"
-          :page-size="page.size"
-          :page-sizes="[15, 50, 100]"
-          :total="page.total"
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          style="margin-top: 15px"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange">
+        :current-page="page.current"
+        :page-size="page.size"
+        :page-sizes="[15, 50, 100]"
+        :total="page.total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top: 15px"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
   </div>
@@ -101,13 +103,13 @@ export default {
       this.listLoading = true
 
       specApi.getListByPage(this.page, this.formData)
-          .then(response => {
-            this.tableData = response.records
-            this.page.total = parseInt(response.total)
-          })
-          .finally(() => {
-            this.listLoading = false
-          })
+        .then(response => {
+          this.tableData = response.records
+          this.page.total = parseInt(response.total)
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     onSearch() {
       this.page.current = 1
@@ -125,10 +127,14 @@ export default {
       })
     },
     onEdit(index, row) {
+      if (row.storeId !== this.userData.storeId) {
+        this.$message.error('您无权修改这项设置')
+        return
+      }
       specApi.update(row)
-          .then((res) => {
-            this.$message.success(res.message)
-          })
+        .then((res) => {
+          this.$message.success(res.message)
+        })
     },
     onDelete(id) {
       this.$confirm('是否确定删除?', '提示', {
@@ -137,9 +143,9 @@ export default {
         type: 'warning'
       }).then(() => {
         specApi.del(id)
-            .then(() => {
-              this.getList()
-            })
+          .then(() => {
+            this.getList()
+          })
       })
     },
     handleSizeChange(val) {
