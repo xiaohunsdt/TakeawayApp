@@ -204,7 +204,7 @@ public class OrderController extends BaseController {
 
         orderSubscribeMessageSender.send(order.get());
         printerUtil.print(order.get());
-//        wechatAutoTask.orderShow(order.get());
+        wechatAutoTask.orderShow(order.get());
         return new SuccessTip();
     }
 
@@ -258,20 +258,20 @@ public class OrderController extends BaseController {
         }
 
         // 设置店铺资金和记录
-        long money = 0;
-        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
-            money = (long) (order.get().getRealPrice().longValue() * 0.02);
-        }
+//        long money = 0;
 //        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
-//            money = (long) (order.get().getRealPrice().longValue() * 0.02) + 300L;
+//            money = (long) (order.get().getRealPrice().longValue() * 0.02);
+//        }
+//        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
+//            money = 300L;
 //        } else {
 //            money = 500;
 //        }
 
-        if (money != 0) {
-            long afterMoney = balanceService.sub(order.get().getStoreId(), money);
-            balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
-        }
+//        if (money != 0) {
+//            long afterMoney = balanceService.sub(order.get().getStoreId(), money);
+//            balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
+//        }
 
         // 签到
         if (order.get().getPaymentWay() != PaymentWay.CREDIT_CARD && order.get().getRealPrice() >= 12000) {

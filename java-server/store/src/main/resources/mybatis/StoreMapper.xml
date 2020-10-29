@@ -9,5 +9,6 @@
             </if>
             AND `deleted` = 0
         </where>
+        ORDER BY `create_date` ASC
     </select>
 </mapper>

@@ -29,7 +29,6 @@ public class StoreBalanceController extends BaseController {
     public ResponseEntity getListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
         args.put("storeId",sysContext.getCurrentStoreId());
         page = (Page) balanceLogService.getListByPage(page, args);
-//        page.setRecords((List) new DeliveryWrapper(page.getRecords()).warp());
         return ResponseEntity.ok(page);
     }
 }

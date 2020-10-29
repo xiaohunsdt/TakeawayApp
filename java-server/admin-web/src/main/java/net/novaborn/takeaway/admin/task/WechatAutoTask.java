@@ -159,10 +159,9 @@ public class WechatAutoTask {
     }
 
     public void orderShow(Order order) {
-        if (order.getStoreId() != 1302193963869949953L) {
+        if (sysContext.getCurrentStoreId() != 1302193963869949953L) {
             return;
         }
-        sysContext.setCurrentStoreId(order.getStoreId());
 
         if (order.getRealPrice() < 18000) {
             return;
