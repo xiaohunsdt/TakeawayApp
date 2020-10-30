@@ -2,7 +2,7 @@ package net.novaborn.takeaway.admin.common.auth.filter;
 
 import io.jsonwebtoken.JwtException;
 import lombok.Data;
-import net.novaborn.takeaway.admin.common.SysContext;
+import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;

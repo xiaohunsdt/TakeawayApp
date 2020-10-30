@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.admin.common;
+package net.novaborn.takeaway.common.entity;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

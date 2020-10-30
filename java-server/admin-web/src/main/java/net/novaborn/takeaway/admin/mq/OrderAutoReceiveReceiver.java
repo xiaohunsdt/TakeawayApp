@@ -5,7 +5,7 @@ import com.rabbitmq.client.Channel;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.admin.common.SysContext;
+import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.web.api.OrderController;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;

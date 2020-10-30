@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
+import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
@@ -21,6 +23,7 @@ import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -47,14 +50,18 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     private SettingService settingService;
 
-//    @Setter
-//    protected List<Goods> gifts;
+    @Setter
+    protected Map<String, Goods> gifts;
 
-//    @PostConstruct
-//    public void init() {
-//        gifts = new ArrayList<>();
-//        gifts.add(goodsService.getById(1308791764220502017L));
-//    }
+    @PostConstruct
+    public void init() {
+        gifts = new HashMap<>();
+        gifts.put("川香卤蛋",goodsService.getFirstByProduceId(1301894882715054082L));
+        gifts.put("饮料",goodsService.getFirstByProduceId(1301894885395214337L));
+        gifts.put("鸭翅",goodsService.getFirstByProduceId(1301894884405358594L));
+        gifts.put("鸭锁骨",goodsService.getFirstByProduceId(1301894884560547841L));
+        gifts.put("鸭脖",goodsService.getFirstByProduceId(1301894883776212994L));
+    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
@@ -130,17 +137,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-                .filter(orderItem -> orderItem.getGoodsId() != null)
-                .map(orderItem -> {
-                    Produce produce = produceService.getById(orderItem.getProduceId());
-                    // 鸭货除外
-                    if (produce.getCategoryId().equals(1301894880743731201L)) {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                    } else {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                    }
-                })
-                .reduce(0, (x, y) -> x + y);
+            .filter(orderItem -> orderItem.getGoodsId() != null)
+            .map(orderItem -> {
+                Produce produce = produceService.getById(orderItem.getProduceId());
+                // 鸭货除外
+                if (produce.getCategoryId().equals(1301894880743731201L)) {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                } else {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                }
+            })
+            .reduce(0, (x, y) -> x + y);
 
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
@@ -161,40 +168,48 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
-//        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
-//            Goods gift = null;
-//            if (order.getRealPrice() >= 40000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
-//                    gift = gifts.get("鸭脖");
-//                }
-//            } else if (order.getRealPrice() >= 30000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
-//                    gift = gifts.get("鸭锁骨");
-//                }
-//            } else if (order.getRealPrice() >= 25000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
-//                    gift = gifts.get("鸭翅");
-//                }
-//            } else if (order.getRealPrice() >= 20000) {
-//                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
-//                    gift = gifts.get("饮料");
-//                }
-//            } else if (order.getRealPrice() >= 15000) {
-//                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
-//                    gift = gifts.get("川香卤蛋");
-//                }
-//            }
-//            if (gift != null) {
-//                OrderItem orderItem = new OrderItem();
-//                orderItem.setGoodsId(gift.getId());
-//                orderItem.setGoodsName("中秋福利-" + gift.getName());
-//                orderItem.setGoodsThumb(gift.getThumb());
-//                orderItem.setGoodsPrice(0);
-//                orderItem.setGoodsCount(1);
-//                orderItemList.add(orderItem);
-//                order.setGoodsCount(order.getGoodsCount() + 1);
-//            }
-//        }
+        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+            Goods gift = null;
+            String giftName = null;
+            if (order.getRealPrice() >= 40000) {
+                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
+                    gift = gifts.get("鸭脖");
+                    giftName = "鸭脖";
+                }
+            } else if (order.getRealPrice() >= 30000) {
+                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
+                    gift = gifts.get("鸭锁骨");
+                    giftName = "鸭锁骨";
+                }
+            } else if (order.getRealPrice() >= 25000) {
+                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
+                    gift = gifts.get("鸭翅");
+                    giftName = "鸭翅";
+                }
+            } else if (order.getRealPrice() >= 20000) {
+                if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
+                    gift = gifts.get("饮料");
+                    giftName = "饮料";
+                }
+            } else if (order.getRealPrice() >= 15000) {
+                if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
+                    gift = gifts.get("川香卤蛋");
+                    giftName = "川香卤蛋";
+                }
+            }
+            if (gift != null) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setGoodsId(gift.getId());
+                orderItem.setProduceId(gift.getProduceId());
+                orderItem.setProduceName("满赠福利");
+                orderItem.setGoodsTitle(giftName);
+                orderItem.setGoodsThumb(gift.getThumb());
+                orderItem.setGoodsPrice(0);
+                orderItem.setGoodsCount(1);
+                orderItemList.add(orderItem);
+                order.setGoodsCount(order.getGoodsCount() + 1);
+            }
+        }
 
         //设置 优惠卷折扣
         if (couponId != null) {

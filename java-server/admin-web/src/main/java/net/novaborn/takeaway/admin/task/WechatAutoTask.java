@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.admin.common.SysContext;
+import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Produce;

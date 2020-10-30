@@ -1,6 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import net.novaborn.takeaway.admin.common.SysContext;
+import net.novaborn.takeaway.common.entity.SysContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
