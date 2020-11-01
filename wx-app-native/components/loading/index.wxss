@@ -1,0 +1,47 @@
+.loading{
+  display: block;
+  text-align: center;
+  height: 50rpx;
+}
+
+.loading-block{
+  display: inline-block;
+  border-radius: 50%;
+  width: 55rpx;
+  height: 55rpx;
+  padding: 10rpx;
+  background-color: white;
+  box-shadow: 0 8px 15px 0 rgba(0, 0, 0, .13);
+}
+
+.van-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #c8c9cc;
+}
+
+.van-loading__spinner {
+  position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
+  animation: van-rotate .8s linear infinite;
+}
+
+.van-loading__text:empty {
+  display: none;
+}
+
+.van-loading__text {
+  margin-left: 16rpx;
+  color: #969799;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.van-loading__spinner--circular {
+  border: 10rpx solid transparent;
+  border-top-color: initial;
+  border-radius: 100%;
+}
