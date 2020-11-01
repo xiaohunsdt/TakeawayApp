@@ -179,13 +179,17 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
 
             Date startDate;
             Date endDate;
-            if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+            if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
                 // 预定要提前2个小时
                 startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
                 endDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                     .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
                     .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+
+                if (startDate.getTime() > endDate.getTime()) {
+                    endDate = DateUtil.offsetDay(endDate, 1);
+                }
             } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
                 startDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
@@ -196,6 +200,10 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
                     .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                     .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
                     .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+
+                if (startDate.getTime() > endDate.getTime()) {
+                    endDate = DateUtil.offsetDay(endDate, 1);
+                }
 
                 long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
                 if (diffMinutes < 120) {
@@ -208,7 +216,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
             // 最迟截止下单日期的后30分钟到达
             endDate = DateTime.of(endDate).offset(DateField.MINUTE, 30);
 
-            if (TimeUtil.isAfter(startDate, endDate)) {
+            if (startDate.after(endDate)) {
                 continue;
             }
 

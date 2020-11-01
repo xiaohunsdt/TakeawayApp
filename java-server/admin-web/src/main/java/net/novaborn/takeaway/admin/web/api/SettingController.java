@@ -1,6 +1,5 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.utils.PrinterUtil;
@@ -17,12 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * @author xiaohun
@@ -64,6 +59,7 @@ public class SettingController extends BaseController {
         }
 
         SettingScope settingScope = SettingScope.valueOf((String) args.remove("scope"));
+        Store store = storeService.getById(sysContext.getCurrentStoreId());
 
         args.forEach((key, value) -> {
             Setting setting = settingService.getSettingByName(key, settingScope);
@@ -94,22 +90,22 @@ public class SettingController extends BaseController {
 //                }
 //            }
 
-            if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
-                // 转义从前端传来的日期字符串
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                sf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                try {
-                    value = DateUtil.formatDateTime(sf.parse((String) value));
-                } catch (ParseException e) {
-                    log.error(null, e);
-                    throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
-                }
-            }
+//            if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
+//                // 转义从前端传来的日期字符串
+//                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+//                sf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                try {
+//                    value = DateUtil.formatDateTime(sf.parse((String) value));
+//                } catch (ParseException e) {
+//                    log.error(null, e);
+//                    throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
+//                }
+//            }
 
             if ("sn".equals(key)) {
                 Setting sn = settingService.getSettingByName(key, settingScope);
                 if (sn == null || !sn.getValue().equals(value)) {
-                    printerUtil.addPrinter("test", (String) value);
+                    printerUtil.addPrinter(store.getName(), (String) value);
                 }
             }
 
@@ -121,8 +117,7 @@ public class SettingController extends BaseController {
                 }
             }
 
-            if("max_delivery_distance".equals(key)){
-                Store store = storeService.getById(sysContext.getCurrentStoreId());
+            if ("max_delivery_distance".equals(key)) {
                 store.setMaxDeliveryDistance(Integer.valueOf((String) value));
                 store.updateById();
             }

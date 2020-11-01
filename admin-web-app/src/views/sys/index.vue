@@ -72,12 +72,12 @@
             </el-form-item>
             <el-form-item label="运营时间">
               <el-time-picker
-                v-model="timePickValue"
-                end-placeholder="关门时间"
-                is-range
-                placeholder="选择运营时间范围"
-                range-separator="至"
-                start-placeholder="开门时间"/>
+                v-model="storeSetting.store_open_time"
+                placeholder="选择开门时间"/>
+              -
+              <el-time-picker
+                v-model="storeSetting.store_close_time"
+                placeholder="选择开门时间"/>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveSetting('STORE')">保存设置</el-button>
@@ -176,11 +176,11 @@
             </el-form-item>
             <el-form-item label="语音类型">
               <el-select v-model="printerSetting.voiceType" placeholder="请选择语言类型">
-                <el-option value="0" label="真人语音 (大)"/>
-                <el-option value="1" label="真人语音 (中)"/>
-                <el-option value="2" label="真人语音 (小)"/>
-                <el-option value="3" label="嘀嘀声"/>
-                <el-option value="4" label="静音"/>
+                <el-option label="真人语音 (大)" value="0"/>
+                <el-option label="真人语音 (中)" value="1"/>
+                <el-option label="真人语音 (小)" value="2"/>
+                <el-option label="嘀嘀声" value="3"/>
+                <el-option label="静音" value="4"/>
               </el-select>
             </el-form-item>
             <el-form-item label="厨师体温">
@@ -213,6 +213,7 @@ import settingApi from '@/api/sys-setting'
 import storeApi from '@/api/store'
 import DynamicInput from './components/DynamicInput'
 import { getToken } from '@/utils/auth'
+import { parseTime } from '@u/index'
 
 export default {
   name: 'SysManagement',
@@ -223,7 +224,6 @@ export default {
   data() {
     return {
       saveLoading: false,
-      timePickValue: [new Date(), new Date()],
       systemSetting: {
         service_running: true,
         auto_receive_order: false,
@@ -287,13 +287,9 @@ export default {
         res.forEach(item => {
           if (item.key === 'store_open_date') {
             this.$set(this.storeSetting, item.key, item.value.split(','))
+          } else if (item.key === 'store_open_time' || item.key === 'store_close_time') {
+            this.$set(this.storeSetting, item.key, new Date(item.value))
           } else {
-            if (item.key === 'store_open_time') {
-              this.$set(this.timePickValue, 0, new Date(item.value))
-            }
-            if (item.key === 'store_close_time') {
-              this.$set(this.timePickValue, 1, new Date(item.value))
-            }
             this.$set(this.storeSetting, item.key, item.value)
           }
         })
@@ -327,8 +323,8 @@ export default {
         case 'STORE':
           settings = Object.assign({}, this.storeSetting)
           settings.store_open_date = settings.store_open_date.join()
-          settings.store_open_time = this.timePickValue[0]
-          settings.store_close_time = this.timePickValue[1]
+          settings.store_open_time = parseTime(settings.store_open_time, '{y}-{m}-{d} {h}:{i}:{s}')
+          settings.store_close_time = parseTime(settings.store_close_time, '{y}-{m}-{d} {h}:{i}:{s}')
           break
         case 'DELIVERY':
           settings = Object.assign({}, this.deliverySetting)

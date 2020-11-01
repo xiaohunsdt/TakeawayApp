@@ -14,6 +14,7 @@
     "pages/order/index",
     "pages/order/comment/index",
     "pages/order/detail/index",
+    "pages/order/success/index",
     "pages/buy/index",
     "pages/buy/remark/index",
     "pages/pay/index",

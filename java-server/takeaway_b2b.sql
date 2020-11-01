@@ -11,7 +11,11 @@
  Target Server Version : 50730
  File Encoding         : 65001
 
+<<<<<<< HEAD:java-server/takeaway_b2b.sql
  Date: 28/10/2020 02:57:51
+=======
+ Date: 01/11/2020 14:44:17
+>>>>>>> master:java-server/takeaway.sql
 */
 
 SET NAMES utf8mb4;

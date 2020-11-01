@@ -32,7 +32,8 @@ Page({
       })
       if (this.data.order.payState === 'PAID') {
         wx.reLaunch({
-          url: '/pages/order/index?state=WAIT_EAT'
+          // url: '/pages/order/index?state=WAIT_EAT'
+          url: '/pages/order/success/index'
         })
         return
       }

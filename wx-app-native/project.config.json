@@ -149,6 +149,11 @@
           "name": "pages/my/signin/index",
           "pathName": "pages/my/signin/index",
           "scene": null
+        },
+        {
+          "name": "pages/order/success/index",
+          "pathName": "pages/order/success/index",
+          "scene": null
         }
       ]
     }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
@@ -56,11 +55,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @PostConstruct
     public void init() {
         gifts = new HashMap<>();
-        gifts.put("川香卤蛋",goodsService.getFirstByProduceId(1301894882715054082L));
-        gifts.put("饮料",goodsService.getFirstByProduceId(1301894885395214337L));
-        gifts.put("鸭翅",goodsService.getFirstByProduceId(1301894884405358594L));
-        gifts.put("鸭锁骨",goodsService.getFirstByProduceId(1301894884560547841L));
-        gifts.put("鸭脖",goodsService.getFirstByProduceId(1301894883776212994L));
+        gifts.put("川香卤蛋", goodsService.getFirstByProduceId(1301894882715054082L));
+        gifts.put("饮料", goodsService.getFirstByProduceId(1301894885395214337L));
+        gifts.put("鸭翅", goodsService.getFirstByProduceId(1301894884405358594L));
+        gifts.put("鸭锁骨", goodsService.getFirstByProduceId(1301894884560547841L));
+        gifts.put("鸭脖", goodsService.getFirstByProduceId(1301894883776212994L));
     }
 
     @Override
@@ -168,7 +167,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
-        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+        if (order.getStoreId() == 1302193963869949953L && order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
             String giftName = null;
             if (order.getRealPrice() >= 40000) {

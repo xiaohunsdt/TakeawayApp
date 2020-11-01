@@ -15,11 +15,9 @@
 		<view id="banner">
 			<search-bar bind:search="onSearch" background="#ffffff" placeholder="请输入菜名"></search-bar>
 			<view id="scrollImg">
-				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true"
-					style="max-height: 10rem;overflow:hidden">
+				<swiper autoplay="true" circular="true" easing-function="easeInOutCubic" indicator-dots="true" style="height: 300rpx; overflow:hidden">
 					<swiper-item wx:key="id" wx:for="{{bannerList}}" wx:for-item="banner">
-						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg"
-							mode="widthFix" />
+						<image src="{{banner.img}}" data-page-path="{{banner.pagePath}}" bind:tap="gotoPage" class="itemImg" mode="widthFix" />
 					</swiper-item>
 				</swiper>
 			</view>
