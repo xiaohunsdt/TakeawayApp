@@ -26,7 +26,7 @@ public class ProduceListDto {
         queryWrapper.in(Category::getId, produceList.stream().map(Produce::getCategoryId).distinct().collect(Collectors.toList()));
 
         categoryService.list(queryWrapper).stream()
-            .sorted(Comparator.comparing(Category::getCreateDate))
+            .sorted(Comparator.comparing(Category::getIndex).reversed().thenComparing(Category::getCreateDate))
             .forEach(category -> {
                 List<Map> goodsWrapperExList = produceList.parallelStream()
                     .filter(produce -> produce.getCategoryId().equals(category.getId()))
