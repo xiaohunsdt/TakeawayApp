@@ -1,0 +1,8 @@
+<view class="loading">
+  <view class="loading-block">
+    <view class="van-loading">
+      <view class="van-loading__spinner van-loading__spinner--circular" style="color: #ffd200; width: 55rpx; height: 55rpx"></view>
+      <view class="van-loading__text" style="font-size: ;"></view>
+    </view>
+  </view>
+</view>

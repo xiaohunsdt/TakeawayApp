@@ -3,6 +3,7 @@
   "navigationStyle": "custom",
   "backgroundColor": "#F0F0F0",
   "usingComponents": {
+    "loading": "/components/loading/index",
     "search-bar": "/components/search-bar/index",
     "food-panel": "./components/food-panel/index",
     "store-card": "/components/store-card/index"
