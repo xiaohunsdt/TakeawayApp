@@ -90,17 +90,17 @@ public class SettingController extends BaseController {
 //                }
 //            }
 
-            if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
-                // 转义从前端传来的日期字符串
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                sf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                try {
-                    value = DateUtil.formatDateTime(sf.parse((String) value));
-                } catch (ParseException e) {
-                    log.error(null, e);
-                    throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
-                }
-            }
+//            if ("store_open_time".equals(key) || "store_close_time".equals(key)) {
+//                // 转义从前端传来的日期字符串
+//                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+//                sf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//                try {
+//                    value = DateUtil.formatDateTime(sf.parse((String) value));
+//                } catch (ParseException e) {
+//                    log.error(null, e);
+//                    throw new SysException(SettingExceptionEnum.UPDATE_ERROR);
+//                }
+//            }
 
             if ("sn".equals(key)) {
                 Setting sn = settingService.getSettingByName(key, settingScope);

@@ -1,0 +1,5 @@
+<view class="container">
+  <view class="gradientview"></view>
+  <view class="container-contain">
+  </view>
+</view>

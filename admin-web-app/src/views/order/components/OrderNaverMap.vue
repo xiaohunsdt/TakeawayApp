@@ -126,7 +126,7 @@ export default {
     settingApi.getSettingByKey('max_delivery_distance', 'DELIVERY')
       .then(res => {
         if (res) {
-          this.distancePriceArr.push({ key: res.value })
+          this.distancePriceArr.push({ key: parseInt(res.value) })
         }
       })
   },

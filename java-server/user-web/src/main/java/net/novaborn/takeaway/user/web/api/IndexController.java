@@ -13,7 +13,6 @@ import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.TimeUtil;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -55,21 +54,21 @@ public class IndexController extends BaseController {
 
     private BannerService bannerService;
 
-    private static Map<From,String> fromerNotice;
+    private static Map<From, String> fromerNotice;
 
     static {
         fromerNotice = new HashMap<>();
-        fromerNotice.put(From.YONSEI,"让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。延世学联祝你中秋佳节快乐，月圆人圆事事圆满!");
-        fromerNotice.put(From.SOGANG,"让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。西江学联祝你中秋佳节快乐，月圆人圆事事圆满!");
+        fromerNotice.put(From.YONSEI, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。延世学联祝你中秋佳节快乐，月圆人圆事事圆满!");
+        fromerNotice.put(From.SOGANG, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。西江学联祝你中秋佳节快乐，月圆人圆事事圆满!");
     }
 
     @GetMapping("getBannersList")
     public ResponseEntity getBannersList() {
         List<Banner> activities = bannerService.list()
-                .stream()
-                .filter(Banner::getIsShow)
-                .sorted(Comparator.comparing(Banner::getIndex).reversed())
-                .collect(Collectors.toList());
+            .stream()
+            .filter(Banner::getIsShow)
+            .sorted(Comparator.comparing(Banner::getIndex).reversed())
+            .collect(Collectors.toList());
         return ResponseEntity.ok(new BannerWrapper(activities).warp());
     }
 
@@ -80,8 +79,8 @@ public class IndexController extends BaseController {
 
         // 筛选有效商品
         goodsList = goodsList.stream()
-                .filter(item -> !item.getState().equals(ProduceState.OFF))
-                .collect(Collectors.toList());
+            .filter(item -> !item.getState().equals(ProduceState.OFF))
+            .collect(Collectors.toList());
 
         return new ProduceWrapper(goodsList).warp();
     }
@@ -116,8 +115,8 @@ public class IndexController extends BaseController {
 
 
         // 距离对应价格设置
-        for (BaseKVO<Integer,Integer> item:distancePriceArr){
-            if(distance >= item.getKey() && allPrice < item.getValue()){
+        for (BaseKVO<Integer, Integer> item : distancePriceArr) {
+            if (distance >= item.getKey() && allPrice < item.getValue()) {
                 return new ServiceStateDto(-1, String.format("您当前距离本店%d米，需要点至少点 ₩%d 才能配送!!", (int) distance, item.getValue()));
             }
         }
@@ -159,9 +158,9 @@ public class IndexController extends BaseController {
         for (int i = 0; i < 3; i++) {
             if (i != 0) {
                 currentDate = DateUtil.offsetDay(currentDate, 1)
-                        .setField(DateField.HOUR_OF_DAY, 0)
-                        .setField(DateField.MINUTE, 0)
-                        .setField(DateField.SECOND, 0);
+                    .setField(DateField.HOUR_OF_DAY, 0)
+                    .setField(DateField.MINUTE, 0)
+                    .setField(DateField.SECOND, 0);
             }
             // 指定日期是否营业
             if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
@@ -170,23 +169,31 @@ public class IndexController extends BaseController {
 
             Date startDate;
             Date endDate;
-            if (TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+            if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
                 // 预定要提前2个小时
                 startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
                 endDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+
+                if (startDate.getTime() > endDate.getTime()) {
+                    endDate = DateUtil.offsetDay(endDate, 1);
+                }
             } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
                 startDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
-                        .offset(DateField.MINUTE, 30);
+                    .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
+                    .offset(DateField.MINUTE, 30);
                 endDate = new DateTime(currentDate)
-                        .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                        .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                        .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
+                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
+                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+
+                if (startDate.getTime() > endDate.getTime()) {
+                    endDate = DateUtil.offsetDay(endDate, 1);
+                }
 
                 long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
                 if (diffMinutes < 120) {
@@ -199,7 +206,7 @@ public class IndexController extends BaseController {
             // 最迟截止下单日期的后30分钟到达
             endDate = DateTime.of(endDate).offset(DateField.MINUTE, 30);
 
-            if (TimeUtil.isAfter(startDate, endDate)) {
+            if (startDate.after(endDate)) {
                 continue;
             }
 

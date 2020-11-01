@@ -33,7 +33,8 @@ export function payOrder (orderId, payWay) {
           break
         default:
           wx.redirectTo({
-            url: '/pages/order/index?state=WAIT_EAT'
+            // url: '/pages/order/index?state=WAIT_EAT'
+            url: '/pages/order/success'
           })
       }
     })
