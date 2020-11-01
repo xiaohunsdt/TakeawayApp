@@ -11,19 +11,29 @@ Page({
       if (newVal.x === 0 || newVal.y === 0) {
         return;
       }
-      storeService.getAvailableStoreList(newVal.x, newVal.y).then(res => {
-        this.setData({
-          storeList: res
-        })
+      this.setData({
+        storeListLoading: true
       })
+      storeService.getAvailableStoreList(newVal.x, newVal.y)
+        .then(res => {
+          this.setData({
+            storeList: res
+          })
+        })
+        .finally(() => {
+          this.setData({
+            storeListLoading: false
+          })
+        })
     }
   },
   data: {
     statusBarHeight: 0,
+    storeListLoading: false,
     bannerList: [],
     newGoodsList: [],
     hotGoodsList: [],
-    storeList: [],
+    storeList: null,
     currentAddress: {
       address: '加载中...',
       x: 0.0,

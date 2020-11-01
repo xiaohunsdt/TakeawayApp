@@ -25,8 +25,9 @@
 		<!-- <food-panel foodList="{{newGoodsList}}" title="新品" /> -->
 		<!-- <food-panel foodList="{{hotGoodsList}}" title="热门" /> -->
 		<view class="store-cards">
-			<van-empty wx:if="{{storeList.length === 0}}" class="custom-image" image="/static/images/status/no_load.png" description="附近没有店铺, 敬请期待!" />
+			<van-empty wx:if="{{storeList!==null && storeList.length === 0}}" class="custom-image" image="/static/images/status/no_load.png" description="附近没有店铺, 敬请期待!" />
 			<store-card store="{{item}}" wx:for="{{storeList}}" wx:key="id" />
+			<loading wx:if="{{storeListLoading}}" />
 		</view>
 	</view>
 </view>

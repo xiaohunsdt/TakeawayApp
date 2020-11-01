@@ -1,7 +1,6 @@
 .loading{
   display: block;
   text-align: center;
-  height: 50rpx;
 }
 
 .loading-block{
