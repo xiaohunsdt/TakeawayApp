@@ -130,12 +130,13 @@ Page({
             order: res
           })
           if (this.data.order.payState === 'PAID') {
-            // mpvue.redirectTo({
-            //   url: '/pages/order/main?state=waitEat'
-            // })
-            wx.reLaunch({
-              url: `/pages/order/detail/index?orderId=${this.data.order.id}`
+            mpvue.reLaunch({
+              // url: '/pages/order/index?state=WAIT_EAT'
+              url: '/pages/order/success/index'
             })
+            // wx.reLaunch({
+            //   url: `/pages/order/detail/index?orderId=${this.data.order.id}`
+            // })
           } else {
             wx.reLaunch({
               url: '/pages/order/index?state=WAIT_PAY'
