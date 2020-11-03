@@ -120,7 +120,7 @@ Page({
         this.setData({
           editLoading: false
         })
-        mpvue.navigateBack()
+        wx.navigateBack()
       })
       .catch(() => {
         this.setData({
