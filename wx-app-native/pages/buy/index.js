@@ -132,7 +132,7 @@ Page({
             order: res
           })
           if (this.data.order.payState === 'PAID') {
-            mpvue.reLaunch({
+            wx.reLaunch({
               // url: '/pages/order/index?state=WAIT_EAT'
               url: '/pages/order/success/index'
             })

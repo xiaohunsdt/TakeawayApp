@@ -270,7 +270,7 @@ public class OrderController extends BaseController {
 
 //        if (money != 0) {
 //            long afterMoney = balanceService.sub(order.get().getStoreId(), money);
-//            balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(), order.get().getRealPrice(), money);
+//            balanceLogService.setMoneyLog(order.get().getStoreId(), money * -1, afterMoney, 2, order.get().getId(),order.get().getNumber(), order.get().getRealPrice(), money);
 //        }
 
         // 签到

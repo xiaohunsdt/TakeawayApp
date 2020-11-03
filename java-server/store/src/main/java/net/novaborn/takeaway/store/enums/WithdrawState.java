@@ -4,22 +4,22 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 @Getter
-public enum PaymentWay {
+public enum WithdrawState {
 
     /**
      * 免费
      */
-    FREE(0),
+    WAITING_PROCESS(0),
     /**
      * 按量计费
      */
-    PAY_AS_YOU_GO(1),
+    FINISH(1),
     /**
      * 包月
      */
-    MONTH(2);
+    REJECT(2);
 
-    PaymentWay(int code) {
+    WithdrawState(int code) {
         this.code = code;
     }
 

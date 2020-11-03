@@ -119,7 +119,7 @@ public class PayService implements IPayService {
         // 设置店铺资金和记录
         long money = order.get().getRealPrice().longValue();
         long afterMoney = balanceService.add(order.get().getStoreId(), money);
-        balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), money);
+        balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), order.get().getNumber(), money);
 
         // 系统是否允许自动接单
         Setting orderAutoReceive = settingService.getSettingByName(order.get().getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
