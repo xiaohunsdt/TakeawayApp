@@ -16,7 +16,7 @@
   color: black;
 }
 
-.container-contain .exchange-btn{
+.container-contain .exchange-btn {
   background: white;
   color: #FFD200;
   box-shadow: 0 5px 25px 0 rgba(0, 0, 0, .13);
@@ -65,11 +65,20 @@ van-icon {
 }
 
 .info .description {
+  font-size: 46rpx;
+  position: relative;
+  z-index: 100;
   font-weight: bolder;
 }
 
-.info .endDate {
+.info .belong {
   margin-top: 20rpx;
+  color: #999999;
+  font-size: 20rpx;
+}
+
+.info .endDate {
+  margin-top: 5rpx;
   color: #999999;
   font-size: 20rpx;
 }

@@ -1,3 +1,5 @@
+<wxs src="./tools.wxs" module="tools" />
+
 <view style="display: unset">
 	<view class="container" wx:if="{{couponList.length > 0}}">
 		<view class="gradientview"></view>
@@ -9,7 +11,10 @@
 				<view class="coupon-item">
 					<view class="info">
 						<view class="description">{{coupon.couponName}}</view>
-						<van-tag color="#FFD200">{{couponType}}</van-tag>
+						<van-tag color="#FFD200">{{ tools.formatCouponType(coupon.couponType) }}</van-tag>
+						<view class="belong">
+							{{coupon.belong!==''?coupon.belong:'任意店铺'}} 可用
+						</view>
 						<view class="endDate">
 							有限期至
 							<span wx:if="{{coupon.expireDate!==''}}">{{coupon.expireDate}}</span>
