@@ -1,0 +1,17 @@
+function formatCouponType(type) {
+  var str = ''
+  switch (type) {
+    case 'MONEY':
+      str = '现金卷'
+      break
+    case 'DISCOUNT':
+      str = '折扣卷'
+      break
+  }
+
+  return str
+}
+
+module.exports = {
+  formatCouponType: formatCouponType
+};
