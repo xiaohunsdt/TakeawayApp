@@ -9,6 +9,11 @@
     <el-row :gutter="30" style="margin-top: 30px;padding: 0 15px">
       <el-col :lg="8" :sm="24" :xs="24">
         <base-card>
+          <simple-store-card />
+        </base-card>
+      </el-col>
+      <el-col :lg="8" :sm="24" :xs="24">
+        <base-card>
           <pie-chart v-if="dashboardData" :dashboardData="dashboardData"/>
         </base-card>
       </el-col>
@@ -38,6 +43,7 @@ import PanelGroup2 from './components/PanelGroup2'
 import LineChart from './components/LineChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
+import SimpleStoreCard from './components/SimpleStoreCard'
 import OrderNaverMap from '@v/order/components/OrderNaverMap'
 
 export default {
@@ -49,6 +55,7 @@ export default {
     LineChart,
     PieChart,
     BarChart,
+    SimpleStoreCard,
     OrderNaverMap
   },
   data() {
