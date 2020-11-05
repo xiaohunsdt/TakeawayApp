@@ -144,6 +144,11 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
         // 没有这个优惠卷
         coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
 
+        // 这个优惠券不属于本店
+        if (coupon.get().getStoreId() != 0 && !coupon.get().getStoreId().equals(order.getStoreId())) {
+            throw new SysException(CouponExceptionEnum.NOT_BELONG_STORE);
+        }
+
         // 此优惠卷不可用
         if (coupon.get().getState() != CouponState.UN_USE) {
             throw new SysException(CouponExceptionEnum.COUPON_CAN_NOT_BE_USED);
