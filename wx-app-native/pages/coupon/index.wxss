@@ -65,6 +65,9 @@ van-icon {
 }
 
 .info .description {
+  font-size: 46rpx;
+  position: relative;
+  z-index: 100;
   font-weight: bolder;
 }
 
