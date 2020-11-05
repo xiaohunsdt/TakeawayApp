@@ -1,39 +1,42 @@
 <template>
   <el-dialog
-      :close-on-click-modal="false"
-      :lock-scroll="false"
-      :modal-append-to-body="false"
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      class="simple-order-dialog"
-      size="mini"
-      width="800px">
+    :close-on-click-modal="false"
+    :lock-scroll="false"
+    :modal-append-to-body="false"
+    :title="title"
+    :visible.sync="dialogFormVisible"
+    class="simple-order-dialog"
+    size="mini"
+    width="800px">
     <el-table
-        v-loading="listLoading"
-        :data="tableData"
-        class="tb-edit"
-        element-loading-text="正在加载中..."
-        highlight-current-row
-        stripe
-        style="width: 100%"
-        @expand-change="getOrderDetail">
+      v-loading="listLoading"
+      :data="tableData"
+      class="tb-edit"
+      element-loading-text="正在加载中..."
+      highlight-current-row
+      stripe
+      style="width: 100%"
+      @expand-change="getOrderDetail">
       <el-table-column type="expand">
         <template v-slot="props">
           <div v-if="props.row.detail.hasOwnProperty('address')" class="order-expand">
             <el-table
-                :data="props.row.detail.orderItemList"
-                :show-header="false"
-                stripe
-                style="width: 100%">
-              <el-table-column
-                  prop="goodsName">
+              :data="props.row.detail.orderItemList"
+              :show-header="false"
+              stripe
+              style="width: 100%">
+              <el-table-column>
+                <template v-slot="scope">
+                  {{ scope.row.produceName }}
+                  <el-tag v-if="scope.row.goodsTitle!==''" effect="dark" size="mini">{{ scope.row.goodsTitle }}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column>
                 <template v-slot="scope">
                   <img
-                      v-if="scope.row.goodsThumb!==''"
-                      :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
-                      style="height: 30px;width: auto;"/>
+                    v-if="scope.row.goodsThumb!==''"
+                    :src="$VUE_APP_BASE_API + scope.row.goodsThumb"
+                    style="height: 30px;width: auto;"/>
                 </template>
               </el-table-column>
               <el-table-column>
@@ -84,42 +87,42 @@
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="单号"
-          prop="number"
-          width="60">
+        align="center"
+        label="单号"
+        prop="number"
+        width="60">
       </el-table-column>
       <el-table-column
-          align="center"
-          label="用户">
+        align="center"
+        label="用户">
         <template v-slot="props">
           <div>{{ props.row.userName }}</div>
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="商品数量"
-          prop="goodsCount"
-          width="80">
+        align="center"
+        label="商品数量"
+        prop="goodsCount"
+        width="80">
       </el-table-column>
       <el-table-column
-          align="center"
-          label="总金额"
-          prop="allPrice">
+        align="center"
+        label="总金额"
+        prop="allPrice">
         <template v-slot="scope">
           <div>₩ {{ scope.row.allPrice.toLocaleString() }}</div>
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="实际金额">
+        align="center"
+        label="实际金额">
         <template v-slot="scope">
           <div>₩ {{ scope.row.realPrice.toLocaleString() }}</div>
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="支付状态">
+        align="center"
+        label="支付状态">
         <template v-slot="scope">
           <el-tag v-if="scope.row.payState === 'PAID'" type="success">
             {{ scope.row.payState | payStateFormat }}
@@ -133,8 +136,8 @@
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="订单状态">
+        align="center"
+        label="订单状态">
         <template v-slot="scope">
           <el-tag v-if="scope.row.orderState === 'FINISHED'" type="success">
             {{ scope.row.orderState | orderStateFormat }}
@@ -154,21 +157,21 @@
         </template>
       </el-table-column>
       <el-table-column
-          align="center"
-          label="创建时间"
-          prop="createDate">
+        align="center"
+        label="创建时间"
+        prop="createDate">
       </el-table-column>
     </el-table>
     <el-pagination
-        :current-page="page.current"
-        :page-size="page.size"
-        :page-sizes="[10, 50, 100]"
-        :total="page.total"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        style="margin-top: 15px"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange">
+      :current-page="page.current"
+      :page-size="page.size"
+      :page-sizes="[10, 50, 100]"
+      :total="page.total"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      style="margin-top: 15px"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange">
     </el-pagination>
   </el-dialog>
 </template>
@@ -233,26 +236,26 @@ export default {
       params.endDate = nowStr
 
       orderApi.getOrderListByPage(this.page, params)
-          .then(response => {
-            const datas = response.records
-            datas.forEach(item => {
-              item.detail = {}
-            })
-            this.tableData = datas
-            this.page.total = parseInt(response.total)
+        .then(response => {
+          const datas = response.records
+          datas.forEach(item => {
+            item.detail = {}
           })
-          .finally(() => {
-            this.listLoading = false
-          })
+          this.tableData = datas
+          this.page.total = parseInt(response.total)
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     async getOrderDetail(row, expandedRows) {
       const currentRow = expandedRows.find(item => item.id === row.id)
       // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
       if (currentRow !== undefined) {
         await orderApi.getOrderDetail(row.id)
-            .then(response => {
-              this.$set(currentRow, 'detail', response)
-            })
+          .then(response => {
+            this.$set(currentRow, 'detail', response)
+          })
       }
     },
     openDialog(orderState, paymentWay) {

@@ -29,6 +29,7 @@ public class CouponLogService extends ServiceImpl<ICouponLogDao, CouponLog> impl
         couponLog.setUserId(order.getUserId());
         couponLog.setCouponId(coupon.getId());
         couponLog.setOrderId(order.getId());
+        couponLog.setStoreId(coupon.getStoreId());
         couponLog.setCouponAmount(order.getDiscountedPrices());
         couponLog.setOrderOriginalAmount(order.getAllPrice());
         couponLog.setOrderFinalAmount(order.getRealPrice());

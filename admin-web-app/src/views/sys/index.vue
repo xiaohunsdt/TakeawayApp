@@ -57,7 +57,7 @@
               </el-upload>
             </el-form-item>
             <el-form-item label="店铺二维码" size="small">
-              <el-button @click="onDownloadQrCode" size="small" type="primary">下载店铺二维码</el-button>
+              <el-button size="small" type="primary" @click="onDownloadQrCode">下载店铺二维码</el-button>
             </el-form-item>
             <el-form-item label="运营周期" size="small">
               <el-checkbox-group v-model="storeSetting.store_open_date" size="mini">

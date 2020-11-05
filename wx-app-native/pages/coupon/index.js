@@ -45,9 +45,15 @@ Page({
     if (pages.length > 2 && pages[pages.length - 2].route === 'pages/buy/index') {
       wx.navigateBack()
     } else {
-      wx.switchTab({
-        url: '/pages/goods/index'
-      })
+      if (event.currentTarget.dataset.coupon.storeId !== 0) {
+        wx.navigateTo({
+          url: `/pages/goods/index?storeId=${event.currentTarget.dataset.coupon.storeId}`
+        })
+      } else {
+        wx.switchTab({
+          url: '/pages/index/index'
+        })
+      }
     }
   },
   onExchangeCouponIdChange(event) {

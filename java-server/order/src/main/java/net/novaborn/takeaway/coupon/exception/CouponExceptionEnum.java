@@ -16,7 +16,7 @@ public enum CouponExceptionEnum implements ServiceExceptionEnum {
     HAD_BOUND(5002, "此优惠卷已经被绑定！"),
     COUPON_CAN_NOT_BE_USED(5003, "此优惠卷不可用"),
     DO_NOT_MEET_MINI_AMOUNT_REQUIREMENTS(5004, "订单总金额不满足此优惠卷最低使用要求"),
-    NOT_BELONG_STORE(5004, "此优惠卷不属于本店,无法使用!请核查!"),
+    NOT_BELONG_STORE(5004, "此优惠卷不属于本店,无法使用!"),
     UNKNOWN_ERROR(500, "未知错误!!!");
 
     CouponExceptionEnum(int code, String message) {
