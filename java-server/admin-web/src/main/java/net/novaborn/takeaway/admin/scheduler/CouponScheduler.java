@@ -38,7 +38,7 @@ public class CouponScheduler {
                     // 把已经过期的全部过滤出来
                     if (coupon.getExpireDate() != null && DateUtil.compare(coupon.getExpireDate(), current) <= 0) {
                         coupon.setState(CouponState.EXPIRED);
-                        coupon.updateById();
+                        couponService.updateById(coupon);
                         return false;
                     }
                     return true;

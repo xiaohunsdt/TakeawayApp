@@ -66,7 +66,7 @@ public class WxController extends BaseController {
 
         BeanUtil.copyProperties(wxUserInfoVo, user.get(), CopyOptions.create().setIgnoreNullValue(true));
         user.get().setAvatar(wxUserInfoVo.getAvatarUrl());
-        return user.get().updateById() ? new SuccessTip() : new ErrorTip(-1, "设置用户信息失败");
+        return userService.updateById(user.get()) ? new SuccessTip() : new ErrorTip(-1, "设置用户信息失败");
 
     }
 }

@@ -11,6 +11,7 @@ import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
 import net.novaborn.takeaway.goods.service.IProduceService;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,17 +72,17 @@ public class ProduceService extends ServiceImpl<IProduceDao, Produce> implements
             if (allGoodsCount == availableGoodsCount) {
                 if (produce.getState() == ProduceState.SHORTAGE || produce.getState() == ProduceState.PART_SHORTAGE) {
                     produce.setState(ProduceState.ON);
-                    produce.updateById();
+                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
                 }
             } else if (availableGoodsCount == 0) {
                 if (produce.getState() != ProduceState.SHORTAGE) {
                     produce.setState(ProduceState.SHORTAGE);
-                    produce.updateById();
+                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
                 }
             } else if (allGoodsCount > availableGoodsCount) {
                 if (produce.getState() != ProduceState.PART_SHORTAGE) {
                     produce.setState(ProduceState.PART_SHORTAGE);
-                    produce.updateById();
+                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
                 }
             }
         }

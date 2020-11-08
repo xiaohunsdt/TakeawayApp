@@ -123,7 +123,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.FINISHED);
-        order.get().updateById();
+        orderService.updateById(order.get());
         return new SuccessTip();
     }
 
@@ -170,7 +170,7 @@ public class OrderController extends BaseController {
             if (orderDto.getCouponId() != null && orderDto.getCouponId() != null) {
                 Coupon coupon = couponService.getById(orderDto.getCouponId());
                 coupon.setState(CouponState.USED);
-                coupon.updateById();
+                couponService.updateById(coupon);
 
                 // 添加优惠卷使用记录
                 couponLogService.makeNewCouponLog(order, coupon);
@@ -209,7 +209,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setIsCommented(true);
-        order.get().updateById();
+        orderService.updateById(order.get());
 
         return new SuccessTip();
     }

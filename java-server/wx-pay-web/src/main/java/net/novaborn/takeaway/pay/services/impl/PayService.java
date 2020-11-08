@@ -99,7 +99,7 @@ public class PayService implements IPayService {
                 if (order.get().getPayState() != PayState.PAID) {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
-                    order.get().updateById();
+                    orderService.updateById(order.get());
                 } else {
                     throw new SysException(PayExceptionEnum.PAY_PAID_ERROR);
                 }

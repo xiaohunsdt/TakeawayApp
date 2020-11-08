@@ -26,6 +26,7 @@ import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.PaymentWay;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -129,7 +130,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
             coupon.get().setExpireDate(DateUtil.offsetSecond(new Date(), (int) diffent));
         }
         coupon.get().setUserId(userId);
-        return coupon.get().updateById();
+        return ((CouponService)AopContext.currentProxy()).updateById(coupon.get());
     }
 
     @Override

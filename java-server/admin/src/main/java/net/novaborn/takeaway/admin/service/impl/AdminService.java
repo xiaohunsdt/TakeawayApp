@@ -11,6 +11,7 @@ import net.novaborn.takeaway.admin.exception.AdminExceptionEnum;
 import net.novaborn.takeaway.admin.service.IAdminService;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,7 @@ public class AdminService extends ServiceImpl<IAdminDao, Admin> implements IAdmi
         }
 
         admin.get().setLoginDate(new Date());
-        admin.get().updateById();
+        ((AdminService)AopContext.currentProxy()).updateById(admin.get());
         return true;
     }
 

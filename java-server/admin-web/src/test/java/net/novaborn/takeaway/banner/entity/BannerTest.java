@@ -27,6 +27,6 @@ public class BannerTest {
     public void updateTest() {
         Banner banner = bannerService.getById("8fcc7d8112e6ec41b164bb1221a76c1c");
         banner.setTitle("cvbcvb");
-        banner.updateById();
+        bannerService.updateById(banner);
     }
 }
