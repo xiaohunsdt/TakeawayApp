@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.goods.dao.IProduceDao;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
+import net.novaborn.takeaway.goods.exception.ProduceServiceException;
 import net.novaborn.takeaway.goods.service.IProduceService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ProduceService extends ServiceImpl<IProduceDao, Produce> implements
     @Override
     public boolean updateById(Produce entity) {
         if (!super.updateById(entity)) {
-            throw new SysException(GoodsExceptionEnum.UPDATE_FAILED);
+            throw new ProduceServiceException(GoodsExceptionEnum.UPDATE_FAILED);
         }
 
         return true;
@@ -72,17 +72,17 @@ public class ProduceService extends ServiceImpl<IProduceDao, Produce> implements
             if (allGoodsCount == availableGoodsCount) {
                 if (produce.getState() == ProduceState.SHORTAGE || produce.getState() == ProduceState.PART_SHORTAGE) {
                     produce.setState(ProduceState.ON);
-                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
+                    ((ProduceService) AopContext.currentProxy()).updateById(produce);
                 }
             } else if (availableGoodsCount == 0) {
                 if (produce.getState() != ProduceState.SHORTAGE) {
                     produce.setState(ProduceState.SHORTAGE);
-                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
+                    ((ProduceService) AopContext.currentProxy()).updateById(produce);
                 }
             } else if (allGoodsCount > availableGoodsCount) {
                 if (produce.getState() != ProduceState.PART_SHORTAGE) {
                     produce.setState(ProduceState.PART_SHORTAGE);
-                    ((ProduceService)AopContext.currentProxy()).updateById(produce);
+                    ((ProduceService) AopContext.currentProxy()).updateById(produce);
                 }
             }
         }

@@ -14,14 +14,16 @@ import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
-import net.novaborn.takeaway.pay.exception.PayExceptionEnum;
+import net.novaborn.takeaway.pay.enums.PayExceptionEnum;
 import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
+import net.novaborn.takeaway.pay.exception.PayServiceException;
 import net.novaborn.takeaway.pay.services.IPayService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -72,6 +74,7 @@ public class PayService implements IPayService {
         return result;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void confirmPay(Long orderId) {
         WxPayOrderQueryResult result;
@@ -79,9 +82,9 @@ public class PayService implements IPayService {
             result = wxPayService.queryOrder(null, orderId.toString());
         } catch (WxPayException e) {
             log.error(null, e);
-            SysException sysException = new SysException(PayExceptionEnum.QUERY_PAY_ERROR);
-            sysException.setMessage(e.getErrCodeDes());
-            throw sysException;
+            PayServiceException payServiceException = new PayServiceException(PayExceptionEnum.QUERY_PAY_ERROR);
+            payServiceException.setMessage(e.getErrCodeDes());
+            throw payServiceException;
         }
 
         int totalPrice = result.getTotalFee();
@@ -91,7 +94,7 @@ public class PayService implements IPayService {
 
     private void confirmOrder(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
-        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+        order.orElseThrow(() -> new PayServiceException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         // 确认订单已经支付并且支付
         if ("SUCCESS".equals(state)) {
@@ -101,13 +104,13 @@ public class PayService implements IPayService {
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
                 } else {
-                    throw new SysException(PayExceptionEnum.PAY_PAID_ERROR);
+                    throw new PayServiceException(PayExceptionEnum.PAY_PAID_ERROR);
                 }
             } else {
-                throw new SysException(PayExceptionEnum.PAY_PRICE_ERROR);
+                throw new PayServiceException(PayExceptionEnum.PAY_PRICE_ERROR);
             }
         } else {
-            throw new SysException(PayExceptionEnum.PAY_ERROR, state);
+            throw new PayServiceException(PayExceptionEnum.PAY_ERROR, state);
         }
 
         // 系统是否允许自动接单

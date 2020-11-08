@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.pay.exception;
+package net.novaborn.takeaway.pay.enums;
 
 import net.novaborn.takeaway.common.exception.ServiceExceptionEnum;
 

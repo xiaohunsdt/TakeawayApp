@@ -7,9 +7,8 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.goods.dao.IGoodsStockDao;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.GoodsStock;
-import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.GoodsState;
-import net.novaborn.takeaway.goods.enums.ProduceState;
+import net.novaborn.takeaway.goods.exception.GoodsStockException;
 import net.novaborn.takeaway.goods.exception.GoodsStockExceptionEnum;
 import net.novaborn.takeaway.goods.service.IGoodsStockService;
 import org.springframework.aop.framework.AopContext;
@@ -69,7 +68,7 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
         }
 
         if (targetGoodsStock.get().getStock() == 0 || targetGoodsStock.get().getStock() - count < 0) {
-            throw new SysException(GoodsStockExceptionEnum.STOCK_HAD_NONE);
+            throw new GoodsStockException(GoodsStockExceptionEnum.STOCK_HAD_NONE);
         }
 
         targetGoodsStock.get().setStock(targetGoodsStock.get().getStock() - count);
@@ -115,7 +114,7 @@ public class GoodsStockService extends ServiceImpl<IGoodsStockDao, GoodsStock> i
     @Override
     public boolean updateById(GoodsStock entity) {
         if (!super.updateById(entity)) {
-            throw new SysException(GoodsStockExceptionEnum.UPDATE_FAILED);
+            throw new GoodsStockException(GoodsStockExceptionEnum.UPDATE_FAILED);
         }
 
         return true;

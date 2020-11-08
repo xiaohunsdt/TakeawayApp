@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -39,9 +41,9 @@ public class CouponExpiredReceiver {
 
     private CouponService couponService;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Coupon coupon, Channel channel, @Headers Map<String, Object> headers) {
+    @Transactional(rollbackFor = Exception.class)
+    public void process(@Payload Coupon coupon, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.debug("优惠卷过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Coupon target = couponService.getById(coupon.getId());
@@ -59,14 +61,8 @@ public class CouponExpiredReceiver {
                 }
             } else {
                 if (target.getState() != CouponState.EXPIRED) {
-                    try {
-                        target.setState(CouponState.EXPIRED);
-                        couponService.updateById(target);
-                    } catch (Exception e) {
-                        log.error("优惠卷ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
-                        channel.basicReject(deliveryTag, true);
-                        return;
-                    }
+                    target.setState(CouponState.EXPIRED);
+                    couponService.updateById(target);
                 }
             }
         }

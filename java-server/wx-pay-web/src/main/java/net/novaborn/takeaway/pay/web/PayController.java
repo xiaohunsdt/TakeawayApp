@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class PayController extends BaseController {
     private PayService payService;
 
-
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("createPayInfo")

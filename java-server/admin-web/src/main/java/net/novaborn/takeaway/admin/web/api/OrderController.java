@@ -192,9 +192,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.PRODUCING);
-        if (!orderService.updateById(order.get())) {
-            return new ErrorTip(-1, "操作失败!");
-        }
+        orderService.updateById(order.get());
 
         orderSubscribeMessageSender.send(order.get());
         printerUtil.print(order.get());

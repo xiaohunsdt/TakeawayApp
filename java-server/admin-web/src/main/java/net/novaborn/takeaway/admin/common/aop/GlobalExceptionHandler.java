@@ -39,6 +39,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorTip sysException(SysException e) {
+        log.error(null, e);
         return new ErrorTip(e.getCode(), e.getMessage());
     }
 

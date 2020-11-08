@@ -60,6 +60,12 @@ spring:
         acknowledge-mode: manual
         concurrency: 5
         max-concurrency: 10
+        retry:
+          enabled: true
+          max-attempts: 10
+          max-interval: 20000ms
+          initial-interval: 3000ms
+          multiplier: 2
 #  data:
 #    elasticsearch:
 #      repositories:

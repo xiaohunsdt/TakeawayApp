@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -41,19 +43,18 @@ public class OrderSignInReceiver {
     private SignInService signInService;
 
     private CouponService couponService;
+
     private CouponTemplateService couponTemplateService;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.info("订单签到消息队列接收时间: {}", DateUtil.formatDateTime(new Date()));
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        try {
-            Date current = new Date();
-            CouponTemplate couponTemplate;
-            signInService.signIn(order.getUserId(), order.getCreateDate());
-            int signInedCount = signInService.getSignInedCount(order.getUserId(), current, Calendar.MONTH);
+        Date current = new Date();
+        CouponTemplate couponTemplate;
+        signInService.signIn(order.getUserId(), order.getCreateDate());
+        int signInedCount = signInService.getSignInedCount(order.getUserId(), current, Calendar.MONTH);
 //            if (signInedCount == 7) {
 //                int weekOfMonth = DateUtil.weekOfMonth(current);
 //                SignIn signIn = signInService.getSignIn(order.getUserId(), current).get();
@@ -64,28 +65,23 @@ public class OrderSignInReceiver {
 //                    signInService.saveSignIn(signIn.getUserId(), signIn.getCreateDate(), signIn);
 //                }
 //            }
-            switch (signInedCount) {
-                case 7:
-                    couponTemplate = couponTemplateService.getById(1301898254461513729L);
-                    break;
-                case 14:
-                    couponTemplate = couponTemplateService.getById(1315330201966731266L);
-                    break;
-                case 20:
-                    couponTemplate = couponTemplateService.getById(1315330495601565698L);
-                    break;
-                default:
-                    couponTemplate = null;
-                    break;
-            }
+        switch (signInedCount) {
+            case 7:
+                couponTemplate = couponTemplateService.getById(1301898254461513729L);
+                break;
+            case 14:
+                couponTemplate = couponTemplateService.getById(1315330201966731266L);
+                break;
+            case 20:
+                couponTemplate = couponTemplateService.getById(1315330495601565698L);
+                break;
+            default:
+                couponTemplate = null;
+                break;
+        }
 
-            if (couponTemplate != null) {
-                couponService.generateCoupon(couponTemplate, order.getUserId());
-            }
-        } catch (Exception e) {
-            log.error("订单ID: {},设置订单签到失败!重新方式队列中!!", order.getId());
-            channel.basicReject(deliveryTag, true);
-            return;
+        if (couponTemplate != null) {
+            couponService.generateCoupon(couponTemplate, order.getUserId());
         }
 
         channel.basicAck(deliveryTag, false);

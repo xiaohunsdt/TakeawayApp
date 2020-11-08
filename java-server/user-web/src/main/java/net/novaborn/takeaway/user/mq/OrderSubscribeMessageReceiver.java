@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -40,9 +42,8 @@ public class OrderSubscribeMessageReceiver {
 
     private WxSubscrubeMessageUtil wxSubscrubeMessageUtil;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.info("订单订阅消息队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Order target = orderService.getById(order.getId());

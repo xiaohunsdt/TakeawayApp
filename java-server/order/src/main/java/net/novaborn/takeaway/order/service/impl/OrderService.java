@@ -1,15 +1,12 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
-import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
@@ -18,13 +15,14 @@ import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
+import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.exception.OrderServiceException;
 import net.novaborn.takeaway.order.service.IOrderService;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -59,6 +57,15 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //        gifts = new ArrayList<>();
 //        gifts.add(goodsService.getById(1308791764220502017L));
 //    }
+
+    @Override
+    public boolean updateById(Order entity) {
+        if (!super.updateById(entity)) {
+            throw new OrderServiceException(OrderExceptionEnum.UPDATE_FAILED);
+        }
+
+        return true;
+    }
 
     @Override
     public Optional<Order> getById(Long orderId, boolean isShowDeleted) {
