@@ -31,45 +31,45 @@
     </base-card>
     <base-card class="container-main">
       <el-table
-          v-loading="listLoading"
-          :data="tableData"
-          class="tb-edit"
-          element-loading-text="正在加载中..."
-          highlight-current-row
-          stripe
-          style="width: 100%">
+        v-loading="listLoading"
+        :data="tableData"
+        class="tb-edit"
+        element-loading-text="正在加载中..."
+        highlight-current-row
+        stripe
+        style="width: 100%">
         <el-table-column
-            align="center"
-            label="ID"
-            prop="id"
-            width="200"/>
+          align="center"
+          label="ID"
+          prop="id"
+          width="200"/>
         <el-table-column
-            align="center"
-            label="账号"
-            prop="userName"
-            width="200"/>
+          align="center"
+          label="账号"
+          prop="userName"
+          width="200"/>
         <el-table-column
-            align="center"
-            label="级别"
-            prop="level"
-            width="200"/>
+          align="center"
+          label="级别"
+          prop="level"
+          width="200"/>
         <el-table-column
-            align="center"
-            label="所属店铺"
-            prop="belong"
-            width="200"/>
+          align="center"
+          label="所属店铺"
+          prop="belong"
+          width="200"/>
         <el-table-column
-            align="center"
-            label="状态"
-            prop="state"
-            width="200"/>
+          align="center"
+          label="状态"
+          prop="state"
+          width="200"/>
         <el-table-column
-            align="center"
-            label="最后登陆时间"
-            prop="loginDate"/>
+          align="center"
+          label="最后登陆时间"
+          prop="loginDate"/>
         <el-table-column
-            align="center"
-            label="操作">
+          align="center"
+          label="操作">
           <template v-slot="props">
             <el-button size="mini" type="primary" @click="onEdit(props.row.id)">编辑</el-button>
             <!--            <el-button @click="onDelete(props.row.id)" size="mini" type="danger">删除</el-button>-->
@@ -77,15 +77,15 @@
         </el-table-column>
       </el-table>
       <el-pagination
-          :current-page="page.current"
-          :page-size="page.size"
-          :page-sizes="[15, 50, 100]"
-          :total="page.total"
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          style="margin-top: 15px"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange">
+        :current-page="page.current"
+        :page-size="page.size"
+        :page-sizes="[15, 50, 100]"
+        :total="page.total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top: 15px"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
     <admin-dialog ref="admin-dialog" @updated-admin="onUpdatedAdmin"/>
@@ -125,13 +125,13 @@ export default {
     getList() {
       this.listLoading = true
       adminApi.getSubAdminByPage(this.page, this.formData)
-          .then(response => {
-            this.tableData = response.records
-            this.page.total = parseInt(response.total)
-          })
-          .finally(() => {
-            this.listLoading = false
-          })
+        .then(response => {
+          this.tableData = response.records
+          this.page.total = parseInt(response.total)
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     handleSizeChange(val) {
       this.page.size = val

@@ -139,7 +139,7 @@ public class AdminController extends BaseController {
         }
 
         BeanUtil.copyProperties(admin, target, CopyOptions.create().setIgnoreNullValue(true));
-        target.updateById();
+        adminService.updateById(target);
         return new SuccessTip();
     }
 

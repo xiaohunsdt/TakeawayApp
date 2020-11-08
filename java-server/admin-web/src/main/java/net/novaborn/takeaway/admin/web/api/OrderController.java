@@ -64,10 +64,6 @@ public class OrderController extends BaseController {
 
     private OrderItemService orderItemService;
 
-    private BalanceService balanceService;
-
-    private BalanceLogService balanceLogService;
-
     private SettingService settingService;
 
     private WechatAutoTask wechatAutoTask;
@@ -157,7 +153,7 @@ public class OrderController extends BaseController {
         }
         BeanUtil.copyProperties(order, targetOrder.get(), CopyOptions.create().setIgnoreNullValue(true));
 
-        if (!targetOrder.get().updateById()) {
+        if (!orderService.updateById(targetOrder.get())) {
             return new ErrorTip(-1, "操作失败!");
         }
         return new SuccessTip();
@@ -174,7 +170,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setPayState(PayState.PAID);
-        if (!order.get().updateById()) {
+        if (!orderService.updateById(order.get())) {
             return new ErrorTip(-1, "操作失败!");
         }
 
@@ -198,7 +194,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.PRODUCING);
-        if (!order.get().updateById()) {
+        if (!orderService.updateById(order.get())) {
             return new ErrorTip(-1, "操作失败!");
         }
 
@@ -221,7 +217,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.DELIVERING);
-        if (!order.get().updateById()) {
+        if (!orderService.updateById(order.get())) {
             return new ErrorTip(-1, "操作失败!");
         }
 
@@ -253,7 +249,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.FINISHED);
-        if (!order.get().updateById()) {
+        if (!orderService.updateById(order.get())) {
             return new ErrorTip(-1, "操作失败!");
         }
 
@@ -281,8 +277,7 @@ public class OrderController extends BaseController {
         // 设置配送信息
         Optional<Delivery> delivery = deliveryService.getByOrderId(orderId);
         delivery.get().setFinishDate(new Date());
-        delivery.get().updateById();
-
+        deliveryService.updateById(delivery.get());
         orderSubscribeMessageSender.send(order.get());
         return new SuccessTip();
     }
@@ -300,7 +295,7 @@ public class OrderController extends BaseController {
         }
 
         order.get().setOrderState(OrderState.REFUND);
-        if (!order.get().updateById()) {
+        if (!orderService.updateById(order.get())) {
             // 恢复库存
             orderItemService.selectByOrderId(orderId).parallelStream().forEach(item -> {
                 Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));

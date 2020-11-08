@@ -57,8 +57,7 @@
             AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
         </if>
         <if test="args.appointmentStartDate !=null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
-            AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND
-            DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
+            AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
         </if>
         <if test="args.showDelete == 0">
             AND deleted = 0
@@ -87,10 +86,10 @@
     </select>
 
     <sql id="common_get_waiting_receive_order">
-        <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
+        <if test="deliveryType == @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
             AND `appointment_date` is null
         </if>
-        <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
+        <if test="deliveryType == @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
             AND `appointment_date` is not null
         </if>
         AND `pay_state` &lt;&gt; 0
@@ -158,9 +157,9 @@
             <include refid="common_order_list_where_u"/>
             AND
             (
-                TO_DAYS(create_date) = TO_DAYS(NOW())
-                OR
-                (appointment_date IS NOT NULL AND TO_DAYS(appointment_date) = TO_DAYS(NOW()))
+            TO_DAYS(create_date) = TO_DAYS(NOW())
+            OR
+            (appointment_date IS NOT NULL AND TO_DAYS(appointment_date) = TO_DAYS(NOW()))
             )
         </where>
         ORDER BY `create_date` DESC

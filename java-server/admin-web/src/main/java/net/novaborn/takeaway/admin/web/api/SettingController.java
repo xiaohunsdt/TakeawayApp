@@ -119,7 +119,7 @@ public class SettingController extends BaseController {
 
             if ("max_delivery_distance".equals(key)) {
                 store.setMaxDeliveryDistance(Integer.valueOf((String) value));
-                store.updateById();
+                storeService.updateById(store);
             }
 
             setting.setKey(key);

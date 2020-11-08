@@ -41,7 +41,7 @@
           label="金额">
           <template v-slot="props">
             <el-tag :type="props.row.money > 0 ? 'success':'danger'">
-              {{ props.row.money.toLocaleString() }}
+              {{ parseInt(props.row.money).toLocaleString() }}
             </el-tag>
           </template>
         </el-table-column>
@@ -49,7 +49,7 @@
           align="center"
           label="变更后资金">
           <template v-slot="props">
-            {{ props.row.afterMoney.toLocaleString() }}
+            {{ parseInt(props.row.afterMoney).toLocaleString() }}
           </template>
         </el-table-column>
       </el-table>
@@ -110,7 +110,7 @@ export default {
       params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
       params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
-      balanceApi.getListByPage(this.page, params)
+      balanceApi.getBalanceLogListByPage(this.page, params)
         .then(response => {
           this.tableData = response.records
           this.page.total = parseInt(response.total)

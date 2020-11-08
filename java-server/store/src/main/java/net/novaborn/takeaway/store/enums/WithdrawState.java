@@ -7,17 +7,24 @@ import lombok.Getter;
 public enum WithdrawState {
 
     /**
-     * 免费
+     * 等待处理
      */
     WAITING_PROCESS(0),
+
     /**
-     * 按量计费
+     * 完成
      */
     FINISH(1),
+
     /**
-     * 包月
+     * 拒绝
      */
-    REJECT(2);
+    REJECT(2),
+
+    /**
+     * 取消
+     */
+    CANCEL(3);
 
     WithdrawState(int code) {
         this.code = code;

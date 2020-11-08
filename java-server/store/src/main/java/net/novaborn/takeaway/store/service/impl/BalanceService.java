@@ -8,6 +8,7 @@ import net.novaborn.takeaway.store.dao.IBalanceDao;
 import net.novaborn.takeaway.store.entity.Balance;
 import net.novaborn.takeaway.store.exception.StoreBalanceExceptionEnum;
 import net.novaborn.takeaway.store.service.IBalanceService;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class BalanceService extends ServiceImpl<IBalanceDao, Balance> implements
         }
 
         balance.setMoney(balance.getMoney() + money);
-        balance.updateById();
+        ((BalanceService) AopContext.currentProxy()).updateById(balance);
         return balance.getMoney();
     }
 
@@ -53,7 +54,7 @@ public class BalanceService extends ServiceImpl<IBalanceDao, Balance> implements
         }
 
         balance.setMoney(balance.getMoney() - money);
-        balance.updateById();
+        ((BalanceService) AopContext.currentProxy()).updateById(balance);
         return balance.getMoney();
     }
 }

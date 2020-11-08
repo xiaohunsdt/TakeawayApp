@@ -65,7 +65,7 @@ public class CouponExpiredReceiver {
                 if (target.getState() != CouponState.EXPIRED) {
                     try {
                         target.setState(CouponState.EXPIRED);
-                        target.updateById();
+                        couponService.updateById(target);
                     } catch (Exception e) {
                         log.error("优惠卷ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
                         channel.basicReject(deliveryTag, true);

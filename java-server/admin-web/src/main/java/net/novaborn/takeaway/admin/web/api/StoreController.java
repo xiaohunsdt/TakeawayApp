@@ -99,7 +99,7 @@ public class StoreController extends BaseController {
         Store target = storeService.getById(store.getId());
         BeanUtil.copyProperties(store, target, CopyOptions.create().setIgnoreNullValue(true));
 
-        target.updateById();
+        storeService.updateById(target);
         return new SuccessTip();
     }
 }

@@ -297,7 +297,7 @@ export const asyncRoutes = [
                 path: 'withdraw',
                 name: 'WithdrawManagement',
                 component: () => import('@/views/balance/withdraw'),
-                meta: { title: '提现管理', icon: 'setting', roles: ['SHOP_MANAGER'] }
+                meta: { title: '提现管理', icon: 'setting', roles: ['SUPER_MANAGER', 'SHOP_MANAGER'] }
             }
         ]
     },

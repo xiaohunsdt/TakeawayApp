@@ -17,7 +17,12 @@ public enum StoreBalanceExceptionEnum implements ServiceExceptionEnum {
     /**
      * 店铺不存在
      */
-    NOT_EXIST(500, "不存在!");
+    NOT_EXIST(500, "不存在!"),
+
+    /**
+     * 余额不足
+     */
+    HAVE_NO_ENOUGH_BALANCE(500, "余额不足!");
 
     StoreBalanceExceptionEnum(int code, String message) {
         this.code = code;
@@ -45,4 +50,4 @@ public enum StoreBalanceExceptionEnum implements ServiceExceptionEnum {
     public void setMessage(String message) {
         this.message = message;
     }
-    }
+}

@@ -86,7 +86,7 @@ public class AddressController extends BaseController {
 //            address.setY(coordinate.getY());
 //        }
         BeanUtil.copyProperties(address, target, CopyOptions.create().setIgnoreNullValue(true));
-        target.updateById();
+        addressService.updateById(target);
         return new SuccessTip();
     }
 

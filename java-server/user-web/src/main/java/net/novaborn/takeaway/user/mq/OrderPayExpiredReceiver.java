@@ -59,7 +59,7 @@ public class OrderPayExpiredReceiver {
         if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
             try {
                 target.setOrderState(OrderState.EXPIRED);
-                target.updateById();
+                orderService.updateById(target);
 
                 // 恢复库存
                 orderItemService.selectByOrderId(order.getId()).parallelStream().forEach(item -> {

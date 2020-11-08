@@ -1,6 +1,5 @@
 package net.novaborn.takeaway.admin.common.aop;
 
-import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.ConstraintViolationException;
 
 /**
  * 全局的的异常拦截器（拦截所有的控制器）（带有@RequestMapping注解的方法上都会拦截）
@@ -47,8 +48,8 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorTip handleBindException(BindException e) {
         return new ErrorTip(
-                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
-                e.getFieldError().getDefaultMessage()
+            SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+            e.getFieldError().getDefaultMessage()
         );
     }
 
@@ -57,8 +58,18 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorTip handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return new ErrorTip(
-                SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
-                e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+            SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+            e.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+        );
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorTip handleConstraintViolationException(ConstraintViolationException e) {
+        return new ErrorTip(
+            SysExceptionEnum.ARGUMENT_VALID_ERROR.getCode(),
+            e.getConstraintViolations().stream().findFirst().get().getMessageTemplate()
         );
     }
 
