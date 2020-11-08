@@ -52,7 +52,7 @@ public class WxValidator implements IReqValidator {
 
             //设置最后登陆时间
             user.get().setLastLoginDate(new Date());
-            user.get().updateById();
+            userService.updateById(user.get());
 
             //将 openId 和 sessionkey 保存在redis中
             ((WxAuthRequest) credence).setOpenId(session.getOpenid());

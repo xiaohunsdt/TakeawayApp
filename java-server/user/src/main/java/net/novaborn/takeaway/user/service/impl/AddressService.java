@@ -59,13 +59,13 @@ public class AddressService extends ServiceImpl<IAddressDao, Address> implements
         defaultAddress.ifPresent((address)->{
             if (!address.getId().equals(addressId)) {
                 address.setIsDefault(false);
-                address.updateById();
+                addressService.updateById(defaultAddress.get());
             }
         });
 
         // 把参数实例设置成默认地址
         Address target = addressService.getById(addressId);
         target.setIsDefault(true);
-        return target.updateById();
+        return addressService.updateById(target);
     }
 }

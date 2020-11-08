@@ -278,6 +278,7 @@ public class OrderController extends BaseController {
         Optional<Delivery> delivery = deliveryService.getByOrderId(orderId);
         delivery.get().setFinishDate(new Date());
         deliveryService.updateById(delivery.get());
+
         orderSubscribeMessageSender.send(order.get());
         return new SuccessTip();
     }

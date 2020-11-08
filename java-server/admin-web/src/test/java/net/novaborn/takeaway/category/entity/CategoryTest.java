@@ -26,6 +26,6 @@ public class CategoryTest {
     public void updateAdminTest() {
         Category category = categoryService.getById("8410fe3eac3dd72c7b0aeb4f24cc05a8");
         category.setName("素菜小炒");
-        category.updateById();
+        categoryService.updateById(category);
     }
 }
