@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -48,32 +50,26 @@ public class OrderPayExpiredReceiver {
 
     private GoodsStockService goodsStockService;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
+    @Transactional(rollbackFor = Exception.class)
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.info("订单过期队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
         if (target != null && target.getPayState() == PayState.UN_PAY && target.getOrderState() != OrderState.EXPIRED) {
-            try {
-                target.setOrderState(OrderState.EXPIRED);
-                orderService.updateById(target);
+            target.setOrderState(OrderState.EXPIRED);
+            orderService.updateById(target);
 
-                // 恢复库存
-                orderItemService.selectByOrderId(order.getId()).parallelStream().forEach(item -> {
-                    Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
-                    if (goods.isEmpty()) {
-                        return;
-                    }
-                    goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
-                });
-            } catch (Exception e) {
-                log.error("订单ID: {},设置订单为过期状态失败!重新方式队列中!!", target.getId());
-                channel.basicReject(deliveryTag, true);
-                return;
-            }
+            // 恢复库存
+            orderItemService.selectByOrderId(order.getId()).parallelStream().forEach(item -> {
+                Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
+                if (goods.isEmpty()) {
+                    return;
+                }
+                goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
+            });
         }
 
         channel.basicAck(deliveryTag, false);

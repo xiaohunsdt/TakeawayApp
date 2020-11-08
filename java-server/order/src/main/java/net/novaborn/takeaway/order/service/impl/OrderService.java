@@ -16,6 +16,8 @@ import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
+import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.exception.OrderServiceException;
 import net.novaborn.takeaway.order.service.IOrderService;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -60,6 +62,15 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         gifts.put("鸭翅", goodsService.getFirstByProduceId(1301894884405358594L));
         gifts.put("鸭锁骨", goodsService.getFirstByProduceId(1301894884560547841L));
         gifts.put("鸭脖", goodsService.getFirstByProduceId(1301894883776212994L));
+    }
+
+    @Override
+    public boolean updateById(Order entity) {
+        if (!super.updateById(entity)) {
+            throw new OrderServiceException(OrderExceptionEnum.UPDATE_FAILED);
+        }
+
+        return true;
     }
 
     @Override

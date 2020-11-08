@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -42,9 +44,9 @@ public class OrderAutoReceiveReceiver {
 
     private SysContext sysContext;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
+    @Transactional(rollbackFor = Exception.class)
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.debug("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);

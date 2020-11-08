@@ -3,7 +3,6 @@ package net.novaborn.takeaway.user.mq;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.activity.signin.service.impl.SignInService;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
@@ -19,6 +18,7 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -40,19 +40,18 @@ public class OrderSignInReceiver {
     private SignInService signInService;
 
     private CouponService couponService;
+
     private CouponTemplateService couponTemplateService;
 
-    @SneakyThrows
     @RabbitHandler
-    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) {
+    public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
         log.info("订单签到消息队列接收时间: {}", DateUtil.formatDateTime(new Date()));
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        try {
-            Date current = new Date();
-            CouponTemplate couponTemplate;
-            signInService.signIn(order.getStoreId(), order.getUserId(), order.getCreateDate());
-            int signInedCount = signInService.getSignInedCount(order.getStoreId(), order.getUserId(), current, Calendar.MONTH);
+        Date current = new Date();
+        CouponTemplate couponTemplate;
+        signInService.signIn(order.getStoreId(), order.getUserId(), order.getCreateDate());
+        int signInedCount = signInService.getSignInedCount(order.getStoreId(), order.getUserId(), current, Calendar.MONTH);
 //            if (signInedCount == 7) {
 //                int weekOfMonth = DateUtil.weekOfMonth(current);
 //                SignIn signIn = signInService.getSignIn(order.getUserId(), current).get();
@@ -63,28 +62,22 @@ public class OrderSignInReceiver {
 //                    signInService.saveSignIn(signIn.getUserId(), signIn.getCreateDate(), signIn);
 //                }
 //            }
-            switch (signInedCount) {
-                case 7:
-                    couponTemplate = couponTemplateService.getById(1301898254461513729L);
-                    break;
-                case 14:
-                    couponTemplate = couponTemplateService.getById(1315330201966731266L);
-                    break;
-                case 20:
-                    couponTemplate = couponTemplateService.getById(1315330495601565698L);
-                    break;
-                default:
-                    couponTemplate = null;
-                    break;
-            }
-
-            if (couponTemplate != null) {
-                couponService.generateCoupon(couponTemplate, order.getStoreId(), order.getUserId());
-            }
-        } catch (Exception e) {
-            log.error("订单ID: {},设置订单签到失败!重新方式队列中!!", order.getId());
-            channel.basicReject(deliveryTag, true);
-            return;
+        switch (signInedCount) {
+            case 7:
+                couponTemplate = couponTemplateService.getById(1301898254461513729L);
+                break;
+            case 14:
+                couponTemplate = couponTemplateService.getById(1315330201966731266L);
+                break;
+            case 20:
+                couponTemplate = couponTemplateService.getById(1315330495601565698L);
+                break;
+            default:
+                couponTemplate = null;
+                break;
+        }
+        if (couponTemplate != null) {
+            couponService.generateCoupon(couponTemplate, order.getStoreId(), order.getUserId());
         }
 
         channel.basicAck(deliveryTag, false);

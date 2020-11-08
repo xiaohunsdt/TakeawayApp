@@ -16,6 +16,7 @@ import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.entity.CouponTemplate;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.exception.CouponExceptionEnum;
+import net.novaborn.takeaway.coupon.exception.CouponServiceException;
 import net.novaborn.takeaway.coupon.services.ICouponService;
 import net.novaborn.takeaway.coupon.util.CouponUtil;
 import net.novaborn.takeaway.goods.entity.Produce;
@@ -24,6 +25,8 @@ import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.exception.OrderServiceException;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +52,14 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
 
     private ProduceService produceService;
 
-    private GoodsService goodsService;
+    @Override
+    public boolean updateById(Coupon entity) {
+        if (!super.updateById(entity)) {
+            throw new CouponServiceException(OrderExceptionEnum.UPDATE_FAILED);
+        }
+
+        return true;
+    }
 
     @Override
     public List<Coupon> getCouponListByUserId(Long userId, boolean onlyShowUseAble) {
@@ -114,14 +124,14 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     @Override
     public boolean bindCoupon(Long userId, Long couponId) {
         Optional<Coupon> coupon = Optional.ofNullable(this.baseMapper.selectById(couponId));
-        coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
+        coupon.orElseThrow(() -> new CouponServiceException(CouponExceptionEnum.HAVE_NO_COUPON));
 
         if (coupon.get().getUserId() != null) {
-            throw new SysException(CouponExceptionEnum.HAD_BOUND);
+            throw new CouponServiceException(CouponExceptionEnum.HAD_BOUND);
         }
 
         if (userId == null) {
-            throw new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER);
+            throw new CouponServiceException(SysExceptionEnum.AUTH_HAVE_NO_USER);
         }
 
         if (coupon.get().getExpireDate() != null) {
@@ -136,14 +146,14 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
     public Order getDiscountMoney(Order order, List<OrderItem> orderItems, Long couponId) {
         // 刷卡除外
         if (order.getPaymentWay() == PaymentWay.CREDIT_CARD) {
-            SysException sysException = new SysException(CouponExceptionEnum.UNSUPPORT_PAYMENT_WAY);
+            SysException sysException = new CouponServiceException(CouponExceptionEnum.UNSUPPORT_PAYMENT_WAY);
             sysException.setMessage("此优惠卷不支持刷卡支付");
             throw sysException;
         }
 
         Optional<Coupon> coupon = Optional.ofNullable(this.getById(couponId));
         // 没有这个优惠卷
-        coupon.orElseThrow(() -> new SysException(CouponExceptionEnum.HAVE_NO_COUPON));
+        coupon.orElseThrow(() -> new CouponServiceException(CouponExceptionEnum.HAVE_NO_COUPON));
 
         // 这个优惠券不属于本店
         if (coupon.get().getStoreId() != 0 && !coupon.get().getStoreId().equals(order.getStoreId())) {
@@ -152,7 +162,7 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
 
         // 此优惠卷不可用
         if (coupon.get().getState() != CouponState.UN_USE) {
-            throw new SysException(CouponExceptionEnum.COUPON_CAN_NOT_BE_USED);
+            throw new CouponServiceException(CouponExceptionEnum.COUPON_CAN_NOT_BE_USED);
         }
 
         Map<String, List<String>> couponRules = CouponUtil.getCouponRule(coupon.get());
@@ -176,14 +186,14 @@ public class CouponService extends ServiceImpl<ICouponDao, Coupon> implements IC
                 case MONEY:
                     if (coupon.get().getMinimumMoney() > 0) {
                         if (coupon.get().getMinimumMoney() > needDisCountPrice) {
-                            throw new SysException(CouponExceptionEnum.DO_NOT_MEET_MINI_AMOUNT_REQUIREMENTS);
+                            throw new CouponServiceException(CouponExceptionEnum.DO_NOT_MEET_MINI_AMOUNT_REQUIREMENTS);
                         }
                     }
                     discountedMoney = coupon.get().getCouponMoney();
                     break;
                 case DISCOUNT:
                     if (coupon.get().getMinimumMoney() > needDisCountPrice) {
-                        throw new SysException(CouponExceptionEnum.DO_NOT_MEET_MINI_AMOUNT_REQUIREMENTS);
+                        throw new CouponServiceException(CouponExceptionEnum.DO_NOT_MEET_MINI_AMOUNT_REQUIREMENTS);
                     }
                     discount = coupon.get().getCouponDiscount();
                     discountedMoney = needDisCountPrice * (100 - discount) / 100;
