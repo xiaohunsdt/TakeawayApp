@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import net.novaborn.takeaway.store.enums.WithdrawState;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Data
@@ -16,9 +18,19 @@ public class Withdraw extends Model<Withdraw> {
 
     private Long storeId;
 
-    private Integer money;
+    @Min(value = 5000, message = "申请金额必须大于或等于5000")
+    private Long money;
 
-    private Integer fee;
+    private Long fee;
+
+    @NotBlank(message = "银行必须选择")
+    private String bankName;
+
+    @NotBlank(message = "账户名不能为空")
+    private String accountName;
+
+    @NotBlank(message = "账户不能为空")
+    private String account;
 
     private String ps;
 

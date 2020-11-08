@@ -3,7 +3,6 @@ package net.novaborn.takeaway.admin.web.api;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
-import net.novaborn.takeaway.admin.web.wrapper.OrderWrapper;
 import net.novaborn.takeaway.admin.web.wrapper.WithdrawWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +27,6 @@ import java.util.Optional;
 /**
  * @author xiaohun
  */
-@Validated
 @Controller
 @Setter(onMethod_ = {@Autowired})
 @RequestMapping("/api/admin/store/balance")
@@ -55,8 +52,9 @@ public class StoreBalanceController extends BaseController {
 
     @ResponseBody
     @PostMapping("withdraw/apply")
-    public Tip applyWithdraw(@Min(value = 5000, message = "申请金额必须大于或等于5000") @RequestParam("money") Integer money) {
-        withdrawService.apply(money, sysContext.getCurrentStoreId());
+    public Tip applyWithdraw(@Validated Withdraw withdraw) {
+        withdraw.setStoreId(sysContext.getCurrentStoreId());
+        withdrawService.apply(withdraw);
         return new SuccessTip();
     }
 

@@ -33,11 +33,11 @@
         highlight-current-row
         stripe
         style="width: 100%">
-        <el-table-column
-          align="center"
-          label="ID"
-          prop="id">
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          align="center"-->
+<!--          label="ID"-->
+<!--          prop="id">-->
+<!--        </el-table-column>-->
         <el-table-column
           v-if="userData.level === 'SUPER_MANAGER'"
           align="center"
@@ -57,6 +57,13 @@
           label="手续费">
           <template v-slot="props">
             {{ props.row.fee.toLocaleString() }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="提现通帐">
+          <template v-slot="props">
+            {{ props.row.bankName }}-{{ props.row.account }}-{{ props.row.accountName }}
           </template>
         </el-table-column>
         <el-table-column

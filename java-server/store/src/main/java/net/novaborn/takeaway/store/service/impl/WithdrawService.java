@@ -37,22 +37,19 @@ public class WithdrawService extends ServiceImpl<IWithdrawDao, Withdraw> impleme
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void apply(int money, long storeId) {
-        Balance balance = balanceService.getById(storeId);
-        if (balance.getMoney() < money) {
+    public void apply(Withdraw withdraw) {
+        Balance balance = balanceService.getById(withdraw.getStoreId());
+        if (balance.getMoney() < withdraw.getMoney()) {
             throw new SysException(StoreBalanceExceptionEnum.HAVE_NO_ENOUGH_BALANCE);
         }
 
-        Withdraw withdraw = new Withdraw();
-        withdraw.setStoreId(storeId);
-        withdraw.setMoney(money);
-        withdraw.setFee((int) (money * 0.02));
+        withdraw.setFee((long) (withdraw.getMoney() * 0.02));
 
         if (withdraw.insert()) {
-            balance.setMoney(balance.getMoney() - money);
+            balance.setMoney(balance.getMoney() - withdraw.getMoney());
             balanceService.updateById(balance);
-            
-            balanceLogService.setMoneyLog(storeId, (long) money, balance.getMoney(), 3, money, withdraw.getFee());
+
+            balanceLogService.setMoneyLog(withdraw.getStoreId(), withdraw.getMoney(), balance.getMoney(), 3, withdraw.getMoney(), withdraw.getFee());
         }
     }
 

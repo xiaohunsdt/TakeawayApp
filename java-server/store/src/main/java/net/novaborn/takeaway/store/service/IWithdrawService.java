@@ -25,7 +25,7 @@ public interface IWithdrawService extends IService<Withdraw> {
      * @param money
      * @param storeId
      */
-    void apply(int money, long storeId);
+    void apply(Withdraw withdraw);
 
     /**
      * 分页获取提现记录列表

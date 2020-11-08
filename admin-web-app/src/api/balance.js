@@ -23,12 +23,12 @@ export function getBalanceLogListByPage(page, args) {
     })
 }
 
-export function applyWithdraw(money) {
+export function applyWithdraw(data) {
     return request({
         url: '/store/balance/withdraw/apply',
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        data: { money },
+        data,
         transformRequest: [function(data) {
             data = Qs.stringify(data)
             return data
