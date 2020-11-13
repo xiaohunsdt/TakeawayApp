@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -41,6 +42,12 @@ public class GlobalExceptionHandler {
     public ErrorTip sysException(SysException e) {
         log.error(null, e);
         return new ErrorTip(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ErrorTip mismatchErrorHandler(MethodArgumentTypeMismatchException e) {
+        log.error("方法:{},字段:{},参数:{},错误信息:{}", e.getParameter().getMethod(), e.getName(), e.getValue(), e.getMessage());
+        return new ErrorTip(500, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
