@@ -28,9 +28,10 @@ public class AppointmentTimesDto {
             } while (start.before(end));
         });
 
-        Set<Integer> days = times.stream()
+        List<Integer> days = times.stream()
             .map((time) -> time.getField(DateField.DAY_OF_YEAR))
-            .collect(Collectors.toSet());
+            .distinct()
+            .collect(Collectors.toList());
 
         days.forEach(day -> {
             Map<String, List<Integer>> timeMap = new LinkedHashMap<>();
