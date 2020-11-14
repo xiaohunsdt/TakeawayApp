@@ -1,6 +1,6 @@
 package net.novaborn.takeaway.admin.web.api;
 
-import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.utils.PrinterUtil;
@@ -15,12 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * @author xiaohun
@@ -102,18 +98,33 @@ public class SettingController extends BaseController {
 //                }
 //            }
 
-            if ("sn".equals(key)) {
+            if ("front_sn".equals(key)) {
                 Setting sn = settingService.getSettingByName(key, settingScope);
                 if (sn == null || !sn.getValue().equals(value)) {
-                    printerUtil.addPrinter("test", (String) value);
+                    printerUtil.addPrinter("front_printer", (String) value);
+                }
+            }
+
+            if ("end_sn".equals(key)) {
+                Setting sn = settingService.getSettingByName(key, settingScope);
+                if (sn == null || !sn.getValue().equals(value)) {
+                    printerUtil.addPrinter("end_printer", (String) value);
                 }
             }
 
             if ("voiceType".equals(key)) {
-                Setting sn = settingService.getSettingByName("sn", SettingScope.PRINTER);
                 Setting voiceType = settingService.getSettingByName(key, settingScope);
                 if (voiceType == null || !voiceType.getValue().equals(value)) {
-                    printerUtil.setVoiceType(sn.getValue(), Integer.valueOf((String) value));
+                    Setting front_sn = settingService.getSettingByName("front_sn", SettingScope.PRINTER);
+                    Setting end_sn = settingService.getSettingByName("end_sn", SettingScope.PRINTER);
+
+                    if (front_sn != null && StrUtil.isNotBlank(front_sn.getValue())) {
+                        printerUtil.setVoiceType(front_sn.getValue(), Integer.valueOf((String) value));
+                    }
+
+                    if (end_sn != null && StrUtil.isNotBlank(end_sn.getValue())) {
+                        printerUtil.setVoiceType(end_sn.getValue(), Integer.valueOf((String) value));
+                    }
                 }
             }
 

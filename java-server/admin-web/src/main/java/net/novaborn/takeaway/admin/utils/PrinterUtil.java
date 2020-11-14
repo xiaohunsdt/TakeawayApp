@@ -45,13 +45,26 @@ public class PrinterUtil {
     private SettingService settingService;
 
     public void print(Order order) {
-        List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
-        Address address = addressService.getById(order.getAddressId());
-        Setting sn = settingService.getSettingByName("sn", SettingScope.PRINTER);
-        if (sn == null || StrUtil.isBlank(sn.getValue())) {
+        Setting front_sn = settingService.getSettingByName("front_sn", SettingScope.PRINTER);
+        Setting end_sn = settingService.getSettingByName("end_sn", SettingScope.PRINTER);
+
+        if (front_sn != null && StrUtil.isNotBlank(front_sn.getValue())) {
+            this.printF(order, front_sn);
+        }
+
+        if (end_sn != null && StrUtil.isNotBlank(end_sn.getValue())) {
+            this.printE(order, end_sn);
+        }
+    }
+
+    public void printF(Order order, Setting sn) {
+        if (StrUtil.isBlank(sn.getValue())) {
             log.warn("没有设置打印机设备");
             return;
         }
+
+        List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
+        Address address = addressService.getById(order.getAddressId());
         Setting temperature1 = settingService.getSettingByName("temperature1", SettingScope.PRINTER);
 
         StringBuffer sf = new StringBuffer();
@@ -73,14 +86,8 @@ public class PrinterUtil {
         for (OrderItem item : orderItemList) {
             sf.append("<BR>");
             int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + 1;
-            String formatStr;
-            if (32 > allLength) {
-                formatStr = "<BOLD><L>%s" + addSpecSymbol(32 - allLength) + "x%d\n";
-            } else {
-                formatStr = "<BOLD><L>%s    x%d\n";
-            }
+            String formatStr = "<BOLD><L>%s" + addSpecSymbol(32 - allLength % 32) + "x%d\n";
             sf.append(String.format(formatStr, item.getProduceName(), item.getGoodsCount()));
-
             if (StrUtil.isNotBlank(item.getGoodsTitle())) {
                 sf.append(String.format("<BOLD><L>%s\n", item.getGoodsTitle()));
             }
@@ -126,9 +133,53 @@ public class PrinterUtil {
         request.setSn(sn.getValue());
         request.setContent(sf.toString());
         request.setCopies(1);
-//        request.setPayType(41);
-//        request.setPayMode(60);
-//        request.setMoney(20.15);
+
+        ObjectRestResponse<String> resp = service.print(request);
+        log.debug(resp.toString());
+    }
+
+    public void printE(Order order, Setting sn) {
+        if (StrUtil.isBlank(sn.getValue())) {
+            log.warn("没有设置打印机设备");
+            return;
+        }
+
+        List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
+        StringBuffer sf = new StringBuffer();
+        sf.append(String.format("<BOLD><B2><C>#%d\n", order.getNumber()));
+        sf.append("<BR>");
+        if (order.getAppointmentDate() != null) {
+            sf.append("<B><C>预约订单\n");
+        }
+        sf.append("<N><BOLD>--------------------------------\n");
+        sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));
+        if (order.getAppointmentDate() != null) {
+            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(order.getAppointmentDate())));
+        }
+        sf.append("<BR>");
+        sf.append("<BOLD>--------------菜品--------------\n");
+        for (OrderItem item : orderItemList) {
+            sf.append("<BR>");
+            int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + 1;
+            String formatStr = "<BOLD><B><L>%s" + addSpecSymbol(16 - allLength % 16) + "x%d\n";
+            sf.append(String.format(formatStr, item.getProduceName(), item.getGoodsCount()));
+            if (StrUtil.isNotBlank(item.getGoodsTitle())) {
+                sf.append(String.format("<BOLD><L>%s\n", item.getGoodsTitle()));
+            }
+        }
+        sf.append("<BR>");
+        if (StrUtil.isNotBlank(order.getPs())) {
+            sf.append("<BOLD>--------------------------------\n");
+            sf.append("<B><L><BOLD>备注:\n");
+            sf.append(String.format("<B><L><BOLD>%s\n", order.getPs()));
+            sf.append("<BR>");
+        }
+
+        PrintRequest request = new PrintRequest();
+        createRequestHeader(request);
+        request.setSn(sn.getValue());
+        request.setContent(sf.toString());
+        request.setCopies(1);
 
         ObjectRestResponse<String> resp = service.print(request);
         log.debug(resp.toString());
