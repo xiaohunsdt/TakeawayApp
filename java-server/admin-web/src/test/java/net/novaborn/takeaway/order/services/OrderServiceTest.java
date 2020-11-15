@@ -139,8 +139,8 @@ public class OrderServiceTest {
 
     @Test
     public void orderReportForPersonal() {
-        Date start = DateUtil.parseDateTime("2020-05-01 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-05-31 23:59:59");
+        Date start = DateUtil.parseDateTime("2020-11-14 00:00:00");
+        Date end = DateUtil.parseDateTime("2020-11-14 23:59:59");
         long days = DateUtil.dayOfMonth(end);
         Map<String, Object> args = new HashMap<>();
         args.put("orderState", OrderState.FINISHED.getCode());
