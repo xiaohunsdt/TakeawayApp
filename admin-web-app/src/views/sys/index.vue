@@ -171,8 +171,11 @@
         </el-tab-pane>
         <el-tab-pane label="打印设置">
           <el-form ref="form" :model="printerSetting" label-width="120px" size="mini" style="max-width: 660px">
-            <el-form-item label="设备号">
-              <el-input v-model="printerSetting.sn"></el-input>
+            <el-form-item label="前台设备号">
+              <el-input v-model="printerSetting.front_sn"></el-input>
+            </el-form-item>
+            <el-form-item label="厨房设备号">
+              <el-input v-model="printerSetting.end_sn"></el-input>
             </el-form-item>
             <el-form-item label="语音类型">
               <el-select v-model="printerSetting.voiceType" placeholder="请选择语言类型">
