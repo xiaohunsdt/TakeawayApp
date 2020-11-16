@@ -1,6 +1,5 @@
 package net.novaborn.takeaway.order.services;
 
-import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.order.entity.Order;
@@ -21,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -70,10 +70,10 @@ public class OrderServiceTest {
         List<Order> orderList = orderService.getOrderList(args).stream().sorted(Comparator.comparing(Order::getCreateDate)).collect(Collectors.toList());
         System.out.println(orderList.size());
         orderList = orderList.parallelStream()
-                .filter(order -> userIds.add(order.getUserId()))
+            .filter(order -> userIds.add(order.getUserId()))
 //                .filter(order -> DateUtil.between(order.getCreateDate(), order.getUpdateDate(), DateUnit.MINUTE) >= 50)
 //                .filter(order -> order.getAppointmentDate() == null)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
 //        orderList.forEach(order -> System.out.println(order.getUserId()));
 //        System.out.println(orderList.stream()
@@ -81,12 +81,12 @@ public class OrderServiceTest {
 //                .collect(Collectors.joining(",")));
 
         List<String> phones = orderList.stream()
-                .map(order -> addressService.getById(order.getAddressId()))
-                .distinct()
-                .filter(Objects::nonNull)
-                .map(Address::getPhone)
-                .filter(item -> !item.equals("01000000000"))
-                .collect(Collectors.toList());
+            .map(order -> addressService.getById(order.getAddressId()))
+            .distinct()
+            .filter(Objects::nonNull)
+            .map(Address::getPhone)
+            .filter(item -> !item.equals("01000000000"))
+            .collect(Collectors.toList());
         System.out.println(phones.size());
         System.out.println(userIds.size());
         System.out.println(orderList.size());
@@ -107,34 +107,53 @@ public class OrderServiceTest {
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
         List<Order> orderList = orderService.getOrderList(args).parallelStream()
-                .filter(order -> {
-                    List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
-                    boolean isExist = false;
-                    for (OrderItem orderItem : orderItems) {
-                        if (orderItem.getProduceName().contains("鸭脖")
-                                || orderItem.getProduceName().contains("鸭锁骨")
-                                || orderItem.getProduceName().contains("鸭翅")
-                                || orderItem.getProduceName().contains("鸭头")
-                                || orderItem.getProduceName().contains("鸭肠")
-                                || orderItem.getProduceName().contains("鸭舌")
-                                || orderItem.getProduceName().contains("鸭胗")
-                        ) {
-                            isExist = true;
-                            break;
-                        }
+            .filter(order -> {
+                List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
+                boolean isExist = false;
+                for (OrderItem orderItem : orderItems) {
+                    if (orderItem.getProduceName().contains("鸭脖")
+                        || orderItem.getProduceName().contains("鸭锁骨")
+                        || orderItem.getProduceName().contains("鸭翅")
+                        || orderItem.getProduceName().contains("鸭头")
+                        || orderItem.getProduceName().contains("鸭肠")
+                        || orderItem.getProduceName().contains("鸭舌")
+                        || orderItem.getProduceName().contains("鸭胗")
+                    ) {
+                        isExist = true;
+                        break;
                     }
+                }
 
-                    return isExist;
-                })
-                .collect(Collectors.toList());
+                return isExist;
+            })
+            .collect(Collectors.toList());
 
         System.out.println("订单号：");
         orderList.forEach(order -> System.out.println(order.getId()));
         System.out.println("用户：");
         orderList.forEach(order -> System.out.println(order.getUserId()));
         System.out.println(orderList.stream()
-                .map(order -> addressService.getById(order.getAddressId()).getPhone())
-                .collect(Collectors.joining(",")));
+            .map(order -> addressService.getById(order.getAddressId()).getPhone())
+            .collect(Collectors.joining(",")));
+    }
+
+    @Test
+    public void getOrderByProduceIdTest() {
+        long produceId = 1318313202157740033L;
+        AtomicInteger count = new AtomicInteger();
+        Map<String, Object> args = new HashMap<>();
+        args.put("orderState", OrderState.FINISHED.getCode());
+        orderService.getOrderList(args).parallelStream()
+            .forEach(order -> {
+                List<OrderItem> orderItems = orderItemService.selectByOrderId(order.getId());
+                for (OrderItem orderItem : orderItems) {
+                    if (orderItem.getProduceId().equals(produceId)) {
+                        System.out.println(orderItem);
+                        count.getAndAdd(orderItem.getGoodsCount());
+                    }
+                }
+            });
+        System.out.println(count);
     }
 
     @Test
