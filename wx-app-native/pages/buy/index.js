@@ -132,7 +132,7 @@ Page({
           if (this.data.order.payState === 'PAID') {
             wx.reLaunch({
               // url: '/pages/order/index?state=WAIT_EAT'
-              url: '/pages/order/success/index'
+              url: `/pages/order/success/index?orderId=${this.data.order.orderId}`
             })
             // wx.reLaunch({
             //   url: `/pages/order/detail/index?orderId=${this.data.order.id}`

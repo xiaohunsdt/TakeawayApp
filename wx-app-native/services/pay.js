@@ -9,7 +9,7 @@ export function payOrder (orderId, payWay) {
       if (res.payState === 'PAID') {
         wx.reLaunch({
           // url: '/pages/order/index?state=WAIT_EAT'
-          url: '/pages/order/success/index'
+          url: `/pages/order/success/index?orderId=${orderId}`
         })
         return
       }
@@ -35,7 +35,7 @@ export function payOrder (orderId, payWay) {
         default:
           wx.redirectTo({
             // url: '/pages/order/index?state=WAIT_EAT'
-            url: '/pages/order/success/index'
+            url: `/pages/order/success/index?orderId=${orderId}`
           })
       }
     })

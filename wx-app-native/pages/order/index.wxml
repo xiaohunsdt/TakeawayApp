@@ -2,7 +2,7 @@
 	<view class="container" v-if="orderList.length > 0">
 		<view class="gradientview"></view>
 		<view class="container-contain">
-			<order-card wx:key="orderId" order="{{order}}" bind:refresh-list="init" wx:for="{{orderList}}" wx:for-item="order" />
+			<order-card wx:key="orderId" order="{{order}}" show-operation="{{true}}" bind:refresh-list="init" wx:for="{{orderList}}" wx:for-item="order" />
 		</view>
 	</view>
 	<view class="none-content-view" wx:if="{{orderList.length === 0}}">

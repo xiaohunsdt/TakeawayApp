@@ -81,5 +81,15 @@ Page({
       .finally(err => {
         wx.hideLoading()
       })
+  },
+  onShareAppMessage: function (event) {
+    const userInfo = wx.getStorageSync('userInfo')
+    return {
+      title:  `${userInfo.nickName} 分享的红包！快来领红包点外卖吧！`,
+      path: `/pages/index/index?orderId=${event.target.dataset.detail}`,
+      imageUrl: '/static/images/red_packet.jpg',
+      success: function (e) {},
+      fail: function (e) {}
+    }
   }
 })
