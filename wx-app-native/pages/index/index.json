@@ -3,6 +3,7 @@
   "usingComponents": {
     "loading": "/components/loading/index",
     "search-bar": "/components/search-bar/index",
-    "food-panel": "./components/food-panel/index"
+    "food-panel": "./components/food-panel/index",
+    "red-packet": "./components/red-packet/index"
   }
 }

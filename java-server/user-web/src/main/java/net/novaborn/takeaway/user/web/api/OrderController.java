@@ -20,13 +20,17 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
+import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
+import net.novaborn.takeaway.order.service.impl.OrderDetailService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.system.entity.Setting;
@@ -36,7 +40,6 @@ import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
 import net.novaborn.takeaway.user.web.dto.DeliveryArriveTimeDto;
-import net.novaborn.takeaway.user.web.dto.OrderDto;
 import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +72,8 @@ public class OrderController extends BaseController {
     private CouponLogService couponLogService;
 
     private OrderService orderService;
+
+    private OrderDetailService orderDetailService;
 
     private OrderItemService orderItemService;
 
@@ -136,13 +141,14 @@ public class OrderController extends BaseController {
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         Order order = orderDto.getOrder();
+        OrderDetail orderDetail = orderDto.getOrderDetail();
         List<OrderItem> orderItems = orderDto.getOrderItems();
 
         if (orderItems.size() == 0) {
             throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
         }
 
-        if (order.getAppointmentDate() == null && !this.getCanOrderNow()) {
+        if (orderDetail.getAppointmentDate() == null && !this.getCanOrderNow()) {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
         }
 
@@ -151,7 +157,7 @@ public class OrderController extends BaseController {
         //检测订单商品项是否可以下单
         orderItemService.checkOrderItems(orderItems);
         orderService.checkOrder(order, orderItems);
-        orderService.postCheckOrder(order, orderItems, orderDto.getCouponId());
+        orderService.postCheckOrder(orderDto);
 
         //先生成订单，再生成订单产品详情
         if (order.insert()) {
@@ -198,6 +204,9 @@ public class OrderController extends BaseController {
         Optional<Order> order = Optional.ofNullable(orderService.getById(comment.getOrderId()));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
+        Optional<OrderDetail> orderDetail = Optional.ofNullable(orderDetailService.getById(comment.getOrderId()));
+        orderDetail.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_DETAIL_NOT_EXIST));
+
         if (order.get().getOrderState() != OrderState.FINISHED) {
             throw new SysException(OrderExceptionEnum.ORDER_NOT_FINISHED);
         }
@@ -208,8 +217,8 @@ public class OrderController extends BaseController {
             return new ErrorTip(-1, "评论失败!");
         }
 
-        order.get().setIsCommented(true);
-        orderService.updateById(order.get());
+        orderDetail.get().setIsCommented(true);
+        orderDetailService.updateById(orderDetail.get());
 
         return new SuccessTip();
     }
@@ -243,28 +252,36 @@ public class OrderController extends BaseController {
     public Object getDeliveryArriveTime(@RequestParam(required = false) Long orderId) {
         Date deliveryDate;
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
-//        order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
+        Optional<OrderDetail> orderDetail = Optional.ofNullable(orderDetailService.getById(orderId));
+
         int base_express_time = Integer.parseInt(settingService.getSettingByName("base_express_time", SettingScope.DELIVERY).getValue());
         int average_express_time = Integer.parseInt(settingService.getSettingByName("average_express_time", SettingScope.DELIVERY).getValue());
         int deliverier_count = Integer.parseInt(settingService.getSettingByName("deliverier_count", SettingScope.DELIVERY).getValue());
+
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
-                .filter(item -> {
-                    // 返回今天的要配送的订单
-                    Date target = item.getAppointmentDate() == null ? item.getCreateDate() : item.getAppointmentDate();
-                    return DateUtil.isSameDay(target, current);
-                })
-                .sorted((o1, o2) -> {
-                    Date dateForO1 = o1.getAppointmentDate() == null ? o1.getCreateDate() : o1.getAppointmentDate();
-                    Date dateForO2 = o2.getAppointmentDate() == null ? o2.getCreateDate() : o2.getAppointmentDate();
-                    return dateForO1.compareTo(dateForO2);
-                })
-                .collect(Collectors.toList());
+            .filter(item -> {
+                // 返回今天的要配送的订单
+                Date target;
+                if (item.getOrderType() == OrderType.NORMAL) {
+                    target = item.getCreateDate();
+                } else {
+                    target = orderDetailService.getById(item.getId()).getAppointmentDate();
+                    item.setCreateDate(target);
+                }
+                return DateUtil.isSameDay(target, current);
+            })
+            .sorted((o1, o2) -> {
+                Date dateForO1 = o1.getCreateDate();
+                Date dateForO2 = o2.getCreateDate();
+                return dateForO1.compareTo(dateForO2);
+            })
+            .collect(Collectors.toList());
 
         int index = 0;
         if (order.isPresent()) {
-            if (order.get().getAppointmentDate() != null) {
-                return new DeliveryArriveTimeDto(order.get().getAppointmentDate());
+            if (orderDetail.get().getAppointmentDate() != null) {
+                return new DeliveryArriveTimeDto(orderDetail.get().getAppointmentDate());
             }
             if (order.get().getPayState() == PayState.UN_PAY) {
                 return new SuccessTip("未知");

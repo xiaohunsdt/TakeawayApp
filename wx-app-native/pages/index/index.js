@@ -1,9 +1,9 @@
-
 const app = getApp()
 import indexService from '../../services/index'
 
 Page({
   data: {
+    orderId: null,
     bannerList: [],
     newGoodsList: [],
     hotGoodsList: []
@@ -13,9 +13,14 @@ Page({
     if (option.from) {
       app.globalData.from = option.from
     }
+    if (option.orderId) {
+      this.setData({
+        orderId: option.orderId
+      })
+    }
     this.init()
   },
-  onPullDownRefresh () {
+  onPullDownRefresh() {
     this.init()
     wx.stopPullDownRefresh()
   },
@@ -45,11 +50,11 @@ Page({
   },
   gotoPage(event) {
     let page = event.currentTarget.dataset.pagePath
-    
+
     if (page === '') {
       return
     }
-    
+
     wx.navigateTo({
       url: page
     })

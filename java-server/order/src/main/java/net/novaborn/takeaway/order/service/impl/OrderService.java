@@ -12,6 +12,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
+import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
@@ -94,8 +95,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
 
     @Override
-    public int getWaitingReceiveOrderCount(DeliveryType deliveryType) {
-        return this.baseMapper.getWaitingReceiveOrderCount(deliveryType);
+    public int getWaitingReceiveOrderCount(OrderType orderType) {
+        return this.baseMapper.getWaitingReceiveOrderCount(orderType);
     }
 
     @Override
@@ -109,6 +110,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
+    public int getTodayOrderCount(Date day, OrderType orderType) {
+        return this.baseMapper.getTodayOrderCount(day, orderType);
+    }
+
+    @Override
     public List<Order> getTodayOrderByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderByStateU(userId, orderState);
     }
@@ -116,11 +122,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public int getTodayOrderCountByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
-    }
-
-    @Override
-    public int getOrderCount(Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(day, deliveryType);
     }
 
     @Override
@@ -136,17 +137,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-                .filter(orderItem -> orderItem.getGoodsId() != null)
-                .map(orderItem -> {
-                    Produce produce = produceService.getById(orderItem.getProduceId());
-                    // 鸭货除外
-                    if (produce.getCategoryId().equals(1301894880743731201L)) {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                    } else {
-                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                    }
-                })
-                .reduce(0, (x, y) -> x + y);
+            .filter(orderItem -> orderItem.getGoodsId() != null)
+            .map(orderItem -> {
+                Produce produce = produceService.getById(orderItem.getProduceId());
+                // 鸭货除外
+                if (produce.getCategoryId().equals(1301894880743731201L)) {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                } else {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                }
+            })
+            .reduce(0, (x, y) -> x + y);
 
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
@@ -166,7 +167,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
+    public void postCheckOrder(OrderDto orderDto) {
         // 设置优惠
 //        if (order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
 //            Goods gift = null;
@@ -216,33 +217,50 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //        }
 
         //设置 优惠卷折扣
-        if (couponId != null) {
-            this.setDiscount(order, orderItemList, couponId);
+        if (orderDto.getCouponId() != null) {
+            this.setDiscount(orderDto.getOrder(), orderDto.getOrderItems(), orderDto.getCouponId());
         }
 
         //填写订单信息
         int number;
-        if (order.getAppointmentDate() == null) {
-            // 一般订单
-            number = this.getOrderCount(new Date(), DeliveryType.NORMAL) + 1;
-        } else {
-            // 预约订单
-            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+        switch (orderDto.getOrder().getOrderType()) {
+            case NORMAL:
+                // 一般订单
+                number = this.getTodayOrderCount(new Date(), OrderType.NORMAL) + 1;
+                break;
+            case APPOINTMENT:
+                // 预约订单
+                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                break;
+            case IN_STORE:
+                // 堂食订单
+                number = 600000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                break;
+            case EXPRESS:
+                // 快递订单
+                number = 700000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                break;
+            case SELF:
+                // 自取订单
+                number = 800000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                break;
+            default:
+                number = 0;
         }
-        order.setNumber(number);
+        orderDto.getOrder().setNumber(number);
 
         //设置订单的支付状态
-        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
+        if (orderDto.getOrder().getPaymentWay() == PaymentWay.CREDIT_CARD || orderDto.getOrder().getPaymentWay() == PaymentWay.CASH) {
             //刷卡和现金支付设置为后付状态
-            order.setPayState(PayState.PAY_LATER);
+            orderDto.getOrder().setPayState(PayState.PAY_LATER);
         } else {
-            order.setPayState(PayState.UN_PAY);
+            orderDto.getOrder().setPayState(PayState.UN_PAY);
         }
 
         // 处理订单不需要支付的情况
-        if (order.getRealPrice() <= 0) {
-            order.setPaymentWay(PaymentWay.CASH);
-            order.setPayState(PayState.PAID);
+        if (orderDto.getOrder().getRealPrice() <= 0) {
+            orderDto.getOrder().setPaymentWay(PaymentWay.CASH);
+            orderDto.getOrder().setPayState(PayState.PAID);
         }
     }
 
@@ -251,16 +269,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         TreeMap<String, Integer> goodsSale = new TreeMap<>();
 
         orderList.stream()
-                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
-                .forEach(order -> {
-                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                        Integer count = orderItem.getGoodsCount();
-                        if (goodsSale.containsKey(orderItem.getProduceName())) {
-                            count += goodsSale.get(orderItem.getProduceName());
-                        }
-                        goodsSale.put(orderItem.getProduceName(), count);
-                    });
+            .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
+            .forEach(order -> {
+                orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                    Integer count = orderItem.getGoodsCount();
+                    if (goodsSale.containsKey(orderItem.getProduceName())) {
+                        count += goodsSale.get(orderItem.getProduceName());
+                    }
+                    goodsSale.put(orderItem.getProduceName(), count);
                 });
+            });
 
         List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
         Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));

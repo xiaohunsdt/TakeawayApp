@@ -132,8 +132,8 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @RequestMapping("getWaitingReceiveOrderCount")
-    public int getWaitingReceiveOrderCount(@RequestParam(required = false) DeliveryType deliveryType) {
-        return orderService.getWaitingReceiveOrderCount(deliveryType);
+    public int getWaitingReceiveOrderCount(@RequestParam(required = false) OrderType orderType) {
+        return orderService.getWaitingReceiveOrderCount(orderType);
     }
 
     @ResponseBody

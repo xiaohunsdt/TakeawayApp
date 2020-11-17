@@ -1,19 +1,19 @@
 package net.novaborn.takeaway.order.utils;
 
-import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.PayState;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static net.novaborn.takeaway.order.enums.OrderState.*;
+import static net.novaborn.takeaway.order.enums.OrderType.*;
 import static net.novaborn.takeaway.order.enums.PayState.*;
 import static net.novaborn.takeaway.order.enums.PaymentWay.*;
 
 public class OrderFormatUtil {
     private static Map<OrderState, String> orderStateMap = new HashMap<>();
+
+    private static Map<OrderType, String> orderTypeMap = new HashMap<>();
 
     private static Map<PayState, String> payStateMap = new HashMap<>();
 
@@ -26,6 +26,12 @@ public class OrderFormatUtil {
         orderStateMap.put(FINISHED, "已完成");
         orderStateMap.put(REFUND, "退款");
         orderStateMap.put(EXPIRED, "过期");
+
+        orderTypeMap.put(NORMAL, "一般订单");
+        orderTypeMap.put(APPOINTMENT, "预约订单");
+        orderTypeMap.put(IN_STORE, "堂食订单");
+        orderTypeMap.put(EXPRESS, "快递订单");
+        orderTypeMap.put(SELF, "自取订单");
 
         payStateMap.put(UN_PAY, "未支付");
         payStateMap.put(PAID, "已支付");
@@ -51,7 +57,7 @@ public class OrderFormatUtil {
         return paymentWayMap.get(paymentWay);
     }
 
-    public static String formatOrderType(Order order) {
-        return order.getAppointmentDate() == null ? "一般订单" : "预约订单";
+    public static String formatOrderType(OrderType orderType) {
+        return orderTypeMap.get(orderType);
     }
 }

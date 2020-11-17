@@ -33,7 +33,7 @@ public class WxSubscrubeMessageUtil {
         dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber().toString()));
         dataList.add(new WxMaSubscribeMessage.Data("phrase2", "制作中"));
         dataList.add(new WxMaSubscribeMessage.Data("amount3", "₩" + order.getRealPrice()));
-        dataList.add(new WxMaSubscribeMessage.Data("phrase5", OrderFormatUtil.formatOrderType(order)));
+        dataList.add(new WxMaSubscribeMessage.Data("phrase5", OrderFormatUtil.formatOrderType(order.getOrderType())));
         dataList.add(new WxMaSubscribeMessage.Data("thing7", "已经确认收到您的订单,正在为您制作!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();

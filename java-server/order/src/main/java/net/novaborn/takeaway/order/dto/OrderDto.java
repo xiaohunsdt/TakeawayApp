@@ -1,8 +1,9 @@
-package net.novaborn.takeaway.user.web.dto;
+package net.novaborn.takeaway.order.dto;
 
 import lombok.Data;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.entity.OrderItem;
 
 import javax.validation.Valid;
@@ -14,8 +15,12 @@ import java.util.List;
 public class OrderDto {
 
     @Valid
-    @NotNull(message = "没有订单信息")
+    @NotNull(message = "没有订单")
     private Order order;
+
+    @Valid
+    @NotNull(message = "没有订单详细")
+    private OrderDetail orderDetail;
 
     @Valid
     @Size(min = 1, message = "没有订单产品信息")

@@ -14,7 +14,7 @@ import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
-import net.novaborn.takeaway.user.web.dto.OrderDto;
+import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.user.web.wrapper.CouponLogWrapper;
 import net.novaborn.takeaway.user.web.wrapper.CouponWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

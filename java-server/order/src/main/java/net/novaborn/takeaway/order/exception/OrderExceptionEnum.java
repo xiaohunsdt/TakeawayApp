@@ -15,6 +15,7 @@ public enum OrderExceptionEnum implements ServiceExceptionEnum {
      * order 异常
      */
     ORDER_NOT_EXIST(500, "订单不存在!"),
+    ORDER_DETAIL_NOT_EXIST(500, "订单详细不存在!"),
     UPDATE_FAILED(500, "更新失败!"),
     /**
      * 没有订单商品

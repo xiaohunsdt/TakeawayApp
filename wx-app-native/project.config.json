@@ -149,6 +149,13 @@
         {
           "name": "pages/order/success/index",
           "pathName": "pages/order/success/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
+          "query": "orderId=111",
           "scene": null
         }
       ]

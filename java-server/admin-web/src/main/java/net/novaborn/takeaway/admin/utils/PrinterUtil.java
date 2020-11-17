@@ -4,7 +4,10 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.OrderType;
+import net.novaborn.takeaway.order.service.impl.OrderDetailService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.utils.OrderFormatUtil;
 import net.novaborn.takeaway.system.entity.Setting;
@@ -36,6 +39,9 @@ public class PrinterUtil {
     private PrintService service = new PrintService();
 
     @Autowired
+    private OrderDetailService orderDetailService;
+
+    @Autowired
     private OrderItemService orderItemService;
 
     @Autowired
@@ -62,7 +68,7 @@ public class PrinterUtil {
             log.warn("没有设置打印机设备");
             return;
         }
-
+        OrderDetail orderDetail = orderDetailService.getById(order.getId());
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
         Address address = addressService.getById(order.getAddressId());
         Setting temperature1 = settingService.getSettingByName("temperature1", SettingScope.PRINTER);
@@ -72,14 +78,14 @@ public class PrinterUtil {
         sf.append("<BR>");
         sf.append("<B><C>川香苑-新村店\n");
         sf.append("<BR>");
-        if (order.getAppointmentDate() != null) {
-            sf.append("<B><C>预约订单\n");
+        if (order.getOrderType() != OrderType.NORMAL) {
+            sf.append(String.format("<B><C>%s\n", OrderFormatUtil.formatOrderType(order.getOrderType())));
         }
         sf.append(String.format("<B><BOLD><C>%s-%s\n", OrderFormatUtil.formatPaymentWay(order.getPaymentWay()), OrderFormatUtil.formatPayState(order.getPayState())));
         sf.append("<N><BOLD>--------------------------------\n");
         sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));
-        if (order.getAppointmentDate() != null) {
-            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(order.getAppointmentDate())));
+        if (orderDetail.getAppointmentDate() != null) {
+            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
         }
         sf.append("<BR>");
         sf.append("<BOLD>--------------菜品--------------\n");
@@ -95,10 +101,10 @@ public class PrinterUtil {
         sf.append("<BR><BOLD>--------------------------------\n");
         sf.append(String.format("<R><BOLD>合计: %d 韩元\n", order.getRealPrice()));
         sf.append("<BR>");
-        if (StrUtil.isNotBlank(order.getPs())) {
+        if (StrUtil.isNotBlank(orderDetail.getPs())) {
             sf.append("<BOLD>--------------------------------\n");
             sf.append("<B><L><BOLD>备注:\n");
-            sf.append(String.format("<B><L><BOLD>%s\n", order.getPs()));
+            sf.append(String.format("<B><L><BOLD>%s\n", orderDetail.getPs()));
             sf.append("<BR>");
         }
         sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
@@ -144,17 +150,18 @@ public class PrinterUtil {
             return;
         }
 
+        OrderDetail orderDetail = orderDetailService.getById(order.getId());
         List<OrderItem> orderItemList = orderItemService.selectByOrderId(order.getId());
         StringBuffer sf = new StringBuffer();
         sf.append(String.format("<BOLD><B2><C>#%d\n", order.getNumber()));
         sf.append("<BR>");
-        if (order.getAppointmentDate() != null) {
+        if (orderDetail.getAppointmentDate() != null) {
             sf.append("<B><C>预约订单\n");
         }
         sf.append("<N><BOLD>--------------------------------\n");
         sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));
-        if (order.getAppointmentDate() != null) {
-            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(order.getAppointmentDate())));
+        if (orderDetail.getAppointmentDate() != null) {
+            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
         }
         sf.append("<BR>");
         sf.append("<BOLD>--------------菜品--------------\n");
@@ -168,10 +175,10 @@ public class PrinterUtil {
             }
         }
         sf.append("<BR>");
-        if (StrUtil.isNotBlank(order.getPs())) {
+        if (StrUtil.isNotBlank(orderDetail.getPs())) {
             sf.append("<BOLD>--------------------------------\n");
             sf.append("<B><L><BOLD>备注:\n");
-            sf.append(String.format("<B><L><BOLD>%s\n", order.getPs()));
+            sf.append(String.format("<B><L><BOLD>%s\n", orderDetail.getPs()));
             sf.append("<BR>");
         }
 
