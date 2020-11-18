@@ -65,11 +65,17 @@ const api = {
   // 更新一个地址
   updateAddress: (address) => request.post('address/updateAddress', address),
   // 设置默认地址
-  setDefaultAddress: (addressId) => request.post('address/setDefaultAddress', {id: addressId}),
+  setDefaultAddress: (addressId) => request.post('address/setDefaultAddress', {
+    id: addressId
+  }),
   deleteAddress: (addressId) => request.post('address/deleteAddress', {
     addressId
   }),
+  
   selectOrderById: (orderId) => request.post('order/selectOrderById', {
+    orderId
+  }),
+  selectOrderDetailById: (orderId) => request.post('order/selectOrderDetailById', {
     orderId
   }),
   getOrderListByPage: (arge) => request.post('order/getOrderListByPage', arge),
@@ -81,8 +87,9 @@ const api = {
     orderId
   }),
   // 创建一个订单
-  createOrder: (order, orderItems, couponId) => request.post('order/createOrder', {
+  createOrder: (order, orderDetail, orderItems, couponId) => request.post('order/createOrder', {
     order,
+    orderDetail,
     orderItems,
     couponId
   }, {
@@ -96,7 +103,7 @@ const api = {
   createComment: (commentData) => request.post('order/createComment', commentData),
   getDeliveryArriveTime: (orderId) => {
     let data = {}
-    if(orderId){
+    if (orderId) {
       data['orderId'] = orderId
     }
     return request.post('order/getDeliveryArriveTime', data)

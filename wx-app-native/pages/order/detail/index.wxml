@@ -89,13 +89,13 @@
 				<view class="content">{{order.id}}</view>
 			</view>
 			<view class="order-row">
+				<wxs src="./util.wxs" module="util" />
 				<view class="title">订单类型</view>
-				<view class="content" wx:if="{{order.appointmentDate===''}}">一般订单</view>
-				<view class="content" wx:else>预约订单</view>
+				<view class="content">{{util.formatOrderType(order.orderType)}}</view>
 			</view>
-			<view class="order-row" wx:if="{{order.appointmentDate!==''}}">
+			<view class="order-row" wx:if="{{orderDetail.appointmentDate!==''}}">
 				<view class="title">预约时间</view>
-				<view class="content">{{order.appointmentDate}}</view>
+				<view class="content">{{orderDetail.appointmentDate}}</view>
 			</view>
 			<view class="order-row">
 				<view class="title">下单时间</view>
@@ -127,7 +127,7 @@
 			</view>
 			<view class="order-row">
 				<view class="title">备注</view>
-				<view class="content">{{order.ps !== '' ? order.ps : '无'}}</view>
+				<view class="content">{{orderDetail.ps !== '' ? orderDetail.ps : '无'}}</view>
 			</view>
 		</base-panel>
 	</view>

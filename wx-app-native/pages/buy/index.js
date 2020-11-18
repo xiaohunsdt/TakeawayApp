@@ -14,6 +14,9 @@ Page({
   watch: {
     address(newVal) {
       this.checkExpressState(newVal.id, this.data.cartAllPrice)
+      this.setData({
+        'order.addressId': newVal.id
+      })
     },
     coupon(newVal) {
       if (newVal) {
@@ -27,24 +30,24 @@ Page({
       }
     },
     cartAllPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+      const _realPrice = newVal - this.data.couponDiscountPrice + this.data.order.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
     couponDiscountPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+      const _realPrice = this.data.cartAllPrice - newVal + this.data.order.deliveryPrice
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    deliveryPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+    'order.deliveryPrice': function(newVal){
+      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + newVal
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    payWay(newVal) {
+    'order.paymentWay': function (newVal) {
       if (newVal && this.data.coupon) {
         this.checkCouponDiscountPrice()
       }
@@ -56,18 +59,19 @@ Page({
         const minute = this.data.appointment[2]
         if (day === '今天' && hour === '尽快配送') {
           this.setData({
-            deliveryType: '尽快配送'
+            'order.orderType': 'NORMAL'
           })
         } else {
           this.setData({
-            deliveryType: '预约点餐',
+            'order.orderType': 'APPOINTMENT',
+            'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
             deliveryArriveTime: `${day} ${hour}:${minute}`
           })
         }
       }
     },
-    deliveryType(newVal) {
-      if (newVal === '尽快配送') {
+    'order.orderType': function (newVal) {
+      if (newVal === 'NORMAL') {
         orderService.getDeliveryArriveTime()
           .then(res => {
             this.setData({
@@ -85,27 +89,33 @@ Page({
     tipNotice: '',
     fromNotice: null,
     signNotice: null,
-    orderId: '',
-    order: {},
-    address: null,
+    order: {
+      id: null,
+      addressId: null,
+      couponId: null,
+      paymentWay: 'WEIXIN_PAY',
+      orderType: '',
+      deliveryPrice: 2000
+    },
+    orderDetail: {
+      from: null,
+      ps: null,
+      appointmentDate: null
+    },
     orderItems: [],
     cartAllCount: 0,
     cartAllPrice: 0,
+    address: null,
     coupon: null,
     couponDiscountPrice: 0,
     couponInfoTip: null,
     couponInfoDetail: null,
     realPrice: 0,
-    payWay: 'WEIXIN_PAY',
-    psData: '',
-    from: null,
     showTimePicker: false,
     appointment: [],
     appointmentIndex: [],
     appointmentTimes: [],
-    deliveryType: '',
-    deliveryArriveTime: null,
-    deliveryPrice: 2000
+    deliveryArriveTime: null
   },
 
   /**
@@ -120,11 +130,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (this.data.orderId !== '') {
+    if (this.data.order.id !== null) {
       wx.showLoading({
         title: '正在核对信息,请稍等...'
       })
-      orderService.selectOrderById(this.data.orderId)
+      orderService.selectOrderById(this.data.order.id)
         .then(res => {
           this.setData({
             order: res
@@ -132,7 +142,7 @@ Page({
           if (this.data.order.payState === 'PAID') {
             wx.reLaunch({
               // url: '/pages/order/index?state=WAIT_EAT'
-              url: `/pages/order/success/index?orderId=${this.data.order.orderId}`
+              url: `/pages/order/success/index?orderId=${this.data.order.id}`
             })
             // wx.reLaunch({
             //   url: `/pages/order/detail/index?orderId=${this.data.order.id}`
@@ -197,11 +207,11 @@ Page({
       cartAllPrice: cartService.getCartAllPrice(),
       cartAllCount: cartService.getCartAllCount(),
       orderItems: temp,
-      from: getApp().globalData.from,
+      'orderDetail.from': getApp().globalData.from,
     })
 
-    if (this.data.from) {
-      indexService.getFormerNotice(this.data.from).then(res => {
+    if (this.data.orderDetail.from) {
+      indexService.getFormerNotice(this.data.orderDetail.from).then(res => {
         this.setData({
           fromNotice: res.message
         })
@@ -216,7 +226,7 @@ Page({
     indexService.getDeliveryPrice()
       .then(res => {
         this.setData({
-          deliveryPrice: res
+          'order.deliveryPrice': res
         })
       })
 
@@ -251,12 +261,13 @@ Page({
 
         if (days[0] === '今天' && hours[0] === '尽快配送') {
           this.setData({
-            deliveryType: '尽快配送'
+            'order.orderType': 'NORMAL'
           })
         } else {
           this.setData({
-            deliveryType: '预约点餐',
-            deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
+            'order.orderType': 'APPOINTMENT',
+            'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+            deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`,
           })
         }
 
@@ -285,16 +296,16 @@ Page({
       events: {
         setPsContent(data) {
           $this.setData({
-            psData: data.ps
+            'orderDetail.ps': data.ps
           })
         }
       }
     })
   },
-  payWayChange(event) {
-    let payWay = event.currentTarget.dataset.payWay
+  paymentWayChange(event) {
+    let paymentWay = event.currentTarget.dataset.paymentWay
     this.setData({
-      payWay
+      'order.paymentWay': paymentWay
     })
   },
   onSubmitOrder() {
@@ -422,11 +433,18 @@ Page({
     }
   },
   createOrder() {
+    if (!this.data.order.addressId) {
+      wx.showToast({
+        title: '请设置地址!!',
+        image: '/static/images/error.png'
+      })
+      return
+    }
     orderService.createOrder(
-      orderService.generateOrder(this.data.payWay, this.data.psData, indexService.formatAppointmentTime(this.data.deliveryType, this.data.appointment), this.data.from),
+      this.data.order,
+      this.data.orderDetail,
       this.data.orderItems,
-      this.data.coupon,
-      this.data.address
+      this.data.coupon
     ).then(res => {
       cartService.clearCart()
       getApp().globalData.currentCoupon = null
@@ -436,11 +454,10 @@ Page({
         cartAllCount: 0,
         cartAllPrice: 0,
         coupon: null,
-        from: null,
-        orderId: res.message,
+        'order.id': res.message,
         submitLoading: false
       })
-      payService.payOrder(this.data.orderId, this.data.payWay)
+      payService.payOrder(this.data.order.id, this.data.order.paymentWay)
     }).catch(res => {
       this.setData({
         submitLoading: false
@@ -448,9 +465,6 @@ Page({
     })
   },
   checkExpressState(addressId, allPrice) {
-    // this.setData({
-    //   disableService: false
-    // })
     indexService.getExpressServiceState(addressId, allPrice)
       .then(res => {
         this.setData({
@@ -467,9 +481,9 @@ Page({
     })
 
     couponService.checkCouponDiscountPrice(
-      orderService.generateOrder(this.data.payWay, null, null, this.data.from),
+      this.data.order,
       this.data.orderItems,
-      this.data.coupon
+      this.data.coupon.id
     ).then(res => {
       this.setData({
         couponDiscountPrice: res.message

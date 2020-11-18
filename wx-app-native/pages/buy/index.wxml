@@ -30,7 +30,9 @@
 						<van-cell is-link title="选择地址" url="/pages/my/address/index" />
 					</view>
 				</view>
-				<van-cell title="{{deliveryType}}" value="{{deliveryArriveTime}}" bind:click="onShowTimePicker">
+				
+				<wxs src="./util.wxs" module="util" />
+				<van-cell title="{{util.formatDeliveryType(order.orderType)}}" value="{{deliveryArriveTime}}" bind:click="onShowTimePicker">
 					<view slot="icon" style="margin-right: 0.2rem">
 						<van-icon color="#FFD200" name="clock" size="1.2rem" />
 					</view>
@@ -63,35 +65,35 @@
 				</view>
 				<view class="delivery-price-view">
 					<view class="delivery-str">
-						<view wx:if="{{deliveryPrice > 0}}">
+						<view wx:if="{{order.deliveryPrice > 0}}">
 							配送费：
 						</view>
 						<view wx:else>
 							免费配送
 						</view>
 					</view>
-					<view class="delivery-price" wx:if="{{deliveryPrice > 0}}">
-						₩ {{deliveryPrice}}
+					<view class="delivery-price" wx:if="{{order.deliveryPrice > 0}}">
+						₩ {{order.deliveryPrice}}
 					</view>
 				</view>
 				<view id="order-amount">
 					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
-					小计 <span style="color: #FFD200">₩ {{ cartAllPrice + deliveryPrice }}</span>
+					小计 <span style="color: #FFD200">₩ {{ cartAllPrice + order.deliveryPrice }}</span>
 				</view>
 			</base-panel>
 			<base-panel>
 				<view>支付方式</view>
 				<view class="pay-way-btns">
-					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary" wx:if="{{address}}">微信支付
+					<van-button color="{{order.paymentWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="paymentWayChange" data-payment-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary" wx:if="{{address}}">微信支付
 					</van-button>
 					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付</van-button>
-					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" wx:if="{{address}}">支付宝支付
+					<van-button color="{{order.paymentWay==='ALI_PAY'?'#FFD200':null}}" bind:click="paymentWayChange" data-payment-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" wx:if="{{address}}">支付宝支付
 					</van-button>
-					<van-button color="{{payWay==='TRANSFER'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
+					<van-button color="{{order.paymentWay==='TRANSFER'?'#FFD200':null}}" bind:click="paymentWayChange" data-payment-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
 					</van-button>
-					<van-button color="{{payWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
+					<van-button color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange" data-payment-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
 					</van-button>
-					<van-button color="{{payWay==='CASH'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
+					<van-button color="{{order.paymentWay==='CASH'?'#FFD200':null}}" bind:click="paymentWayChange" data-payment-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
 					</van-button>
 				</view>
 			</base-panel>
@@ -118,8 +120,8 @@
 			<base-panel>
 				<view catch:tap="setPs">
 					<view>备注</view>
-					<view wx:if="{{psData!==''}}">
-						<van-cell title="{{psData}}" />
+					<view wx:if="{{orderDetail.ps !== null}}">
+						<van-cell title="{{orderDetail.ps}}" />
 					</view>
 				</view>
 			</base-panel>

@@ -32,12 +32,12 @@ export function getAppointmentTimes () {
   return api.getAppointmentTimes()
 }
 
-export function formatAppointmentTime (deliveryType, appointment) {
+export function formatAppointmentTime (orderType, appointment) {
   let appointmentDate = null
   if (appointment === null || appointment.length !== 3) {
     return appointmentDate
   }
-  if (deliveryType === '预约点餐') {
+  if (orderType === 'APPOINTMENT') {
     appointmentDate = new Date()
     switch (appointment[0]) {
       case '今天':

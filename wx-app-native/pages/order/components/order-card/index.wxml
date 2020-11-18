@@ -2,7 +2,7 @@
 	<view catch:tap="openOrderDetail">
 		<view class="order-header">
 			<view class="header-left">
-				<view wx:if="{{order.appointmentDate!==''}}">
+				<view wx:if="{{order.orderType==='APPOINTMENT'}}">
 					<van-icon name="clock" color="#FFD200" size="1.3rem" />
 				</view>
 			</view>

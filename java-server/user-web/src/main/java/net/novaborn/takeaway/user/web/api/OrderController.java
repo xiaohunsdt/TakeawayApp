@@ -94,6 +94,14 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
+    @PostMapping("selectOrderDetailById")
+    public ResponseEntity selectOrderDetailById(@RequestParam Long orderId) {
+        Optional<OrderDetail> orderDetail = Optional.ofNullable(orderDetailService.getById(orderId));
+        orderDetail.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_DETAIL_NOT_EXIST));
+        return ResponseEntity.ok(orderDetail.get());
+    }
+
+    @ResponseBody
     @PostMapping("getOrderListByPage")
     public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam(required = false) OrderStateEx orderState) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
@@ -161,6 +169,11 @@ public class OrderController extends BaseController {
 
         //先生成订单，再生成订单产品详情
         if (order.insert()) {
+            // 生成订单详情
+            orderDetail.setOrderId(order.getId());
+            orderDetailService.save(orderDetail);
+
+            //生成订购项
             orderItems.parallelStream().forEach(item -> {
                 item.setOrderId(order.getId());
                 if (StrUtil.isNotBlank(item.getGoodsThumb())) {

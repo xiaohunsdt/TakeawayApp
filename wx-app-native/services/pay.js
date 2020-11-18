@@ -3,7 +3,7 @@
  */
 import orderService from './order'
 
-export function payOrder (orderId, payWay) {
+export function payOrder (orderId, paymentWay) {
   orderService.selectOrderById(orderId)
     .then(res => {
       if (res.payState === 'PAID') {
@@ -15,7 +15,7 @@ export function payOrder (orderId, payWay) {
       }
 
       // 支付逻辑
-      switch (payWay) {
+      switch (paymentWay) {
         case 'WEIXIN_PAY':
           wx.navigateToMiniProgram({
             appId: 'wxdd0eeefb8c1c5ceb',

@@ -223,10 +223,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
         //填写订单信息
         int number;
+        Date currentDate = new Date();
         switch (orderDto.getOrder().getOrderType()) {
             case NORMAL:
                 // 一般订单
-                number = this.getTodayOrderCount(new Date(), OrderType.NORMAL) + 1;
+                number = this.getTodayOrderCount(currentDate, OrderType.NORMAL) + 1;
                 break;
             case APPOINTMENT:
                 // 预约订单
@@ -234,15 +235,15 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 break;
             case IN_STORE:
                 // 堂食订单
-                number = 600000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.IN_STORE) + 1;
                 break;
             case EXPRESS:
                 // 快递订单
-                number = 700000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.EXPRESS) + 1;
                 break;
             case SELF:
                 // 自取订单
-                number = 800000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.SELF) + 1;
                 break;
             default:
                 number = 0;

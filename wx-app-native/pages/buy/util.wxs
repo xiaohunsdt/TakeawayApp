@@ -1,0 +1,20 @@
+function formatDeliveryType(orderType){
+  var str = ''
+  switch(orderType){
+    case 'NORMAL':
+      str = '尽快配送'
+      break
+    case 'APPOINTMENT':
+      str = '预约点餐'
+      break
+    default:
+      str = '未知'
+      break
+  }
+
+  return str
+}
+
+module.exports = {
+  formatDeliveryType: formatDeliveryType
+};
