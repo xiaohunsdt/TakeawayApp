@@ -4,6 +4,7 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.OrderType;
 
 import java.util.List;
 
@@ -35,5 +36,5 @@ public interface IOrderItemService extends IService<OrderItem> {
      * 商品不足抛出 @GoodsExceptionEnum 异常
      * @param orderItemList 被检查的订单商品项
      */
-    void checkOrderItems(List<OrderItem> orderItemList);
+    void checkOrderItems(OrderType orderType,List<OrderItem> orderItemList);
 }

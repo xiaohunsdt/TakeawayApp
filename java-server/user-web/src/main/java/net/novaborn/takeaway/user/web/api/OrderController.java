@@ -163,7 +163,7 @@ public class OrderController extends BaseController {
         order.setUserId(user.get().getId());
 
         //检测订单商品项是否可以下单
-        orderItemService.checkOrderItems(orderItems);
+        orderItemService.checkOrderItems(order.getOrderType(), orderItems);
         orderService.checkOrder(order, orderItems);
         orderService.postCheckOrder(orderDto);
 

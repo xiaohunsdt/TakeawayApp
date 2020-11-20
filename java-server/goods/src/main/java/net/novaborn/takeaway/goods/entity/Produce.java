@@ -61,6 +61,11 @@ public class Produce extends Model<Produce> {
     private Integer index;
 
     /**
+     * 是否可快递
+     */
+    private Boolean expressAble;
+
+    /**
      * 评分
      */
     private Integer rate;
