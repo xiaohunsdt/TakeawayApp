@@ -39,7 +39,7 @@
             <el-option :value="1" label="显示"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="预约日期">
+        <el-form-item label="创建日期">
           <el-date-picker
             v-model="formData.formDate"
             end-placeholder="end date"
@@ -123,17 +123,17 @@
                         <span>{{ props.row.ps }}</span>
                       </el-form-item>
                     </el-col>
-<!--                    <el-col :span="12">-->
-<!--                      <el-form-item label="地址">-->
-<!--                        <div>-->
-<!--                          <div>{{ props.row.detail.address.address }}</div>-->
-<!--                          <div>{{ props.row.detail.address.detail }}</div>-->
-<!--                        </div>-->
-<!--                      </el-form-item>-->
-<!--                      <el-form-item label="联系方式">-->
-<!--                        <span>{{ props.row.detail.address.phone }}</span>-->
-<!--                      </el-form-item>-->
-<!--                    </el-col>-->
+                    <!--                    <el-col :span="12">-->
+                    <!--                      <el-form-item label="地址">-->
+                    <!--                        <div>-->
+                    <!--                          <div>{{ props.row.detail.address.address }}</div>-->
+                    <!--                          <div>{{ props.row.detail.address.detail }}</div>-->
+                    <!--                        </div>-->
+                    <!--                      </el-form-item>-->
+                    <!--                      <el-form-item label="联系方式">-->
+                    <!--                        <span>{{ props.row.detail.address.phone }}</span>-->
+                    <!--                      </el-form-item>-->
+                    <!--                    </el-col>-->
                   </el-row>
                 </el-form>
               </base-card>
@@ -228,8 +228,10 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="预约时间"
-          prop="appointmentDate">
+          label="预约时间">
+          <template v-slot="scope">
+            {{ scope.row.appointmentDate ? scope.row.appointmentDate : '立刻取餐' }}
+          </template>
         </el-table-column>
         <el-table-column
           align="center"
@@ -354,10 +356,8 @@ export default {
     }
   },
   created() {
-    let temp = new Date()
-    temp = temp.setHours(temp.getHours() + 3 * 24)
     this.formData.formDate[0] = new Date()
-    this.formData.formDate[1] = new Date(temp)
+    this.formData.formDate[1] = new Date()
     this.onSearch()
   },
   methods: {
@@ -369,8 +369,8 @@ export default {
       this.listLoading = true
 
       const params = Object.assign({}, this.formData)
-      params.appointmentStartDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
-      params.appointmentEndDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
+      params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
+      params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
 
       orderApi.getOrderListByPage(this.page, params)
         .then(response => {

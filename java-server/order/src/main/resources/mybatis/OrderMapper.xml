@@ -77,8 +77,17 @@
         <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
             ORDER BY `create_date` DESC
         </if>
-        <if test="args.orderType != null and (args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT or args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF)">
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+            ORDER BY `create_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+            ORDER BY `create_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
             ORDER BY `appointment_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+            ORDER BY `appointment_date`,`create_date` DESC
         </if>
     </select>
 
@@ -151,8 +160,22 @@
             <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
                 AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
             </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT or orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
                 AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+                AND
+                (
+                    TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                    OR
+                    (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+                )
             </if>
         </where>
     </select>

@@ -8,7 +8,7 @@ function formatDeliveryType(orderType){
       str = '预约点餐'
       break
     case 'SELF':
-      str = '预约时间'
+      str = '自取时间'
       break
     default:
       str = '未知'

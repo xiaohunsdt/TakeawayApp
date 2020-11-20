@@ -3,16 +3,12 @@ package net.novaborn.takeaway.admin.mq;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.api.OrderController;
-import net.novaborn.takeaway.mq.config.CouponQueueConfig;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
-import net.novaborn.takeaway.mq.config.PrinterQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.service.impl.OrderService;
-import org.springframework.amqp.rabbit.annotation.*;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -50,7 +46,11 @@ public class OrderAutoReceiveReceiver {
         log.debug("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
-        orderController.receiveOrder(order.getId());
+        try {
+            orderController.receiveOrder(order.getId());
+        } catch (Exception e) {
+            log.error(null, e);
+        }
         channel.basicAck(deliveryTag, false);
     }
 }

@@ -77,7 +77,7 @@
 					</picker-view-column>
 					<picker-view-column>
 						<view style="line-height: 50px" wx:for="{{appointmentTimes[1]}}">
-							<view wx:if="{{item!=='尽快配送'}}">{{item}}点</view>
+							<view wx:if="{{item!=='尽快配送' && item!=='立刻取餐'}}">{{item}}点</view>
 							<view wx:else>{{item}}</view>
 						</view>
 					</picker-view-column>
