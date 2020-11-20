@@ -29,7 +29,9 @@ const api = {
     allPrice
   }),
   getDeliveryPrice: () => request.get('index/getDeliveryPrice'),
-  getAppointmentTimes: () => request.get('index/getAppointmentTimes'),
+  getAppointmentTimes: (orderType) => request.post('index/getAppointmentTimes', {
+    orderType
+  }),
   // 获取来自者的消息提示
   getFormerNotice: (from) => request.get('index/getFormerNotice', {
     from

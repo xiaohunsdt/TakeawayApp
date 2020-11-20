@@ -28,8 +28,8 @@ export function getDeliveryPrice () {
   return api.getDeliveryPrice()
 }
 
-export function getAppointmentTimes () {
-  return api.getAppointmentTimes()
+export function getAppointmentTimes (orderType) {
+  return api.getAppointmentTimes(orderType)
 }
 
 export function formatAppointmentTime (orderType, appointment) {

@@ -152,11 +152,7 @@ public class OrderController extends BaseController {
         OrderDetail orderDetail = orderDto.getOrderDetail();
         List<OrderItem> orderItems = orderDto.getOrderItems();
 
-        if (orderItems.size() == 0) {
-            throw new SysException(OrderExceptionEnum.ORDER_NOT_EXIST);
-        }
-
-        if (orderDetail.getAppointmentDate() == null && !this.getCanOrderNow()) {
+        if (order.getOrderType() == OrderType.NORMAL && !this.getCanOrderNow()) {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
         }
 

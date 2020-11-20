@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.user.web.api;
 
 import com.alibaba.fastjson.JSON;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.user.UserApplication;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,6 @@ class IndexControllerTest {
 
     @Test
     void getAppointmentTimes() {
-        System.out.println(JSON.toJSONString(indexController.getAppointmentTimes()));
+        System.out.println(JSON.toJSONString(indexController.getAppointmentTimes(OrderType.APPOINTMENT)));
     }
 }

@@ -57,16 +57,21 @@ Page({
         const day = this.data.appointment[0]
         const hour = this.data.appointment[1]
         const minute = this.data.appointment[2]
+
         if (day === '今天' && hour === '尽快配送') {
           this.setData({
             'order.orderType': 'NORMAL'
           })
         } else {
           this.setData({
-            'order.orderType': 'APPOINTMENT',
             'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
             deliveryArriveTime: `${day} ${hour}:${minute}`
           })
+          if (this.data.order.orderType !== 'SELF') {
+            this.setData({
+              'order.orderType': 'APPOINTMENT'
+            })
+          }
         }
       }
     },
@@ -80,7 +85,7 @@ Page({
               })
             })
         }
-        if(this.data.order.addressId){
+        if (this.data.order.addressId) {
           this.checkExpressState(this.data.order.addressId, this.data.cartAllPrice)
         }
       } else {
@@ -241,7 +246,10 @@ Page({
       })
 
     // 获取预约时间项
-    indexService.getAppointmentTimes()
+    this.getAppointmentTimes('APPOINTMENT')
+  },
+  getAppointmentTimes(orderType) {
+    indexService.getAppointmentTimes(orderType)
       .then(res => {
         times = res.appointmentTimes
         const canDeliveryNow = res.canDeliveryNow
@@ -259,7 +267,7 @@ Page({
         const hour = hours[0]
         let minutes = times[day][hour]
 
-        if (canDeliveryNow) {
+        if (orderType === 'NORMAL' && canDeliveryNow) {
           times['今天'] = Object.assign({}, {
             '尽快配送': []
           }, times['今天'])
@@ -274,8 +282,12 @@ Page({
             'order.orderType': 'NORMAL'
           })
         } else {
+          if (orderType === 'NORMAL') {
+            this.setData({
+              'order.orderType': 'APPOINTMENT'
+            })
+          }
           this.setData({
-            'order.orderType': 'APPOINTMENT',
             'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
             deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`,
           })
@@ -330,6 +342,11 @@ Page({
       this.setData({
         'order.orderType': orderType
       })
+    }
+
+    if (orderType === 'NORMAL' || orderType === 'SELF') {
+      //获取预约时间
+      this.getAppointmentTimes(orderType)
     }
   },
   onSubmitOrder() {

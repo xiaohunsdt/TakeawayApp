@@ -48,7 +48,7 @@
 					</view>
 				</view>
 
-				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT'}}">
+				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='SELF'}}">
 					<wxs src="./util.wxs" module="util" />
 					<van-cell title="{{util.formatDeliveryType(order.orderType)}}" value="{{deliveryArriveTime}}"
 						bind:click="onShowTimePicker">

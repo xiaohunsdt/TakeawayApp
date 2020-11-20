@@ -17,6 +17,7 @@ import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -28,10 +29,7 @@ import net.novaborn.takeaway.user.web.wrapper.ProduceWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,16 +42,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/api/user/index")
 public class IndexController extends BaseController {
-    private ProduceService produceService;
-
-    private GoodsService goodsService;
-
-    private AddressService addressService;
-
-    private SettingService settingService;
-
-    private BannerService bannerService;
-
     private static Map<From, String> fromerNotice;
 
     static {
@@ -61,6 +49,12 @@ public class IndexController extends BaseController {
         fromerNotice.put(From.YONSEI, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。延世学联祝你中秋佳节快乐，月圆人圆事事圆满!");
         fromerNotice.put(From.SOGANG, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。西江学联祝你中秋佳节快乐，月圆人圆事事圆满!");
     }
+
+    private ProduceService produceService;
+    private GoodsService goodsService;
+    private AddressService addressService;
+    private SettingService settingService;
+    private BannerService bannerService;
 
     @GetMapping("getBannersList")
     public ResponseEntity getBannersList() {
@@ -144,9 +138,9 @@ public class IndexController extends BaseController {
         return settingService.getSettingByName("delivery_price", SettingScope.DELIVERY).getValueAsInt();
     }
 
-    @GetMapping("getAppointmentTimes")
+    @PostMapping("getAppointmentTimes")
     @ResponseBody
-    public AppointmentTimesDto getAppointmentTimes() {
+    public AppointmentTimesDto getAppointmentTimes(OrderType orderType) {
         Date currentDate = DateUtil.date();
         String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
@@ -171,7 +165,11 @@ public class IndexController extends BaseController {
             Date endDate;
             if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
                 // 预定要提前2个小时
-                startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
+                if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
+                    startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
+                } else {
+                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 30);
+                }
                 endDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                     .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
