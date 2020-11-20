@@ -6,7 +6,6 @@ import net.novaborn.takeaway.common.SpringContextHolder;
 import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.service.impl.DeliveryService;
-import net.novaborn.takeaway.user.entity.Address;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.service.impl.UserService;
@@ -32,7 +31,6 @@ public class OrderWrapperEx extends BaseControllerWrapper {
         AddressService addressService = SpringContextHolder.getBean(AddressService.class);
         DeliveryService deliveryService = SpringContextHolder.getBean(DeliveryService.class);
         User user = userService.getById((Long) map.get("userId"));
-        Address address = addressService.getById((Long) map.get("addressId"));
 
         if (user.getOpenId() != null) {
             map.put("userName", user.getNickName());
@@ -44,8 +42,10 @@ public class OrderWrapperEx extends BaseControllerWrapper {
             Optional<Delivery> delivery = deliveryService.getByOrderId((Long) map.get("id"));
             delivery.ifPresent((item) -> map.put("deliverer", item.getAdminId()));
         }
-
-        map.put("address", address);
+        if (map.get("addressId") != null) {
+            map.put("address", addressService.getById((Long) map.get("addressId")));
+            map.remove("addressId");
+        }
 
         Date createDate = (Date) map.get("createDate");
         Date appointmentDate = (Date) map.get("appointmentDate");

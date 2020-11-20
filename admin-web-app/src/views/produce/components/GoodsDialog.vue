@@ -38,6 +38,13 @@
               <el-checkbox label="今日推荐" name="flag"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <el-form-item label="允许快递">
+            <el-switch
+              v-model="produceData.expressAble"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </el-form-item>
           <el-form-item label="优先级" prop="rate">
             <el-input v-model.number="produceData.index" autocomplete="off" type="number"></el-input>
           </el-form-item>

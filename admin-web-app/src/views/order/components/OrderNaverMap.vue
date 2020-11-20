@@ -44,7 +44,8 @@
       :order="order"
       @click="onMarkerClicked"
       @load="onMarkerLoaded"/>
-    <naver-circle v-for="item in distancePriceArr" :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="item.key"/>
+    <naver-circle v-for="item in distancePriceArr" :key="item.key" :lat="mapOptions.lat" :lng="mapOptions.lng"
+                  :radius="item.key"/>
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="1800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="2800"/>-->
     <!--    <naver-circle :lat="mapOptions.lat" :lng="mapOptions.lng" :radius="3800"/>-->
@@ -164,12 +165,12 @@ export default {
     },
     getWaitEatOrderList() {
       orderApi.getTodayOrderListByState('WAIT_EAT').then(res => {
-        this.orderList = res
+        this.orderList = res.filter(item => item.address)
       })
     },
     getAllTodayOrderList() {
       orderApi.getTodayOrderList().then(res => {
-        this.orderList = res
+        this.orderList = res.filter(item => item.address)
       })
     },
     onCopySuccess() {

@@ -311,7 +311,7 @@ import orderApi from '@/api/order'
 import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
 
 export default {
-  name: 'NormalOrder',
+  name: 'ExpressOrder',
   filters: {
     orderStateFormat: function(value) {
       return formatOrderState(value)
@@ -341,7 +341,7 @@ export default {
         paymentWay: null,
         orderState: null,
         showDelete: 0,
-        orderType: 'NORMAL',
+        orderType: 'EXPRESS',
         formDate: [
           new Date(),
           new Date()

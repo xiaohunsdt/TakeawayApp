@@ -29,12 +29,25 @@ import api from '../utils/api'
  */
 export function createOrder(order, orderDetail, orderItems, coupon) {
   return new Promise(function (resolve, reject) {
-    if ((order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' || order.orderType === 'EXPRESS') && !order.addressId) {
-      wx.showToast({
-        title: '请设置地址!!',
-        image: '/static/images/error.png'
-      })
-      reject()
+    if ((order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' || order.orderType === 'EXPRESS')) {
+      if(!order.addressId){
+        wx.showToast({
+          title: '请设置地址!!',
+          image: '/static/images/error.png'
+        })
+        return reject()
+      }
+      console.log(order.orderType)
+      if(order.orderType === 'EXPRESS'){
+        if(order.paymentWay === 'CREDIT_CARD' || order.paymentWay === 'CASH'){
+          wx.showToast({
+            icon: 'none',
+            title: '快递订单无法刷卡或现金支付!!',
+            duration: 2000
+          })
+          return reject()
+        }
+      }
     }
     const couponId = coupon ? coupon.id : null
     api.createOrder(order, orderDetail, orderItems, couponId)

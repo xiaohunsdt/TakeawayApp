@@ -117,6 +117,20 @@ export const asyncRoutes = [
                 meta: { title: '预约订单', icon: 'order' }
             },
             {
+                path: 'self',
+                name: 'SelfOrder',
+                // props: true,
+                component: () => import('@/views/order/self'),
+                meta: { title: '自取订单', icon: 'order' }
+            },
+            {
+                path: 'express',
+                name: 'ExpressOrder',
+                // props: true,
+                component: () => import('@/views/order/express'),
+                meta: { title: '快递订单', icon: 'order' }
+            },
+            {
                 path: 'map',
                 name: 'OrderMap',
                 // props: true,

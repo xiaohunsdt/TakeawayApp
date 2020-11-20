@@ -80,12 +80,12 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
-    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
+    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args, PaymentWay paymentWay, OrderType orderType, OrderState orderState) {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
-                    .map(User::getId)
-                    .collect(Collectors.toList());
+                .map(User::getId)
+                .collect(Collectors.toList());
             if (ids.size() > 0) {
                 args.put("userIds", ids);
             } else {
@@ -93,13 +93,9 @@ public class OrderController extends BaseController {
             }
         }
 
-        if (StrUtil.isNotBlank((String) args.get("paymentWay"))) {
-            args.put("paymentWay", (PaymentWay.valueOf((String) args.get("paymentWay"))).getCode());
-        }
-
-        if (StrUtil.isNotBlank((String) args.get("orderState"))) {
-            args.put("orderState", (OrderState.valueOf((String) args.get("orderState"))).getCode());
-        }
+        args.put("paymentWay", paymentWay);
+        args.put("orderType", orderType);
+        args.put("orderState", orderState);
 
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());
@@ -117,8 +113,8 @@ public class OrderController extends BaseController {
     @PostMapping("getTodayOrderList")
     public ResponseEntity getTodayOrderList() {
         List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
-                .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
-                .collect(Collectors.toList());
+            .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
     }
 
@@ -239,8 +235,8 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getOrderState() == OrderState.FINISHED
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
@@ -270,8 +266,8 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getPayState() == PayState.UN_PAY
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 

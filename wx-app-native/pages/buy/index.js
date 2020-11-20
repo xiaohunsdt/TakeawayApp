@@ -13,7 +13,9 @@ let times = null
 Page({
   watch: {
     address(newVal) {
-      this.checkExpressState(newVal.id, this.data.cartAllPrice)
+      if(this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT'){
+        this.checkExpressState(newVal.id, this.data.cartAllPrice)
+      }
       this.setData({
         'order.addressId': newVal.id
       })
@@ -297,7 +299,8 @@ Page({
 
         if (days[0] === '今天' && hours[0] === '尽快配送') {
           this.setData({
-            'order.orderType': 'NORMAL'
+            'order.orderType': 'NORMAL',
+            'orderDetail.appointmentDate': null,
           })
         } else {
           if (orderType === 'NORMAL') {
@@ -306,7 +309,7 @@ Page({
             })
           }
           this.setData({
-            'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+            'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', [days[0],hours[0],minutes[0]]),
             deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`,
           })
         }

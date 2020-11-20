@@ -346,7 +346,7 @@ export default {
         paymentWay: null,
         orderState: null,
         showDelete: 0,
-        deliveryType: 'appointment',
+        orderType: 'APPOINTMENT',
         formDate: [null, null]
       },
       listLoading: false,

@@ -17,10 +17,10 @@
         <where>
             `user_id` = #{userId}
             <if test="paymentWay != null">
-                AND `payment_way` = #{paymentWay}
+                AND `payment_way` = #{paymentWay.code}
             </if>
             <if test="orderState != null">
-                AND `order_state` = #{orderState}
+                AND `order_state` = #{orderState.code}
             </if>
             <if test="!isShowDeleted">
                 AND deleted = 0
@@ -74,10 +74,10 @@
         <where>
             <include refid="common_order_list_where"/>
         </where>
-        <if test="args.orderType != null and args.orderType == '1'">
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
             ORDER BY `create_date` DESC
         </if>
-        <if test="args.orderType != null and args.orderType == '2'">
+        <if test="args.orderType != null and (args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT or args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF)">
             ORDER BY `appointment_date` DESC
         </if>
     </select>
@@ -151,7 +151,7 @@
             <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
                 AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
             </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT or orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
                 AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
             </if>
         </where>
@@ -163,11 +163,9 @@
             <include refid="common_order_list_where_u"/>
             AND
             (
-                TO_DAYS(`create_date`) = TO_DAYS(NOW()
-            )
-            OR
-            (
-                `appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+                TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                OR
+                (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
             )
         </where>
         ORDER BY `create_date` DESC
@@ -179,11 +177,9 @@
             <include refid="common_order_list_where_u"/>
             AND
             (
-                TO_DAYS(`create_date`) = TO_DAYS(NOW()
-            )
-            OR
-            (
-                `appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+                TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                OR
+                (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
             )
         </where>
     </select>

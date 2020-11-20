@@ -125,10 +125,10 @@
 					<van-button color="{{order.paymentWay==='TRANSFER'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
 					</van-button>
-					<van-button color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange"
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
 					</van-button>
-					<van-button color="{{order.paymentWay==='CASH'?'#FFD200':null}}" bind:click="paymentWayChange"
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CASH'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
 					</van-button>
 				</view>
