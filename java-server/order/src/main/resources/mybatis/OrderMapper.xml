@@ -191,7 +191,7 @@
                 (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
             )
         </where>
-        ORDER BY `create_date` DESC
+        ORDER BY `appointment_date`,`create_date` DESC
     </select>
 
     <select id="getTodayOrderCountByStateU" resultType="java.lang.Integer">

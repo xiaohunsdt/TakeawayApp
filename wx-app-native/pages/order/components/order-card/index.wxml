@@ -5,6 +5,12 @@
 				<view wx:if="{{order.orderType==='APPOINTMENT'}}">
 					<van-icon name="clock" color="#FFD200" size="1.3rem" />
 				</view>
+				<view wx:if="{{order.orderType==='SELF'}}">
+					<van-icon name="smile" color="#FFD200" size="1.3rem" />
+				</view>
+				<view wx:if="{{order.orderType==='EXPRESS'}}">
+					<van-icon name="bag" color="#FFD200" size="1.3rem" />
+				</view>
 			</view>
 			<view class="header-right">
 				<view wx:if="{{order.payState === 'PAID' || order.payState === 'PAY_LATER'}}">
