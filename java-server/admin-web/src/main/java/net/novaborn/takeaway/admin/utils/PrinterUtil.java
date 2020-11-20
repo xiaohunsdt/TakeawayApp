@@ -107,8 +107,11 @@ public class PrinterUtil {
             sf.append(String.format("<B><L><BOLD>%s\n", orderDetail.getPs()));
             sf.append("<BR>");
         }
-        sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
-        sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
+
+        if(order.getOrderType() == OrderType.NORMAL || order.getOrderType() == OrderType.APPOINTMENT || order.getOrderType() == OrderType.EXPRESS){
+            sf.append(String.format("<lc><N><BOLD><L>地址: %s\n", formatKoreaChar(address.getAddress() + " " + address.getDetail())));
+            sf.append(String.format("<N><BOLD><L>联系方式: %s", address.getPhone()));
+        }
 
         if (temperature1 != null && StrUtil.isNotBlank(temperature1.getValue())) {
             Setting temperature2 = settingService.getSettingByName("temperature2", SettingScope.PRINTER);
@@ -155,8 +158,8 @@ public class PrinterUtil {
         StringBuffer sf = new StringBuffer();
         sf.append(String.format("<BOLD><B2><C>#%d\n", order.getNumber()));
         sf.append("<BR>");
-        if (orderDetail.getAppointmentDate() != null) {
-            sf.append("<B><C>预约订单\n");
+        if (order.getOrderType() != OrderType.NORMAL) {
+            sf.append(String.format("<B><C>%s\n", OrderFormatUtil.formatOrderType(order.getOrderType())));
         }
         sf.append("<N><BOLD>--------------------------------\n");
         sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));

@@ -273,6 +273,7 @@ public class OrderController extends BaseController {
 
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
+            .filter(item -> item.getOrderType() == OrderType.NORMAL || item.getOrderType() == OrderType.APPOINTMENT)
             .filter(item -> {
                 // 返回今天的要配送的订单
                 Date target;

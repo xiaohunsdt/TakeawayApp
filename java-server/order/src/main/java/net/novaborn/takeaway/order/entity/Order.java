@@ -32,7 +32,6 @@ public class Order extends Model<Order> {
 
     private Long userId;
 
-    @NotNull(message = "地址不能为空")
     private Long addressId;
 
     private Integer goodsCount;

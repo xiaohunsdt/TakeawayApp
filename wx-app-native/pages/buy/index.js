@@ -41,7 +41,7 @@ Page({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    'order.deliveryPrice': function(newVal){
+    'order.deliveryPrice': function (newVal) {
       const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + newVal
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
@@ -71,13 +71,23 @@ Page({
       }
     },
     'order.orderType': function (newVal) {
-      if (newVal === 'NORMAL') {
-        orderService.getDeliveryArriveTime()
-          .then(res => {
-            this.setData({
-              deliveryArriveTime: `大约 ${res.date} ${res.time}`
+      if (newVal === 'NORMAL' || newVal === 'APPOINTMENT') {
+        if (newVal === 'NORMAL') {
+          orderService.getDeliveryArriveTime()
+            .then(res => {
+              this.setData({
+                deliveryArriveTime: `大约 ${res.date} ${res.time}`
+              })
             })
-          })
+        }
+        if(this.data.order.addressId){
+          this.checkExpressState(this.data.order.addressId, this.data.cartAllPrice)
+        }
+      } else {
+        this.setData({
+          disableService: false,
+          disableNotice: ''
+        })
       }
     }
   },
@@ -94,7 +104,7 @@ Page({
       addressId: null,
       couponId: null,
       paymentWay: 'WEIXIN_PAY',
-      orderType: '',
+      orderType: 'NORMAL',
       deliveryPrice: 2000
     },
     orderDetail: {
@@ -307,6 +317,20 @@ Page({
     this.setData({
       'order.paymentWay': paymentWay
     })
+  },
+  orderTypeChange(event) {
+    console.log(event.currentTarget.dataset)
+    let orderType = event.currentTarget.dataset.orderType
+
+    if (orderType === 'NORMAL') {
+      this.setData({
+        showTimePicker: false
+      })
+    } else {
+      this.setData({
+        'order.orderType': orderType
+      })
+    }
   },
   onSubmitOrder() {
     if (this.data.orderItems.length === 0) {
