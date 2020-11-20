@@ -15,23 +15,23 @@
 			<base-panel>
 				<view class="order-type-btns">
 					<van-button color="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' ? '#FFD200' : null}}"
-						bind:click="orderTypeChange" data-order-type="NORMAL"
-						custom-class="order-type-btn order-type-btns-left" icon="bell" round size="small" type="primary">
+						bind:click="orderTypeChange" data-order-type="NORMAL" custom-class="order-type-btn order-type-btns-left"
+						icon="bell" round size="small" type="primary">
 						配送
 					</van-button>
 					<van-button color="{{order.orderType==='SELF' ? '#FFD200' : null}}" bind:click="orderTypeChange"
-						data-order-type="SELF" custom-class="order-type-btn order-type-btns-center" icon="smile" round
-						size="small" type="primary">
+						data-order-type="SELF" custom-class="order-type-btn order-type-btns-center" icon="smile" round size="small"
+						type="primary">
 						自取
 					</van-button>
 					<van-button color="{{order.orderType==='EXPRESS' ? '#FFD200' : null}}" bind:click="orderTypeChange"
-						data-order-type="EXPRESS" custom-class="order-type-btn order-type-btns-right" icon="bag" round
-						size="small" type="primary">
+						data-order-type="EXPRESS" custom-class="order-type-btn order-type-btns-right" icon="bag" round size="small"
+						type="primary">
 						快递
 					</van-button>
 				</view>
 				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='EXPRESS'}}">
-					<view wx:if="address">
+					<view wx:if="{{address}}">
 						<van-cell title="{{address.address + ' ' + address.detail}}" is-link url="/pages/my/address/index">
 							<view slot="icon" style="margin-right: 0.2rem">
 								<van-icon color="#FFD200" name="location" size="1.2rem" />
@@ -57,12 +57,13 @@
 						</view>
 					</van-cell>
 				</view>
-				
-				<van-notice-bar wx:if="{{address && (order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='EXPRESS')}}" color="#ad0000" background="#ffe1e1" left-icon="info-o"
-						text="请确认地址是否正确! 送错地址概不负责!" />
+
+				<van-notice-bar
+					wx:if="{{address && (order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='EXPRESS')}}"
+					color="#ad0000" background="#ffe1e1" left-icon="info-o" text="请确认地址是否正确! 送错地址概不负责!" />
 
 				<view wx:if="{{order.orderType==='SELF'}}" style="margin-top: 20rpx">
-					<van-notice-bar color="#67c23a" background="#f0f9eb" left-icon="info-o"text="到店后出示订单号即可取餐!" />
+					<van-notice-bar color="#67c23a" background="#f0f9eb" left-icon="info-o" text="到店后出示订单号即可取餐!" />
 				</view>
 			</base-panel>
 		</view>
@@ -113,14 +114,13 @@
 				<view>支付方式</view>
 				<view class="pay-way-btns">
 					<van-button color="{{order.paymentWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="paymentWayChange"
-						data-payment-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary"
-						wx:if="{{address}}">微信支付
+						data-payment-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary">
+						微信支付
 					</van-button>
 					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付
 					</van-button>
 					<van-button color="{{order.paymentWay==='ALI_PAY'?'#FFD200':null}}" bind:click="paymentWayChange"
-						data-payment-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary"
-						wx:if="{{address}}">支付宝支付
+						data-payment-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary">支付宝支付
 					</van-button>
 					<van-button color="{{order.paymentWay==='TRANSFER'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐

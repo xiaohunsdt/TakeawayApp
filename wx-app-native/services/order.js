@@ -29,6 +29,13 @@ import api from '../utils/api'
  */
 export function createOrder(order, orderDetail, orderItems, coupon) {
   return new Promise(function (resolve, reject) {
+    if ((order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' || order.orderType === 'EXPRESS') && !order.addressId) {
+      wx.showToast({
+        title: '请设置地址!!',
+        image: '/static/images/error.png'
+      })
+      reject()
+    }
     const couponId = coupon ? coupon.id : null
     api.createOrder(order, orderDetail, orderItems, couponId)
       .then(res => resolve(res))

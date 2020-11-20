@@ -457,13 +457,6 @@ Page({
     }
   },
   createOrder() {
-    if (!this.data.order.addressId) {
-      wx.showToast({
-        title: '请设置地址!!',
-        image: '/static/images/error.png'
-      })
-      return
-    }
     orderService.createOrder(
       this.data.order,
       this.data.orderDetail,
