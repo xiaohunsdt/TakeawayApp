@@ -92,7 +92,7 @@
 				<view class="order-items">
 					<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
 				</view>
-				<view class="delivery-price-view">
+				<view class="delivery-price-view" wx:if="{{order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT'}}">
 					<view class="delivery-str">
 						<view wx:if="{{order.deliveryPrice > 0}}">
 							配送费：
@@ -107,7 +107,7 @@
 				</view>
 				<view id="order-amount">
 					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
-					小计 <span style="color: #FFD200">₩ {{ cartAllPrice + order.deliveryPrice }}</span>
+					小计 <span style="color: #FFD200">₩ {{ order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' ? cartAllPrice + order.deliveryPrice : cartAllPrice }}</span>
 				</view>
 			</base-panel>
 			<base-panel>

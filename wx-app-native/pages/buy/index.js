@@ -30,19 +30,28 @@ Page({
       }
     },
     cartAllPrice(newVal) {
-      const _realPrice = newVal - this.data.couponDiscountPrice + this.data.order.deliveryPrice
+      let _realPrice = newVal - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
     couponDiscountPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - newVal + this.data.order.deliveryPrice
+      let _realPrice = this.data.cartAllPrice - newVal
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
     'order.deliveryPrice': function (newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + newVal
+      let _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += newVal
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
@@ -94,6 +103,15 @@ Page({
           disableNotice: ''
         })
       }
+
+      // 重新计算价格
+      let _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
+      this.setData({
+        realPrice: _realPrice > 0 ? _realPrice * 100 : 0
+      })
     }
   },
   data: {

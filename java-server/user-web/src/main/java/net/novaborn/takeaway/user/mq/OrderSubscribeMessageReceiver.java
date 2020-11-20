@@ -3,12 +3,10 @@ package net.novaborn.takeaway.user.mq;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.user.utils.WxSubscrubeMessageUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Date;
@@ -48,21 +45,24 @@ public class OrderSubscribeMessageReceiver {
 
         Order target = orderService.getById(order.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
-
-        if (target != null) {
-            switch (order.getOrderState()) {
-                case PRODUCING:
-                    wxSubscrubeMessageUtil.sendOrderReceiveMessage(target);
-                    break;
-                case DELIVERING:
-                    wxSubscrubeMessageUtil.sendOrderDeliveryMessage(target);
-                    break;
-                case FINISHED:
-                    wxSubscrubeMessageUtil.sendOrderFinishedMessage(target);
-                    break;
-                default:
-                    break;
+        try {
+            if (target != null) {
+                switch (order.getOrderState()) {
+                    case PRODUCING:
+                        wxSubscrubeMessageUtil.sendOrderReceiveMessage(target);
+                        break;
+                    case DELIVERING:
+                        wxSubscrubeMessageUtil.sendOrderDeliveryMessage(target);
+                        break;
+                    case FINISHED:
+                        wxSubscrubeMessageUtil.sendOrderFinishedMessage(target);
+                        break;
+                    default:
+                        break;
+                }
             }
+        } catch (Exception e) {
+            log.error(null, e);
         }
 
         channel.basicAck(deliveryTag, false);

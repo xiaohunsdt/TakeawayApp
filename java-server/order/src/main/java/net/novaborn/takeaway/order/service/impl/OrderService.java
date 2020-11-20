@@ -160,10 +160,15 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
         int deliveryPrice = settingService.getSettingByName("delivery_price", SettingScope.DELIVERY).getValueAsInt();
 
+        order.setAllPrice(allPrice);
+        order.setRealPrice(allPrice);
         order.setGoodsCount(allCount);
-        order.setAllPrice(allPrice + deliveryPrice);
-        order.setRealPrice(allPrice + deliveryPrice);
-        order.setDeliveryPrice(deliveryPrice);
+
+        if (order.getOrderType() == OrderType.NORMAL || order.getOrderType() == OrderType.APPOINTMENT) {
+            order.setAllPrice(order.getAllPrice() + deliveryPrice);
+            order.setRealPrice(order.getRealPrice() + deliveryPrice);
+            order.setDeliveryPrice(deliveryPrice);
+        }
     }
 
     @Override

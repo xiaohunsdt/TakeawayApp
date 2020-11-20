@@ -85,7 +85,7 @@ public class PrinterUtil {
         sf.append("<N><BOLD>--------------------------------\n");
         sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));
         if (orderDetail.getAppointmentDate() != null) {
-            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
+            sf.append(String.format("<N>预约时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
         }
         sf.append("<BR>");
         sf.append("<BOLD>--------------菜品--------------\n");
@@ -164,7 +164,7 @@ public class PrinterUtil {
         sf.append("<N><BOLD>--------------------------------\n");
         sf.append(String.format("<N>下单时间: %s\n", DateUtil.formatDateTime(order.getCreateDate())));
         if (orderDetail.getAppointmentDate() != null) {
-            sf.append(String.format("<N>送达时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
+            sf.append(String.format("<N>预约时间: %s\n", DateUtil.formatDateTime(orderDetail.getAppointmentDate())));
         }
         sf.append("<BR>");
         sf.append("<BOLD>--------------菜品--------------\n");
