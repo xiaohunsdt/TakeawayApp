@@ -6,7 +6,7 @@ public class CommonUtilTest {
 
     @Test
     public void validate() {
-        System.out.println(CommonUtil.validatePhone("01056511996"));
-        System.out.println(CommonUtil.validatePhone("1056511996"));
+        System.out.println(CommonUtil.validateKoreaPhone("01056511996"));
+        System.out.println(CommonUtil.validateKoreaPhone("1056511996"));
     }
 }

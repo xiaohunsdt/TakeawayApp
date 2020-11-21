@@ -101,9 +101,13 @@ Page({
               'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
+            if(this.data.address){
+              this.setData({
+                'orderDetail.phone': this.data.address.phone
+              })
+            }
           }
         }
-
       }
     },
     'order.orderType': function (newVal) {
@@ -155,7 +159,8 @@ Page({
     orderDetail: {
       from: null,
       ps: null,
-      appointmentDate: null
+      appointmentDate: null,
+      phone: null
     },
     orderItems: [],
     cartAllCount: 0,
@@ -405,6 +410,11 @@ Page({
       //获取预约时间
       this.getAppointmentTimes(orderType)
     }
+  },
+  selfPhoneInput(event){
+    this.setData({
+      'orderDetail.phone': event.detail.value
+    })
   },
   onSubmitOrder() {
     if (this.data.orderItems.length === 0) {

@@ -75,7 +75,7 @@ public class AddressController extends BaseController {
     public Tip updateAddress(@ModelAttribute @Validated Address address) {
         Address target = addressService.getById(address.getId());
 
-        if (address.getPhone() != null && !CommonUtil.validatePhone(address.getPhone())) {
+        if (address.getPhone() != null && !CommonUtil.validateKoreaPhone(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 

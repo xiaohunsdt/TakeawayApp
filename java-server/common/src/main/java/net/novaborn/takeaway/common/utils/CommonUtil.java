@@ -8,7 +8,7 @@ public class CommonUtil {
     /**
      * 验证韩国手机号是否正确
      */
-    public static boolean validatePhone(String phone) {
+    public static boolean validateKoreaPhone(String phone) {
         return ReUtil.contains(VALIDATE_REG, phone);
     }
 

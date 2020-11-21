@@ -48,6 +48,16 @@
 					</view>
 				</view>
 
+				<view wx:if="{{order.orderType === 'SELF' && orderDetail.appointmentDate !== null}}">
+					<van-cell>
+						<view slot="icon" style="margin-right: 0.2rem">
+							<van-icon color="#FFD200" name="phone" size="1.2rem" />
+						</view>
+						<view slot="title">
+							<input class="self-phone-input" value="{{orderDetail.phone}}" placeholder="请输入手机号" bind:input="selfPhoneInput"/>
+						</view>
+					</van-cell>
+				</view>
 				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='SELF'}}">
 					<wxs src="./util.wxs" module="util" />
 					<van-cell title="{{util.formatDeliveryType(order.orderType)}}" value="{{deliveryArriveTime}}"
@@ -107,7 +117,8 @@
 				</view>
 				<view id="order-amount">
 					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
-					小计 <span style="color: #FFD200">₩ {{ order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' ? cartAllPrice + order.deliveryPrice : cartAllPrice }}</span>
+					小计 <span style="color: #FFD200">₩
+						{{ order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' ? cartAllPrice + order.deliveryPrice : cartAllPrice }}</span>
 				</view>
 			</base-panel>
 			<base-panel>
@@ -125,11 +136,13 @@
 					<van-button color="{{order.paymentWay==='TRANSFER'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
 					</van-button>
-					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange"
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}"
+						color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange"
 						data-payment-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
 					</van-button>
-					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CASH'?'#FFD200':null}}" bind:click="paymentWayChange"
-						data-payment-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CASH'?'#FFD200':null}}"
+						bind:click="paymentWayChange" data-payment-way="CASH" custom-class="pay-way-btn" icon="bill" round
+						size="small" type="primary">现金支付
 					</van-button>
 				</view>
 			</base-panel>
