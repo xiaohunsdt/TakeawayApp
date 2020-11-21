@@ -12,8 +12,8 @@ export function getCouponLogByOrderId (orderId) {
  * 检查优惠卷可以获取折扣的价格
  * @param order
  */
-export function checkCouponDiscountPrice (order, orderItems, coupon) {
-  return api.checkCouponDiscountPrice(order, orderItems, coupon.id)
+export function checkCouponDiscountPrice (order, orderItems, couponId) {
+  return api.checkCouponDiscountPrice(order, orderItems, couponId)
 }
 
 export function getCouponDetail (coupon) {

@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import net.novaborn.takeaway.common.enums.From;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.PayState;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
@@ -37,7 +35,6 @@ public class Order extends Model<Order> {
 
     private Long userId;
 
-    @NotNull(message = "地址不能为空")
     private Long addressId;
 
     private Integer goodsCount;
@@ -70,28 +67,27 @@ public class Order extends Model<Order> {
     @NotNull(message = "支付方式不能为空")
     private PaymentWay paymentWay;
 
+    private OrderType orderType;
+
     private PayState payState;
 
     private OrderState orderState;
 
-    /**
-     * 备注消息
-     */
-    private String ps;
-
-    private Boolean isCommented;
-
-    /**
-     * 预约时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date appointmentDate;
-
-    /**
-     * 來自哪里
-     */
-    @TableField(value = "`from`")
-    private From from;
+//    /**
+//     * 备注消息
+//     */
+//    private String ps;
+//
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date appointmentDate;
+//
+//    private Boolean isCommented;
+//
+//    /**
+//     * 來自哪里
+//     */
+//    @TableField(value = "`from`")
+//    private From from;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.utils.OrderFormatUtil;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.UserService;
@@ -33,7 +34,7 @@ public class WxSubscrubeMessageUtil {
         dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber().toString()));
         dataList.add(new WxMaSubscribeMessage.Data("phrase2", "制作中"));
         dataList.add(new WxMaSubscribeMessage.Data("amount3", "₩" + order.getRealPrice()));
-        dataList.add(new WxMaSubscribeMessage.Data("phrase5", OrderFormatUtil.formatOrderType(order)));
+        dataList.add(new WxMaSubscribeMessage.Data("phrase5", OrderFormatUtil.formatOrderType(order.getOrderType())));
         dataList.add(new WxMaSubscribeMessage.Data("thing7", "已经确认收到您的订单,正在为您制作!"));
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
@@ -74,8 +75,11 @@ public class WxSubscrubeMessageUtil {
         List<WxMaSubscribeMessage.Data> dataList = new ArrayList<>();
         dataList.add(new WxMaSubscribeMessage.Data("character_string1", "# " + order.getNumber()));
         dataList.add(new WxMaSubscribeMessage.Data("time2", DateUtil.formatDateTime(order.getUpdateDate())));
-//        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您选择聚韩外卖!"));
-        dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,请到门口查看!"));
+        if (order.getOrderType() == OrderType.NORMAL || order.getOrderType() == OrderType.APPOINTMENT) {
+            dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,请到门口查看!"));
+        } else {
+            dataList.add(new WxMaSubscribeMessage.Data("thing3", "您的订单已完成,感谢您的使用!"));
+        }
 
         WxMaSubscribeMessage subscribeMessage = new WxMaSubscribeMessage();
         subscribeMessage.setToUser(user.getOpenId());

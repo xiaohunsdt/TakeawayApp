@@ -13,6 +13,7 @@ import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
+import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
@@ -39,20 +40,14 @@ import java.util.*;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
-    private OrderItemService orderItemService;
-
-    private GoodsService goodsService;
-
-    private ProduceService produceService;
-
-    private GoodsStockService goodsStockService;
-
-    private CouponService couponService;
-
-    private SettingService settingService;
-
     @Setter
     protected Map<String, Goods> gifts;
+    private OrderItemService orderItemService;
+    private GoodsService goodsService;
+    private ProduceService produceService;
+    private GoodsStockService goodsStockService;
+    private CouponService couponService;
+    private SettingService settingService;
 
     @PostConstruct
     public void init() {
@@ -100,8 +95,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
 
     @Override
-    public int getWaitingReceiveOrderCount(DeliveryType deliveryType) {
-        return this.baseMapper.getWaitingReceiveOrderCount(deliveryType);
+    public int getWaitingReceiveOrderCount(OrderType orderType) {
+        return this.baseMapper.getWaitingReceiveOrderCount(orderType);
     }
 
     @Override
@@ -115,6 +110,11 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
+    public int getTodayOrderCount(Date day, OrderType orderType) {
+        return this.baseMapper.getTodayOrderCount(day, orderType);
+    }
+
+    @Override
     public List<Order> getTodayOrderByStateU(Long userId, OrderStateEx orderState) {
         return this.baseMapper.getTodayOrderByStateU(userId, orderState);
     }
@@ -124,16 +124,19 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
     }
 
-    @Override
-    public int getOrderCount(Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(null, day, deliveryType);
-    }
-
-    @Override
-    public int getOrderCount(Long storeId, Date day, DeliveryType deliveryType) {
-        return this.baseMapper.getOrderCount(storeId, day, deliveryType);
-    }
-
+    //<<<<<<< HEAD
+//    public int getOrderCount(Date day, DeliveryType deliveryType) {
+//        return this.baseMapper.getOrderCount(null, day, deliveryType);
+//    }
+//
+//    @Override
+//    public int getOrderCount(Long storeId, Date day, DeliveryType deliveryType) {
+//        return this.baseMapper.getOrderCount(storeId, day, deliveryType);
+//    }
+//
+//    @Override
+//=======
+//>>>>>>> master
     @Override
     public void setDiscount(Order order, List<OrderItem> orderItemList, Long couponId) {
         couponService.getDiscountMoney(order, orderItemList, couponId);
@@ -170,38 +173,44 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int allPrice = orderItemList.parallelStream().mapToInt(item -> item.getGoodsPrice() * item.getGoodsCount()).sum();
         int deliveryPrice = settingService.getSettingByName(order.getStoreId(), "delivery_price", SettingScope.DELIVERY).getValueAsInt();
 
+        order.setAllPrice(allPrice);
+        order.setRealPrice(allPrice);
         order.setGoodsCount(allCount);
-        order.setAllPrice(allPrice + deliveryPrice);
-        order.setRealPrice(allPrice + deliveryPrice);
-        order.setDeliveryPrice(deliveryPrice);
+
+        if (order.getOrderType() == OrderType.NORMAL || order.getOrderType() == OrderType.APPOINTMENT) {
+            order.setAllPrice(order.getAllPrice() + deliveryPrice);
+            order.setRealPrice(order.getRealPrice() + deliveryPrice);
+            order.setDeliveryPrice(deliveryPrice);
+        }
     }
 
     @Override
-    public void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId) {
-        if (order.getStoreId() == 1302193963869949953L && order.getPaymentWay() != PaymentWay.CREDIT_CARD) {
+    public void postCheckOrder(OrderDto orderDto) {
+        // 设置优惠
+        if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
             String giftName = null;
-            if (order.getRealPrice() >= 40000) {
+            if (orderDto.getOrder().getRealPrice() >= 40000) {
                 if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
                     gift = gifts.get("鸭脖");
                     giftName = "鸭脖";
                 }
-            } else if (order.getRealPrice() >= 30000) {
+            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
                 if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
                     gift = gifts.get("鸭锁骨");
                     giftName = "鸭锁骨";
                 }
-            } else if (order.getRealPrice() >= 25000) {
+            } else if (orderDto.getOrder().getRealPrice() >= 25000) {
                 if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
                     gift = gifts.get("鸭翅");
                     giftName = "鸭翅";
                 }
-            } else if (order.getRealPrice() >= 20000) {
+            } else if (orderDto.getOrder().getRealPrice() >= 20000) {
                 if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
                     gift = gifts.get("饮料");
                     giftName = "饮料";
                 }
-            } else if (order.getRealPrice() >= 15000) {
+            } else if (orderDto.getOrder().getRealPrice() >= 15000) {
                 if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
                     gift = gifts.get("川香卤蛋");
                     giftName = "川香卤蛋";
@@ -216,39 +225,57 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                 orderItem.setGoodsThumb(gift.getThumb());
                 orderItem.setGoodsPrice(0);
                 orderItem.setGoodsCount(1);
-                orderItemList.add(orderItem);
-                order.setGoodsCount(order.getGoodsCount() + 1);
+                orderDto.getOrderItems().add(orderItem);
+                orderDto.getOrder().setGoodsCount(orderDto.getOrder().getGoodsCount() + 1);
             }
         }
 
         //设置 优惠卷折扣
-        if (couponId != null) {
-            this.setDiscount(order, orderItemList, couponId);
+        if (orderDto.getCouponId() != null) {
+            this.setDiscount(orderDto.getOrder(), orderDto.getOrderItems(), orderDto.getCouponId());
         }
 
         //填写订单信息
         int number;
-        if (order.getAppointmentDate() == null) {
-            // 一般订单
-            number = this.getOrderCount(order.getStoreId(), new Date(), DeliveryType.NORMAL) + 1;
-        } else {
-            // 预约订单
-            number = 500000 + DateUtil.dayOfMonth(order.getAppointmentDate()) * 1000 + this.getOrderCount(order.getStoreId(), order.getAppointmentDate(), DeliveryType.APPOINTMENT) + 1;
+        Date currentDate = new Date();
+        switch (orderDto.getOrder().getOrderType()) {
+            case NORMAL:
+                // 一般订单
+                number = this.getTodayOrderCount(currentDate, OrderType.NORMAL) + 1;
+                break;
+            case APPOINTMENT:
+                // 预约订单
+                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                break;
+            case IN_STORE:
+                // 堂食订单
+                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.IN_STORE) + 1;
+                break;
+            case EXPRESS:
+                // 快递订单
+                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.EXPRESS) + 1;
+                break;
+            case SELF:
+                // 自取订单
+                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.SELF) + 1;
+                break;
+            default:
+                number = 0;
         }
-        order.setNumber(number);
+        orderDto.getOrder().setNumber(number);
 
         //设置订单的支付状态
-        if (order.getPaymentWay() == PaymentWay.CREDIT_CARD || order.getPaymentWay() == PaymentWay.CASH) {
+        if (orderDto.getOrder().getPaymentWay() == PaymentWay.CREDIT_CARD || orderDto.getOrder().getPaymentWay() == PaymentWay.CASH) {
             //刷卡和现金支付设置为后付状态
-            order.setPayState(PayState.PAY_LATER);
+            orderDto.getOrder().setPayState(PayState.PAY_LATER);
         } else {
-            order.setPayState(PayState.UN_PAY);
+            orderDto.getOrder().setPayState(PayState.UN_PAY);
         }
 
         // 处理订单不需要支付的情况
-        if (order.getRealPrice() <= 0) {
-            order.setPaymentWay(PaymentWay.CASH);
-            order.setPayState(PayState.PAID);
+        if (orderDto.getOrder().getRealPrice() <= 0) {
+            orderDto.getOrder().setPaymentWay(PaymentWay.CASH);
+            orderDto.getOrder().setPayState(PayState.PAID);
         }
     }
 

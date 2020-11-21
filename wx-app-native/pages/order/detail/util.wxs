@@ -1,0 +1,29 @@
+function formatOrderType(orderType) {
+  var str = ''
+  switch (orderType) {
+    case 'NORMAL':
+      str = '一般订单'
+      break
+    case 'APPOINTMENT':
+      str = '预约订单'
+      break
+    case 'IN_STORE':
+      str = '堂食订单'
+      break
+    case 'EXPRESS':
+      str = '快递订单'
+      break
+    case 'SELF':
+      str = '自取订单'
+      break
+    default:
+      str = '未知'
+      break
+  }
+
+  return str
+}
+
+module.exports = {
+  formatOrderType: formatOrderType
+};

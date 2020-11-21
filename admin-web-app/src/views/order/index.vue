@@ -342,7 +342,7 @@ export default {
         paymentWay: null,
         orderState: null,
         showDelete: 0,
-        deliveryType: 'normal',
+        orderType: 'NORMAL',
         formDate: [
           new Date(),
           new Date()

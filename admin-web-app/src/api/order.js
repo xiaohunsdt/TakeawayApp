@@ -54,12 +54,12 @@ export function getOrderDetail(orderId) {
   })
 }
 
-export function getWaitingReceiveOrderCount(deliveryType) {
+export function getWaitingReceiveOrderCount(orderType) {
   return request({
     url: '/order/getWaitingReceiveOrderCount',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: { deliveryType },
+    data: { orderType },
     transformRequest: [function(data) {
       data = Qs.stringify(data)
       return data

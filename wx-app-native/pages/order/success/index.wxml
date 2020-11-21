@@ -4,8 +4,10 @@
     <van-icon name="checked" color="#00C853" size="300rpx"/>
     <view style="margin-top:50rpx;font-size:80rpx;font-weight:bolder">下单成功!</view>
     <view id="action-btns">
-      <van-button class="action-btn" round color="#ffd200" size="normal" bind:click="gotoPage" data-page-path="/pages/index/index">回首页逛逛</van-button>
-      <van-button class="action-btn" round color="#ffd200" size="normal" bind:click="gotoPage" data-page-path="/pages/order/index?state=WAIT_EAT">查看订单</van-button>
+      <van-button custom-class="action-btn" round color="#ffd200" size="normal" bind:click="gotoPage" data-page-path="/pages/order/index?state=WAIT_EAT">查看订单</van-button>
+      <view></view>
+      <van-button custom-class="action-btn" round color="#ffd200" size="normal" bind:click="gotoPage" data-page-path="/pages/index/index">回首页逛逛</van-button>
+      <van-button custom-class="action-btn" round color="#ffd200" size="normal" openType="share" dataset="{{orderId}}">分享领红包</van-button>
     </view>
   </view>
 </view>

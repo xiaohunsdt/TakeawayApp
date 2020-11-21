@@ -11,6 +11,7 @@ Page({
   data: {
     orderId: '',
     order: null,
+    orderDetail: null,
     payStateStr: "",
     paymentWayStr: "",
     couponName: null,
@@ -65,6 +66,11 @@ Page({
             })
           })
       }
+    })
+    orderService.selectOrderDetailById(this.data.orderId).then(res => {
+      this.setData({
+        orderDetail: res
+      })
     })
   },
   payNow() {

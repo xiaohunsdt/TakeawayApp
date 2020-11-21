@@ -13,8 +13,25 @@
 				</view>
 			</base-panel>
 			<base-panel>
-				<view>
-					<view wx:if="address">
+				<view class="order-type-btns">
+					<van-button color="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' ? '#FFD200' : null}}"
+						bind:click="orderTypeChange" data-order-type="NORMAL" custom-class="order-type-btn order-type-btns-left"
+						icon="bell" round size="small" type="primary">
+						配送
+					</van-button>
+					<van-button color="{{order.orderType==='SELF' ? '#FFD200' : null}}" bind:click="orderTypeChange"
+						data-order-type="SELF" custom-class="order-type-btn order-type-btns-center" icon="smile" round size="small"
+						type="primary">
+						自取
+					</van-button>
+					<van-button color="{{order.orderType==='EXPRESS' ? '#FFD200' : null}}" bind:click="orderTypeChange"
+						data-order-type="EXPRESS" custom-class="order-type-btn order-type-btns-right" icon="bag" round size="small"
+						type="primary">
+						快递
+					</van-button>
+				</view>
+				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='EXPRESS'}}">
+					<view wx:if="{{address}}">
 						<van-cell title="{{address.address + ' ' + address.detail}}" is-link url="/pages/my/address/index">
 							<view slot="icon" style="margin-right: 0.2rem">
 								<van-icon color="#FFD200" name="location" size="1.2rem" />
@@ -30,23 +47,37 @@
 						<van-cell is-link title="选择地址" url="/pages/my/address/index" />
 					</view>
 				</view>
-				<van-cell title="{{deliveryType}}" value="{{deliveryArriveTime}}" bind:click="onShowTimePicker">
-					<view slot="icon" style="margin-right: 0.2rem">
-						<van-icon color="#FFD200" name="clock" size="1.2rem" />
-					</view>
-				</van-cell>
-				<van-notice-bar wx:if="address" color="#ad0000" background="#ffe1e1" left-icon="info-o" text="请确认地址是否正确! 送错外卖概不负责!" />
+
+				<view wx:if="{{order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='SELF'}}">
+					<wxs src="./util.wxs" module="util" />
+					<van-cell title="{{util.formatDeliveryType(order.orderType)}}" value="{{deliveryArriveTime}}"
+						bind:click="onShowTimePicker">
+						<view slot="icon" style="margin-right: 0.2rem">
+							<van-icon color="#FFD200" name="clock" size="1.2rem" />
+						</view>
+					</van-cell>
+				</view>
+
+				<van-notice-bar
+					wx:if="{{address && (order.orderType==='NORMAL' || order.orderType==='APPOINTMENT' || order.orderType==='EXPRESS')}}"
+					color="#ad0000" background="#ffe1e1" left-icon="info-o" text="请确认地址是否正确! 送错地址概不负责!" />
+
+				<view wx:if="{{order.orderType==='SELF'}}" style="margin-top: 20rpx">
+					<van-notice-bar color="#67c23a" background="#f0f9eb" left-icon="info-o" text="到店后出示订单号即可取餐!" />
+				</view>
 			</base-panel>
 		</view>
-		<van-action-sheet show="{{showTimePicker}}" z-index="{{9999999}}" bind:cancel="onCloseTimePicker" bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
+		<van-action-sheet show="{{showTimePicker}}" z-index="{{9999999}}" bind:cancel="onCloseTimePicker"
+			bind:click-overlay="onCloseTimePicker" bind:close="onCloseTimePicker" close-on-click-overlay overlay title="预约时间">
 			<view class="time-picker-content">
-				<picker-view value="{{appointmentIndex}}" bind:change="onTimePickerChange" indicator-style="height: 50px" style="width: 100%;height: 100%;">
+				<picker-view value="{{appointmentIndex}}" bind:change="onTimePickerChange" indicator-style="height: 50px"
+					style="width: 100%;height: 100%;">
 					<picker-view-column>
 						<view style="line-height: 50px" wx:for="{{appointmentTimes[0]}}">{{item}}</view>
 					</picker-view-column>
 					<picker-view-column>
 						<view style="line-height: 50px" wx:for="{{appointmentTimes[1]}}">
-							<view wx:if="{{item!=='尽快配送'}}">{{item}}点</view>
+							<view wx:if="{{item!=='尽快配送' && item!=='立刻取餐'}}">{{item}}点</view>
 							<view wx:else>{{item}}</view>
 						</view>
 					</picker-view-column>
@@ -69,37 +100,44 @@
 				<view class="order-items">
 					<order-item itemDetail="{{item}}" wx:key="goodsName" wx:for="{{orderItems}}" />
 				</view>
-				<view class="delivery-price-view">
+				<view class="delivery-price-view" wx:if="{{order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT'}}">
 					<view class="delivery-str">
-						<view wx:if="{{deliveryPrice > 0}}">
+						<view wx:if="{{order.deliveryPrice > 0}}">
 							配送费：
 						</view>
 						<view wx:else>
 							免费配送
 						</view>
 					</view>
-					<view class="delivery-price" wx:if="{{deliveryPrice > 0}}">
-						₩ {{deliveryPrice}}
+					<view class="delivery-price" wx:if="{{order.deliveryPrice > 0}}">
+						₩ {{order.deliveryPrice}}
 					</view>
 				</view>
 				<view id="order-amount">
 					共<span style="color: #FFD200">{{ cartAllCount }}</span>个商品,
-					小计 <span style="color: #FFD200">₩ {{ cartAllPrice + deliveryPrice }}</span>
+					小计 <span style="color: #FFD200">₩ {{ order.orderType === 'NORMAL' || order.orderType === 'APPOINTMENT' ? cartAllPrice + order.deliveryPrice : cartAllPrice }}</span>
 				</view>
 			</base-panel>
 			<base-panel>
 				<view>支付方式</view>
 				<view class="pay-way-btns">
-					<van-button color="{{payWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary" wx:if="{{address}}">微信支付
+					<van-button color="{{order.paymentWay==='WEIXIN_PAY'?'#FFD200':null}}" bind:click="paymentWayChange"
+						data-payment-way="WEIXIN_PAY" custom-class="pay-way-btn" icon="wechat" round size="small" type="primary">
+						微信支付
 					</van-button>
-					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付</van-button>
-					<van-button color="{{payWay==='ALI_PAY'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary" wx:if="{{address}}">支付宝支付
+					<van-button custom-class="pay-way-btn" disabled icon="balance-list" round size="small" type="primary">余额支付
 					</van-button>
-					<van-button color="{{payWay==='TRANSFER'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
+					<van-button color="{{order.paymentWay==='ALI_PAY'?'#FFD200':null}}" bind:click="paymentWayChange"
+						data-payment-way="ALI_PAY" custom-class="pay-way-btn" icon="alipay" round size="small" type="primary">支付宝支付
 					</van-button>
-					<van-button color="{{payWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
+					<van-button color="{{order.paymentWay==='TRANSFER'?'#FFD200':null}}" bind:click="paymentWayChange"
+						data-payment-way="TRANSFER" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">通帐转帐
 					</van-button>
-					<van-button color="{{payWay==='CASH'?'#FFD200':null}}" bind:click="payWayChange" data-pay-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CREDIT_CARD'?'#FFD200':null}}" bind:click="paymentWayChange"
+						data-payment-way="CREDIT_CARD" custom-class="pay-way-btn" icon="card" round size="small" type="primary">刷卡支付
+					</van-button>
+					<van-button disabled="{{order.orderType === 'EXPRESS'}}" color="{{order.paymentWay==='CASH'?'#FFD200':null}}" bind:click="paymentWayChange"
+						data-payment-way="CASH" custom-class="pay-way-btn" icon="bill" round size="small" type="primary">现金支付
 					</van-button>
 				</view>
 			</base-panel>
@@ -126,17 +164,20 @@
 			<base-panel>
 				<view catch:tap="setPs">
 					<view>备注</view>
-					<view wx:if="{{psData!==''}}">
-						<van-cell title="{{psData}}" />
+					<view wx:if="{{orderDetail.ps !== null}}">
+						<van-cell title="{{orderDetail.ps}}" />
 					</view>
 				</view>
 			</base-panel>
 		</view>
 		<view id="footer">
-			<goods-submit-bar decimal-length="{{0}}" disabled="{{submitLoading || disableService}}" loading="{{submitLoading}}" price="{{realPrice}}" tip="{{disableNotice || tipNotice}}" bind:submit="onSubmitOrder" button-text="立刻支付" currency="₩">
+			<goods-submit-bar decimal-length="{{0}}" disabled="{{submitLoading || disableService}}"
+				loading="{{submitLoading}}" price="{{realPrice}}" tip="{{disableNotice || tipNotice}}"
+				bind:submit="onSubmitOrder" button-text="立刻支付" currency="₩">
 				<view class="order-bar-left-content">
 					<image src="/static/images/order/cart.png" />
-					<view style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
+					<view
+						style="display: inline-block;font-weight: bolder; font-size:1.4rem;margin-left: 0.4rem;position:relative;top: -0.15rem;">
 						{{ cartAllCount }}
 					</view>
 				</view>

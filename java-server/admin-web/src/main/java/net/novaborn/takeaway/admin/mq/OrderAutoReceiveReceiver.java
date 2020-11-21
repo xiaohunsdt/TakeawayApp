@@ -3,7 +3,6 @@ package net.novaborn.takeaway.admin.mq;
 import cn.hutool.core.date.DateUtil;
 import com.rabbitmq.client.Channel;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.web.api.OrderController;
@@ -53,7 +52,11 @@ public class OrderAutoReceiveReceiver {
 
         sysContext.setCurrentStoreId(order.getStoreId());
 
-        orderController.receiveOrder(order.getId());
+        try {
+            orderController.receiveOrder(order.getId());
+        } catch (Exception e) {
+            log.error(null, e);
+        }
         channel.basicAck(deliveryTag, false);
     }
 }

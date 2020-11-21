@@ -4,9 +4,9 @@ import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.admin.AdminApplication;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.DeliveryType;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.statistics.entity.UserConsumption;
@@ -37,7 +37,7 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderCountTodayTest() {
-        System.out.println(orderService.getOrderCount(new Date(), DeliveryType.NORMAL));
+        System.out.println(orderService.getTodayOrderCount(new Date(), OrderType.NORMAL));
     }
 
     @Test

@@ -14,7 +14,12 @@ let times = null
 Page({
   watch: {
     address(newVal) {
-      this.checkExpressState(newVal.id, this.data.cartAllPrice)
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        this.checkExpressState(newVal.id, this.data.cartAllPrice)
+      }
+      this.setData({
+        'order.addressId': newVal.id
+      })
     },
     coupon(newVal) {
       if (newVal) {
@@ -28,24 +33,33 @@ Page({
       }
     },
     cartAllPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+      let _realPrice = newVal - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
     couponDiscountPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+      let _realPrice = this.data.cartAllPrice - newVal
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    deliveryPrice(newVal) {
-      const _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice + this.data.deliveryPrice
+    'order.deliveryPrice': function (newVal) {
+      let _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += newVal
+      }
       this.setData({
         realPrice: _realPrice > 0 ? _realPrice * 100 : 0
       })
     },
-    payWay(newVal) {
+    'order.paymentWay': function (newVal) {
       if (newVal && this.data.coupon) {
         this.checkCouponDiscountPrice()
       }
@@ -55,27 +69,72 @@ Page({
         const day = this.data.appointment[0]
         const hour = this.data.appointment[1]
         const minute = this.data.appointment[2]
-        if (day === '今天' && hour === '尽快配送') {
-          this.setData({
-            deliveryType: '尽快配送'
-          })
-        } else {
-          this.setData({
-            deliveryType: '预约点餐',
-            deliveryArriveTime: `${day} ${hour}:${minute}`
-          })
+        console.log(day)
+
+        if ('NORMAL' === this.data.order.orderType || 'APPOINTMENT' === this.data.order.orderType) {
+          if (day === '今天' && hour === '尽快配送') {
+            this.setData({
+              'order.orderType': 'NORMAL',
+              'orderDetail.appointmentDate': null
+            })
+            orderService.getDeliveryArriveTime()
+              .then(res => {
+                this.setData({
+                  deliveryArriveTime: `大约 ${res.date} ${res.time}`
+                })
+              })
+          } else {
+            this.setData({
+              'order.orderType': 'APPOINTMENT',
+              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+              deliveryArriveTime: `${day} ${hour}:${minute}`
+            })
+          }
         }
+        if ('SELF' === this.data.order.orderType) {
+          if (day === '今天' && hour === '立刻取餐') {
+            this.setData({
+              'orderDetail.appointmentDate': null,
+              deliveryArriveTime: '立刻取餐'
+            })
+          } else {
+            this.setData({
+              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+              deliveryArriveTime: `${day} ${hour}:${minute}`
+            })
+          }
+        }
+
       }
     },
-    deliveryType(newVal) {
-      if (newVal === '尽快配送') {
-        orderService.getDeliveryArriveTime()
-          .then(res => {
-            this.setData({
-              deliveryArriveTime: `大约 ${res.date} ${res.time}`
-            })
-          })
+    'order.orderType': function (newVal) {
+      if (newVal === 'NORMAL' || newVal === 'APPOINTMENT') {
+        // if (newVal === 'NORMAL') {
+        //   orderService.getDeliveryArriveTime()
+        //     .then(res => {
+        //       this.setData({
+        //         deliveryArriveTime: `大约 ${res.date} ${res.time}`
+        //       })
+        //     })
+        // }
+        if (this.data.order.addressId) {
+          this.checkExpressState(this.data.order.addressId, this.data.cartAllPrice)
+        }
+      } else {
+        this.setData({
+          disableService: false,
+          disableNotice: ''
+        })
       }
+
+      // 重新计算价格
+      let _realPrice = this.data.cartAllPrice - this.data.couponDiscountPrice
+      if (this.data.order.orderType === 'NORMAL' || this.data.order.orderType === 'APPOINTMENT') {
+        _realPrice += this.data.order.deliveryPrice
+      }
+      this.setData({
+        realPrice: _realPrice > 0 ? _realPrice * 100 : 0
+      })
     }
   },
   data: {
@@ -87,27 +146,33 @@ Page({
     fromNotice: null,
     signNotice: null,
     store: null,
-    orderId: '',
-    order: {},
-    address: null,
+    order: {
+      id: null,
+      addressId: null,
+      couponId: null,
+      paymentWay: 'WEIXIN_PAY',
+      orderType: 'NORMAL',
+      deliveryPrice: 2000
+    },
+    orderDetail: {
+      from: null,
+      ps: null,
+      appointmentDate: null
+    },
     orderItems: [],
     cartAllCount: 0,
     cartAllPrice: 0,
+    address: null,
     coupon: null,
     couponDiscountPrice: 0,
     couponInfoTip: null,
     couponInfoDetail: null,
     realPrice: 0,
-    payWay: 'WEIXIN_PAY',
-    psData: '',
-    from: null,
     showTimePicker: false,
     appointment: [],
     appointmentIndex: [],
     appointmentTimes: [],
-    deliveryType: '',
-    deliveryArriveTime: null,
-    deliveryPrice: 2000
+    deliveryArriveTime: null
   },
 
   /**
@@ -122,11 +187,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (this.data.orderId !== '') {
+    if (this.data.order.id !== null) {
       wx.showLoading({
         title: '正在核对信息,请稍等...'
       })
-      orderService.selectOrderById(this.data.orderId)
+      orderService.selectOrderById(this.data.order.id)
         .then(res => {
           this.setData({
             order: res
@@ -134,7 +199,7 @@ Page({
           if (this.data.order.payState === 'PAID') {
             wx.reLaunch({
               // url: '/pages/order/index?state=WAIT_EAT'
-              url: '/pages/order/success/index'
+              url: `/pages/order/success/index?orderId=${this.data.order.id}`
             })
             // wx.reLaunch({
             //   url: `/pages/order/detail/index?orderId=${this.data.order.id}`
@@ -200,11 +265,11 @@ Page({
       cartAllPrice: cartService.getCartAllPrice(),
       cartAllCount: cartService.getCartAllCount(),
       orderItems: temp,
-      from: getApp().globalData.from,
+      'orderDetail.from': getApp().globalData.from,
     })
 
-    if (this.data.from) {
-      indexService.getFormerNotice(this.data.from).then(res => {
+    if (this.data.orderDetail.from) {
+      indexService.getFormerNotice(this.data.orderDetail.from).then(res => {
         this.setData({
           fromNotice: res.message
         })
@@ -219,48 +284,80 @@ Page({
     storeService.getDeliveryPrice()
       .then(res => {
         this.setData({
-          deliveryPrice: res
+          'order.deliveryPrice': res
         })
       })
 
     // 获取预约时间项
-    storeService.getAppointmentTimes()
+    this.getAppointmentTimes('APPOINTMENT')
+  },
+  getAppointmentTimes(orderType) {
+    indexService.getAppointmentTimes(orderType)
       .then(res => {
         times = res.appointmentTimes
         const canDeliveryNow = res.canDeliveryNow
-        if (canDeliveryNow && !Object.keys(times).includes('今天')) {
-          times = Object.assign({}, {
-            '今天': {
-              '尽快配送': []
-            }
-          }, times)
-        }
 
+        console.log(times)
         const days = Object.keys(times)
         const day = days[0]
         const hours = Object.keys(times[day])
         const hour = hours[0]
         let minutes = times[day][hour]
 
-        if (canDeliveryNow) {
-          times['今天'] = Object.assign({}, {
-            '尽快配送': []
-          }, times['今天'])
-          if (!hours.includes('尽快配送')) {
-            hours.splice(0, 0, '尽快配送')
+        if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
+          if(canDeliveryNow){
+            times['今天'] = Object.assign({}, {
+              '尽快配送': []
+            }, times['今天'])
+            if (!hours.includes('尽快配送')) {
+              hours.splice(0, 0, '尽快配送')
+            }
+            minutes = []
           }
-          minutes = []
+
+          if (days[0] === '今天' && hours[0] === '尽快配送') {
+            this.setData({
+              'order.orderType': 'NORMAL',
+              'orderDetail.appointmentDate': null,
+              deliveryArriveTime: null
+            })
+            orderService.getDeliveryArriveTime()
+              .then(res => {
+                this.setData({
+                  deliveryArriveTime: `大约 ${res.date} ${res.time}`
+                })
+              })
+          } else {
+            this.setData({
+              'order.orderType': 'APPOINTMENT',
+              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
+              deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
+            })
+          }
         }
 
-        if (days[0] === '今天' && hours[0] === '尽快配送') {
-          this.setData({
-            deliveryType: '尽快配送'
-          })
-        } else {
-          this.setData({
-            deliveryType: '预约点餐',
-            deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
-          })
+        if (orderType === 'SELF') {
+          if(canDeliveryNow){
+            times['今天'] = Object.assign({}, {
+              '立刻取餐': []
+            }, times['今天'])
+            if (!hours.includes('立刻取餐')) {
+              hours.splice(0, 0, '立刻取餐')
+            }
+            minutes = []
+          }
+
+          if (days[0] === '今天' && hours[0] === '立刻取餐') {
+            this.setData({
+              'orderDetail.appointmentDate': null,
+              deliveryArriveTime: '立刻取餐'
+            })
+          } else {
+            this.setData({
+              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
+              deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
+            })
+          }
         }
 
         this.setData({
@@ -288,17 +385,29 @@ Page({
       events: {
         setPsContent(data) {
           $this.setData({
-            psData: data.ps
+            'orderDetail.ps': data.ps
           })
         }
       }
     })
   },
-  payWayChange(event) {
-    let payWay = event.currentTarget.dataset.payWay
+  paymentWayChange(event) {
+    let paymentWay = event.currentTarget.dataset.paymentWay
     this.setData({
-      payWay
+      'order.paymentWay': paymentWay
     })
+  },
+  orderTypeChange(event) {
+    let orderType = event.currentTarget.dataset.orderType
+
+    this.setData({
+      'order.orderType': orderType
+    })
+
+    if (orderType === 'NORMAL' || orderType === 'APPOINTMENT' || orderType === 'SELF') {
+      //获取预约时间
+      this.getAppointmentTimes(orderType)
+    }
   },
   onSubmitOrder() {
     if (this.data.orderItems.length === 0) {
@@ -426,10 +535,10 @@ Page({
   },
   createOrder() {
     orderService.createOrder(
-      orderService.generateOrder(this.data.payWay, this.data.psData, storeService.formatAppointmentTime(this.data.deliveryType, this.data.appointment), this.data.from),
+      this.data.order,
+      this.data.orderDetail,
       this.data.orderItems,
-      this.data.coupon,
-      this.data.address
+      this.data.coupon
     ).then(res => {
       cartService.clearCart()
       getApp().globalData.currentCoupon = null
@@ -439,11 +548,10 @@ Page({
         cartAllCount: 0,
         cartAllPrice: 0,
         coupon: null,
-        from: null,
-        orderId: res.message,
+        'order.id': res.message,
         submitLoading: false
       })
-      payService.payOrder(this.data.orderId, this.data.payWay)
+      payService.payOrder(this.data.order.id, this.data.order.paymentWay)
     }).catch(res => {
       this.setData({
         submitLoading: false
@@ -451,10 +559,7 @@ Page({
     })
   },
   checkExpressState(addressId, allPrice) {
-    // this.setData({
-    //   disableService: false
-    // })
-    storeService.getExpressServiceState(addressId, allPrice)
+    indexService.getExpressServiceState(addressId, allPrice)
       .then(res => {
         this.setData({
           disableService: res.state !== 0,
@@ -470,9 +575,9 @@ Page({
     })
 
     couponService.checkCouponDiscountPrice(
-      orderService.generateOrder(this.data.payWay, null, null, this.data.from),
+      this.data.order,
       this.data.orderItems,
-      this.data.coupon
+      this.data.coupon.id
     ).then(res => {
       this.setData({
         couponDiscountPrice: res.message
@@ -489,13 +594,17 @@ Page({
     const {
       value
     } = event.detail
-
+    console.log(value)
     const days = Object.keys(times)
     const day = days[value[0]]
     const hours = Object.keys(times[day])
     if (hours.includes('尽快配送')) {
       hours.splice(hours.length - 1, 1)
       hours.splice(0, 0, '尽快配送')
+    }
+    if (hours.includes('立刻取餐')) {
+      hours.splice(hours.length - 1, 1)
+      hours.splice(0, 0, '立刻取餐')
     }
     const hour = hours[value[1]]
     const minutes = times[day][hour]

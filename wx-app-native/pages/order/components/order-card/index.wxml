@@ -23,15 +23,22 @@
 						已过期
 					</view>
 				</view>
-				<view wx:if="{{order.appointmentDate!==''}}" style="margin-top:10rpx;text-align:right">
+				<view wx:if="{{order.orderType==='APPOINTMENT'}}" style="margin-top:10rpx;text-align:right">
 					<van-icon name="clock" color="#FFD200" size="1.3rem" />
+				</view>
+				<view wx:if="{{order.orderType==='SELF'}}" style="margin-top:10rpx;text-align:right">
+					<van-icon name="smile" color="#FFD200" size="1.3rem" />
+				</view>
+				<view wx:if="{{order.orderType==='EXPRESS'}}" style="margin-top:10rpx;text-align:right">
+					<van-icon name="bag" color="#FFD200" size="1.3rem" />
 				</view>
 			</view>
 		</view>
 		<van-divider custom-style="margin: 0rpx" />
 
 		<view class="order-items">
-			<order-item itemDetail="{{itemDetail}}" wx:key="goodsName" wx:for="{{order.orderItemList}}" wx:for-item="itemDetail" />
+			<order-item itemDetail="{{itemDetail}}" wx:key="goodsName" wx:for="{{order.orderItemList}}"
+				wx:for-item="itemDetail" />
 		</view>
 		<view class="delivery-price-view" wx:if="{{order.deliveryPrice > 0}}">
 			<view class="delivery-str">
@@ -53,7 +60,8 @@
 	</view>
 
 	<view wx:if="{{showOperation}}" class="action-btns">
-		<van-button catch:click="payNow" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'}}">
+		<van-button catch:click="payNow" color="#FFD200" custom-class="action-btn" round size="small"
+			wx:if="{{order.payState === 'UN_PAY' && order.orderState !== 'EXPIRED'}}">
 			立刻付款
 		</van-button>
 		<!--      <van-button-->
@@ -62,16 +70,16 @@
 		<!--        v-if="order.payState !== 'UN_PAY' && (order.orderState=== 'WAITING_RECEIVE' || order.orderState=== 'PRODUCING' || order.orderState=== 'DELIVERING')">-->
 		<!--        确认取餐-->
 		<!--      </van-button>-->
-		<van-button catch:click="comment" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState !== 'UN_PAY' && order.orderState=== 'FINISHED' && !order.isCommented}}">
+		<van-button catch:click="comment" color="#FFD200" custom-class="action-btn" round size="small"
+			wx:if="{{order.payState !== 'UN_PAY' && order.orderState=== 'FINISHED' && !order.isCommented}}">
 			评价
 		</van-button>
-		<!--      <van-button-->
-		<!--        @click.stop="shareOrder" color="#FFD200" custom-class="action-btn"-->
-		<!--        round size="small"-->
-		<!--        v-if="order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'">-->
-		<!--        分享领红包-->
-		<!--      </van-button>-->
-		<van-button catch:click="deleteOrder" color="#FFD200" custom-class="action-btn" round size="small" wx:if="{{order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'}}">
+		<van-button openType="share" dataset="{{order.id}}" color="#FFD200" custom-class="action-btn" round size="small"
+			wx:if="{{order.payState !== 'UN_PAY' && order.orderState!== 'REFUND' && order.orderState!== 'EXPIRED'}}">
+			分享领红包
+		</van-button>
+		<van-button catch:click="deleteOrder" color="#FFD200" custom-class="action-btn" round size="small"
+			wx:if="{{order.payState === 'UN_PAY' || order.orderState === 'REFUND' || order.orderState === 'EXPIRED'}}">
 			删除
 		</van-button>
 	</view>

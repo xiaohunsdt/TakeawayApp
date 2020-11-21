@@ -105,3 +105,26 @@
   padding: 0 80rpx;
   text-align: center
 }
+
+.order-type-btns{
+  text-align: right;
+}
+
+.order-type-btn:first-child{
+  border-radius: unset;
+}
+  
+.order-type-btns-left{
+  border-top-left-radius: 20rpx !important;
+  border-bottom-left-radius:  20rpx !important;
+}
+
+.order-type-btns-center{
+  border-left: solid 1rpx #ebedf0 !important;
+  border-right: solid 1rpx #ebedf0 !important;
+}
+
+.order-type-btns-right{
+  border-top-right-radius: 20rpx !important;
+  border-bottom-right-radius: 20rpx !important;
+}

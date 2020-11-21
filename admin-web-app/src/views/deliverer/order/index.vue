@@ -6,17 +6,20 @@
           <order-card v-for="order in willDeliveryOrderList" :key="order.id" :order="order"></order-card>
         </van-tab>
         <van-tab :badge="myDeliveryOrderList.length" :style="{'min-height': scrollerHeight}" class="tab" title="正在配送">
-          <order-card v-for="order in myDeliveryOrderList" :key="order.id" :order="order" type="delivering"></order-card>
+          <order-card v-for="order in myDeliveryOrderList" :key="order.id" :order="order"
+                      type="delivering"></order-card>
         </van-tab>
       </van-pull-refresh>
     </van-tabs>
     <right-panel :button-icon="'el-icon-location'" :button-top="300" :full-screen="true">
       <template v-slot:default="slotProps">
         <div style="margin-top: 10px">
-          <el-button icon="el-icon-refresh" round size="small" style="position: absolute;right: 0;top: 10px" type="primary" @click="onRefreshMap">
+          <el-button icon="el-icon-refresh" round size="small" style="position: absolute;right: 0;top: 10px"
+                     type="primary" @click="onRefreshMap">
             刷新
           </el-button>
-          <order-naver-map v-if="slotProps.show" :key="mapRefreshCount" ref="naver-map" :all-order="false" :height="mapHeight"/>
+          <order-naver-map v-if="slotProps.show" :key="mapRefreshCount" ref="naver-map" :all-order="false"
+                           :height="mapHeight"/>
         </div>
       </template>
     </right-panel>
@@ -85,7 +88,7 @@ export default {
   methods: {
     getOrderList() {
       orderService.getTodayOrderListByState('WAIT_EAT').then(res => {
-        this.orderList = res
+        this.orderList = res.filter(item => item.orderType === 'NORMAL' || item.orderType === 'APPOINTMENT')
       }).finally(() => {
         this.isLoading = false
       })

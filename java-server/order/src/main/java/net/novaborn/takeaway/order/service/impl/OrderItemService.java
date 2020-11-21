@@ -5,13 +5,17 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.GoodsState;
-import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.exception.GoodsExceptionEnum;
+import net.novaborn.takeaway.goods.exception.ProduceExceptionEnum;
+import net.novaborn.takeaway.goods.exception.ProduceServiceException;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.dao.IOrderItemDao;
 import net.novaborn.takeaway.order.entity.OrderItem;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.service.IOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ import java.util.Optional;
 @Setter(onMethod_ = {@Autowired})
 @Service
 public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> implements IOrderItemService {
+    private ProduceService produceService;
+
     private GoodsService goodsService;
 
     private GoodsStockService goodsStockService;
@@ -46,10 +52,17 @@ public class OrderItemService extends ServiceImpl<IOrderItemDao, OrderItem> impl
     }
 
     @Override
-    public void checkOrderItems(List<OrderItem> orderItemList) {
+    public void checkOrderItems(OrderType orderType, List<OrderItem> orderItemList) {
         orderItemList.parallelStream().forEach(item -> {
             Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
             goods.orElseThrow(() -> new SysException(GoodsExceptionEnum.GOODS_NOT_FOUND));
+
+            if (orderType.equals(OrderType.EXPRESS)) {
+                Produce produce = produceService.getById(goods.get().getProduceId());
+                if (!produce.getExpressAble()) {
+                    throw new ProduceServiceException(ProduceExceptionEnum.PRODUCE_EXPRESS_UNABLE, produce.getName());
+                }
+            }
 
             if (goods.get().getState() == GoodsState.OFF) {
                 SysException sysException = new SysException(GoodsExceptionEnum.GOODS_IS_OFF);

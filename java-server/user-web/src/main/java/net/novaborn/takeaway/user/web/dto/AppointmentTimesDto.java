@@ -1,4 +1,4 @@
-package net.novaborn.takeaway.store.dto;
+package net.novaborn.takeaway.user.web.dto;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;

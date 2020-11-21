@@ -13,14 +13,14 @@
     </select>
 
     <select id="getOrderListByUserId" resultType="Order">
-        SELECT * FROM `order`
+        SELECT `order`.* FROM `order`
         <where>
             `user_id` = #{userId}
             <if test="paymentWay != null">
-                AND `payment_way` = #{paymentWay}
+                AND `payment_way` = #{paymentWay.code}
             </if>
             <if test="orderState != null">
-                AND `order_state` = #{orderState}
+                AND `order_state` = #{orderState.code}
             </if>
             <if test="!isShowDeleted">
                 AND deleted = 0
@@ -41,22 +41,19 @@
         <if test="args.number != null and args.number != ''">
             AND `number` = #{args.number}
         </if>
-        <if test="args.paymentWay != null and args.paymentWay != ''">
-            AND `payment_way` = #{args.paymentWay}
+        <if test="args.paymentWay != null">
+            AND `payment_way` = #{args.paymentWay.code}
         </if>
-        <if test="args.orderState != null and args.orderState != ''">
-            AND `order_state` = #{args.orderState}
+        <if test="args.orderState != null">
+            AND `order_state` = #{args.orderState.code}
         </if>
-        <if test="args.deliveryType != null and args.deliveryType == 'normal'">
-            AND `appointment_date` is null
-        </if>
-        <if test="args.deliveryType != null and args.deliveryType == 'appointment'">
-            AND `appointment_date` is not null
+        <if test="args.orderType != null">
+            AND `order_type` = #{args.orderType.code}
         </if>
         <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
             AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
         </if>
-        <if test="args.appointmentStartDate !=null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
+        <if test="args.appointmentStartDate != null and args.appointmentStartDate != '' and args.appointmentEndDate != null and args.appointmentEndDate != ''">
             AND `appointment_date` BETWEEN #{args.appointmentStartDate} AND DATE_ADD(#{args.appointmentEndDate},INTERVAL 1 DAY)
         </if>
         <if test="args.showDelete == 0">
@@ -65,7 +62,7 @@
     </sql>
 
     <select id="getOrderList" resultType="Order">
-        SELECT * FROM `order`
+        SELECT `order`.* FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where"/>
         </where>
@@ -73,24 +70,30 @@
     </select>
 
     <select id="getOrderListByPage" resultType="Order">
-        SELECT * FROM `order`
+        SELECT `order`.* FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where"/>
         </where>
-        <if test="args.deliveryType == null or args.deliveryType == 'normal'">
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
             ORDER BY `create_date` DESC
         </if>
-        <if test="args.deliveryType != null and args.deliveryType == 'appointment'">
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+            ORDER BY `create_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+            ORDER BY `create_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
             ORDER BY `appointment_date` DESC
+        </if>
+        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+            ORDER BY `appointment_date`,`create_date` DESC
         </if>
     </select>
 
     <sql id="common_get_waiting_receive_order">
-        <if test="deliveryType == @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
-            AND `appointment_date` is null
-        </if>
-        <if test="deliveryType == @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
-            AND `appointment_date` is not null
+        <if test="orderType != null">
+            AND `order_type` = #{orderType.code}
         </if>
         AND `pay_state` &lt;&gt; 0
         AND `order_state` = 0
@@ -136,57 +139,71 @@
     </sql>
 
     <select id="getOrderListByPageU" resultType="Order">
-        SELECT * FROM `order`
+        SELECT `order`.* FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where_u"/>
         </where>
         ORDER BY `create_date` DESC
     </select>
 
-
     <select id="getOrderCountByStateU" resultType="java.lang.Integer">
-        SELECT count(*) FROM `order`
+        SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where_u"/>
+        </where>
+    </select>
+
+    <select id="getTodayOrderCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
+        <where>
+            AND `order_type` = #{orderType.code}
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
+                AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+                AND
+                (
+                    TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                    OR
+                    (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+                )
+            </if>
         </where>
     </select>
 
     <select id="getTodayOrderByStateU" resultType="Order">
-        SELECT * FROM `order`
+        SELECT `order`.* FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where_u"/>
             AND
             (
-            TO_DAYS(create_date) = TO_DAYS(NOW())
-            OR
-            (appointment_date IS NOT NULL AND TO_DAYS(appointment_date) = TO_DAYS(NOW()))
+                TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                OR
+                (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
             )
         </where>
-        ORDER BY `create_date` DESC
+        ORDER BY `appointment_date`,`create_date` DESC
     </select>
 
     <select id="getTodayOrderCountByStateU" resultType="java.lang.Integer">
         SELECT count(*) FROM `order`
         <where>
             <include refid="common_order_list_where_u"/>
-            AND TO_DAYS(create_date) = TO_DAYS(NOW())
-        </where>
-    </select>
-
-    <select id="getOrderCount" resultType="java.lang.Integer">
-        SELECT count(*) FROM `order`
-        <where>
-            <if test="storeId != null">
-                AND `store_id` = #{storeId}
-            </if>
-            <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@NORMAL">
-                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
-                AND `appointment_date` is null
-            </if>
-            <if test="deliveryType== @net.novaborn.takeaway.order.enums.DeliveryType@APPOINTMENT">
-                AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
-                AND `appointment_date` is not null
-            </if>
+            AND
+            (
+                TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                OR
+                (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+            )
         </where>
     </select>
 </mapper>

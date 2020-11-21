@@ -9,7 +9,6 @@ import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
-import net.novaborn.takeaway.goods.service.impl.GoodsService;
 import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.user.web.wrapper.BannerWrapper;
 import net.novaborn.takeaway.user.web.wrapper.ProduceWrapper;
@@ -34,11 +33,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/api/user/index")
 public class IndexController extends BaseController {
-    private ProduceService produceService;
-
-    private GoodsService goodsService;
-
-    private BannerService bannerService;
 
     private static Map<From, String> fromerNotice;
 
@@ -47,6 +41,9 @@ public class IndexController extends BaseController {
         fromerNotice.put(From.YONSEI, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。延世学联祝你中秋佳节快乐，月圆人圆事事圆满!");
         fromerNotice.put(From.SOGANG, "让最圆的明月陪伴你和我，让月饼传达我们的心愿与祝福。西江学联祝你中秋佳节快乐，月圆人圆事事圆满!");
     }
+
+    private ProduceService produceService;
+    private BannerService bannerService;
 
     @GetMapping("getBannersList")
     public ResponseEntity getBannersList() {

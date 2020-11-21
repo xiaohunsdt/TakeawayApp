@@ -4,7 +4,6 @@ package net.novaborn.takeaway.store.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.novaborn.takeaway.store.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.store.dto.ServiceStateDto;
 import net.novaborn.takeaway.store.entity.Store;
 
@@ -69,11 +68,4 @@ public interface IStoreService extends IService<Store> {
      * @return
      */
     Double getDistanceWithStore(Long storeId, Long addressId);
-
-    /**
-     * 返回指定店铺的预约时间列表集
-     * @param storeId
-     * @return
-     */
-    AppointmentTimesDto getAppointmentTimes(Long storeId);
 }

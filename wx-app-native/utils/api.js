@@ -55,8 +55,9 @@ const api = {
   getDeliveryPrice: (storeId) => request.get('store/getDeliveryPrice', {
     storeId
   }),
-  getAppointmentTimes: (storeId) => request.get('store/getAppointmentTimes', {
-    storeId
+  getAppointmentTimes: (storeId,orderType) => request.get('store/getAppointmentTimes', {
+    storeId,
+    orderType
   }),
 
   // 获取所有分类
@@ -97,7 +98,11 @@ const api = {
   deleteAddress: (addressId) => request.post('address/deleteAddress', {
     addressId
   }),
+  
   selectOrderById: (orderId) => request.post('order/selectOrderById', {
+    orderId
+  }),
+  selectOrderDetailById: (orderId) => request.post('order/selectOrderDetailById', {
     orderId
   }),
   getOrderListByPage: (arge) => request.post('order/getOrderListByPage', arge),
@@ -109,8 +114,9 @@ const api = {
     orderId
   }),
   // 创建一个订单
-  createOrder: (order, orderItems, couponId) => request.post('order/createOrder', {
+  createOrder: (order, orderDetail, orderItems, couponId) => request.post('order/createOrder', {
     order,
+    orderDetail,
     orderItems,
     couponId
   }, {

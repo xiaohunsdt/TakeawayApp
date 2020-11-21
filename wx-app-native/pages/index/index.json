@@ -6,6 +6,7 @@
     "loading": "/components/loading/index",
     "search-bar": "/components/search-bar/index",
     "food-panel": "./components/food-panel/index",
-    "store-card": "/components/store-card/index"
+    "store-card": "/components/store-card/index",
+    "red-packet": "./components/red-packet/index"
   }
 }

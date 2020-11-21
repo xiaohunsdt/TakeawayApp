@@ -82,7 +82,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("getOrderListByPage")
-    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args) {
+    public ResponseEntity getOrderListByPage(@ModelAttribute Page page, @RequestParam Map<String, Object> args, PaymentWay paymentWay, OrderType orderType, OrderState orderState) {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
@@ -95,13 +95,9 @@ public class OrderController extends BaseController {
             }
         }
 
-        if (StrUtil.isNotBlank((String) args.get("paymentWay"))) {
-            args.put("paymentWay", (PaymentWay.valueOf((String) args.get("paymentWay"))).getCode());
-        }
-
-        if (StrUtil.isNotBlank((String) args.get("orderState"))) {
-            args.put("orderState", (OrderState.valueOf((String) args.get("orderState"))).getCode());
-        }
+        args.put("paymentWay", paymentWay);
+        args.put("orderType", orderType);
+        args.put("orderState", orderState);
 
         page = (Page) orderService.getOrderListByPage(page, args);
         page.setRecords((List) new OrderWrapper(page.getRecords()).warp());
@@ -134,8 +130,8 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @RequestMapping("getWaitingReceiveOrderCount")
-    public int getWaitingReceiveOrderCount(@RequestParam(required = false) DeliveryType deliveryType) {
-        return orderService.getWaitingReceiveOrderCount(deliveryType);
+    public int getWaitingReceiveOrderCount(@RequestParam(required = false) OrderType orderType) {
+        return orderService.getWaitingReceiveOrderCount(orderType);
     }
 
     @ResponseBody

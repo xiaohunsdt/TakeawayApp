@@ -168,12 +168,12 @@ export default {
     },
     getWaitEatOrderList() {
       orderApi.getTodayOrderListByState('WAIT_EAT').then(res => {
-        this.orderList = res
+        this.orderList = res.filter(item => item.address)
       })
     },
     getAllTodayOrderList() {
       orderApi.getTodayOrderList().then(res => {
-        this.orderList = res
+        this.orderList = res.filter(item => item.address)
       })
     },
     onCopySuccess() {

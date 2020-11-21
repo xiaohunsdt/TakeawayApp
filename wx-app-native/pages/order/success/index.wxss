@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-#action-btns .action-btn {
-  display: inline-table;
+.action-btn {
+  margin-bottom: 20rpx;
   margin-right: 20rpx;
 }

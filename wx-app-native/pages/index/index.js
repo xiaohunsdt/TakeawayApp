@@ -30,6 +30,7 @@ Page({
   data: {
     statusBarHeight: 0,
     storeListLoading: false,
+    orderId: null,
     bannerList: [],
     newGoodsList: [],
     hotGoodsList: [],
@@ -47,6 +48,11 @@ Page({
     })
     if (option.from) {
       app.globalData.from = option.from
+    }
+    if (option.orderId) {
+      this.setData({
+        orderId: option.orderId
+      })
     }
     this.init()
   },

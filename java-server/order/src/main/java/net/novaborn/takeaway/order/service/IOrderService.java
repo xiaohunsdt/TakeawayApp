@@ -4,12 +4,10 @@ package net.novaborn.takeaway.order.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderItem;
-import net.novaborn.takeaway.order.enums.DeliveryType;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 
 import java.util.Date;
 import java.util.List;
@@ -86,10 +84,10 @@ public interface IOrderService extends IService<Order> {
     /**
      * 获取等待接单的订单数量
      *
-     * @param deliveryType 配送类型
+     * @param orderType 订单类型
      * @return 等待接单的订单数量
      */
-    int getWaitingReceiveOrderCount(DeliveryType deliveryType);
+    int getWaitingReceiveOrderCount(OrderType orderType);
 
     /**
      * 用户端分页获取订单列表
@@ -111,6 +109,15 @@ public interface IOrderService extends IService<Order> {
     int getOrderCountByStateU(Long userId, OrderStateEx orderState);
 
     /**
+     * 获取订单数量
+     *
+     * @param day          指定的日期
+     * @param orderType    订单类型
+     * @return 订单数量
+     */
+    int getTodayOrderCount(Date day, OrderType orderType);
+
+    /**
      * 用户端获取今日指定类型的订单
      *
      * @param userId     用户ID
@@ -128,24 +135,24 @@ public interface IOrderService extends IService<Order> {
      */
     int getTodayOrderCountByStateU(Long userId, OrderStateEx orderState);
 
-    /**
-     * 获取订单数量
-     *
-     * @param day          指定的日期
-     * @param deliveryType 配送类型
-     * @return 订单数量
-     */
-    int getOrderCount(Date day, DeliveryType deliveryType);
-
-    /**
-     * 获取订单数量
-     *
-     * @param storeId      店铺Id
-     * @param day          指定的日期
-     * @param deliveryType 配送类型
-     * @return 订单数量
-     */
-    int getOrderCount(Long storeId, Date day, DeliveryType deliveryType);
+//    /**
+//     * 获取订单数量
+//     *
+//     * @param day          指定的日期
+//     * @param deliveryType 配送类型
+//     * @return 订单数量
+//     */
+//    int getOrderCount(Date day, DeliveryType deliveryType);
+//
+//    /**
+//     * 获取订单数量
+//     *
+//     * @param storeId      店铺Id
+//     * @param day          指定的日期
+//     * @param deliveryType 配送类型
+//     * @return 订单数量
+//     */
+//    int getOrderCount(Long storeId, Date day, DeliveryType deliveryType);
 
     /**
      * 设置优惠卷折扣
@@ -176,11 +183,9 @@ public interface IOrderService extends IService<Order> {
     /**
      * 检查完订单后的后续操作
      *
-     * @param order         预检查的订单
-     * @param orderItemList 预检查的订单商品项
-     * @param couponId      优惠卷Id
+     * @param orderDto      预检查的订单
      */
-    void postCheckOrder(Order order, List<OrderItem> orderItemList, Long couponId);
+    void postCheckOrder(OrderDto orderDto);
 
     /**
      * 对指定订单列表的商品进行排名 从高到低

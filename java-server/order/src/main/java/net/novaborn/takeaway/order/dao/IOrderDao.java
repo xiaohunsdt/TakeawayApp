@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.DeliveryType;
-import net.novaborn.takeaway.order.enums.OrderState;
-import net.novaborn.takeaway.order.enums.OrderStateEx;
-import net.novaborn.takeaway.order.enums.PaymentWay;
+import net.novaborn.takeaway.order.enums.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -74,19 +71,19 @@ public interface IOrderDao extends BaseMapper<Order> {
 
     /**
      * 获取等待接单的订单
-     * @param deliveryType 配送类型
      *
+     * @param orderType 订单类型
      * @return 等待接单的订单列表
      */
-    List<Order> getWaitingReceiveOrder(@Param("deliveryType") DeliveryType deliveryType);
+    List<Order> getWaitingReceiveOrder(@Param("orderType") OrderType orderType);
 
     /**
      * 获取等待接单的订单数量
-     * @param deliveryType 配送类型
      *
+     * @param orderType 订单类型
      * @return 等待接单的订单数量
      */
-    int getWaitingReceiveOrderCount(@Param("deliveryType") DeliveryType deliveryType);
+    int getWaitingReceiveOrderCount(@Param("orderType") OrderType orderType);
 
     /**
      * 用户端分页获取订单列表
@@ -108,6 +105,15 @@ public interface IOrderDao extends BaseMapper<Order> {
     int getOrderCountByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
 
     /**
+     * 获取订单数量
+     *
+     * @param day          指定的日期
+     * @param orderType    订单类型
+     * @return 订单数量
+     */
+    int getTodayOrderCount(@Param("day") Date day, @Param("orderType") OrderType orderType);
+
+    /**
      * 用户端获取今日指定类型的订单
      *
      * @param userId     用户ID
@@ -124,13 +130,4 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @return 订单数量
      */
     int getTodayOrderCountByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
-
-    /**
-     * 获取订单数量
-     * @param day           指定的日期
-     * @param deliveryType  配送类型
-     *
-     * @return 订单数量
-     */
-    int getOrderCount(@Param("storeId") Long storeId, @Param("day") Date day, @Param("deliveryType") DeliveryType deliveryType);
 }
