@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.novaborn.takeaway.order.entity.Order;
-import net.novaborn.takeaway.order.enums.*;
+import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderStateEx;
+import net.novaborn.takeaway.order.enums.OrderType;
+import net.novaborn.takeaway.order.enums.PaymentWay;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -88,12 +91,12 @@ public interface IOrderDao extends BaseMapper<Order> {
     /**
      * 获取订单数量
      *
-     * @param storeId      店铺ID
-     * @param day          指定的日期
-     * @param orderType    订单类型
+     * @param storeId   店铺ID
+     * @param day       指定的日期
+     * @param orderType 订单类型
      * @return 订单数量
      */
-    int getOrderCount(@Param("day") Long storeId,@Param("day") Date day, @Param("orderType") OrderType orderType);
+    int getOrderCount(@Param("storeId") Long storeId, @Param("day") Date day, @Param("orderType") OrderType orderType);
 
     /**
      * 用户端分页获取订单列表

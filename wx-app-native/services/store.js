@@ -20,19 +20,25 @@ export function getServiceState() {
   return api.getServiceState(getApp().globalData.currentStoreId)
 }
 
-export function getExpressServiceState(addressId, allPrice) {
-  return api.getExpressServiceState(getApp().globalData.currentStoreId, addressId, allPrice)
+export function getExpressServiceState(storeId, addressId, allPrice) {
+  if (!storeId) {
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getExpressServiceState(storeId, addressId, allPrice)
 }
 
 export function getDeliveryPrice() {
   return api.getDeliveryPrice(getApp().globalData.currentStoreId)
 }
 
-export function getAppointmentTimes (orderType) {
-  return api.getAppointmentTimes(orderType)
+export function getAppointmentTimes(storeId, orderType) {
+  if (!storeId) {
+    storeId = getApp().globalData.currentStoreId
+  }
+  return api.getAppointmentTimes(storeId, orderType)
 }
 
-export function formatAppointmentTime (orderType, appointment) {
+export function formatAppointmentTime(orderType, appointment) {
   let appointmentDate = null
   if (appointment === null || appointment.length !== 3) {
     return appointmentDate

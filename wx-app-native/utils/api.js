@@ -55,7 +55,7 @@ const api = {
   getDeliveryPrice: (storeId) => request.get('store/getDeliveryPrice', {
     storeId
   }),
-  getAppointmentTimes: (storeId,orderType) => request.get('store/getAppointmentTimes', {
+  getAppointmentTimes: (storeId,orderType) => request.post('store/getAppointmentTimes', {
     storeId,
     orderType
   }),

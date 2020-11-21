@@ -86,7 +86,7 @@ Page({
           } else {
             this.setData({
               'order.orderType': 'APPOINTMENT',
-              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+              'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
           }
@@ -99,7 +99,7 @@ Page({
             })
           } else {
             this.setData({
-              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
+              'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
           }
@@ -148,6 +148,7 @@ Page({
     store: null,
     order: {
       id: null,
+      storeId: null,
       addressId: null,
       couponId: null,
       paymentWay: 'WEIXIN_PAY',
@@ -265,6 +266,7 @@ Page({
       cartAllPrice: cartService.getCartAllPrice(),
       cartAllCount: cartService.getCartAllCount(),
       orderItems: temp,
+      'order.storeId': getApp().globalData.currentStoreId,
       'orderDetail.from': getApp().globalData.from,
     })
 
@@ -292,7 +294,7 @@ Page({
     this.getAppointmentTimes('APPOINTMENT')
   },
   getAppointmentTimes(orderType) {
-    indexService.getAppointmentTimes(orderType)
+    storeService.getAppointmentTimes(null, orderType)
       .then(res => {
         times = res.appointmentTimes
         const canDeliveryNow = res.canDeliveryNow
@@ -305,7 +307,7 @@ Page({
         let minutes = times[day][hour]
 
         if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
-          if(canDeliveryNow){
+          if (canDeliveryNow) {
             times['今天'] = Object.assign({}, {
               '尽快配送': []
             }, times['今天'])
@@ -330,14 +332,14 @@ Page({
           } else {
             this.setData({
               'order.orderType': 'APPOINTMENT',
-              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
+              'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
               deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
             })
           }
         }
 
         if (orderType === 'SELF') {
-          if(canDeliveryNow){
+          if (canDeliveryNow) {
             times['今天'] = Object.assign({}, {
               '立刻取餐': []
             }, times['今天'])
@@ -354,7 +356,7 @@ Page({
             })
           } else {
             this.setData({
-              'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
+              'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', [days[0], hours[0], minutes[0]]),
               deliveryArriveTime: `${days[0]} ${hours[0]}:${minutes[0]}`
             })
           }
@@ -559,7 +561,7 @@ Page({
     })
   },
   checkExpressState(addressId, allPrice) {
-    indexService.getExpressServiceState(addressId, allPrice)
+    storeService.getExpressServiceState(null, addressId, allPrice)
       .then(res => {
         this.setData({
           disableService: res.state !== 0,
