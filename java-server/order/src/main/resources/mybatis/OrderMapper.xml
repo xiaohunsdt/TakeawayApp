@@ -119,6 +119,9 @@
         SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             AND `order_type` = #{orderType.code}
+            <if test="storeId != null">
+                AND `store_id` = #{storeId}
+            </if>
             <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
                 AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
             </if>

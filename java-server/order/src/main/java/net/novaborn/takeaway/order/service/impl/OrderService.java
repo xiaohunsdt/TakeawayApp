@@ -111,7 +111,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public int getOrderCount(Date day, OrderType orderType) {
-        return this.baseMapper.getOrderCount(day, orderType);
+        return this.baseMapper.getOrderCount(null,day, orderType);
+    }
+
+    @Override
+    public int getOrderCount(Long storeId, Date day, OrderType orderType) {
+        return this.baseMapper.getOrderCount(storeId,day, orderType);
     }
 
     @Override

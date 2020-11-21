@@ -117,6 +117,17 @@ public interface IOrderService extends IService<Order> {
      */
     int getOrderCount(Date day, OrderType orderType);
 
+
+    /**
+     * 获取订单数量
+     *
+     * @param storeId       店铺Id
+     * @param day           指定的日期
+     * @param orderType     订单类型
+     * @return 订单数量
+     */
+    int getOrderCount(Long storeId, Date day, OrderType orderType);
+
     /**
      * 用户端获取今日指定类型的订单
      *
@@ -134,25 +145,6 @@ public interface IOrderService extends IService<Order> {
      * @return 订单数量
      */
     int getTodayOrderCountByStateU(Long userId, OrderStateEx orderState);
-
-//    /**
-//     * 获取订单数量
-//     *
-//     * @param day          指定的日期
-//     * @param deliveryType 配送类型
-//     * @return 订单数量
-//     */
-//    int getOrderCount(Date day, DeliveryType deliveryType);
-//
-//    /**
-//     * 获取订单数量
-//     *
-//     * @param storeId      店铺Id
-//     * @param day          指定的日期
-//     * @param deliveryType 配送类型
-//     * @return 订单数量
-//     */
-//    int getOrderCount(Long storeId, Date day, DeliveryType deliveryType);
 
     /**
      * 设置优惠卷折扣

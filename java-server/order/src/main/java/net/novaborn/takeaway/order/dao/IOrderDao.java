@@ -88,11 +88,12 @@ public interface IOrderDao extends BaseMapper<Order> {
     /**
      * 获取订单数量
      *
+     * @param storeId      店铺ID
      * @param day          指定的日期
      * @param orderType    订单类型
      * @return 订单数量
      */
-    int getOrderCount(@Param("day") Date day, @Param("orderType") OrderType orderType);
+    int getOrderCount(@Param("day") Long storeId,@Param("day") Date day, @Param("orderType") OrderType orderType);
 
     /**
      * 用户端分页获取订单列表
