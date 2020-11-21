@@ -115,6 +115,33 @@
         </where>
     </select>
 
+    <select id="getOrderCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
+        <where>
+            AND `order_type` = #{orderType.code}
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
+                AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
+            </if>
+            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+                AND
+                (
+                TO_DAYS(`create_date`) = TO_DAYS(NOW())
+                OR
+                (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
+                )
+            </if>
+        </where>
+    </select>
+
     <sql id="common_order_list_where_u">
         <if test="userId != null and userId != ''">
             `user_id` = #{userId}
@@ -150,33 +177,6 @@
         SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
         <where>
             <include refid="common_order_list_where_u"/>
-        </where>
-    </select>
-
-    <select id="getTodayOrderCount" resultType="java.lang.Integer">
-        SELECT count(*) FROM `order` INNER JOIN `order_detail` ON `order`.`id` = `order_detail`.`order_id`
-        <where>
-            AND `order_type` = #{orderType.code}
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
-                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
-            </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
-                AND TO_DAYS(`appointment_date`) = TO_DAYS(#{day})
-            </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
-                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
-            </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
-                AND TO_DAYS(`create_date`) = TO_DAYS(#{day})
-            </if>
-            <if test="orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
-                AND
-                (
-                    TO_DAYS(`create_date`) = TO_DAYS(NOW())
-                    OR
-                    (`appointment_date` IS NOT NULL AND TO_DAYS(`appointment_date`) = TO_DAYS(NOW()))
-                )
-            </if>
         </where>
     </select>
 

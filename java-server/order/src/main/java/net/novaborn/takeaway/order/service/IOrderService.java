@@ -115,7 +115,7 @@ public interface IOrderService extends IService<Order> {
      * @param orderType    订单类型
      * @return 订单数量
      */
-    int getTodayOrderCount(Date day, OrderType orderType);
+    int getOrderCount(Date day, OrderType orderType);
 
     /**
      * 用户端获取今日指定类型的订单

@@ -86,6 +86,15 @@ public interface IOrderDao extends BaseMapper<Order> {
     int getWaitingReceiveOrderCount(@Param("orderType") OrderType orderType);
 
     /**
+     * 获取订单数量
+     *
+     * @param day          指定的日期
+     * @param orderType    订单类型
+     * @return 订单数量
+     */
+    int getOrderCount(@Param("day") Date day, @Param("orderType") OrderType orderType);
+
+    /**
      * 用户端分页获取订单列表
      *
      * @param page       分页实例
@@ -103,15 +112,6 @@ public interface IOrderDao extends BaseMapper<Order> {
      * @return 订单数量
      */
     int getOrderCountByStateU(@Param("userId") Long userId, @Param("orderState") OrderStateEx orderState);
-
-    /**
-     * 获取订单数量
-     *
-     * @param day          指定的日期
-     * @param orderType    订单类型
-     * @return 订单数量
-     */
-    int getTodayOrderCount(@Param("day") Date day, @Param("orderType") OrderType orderType);
 
     /**
      * 用户端获取今日指定类型的订单
