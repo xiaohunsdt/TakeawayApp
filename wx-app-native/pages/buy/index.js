@@ -301,14 +301,16 @@ Page({
         const hour = hours[0]
         let minutes = times[day][hour]
 
-        if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT') && canDeliveryNow) {
-          times['今天'] = Object.assign({}, {
-            '尽快配送': []
-          }, times['今天'])
-          if (!hours.includes('尽快配送')) {
-            hours.splice(0, 0, '尽快配送')
+        if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
+          if(canDeliveryNow){
+            times['今天'] = Object.assign({}, {
+              '尽快配送': []
+            }, times['今天'])
+            if (!hours.includes('尽快配送')) {
+              hours.splice(0, 0, '尽快配送')
+            }
+            minutes = []
           }
-          minutes = []
 
           if (days[0] === '今天' && hours[0] === '尽快配送') {
             this.setData({
@@ -331,14 +333,16 @@ Page({
           }
         }
 
-        if (orderType === 'SELF' && canDeliveryNow) {
-          times['今天'] = Object.assign({}, {
-            '立刻取餐': []
-          }, times['今天'])
-          if (!hours.includes('立刻取餐')) {
-            hours.splice(0, 0, '立刻取餐')
+        if (orderType === 'SELF') {
+          if(canDeliveryNow){
+            times['今天'] = Object.assign({}, {
+              '立刻取餐': []
+            }, times['今天'])
+            if (!hours.includes('立刻取餐')) {
+              hours.splice(0, 0, '立刻取餐')
+            }
+            minutes = []
           }
-          minutes = []
 
           if (days[0] === '今天' && hours[0] === '立刻取餐') {
             this.setData({
