@@ -119,8 +119,8 @@
                         <span>₩ {{ props.row.discountedPrices.toLocaleString() }}</span>
                         <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
                       </el-form-item>
-                      <el-form-item v-if="props.row.ps!==''" label="备注">
-                        <span>{{ props.row.ps }}</span>
+                      <el-form-item v-if="props.row.detail.orderDetail.ps!==''" label="备注">
+                        <span>{{ props.row.detail.orderDetail.ps }}</span>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">

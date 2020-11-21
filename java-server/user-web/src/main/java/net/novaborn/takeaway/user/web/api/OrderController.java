@@ -11,6 +11,7 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.common.utils.CommonUtil;
 import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
@@ -154,6 +155,19 @@ public class OrderController extends BaseController {
 
         if (order.getOrderType() == OrderType.NORMAL && !this.getCanOrderNow(order.getStoreId())) {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
+        }
+
+        //订单为自取订单的情况检测
+        if (order.getOrderType() == OrderType.SELF) {
+            if (orderDetail.getAppointmentDate() != null) {
+                if (orderDetail.getPhone() == null || StrUtil.isBlank(orderDetail.getPhone())) {
+                    throw new SysException(OrderExceptionEnum.ORDER_SELF_HAVE_NO_PHONE);
+                }
+
+                if (!CommonUtil.validateKoreaPhone(orderDetail.getPhone())) {
+                    throw new SysException(OrderExceptionEnum.PHONE_FORMAT_ERROR);
+                }
+            }
         }
 
         order.setUserId(user.get().getId());

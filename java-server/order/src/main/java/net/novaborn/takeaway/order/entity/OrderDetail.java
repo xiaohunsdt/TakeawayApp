@@ -34,6 +34,8 @@ public class OrderDetail extends Model<OrderDetail> {
     @TableField(value = "`from`")
     private From from;
 
+    private String phone;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Date updateDate;

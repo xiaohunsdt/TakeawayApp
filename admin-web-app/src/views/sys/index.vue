@@ -256,7 +256,8 @@ export default {
         accountName: null
       },
       printerSetting: {
-        sn: '',
+        front_sn: '',
+        end_sn: '',
         voiceType: '0',
         temperature1: '',
         temperature2: '',
@@ -337,8 +338,8 @@ export default {
           settings = Object.assign({}, this.paymentSetting)
           break
         case 'PRINTER':
-          if (this.printerSetting.sn === '') {
-            this.$message.warning('请输入设备号')
+          if (this.printerSetting.front_sn === '') {
+            this.$message.warning('请输入前台设备号')
             return
           }
           settings = Object.assign({}, this.printerSetting)

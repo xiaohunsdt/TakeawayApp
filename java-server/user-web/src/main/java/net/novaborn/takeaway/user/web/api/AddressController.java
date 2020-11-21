@@ -104,7 +104,7 @@ public class AddressController extends BaseController {
 
         address.setUserId(user.get().getId());
 
-        if (!CommonUtil.validatePhone(address.getPhone())) {
+        if (!CommonUtil.validateKoreaPhone(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 
@@ -138,7 +138,7 @@ public class AddressController extends BaseController {
         address.setDetail(address.getDetail().trim());
         address.setPhone(address.getPhone().trim());
 
-        if (!CommonUtil.validatePhone(address.getPhone())) {
+        if (!CommonUtil.validateKoreaPhone(address.getPhone())) {
             throw new SysException(AddressExceptionEnum.PHONE_FORMAT_ERROR);
         }
 

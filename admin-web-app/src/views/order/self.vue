@@ -119,21 +119,15 @@
                         <span>₩ {{ props.row.discountedPrices.toLocaleString() }}</span>
                         <span v-if="props.row.discount !=''">({{ props.row.discount }}折)</span>
                       </el-form-item>
-                      <el-form-item v-if="props.row.ps!==''" label="备注">
-                        <span>{{ props.row.ps }}</span>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item v-if="props.row.detail.orderDetail.phone!==''" label="手机号">
+                        <span>{{ props.row.detail.orderDetail.phone }}</span>
+                      </el-form-item>
+                      <el-form-item v-if="props.row.detail.orderDetail.ps!==''" label="备注">
+                        <span>{{ props.row.detail.orderDetail.ps }}</span>
                       </el-form-item>
                     </el-col>
-                    <!--                    <el-col :span="12">-->
-                    <!--                      <el-form-item label="地址">-->
-                    <!--                        <div>-->
-                    <!--                          <div>{{ props.row.detail.address.address }}</div>-->
-                    <!--                          <div>{{ props.row.detail.address.detail }}</div>-->
-                    <!--                        </div>-->
-                    <!--                      </el-form-item>-->
-                    <!--                      <el-form-item label="联系方式">-->
-                    <!--                        <span>{{ props.row.detail.address.phone }}</span>-->
-                    <!--                      </el-form-item>-->
-                    <!--                    </el-col>-->
                   </el-row>
                 </el-form>
               </base-card>
