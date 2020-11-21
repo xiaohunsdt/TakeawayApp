@@ -35,8 +35,8 @@ public class OrderServiceTest {
     AddressService addressService;
 
     @Test
-    public void getOrderCountTodayTest() {
-        System.out.println(orderService.getTodayOrderCount(new Date(), OrderType.NORMAL));
+    public void getOrderCountTest() {
+        System.out.println(orderService.getOrderCount(new Date(), OrderType.NORMAL));
     }
 
     @Test

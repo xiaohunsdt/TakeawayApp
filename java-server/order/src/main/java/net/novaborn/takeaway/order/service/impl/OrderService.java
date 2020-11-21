@@ -110,8 +110,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public int getTodayOrderCount(Date day, OrderType orderType) {
-        return this.baseMapper.getTodayOrderCount(day, orderType);
+    public int getOrderCount(Date day, OrderType orderType) {
+        return this.baseMapper.getOrderCount(day, orderType);
     }
 
     @Override
@@ -232,23 +232,23 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         switch (orderDto.getOrder().getOrderType()) {
             case NORMAL:
                 // 一般订单
-                number = this.getTodayOrderCount(currentDate, OrderType.NORMAL) + 1;
+                number = this.getOrderCount(currentDate, OrderType.NORMAL) + 1;
                 break;
             case APPOINTMENT:
                 // 预约订单
-                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getTodayOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
                 break;
             case IN_STORE:
                 // 堂食订单
-                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.IN_STORE) + 1;
+                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.IN_STORE) + 1;
                 break;
             case EXPRESS:
                 // 快递订单
-                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.EXPRESS) + 1;
+                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.EXPRESS) + 1;
                 break;
             case SELF:
                 // 自取订单
-                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getTodayOrderCount(currentDate, OrderType.SELF) + 1;
+                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.SELF) + 1;
                 break;
             default:
                 number = 0;
