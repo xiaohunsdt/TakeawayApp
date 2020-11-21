@@ -161,14 +161,14 @@ public class IndexController extends BaseController {
                 continue;
             }
 
-            Date startDate;
-            Date endDate;
+            DateTime startDate;
+            DateTime endDate;
             if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
                 // 预定要提前2个小时
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
                     startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
                 } else {
-                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 30);
+                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
                 }
                 endDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
@@ -182,8 +182,12 @@ public class IndexController extends BaseController {
                 startDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
                     .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND))
-                    .offset(DateField.MINUTE, 30);
+                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND));
+                if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
+                    startDate.offset(DateField.MINUTE, 20);
+                } else {
+                    startDate.offset(DateField.MINUTE, 10);
+                }
                 endDate = new DateTime(currentDate)
                     .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
                     .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
