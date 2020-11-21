@@ -14,7 +14,7 @@
         <van-field border="{{false}}" value="{{address.detail}}" bind:change="detailInput" label="详细"
           placeholder="门牌号,楼下密码,送餐提示等详细信息" title-width="3em" />
         <van-field border="{{false}}" value="{{address.phone}}" bind:change="phoneInput" label="手机号"
-          placeholder="请输入手机号,手机格式为:01056511996" required title-width="3em" />
+          placeholder="请输入手机号,手机格式: 010XXXXXXXX" required title-width="3em" />
       </van-cell-group>
     </base-panel>
     <van-button disable="{{editLoading}}" loading="{{editLoading}}" bind:click="editBtnClick" color="#FFD200"

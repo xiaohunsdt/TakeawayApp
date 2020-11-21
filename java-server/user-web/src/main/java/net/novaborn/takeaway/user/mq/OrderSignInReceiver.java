@@ -77,7 +77,7 @@ public class OrderSignInReceiver {
                 break;
         }
         if (couponTemplate != null) {
-            couponService.generateCoupon(couponTemplate, order.getStoreId(), order.getUserId());
+            couponService.generateCoupon(couponTemplate, 1302193963869949953L, order.getUserId());
         }
 
         channel.basicAck(deliveryTag, false);

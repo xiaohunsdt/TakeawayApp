@@ -54,7 +54,7 @@
 							<van-icon color="#FFD200" name="phone" size="1.2rem" />
 						</view>
 						<view slot="title">
-							<input class="self-phone-input" value="{{orderDetail.phone}}" placeholder="请输入手机号" bind:input="selfPhoneInput"/>
+							<input class="self-phone-input" value="{{orderDetail.phone}}" placeholder="手机格式: 010XXXXXXXX" bind:input="selfPhoneInput"/>
 						</view>
 					</van-cell>
 				</view>
