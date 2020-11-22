@@ -84,7 +84,7 @@ public class ProduceController extends BaseController {
 
         List<Produce> produceList = produceService.list(query).stream()
             .filter(item -> !item.getState().equals(ProduceState.OFF))
-            .sorted(Comparator.comparing(Produce::getCreateDate).reversed().thenComparing(Produce::getName).thenComparing(Produce::getIndex))
+            .sorted(Comparator.comparing(Produce::getIndex).reversed().thenComparing(Produce::getName).thenComparing(Produce::getCreateDate))
             .collect(Collectors.toList());
         return ResponseEntity.ok(new ProduceListDto(produceList));
     }
