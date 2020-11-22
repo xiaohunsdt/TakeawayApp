@@ -191,12 +191,12 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-            "川香苑满赠活动、签到活动来了哦~~\n" +
+            "签到活动来了哦~~\n" +
+                "今日点餐满15000送卤蛋，满20000送500ml饮料，满30000送新版麻辣烫，满40000送新版麻辣香锅~~\n" +
                 "快和身边的小伙伴们一起加入我们吧！！[拥抱][拥抱]\n"
         );
         autoMessage.setImgUrlList(
             Arrays.asList(
-                "https://admin.cxy.novaborn.net/upload/images/activity/4f09112c713a478ca8b9dba2cf290ab6.png",
                 "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png"
             )
         );
