@@ -114,12 +114,12 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
     @Override
     public int getOrderCount(Date day, OrderType orderType) {
-        return this.baseMapper.getOrderCount(null,day, orderType);
+        return this.baseMapper.getOrderCount(null, day, orderType);
     }
 
     @Override
     public int getOrderCount(Long storeId, Date day, OrderType orderType) {
-        return this.baseMapper.getOrderCount(storeId,day, orderType);
+        return this.baseMapper.getOrderCount(storeId, day, orderType);
     }
 
     @Override
@@ -158,17 +158,17 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-            .filter(orderItem -> orderItem.getGoodsId() != null)
-            .map(orderItem -> {
-                Produce produce = produceService.getById(orderItem.getProduceId());
-                // 鸭货除外
-                if (produce.getCategoryId().equals(1301894880743731201L)) {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                } else {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                }
-            })
-            .reduce(0, (x, y) -> x + y);
+                .filter(orderItem -> orderItem.getGoodsId() != null)
+                .map(orderItem -> {
+                    Produce produce = produceService.getById(orderItem.getProduceId());
+                    // 鸭货除外
+                    if (produce.getCategoryId().equals(1301894880743731201L)) {
+                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                    } else {
+                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                    }
+                })
+                .reduce(0, (x, y) -> x + y);
 
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
@@ -251,23 +251,23 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         switch (orderDto.getOrder().getOrderType()) {
             case NORMAL:
                 // 一般订单
-                number = this.getOrderCount(currentDate, OrderType.NORMAL) + 1;
+                number = this.getOrderCount(orderDto.getOrder().getStoreId(), currentDate, OrderType.NORMAL) + 1;
                 break;
             case APPOINTMENT:
                 // 预约订单
-                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getOrderCount(orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
+                number = 500000 + DateUtil.dayOfMonth(orderDto.getOrderDetail().getAppointmentDate()) * 1000 + this.getOrderCount(orderDto.getOrder().getStoreId(), orderDto.getOrderDetail().getAppointmentDate(), OrderType.APPOINTMENT) + 1;
                 break;
             case IN_STORE:
                 // 堂食订单
-                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.IN_STORE) + 1;
+                number = 600000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(orderDto.getOrder().getStoreId(), currentDate, OrderType.IN_STORE) + 1;
                 break;
             case EXPRESS:
                 // 快递订单
-                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.EXPRESS) + 1;
+                number = 700000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(orderDto.getOrder().getStoreId(), currentDate, OrderType.EXPRESS) + 1;
                 break;
             case SELF:
                 // 自取订单
-                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(currentDate, OrderType.SELF) + 1;
+                number = 800000 + DateUtil.dayOfMonth(currentDate) * 1000 + this.getOrderCount(orderDto.getOrder().getStoreId(), currentDate, OrderType.SELF) + 1;
                 break;
             default:
                 number = 0;
@@ -294,16 +294,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         TreeMap<String, Integer> goodsSale = new TreeMap<>();
 
         orderList.stream()
-            .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
-            .forEach(order -> {
-                orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                    Integer count = orderItem.getGoodsCount();
-                    if (goodsSale.containsKey(orderItem.getProduceName())) {
-                        count += goodsSale.get(orderItem.getProduceName());
-                    }
-                    goodsSale.put(orderItem.getProduceName(), count);
+                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
+                .forEach(order -> {
+                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                        Integer count = orderItem.getGoodsCount();
+                        if (goodsSale.containsKey(orderItem.getProduceName())) {
+                            count += goodsSale.get(orderItem.getProduceName());
+                        }
+                        goodsSale.put(orderItem.getProduceName(), count);
+                    });
                 });
-            });
 
         List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
         Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
