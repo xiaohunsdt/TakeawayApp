@@ -4,8 +4,11 @@ import cn.hutool.core.date.DateUtil;
 import net.novaborn.takeaway.common.BaseControllerWrapper;
 import net.novaborn.takeaway.common.SpringContextHolder;
 import net.novaborn.takeaway.order.entity.Delivery;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.enums.OrderState;
+import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.service.impl.DeliveryService;
+import net.novaborn.takeaway.order.service.impl.OrderDetailService;
 import net.novaborn.takeaway.user.entity.User;
 import net.novaborn.takeaway.user.service.impl.AddressService;
 import net.novaborn.takeaway.user.service.impl.UserService;
@@ -30,6 +33,7 @@ public class OrderWrapperEx extends BaseControllerWrapper {
         UserService userService = SpringContextHolder.getBean(UserService.class);
         AddressService addressService = SpringContextHolder.getBean(AddressService.class);
         DeliveryService deliveryService = SpringContextHolder.getBean(DeliveryService.class);
+        OrderDetailService orderDetailService = SpringContextHolder.getBean(OrderDetailService.class);
         User user = userService.getById((Long) map.get("userId"));
 
         if (user.getOpenId() != null) {
@@ -48,10 +52,10 @@ public class OrderWrapperEx extends BaseControllerWrapper {
         }
 
         Date createDate = (Date) map.get("createDate");
-        Date appointmentDate = (Date) map.get("appointmentDate");
-
-        if (appointmentDate != null) {
-            map.put("appointmentDate", DateUtil.format(appointmentDate, "MM-dd HH:mm"));
+        OrderType orderType = (OrderType) map.get("orderType");
+        if (orderType == OrderType.APPOINTMENT) {
+            OrderDetail detail = orderDetailService.getById((Long) map.get("id"));
+            map.put("appointmentDate", DateUtil.format(detail.getAppointmentDate(), "MM-dd HH:mm"));
         }
         map.put("createDate", DateUtil.format(createDate, "MM-dd HH:mm"));
     }

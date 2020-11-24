@@ -74,20 +74,25 @@
         <where>
             <include refid="common_order_list_where"/>
         </where>
-        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
+        <if test="args.orderType == null">
             ORDER BY `create_date` DESC
         </if>
-        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
-            ORDER BY `create_date` DESC
-        </if>
-        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
-            ORDER BY `create_date` DESC
-        </if>
-        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
-            ORDER BY `appointment_date` DESC
-        </if>
-        <if test="args.orderType != null and args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
-            ORDER BY `appointment_date`,`create_date` DESC
+        <if test="args.orderType != null">
+            <if test="args.orderType == @net.novaborn.takeaway.order.enums.OrderType@NORMAL">
+                ORDER BY `create_date` DESC
+            </if>
+            <if test="args.orderType == @net.novaborn.takeaway.order.enums.OrderType@IN_STORE">
+                ORDER BY `create_date` DESC
+            </if>
+            <if test="args.orderType == @net.novaborn.takeaway.order.enums.OrderType@EXPRESS">
+                ORDER BY `create_date` DESC
+            </if>
+            <if test="args.orderType == @net.novaborn.takeaway.order.enums.OrderType@APPOINTMENT">
+                ORDER BY `appointment_date` DESC
+            </if>
+            <if test="args.orderType == @net.novaborn.takeaway.order.enums.OrderType@SELF">
+                ORDER BY `appointment_date`,`create_date` DESC
+            </if>
         </if>
     </select>
 

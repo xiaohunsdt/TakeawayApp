@@ -127,7 +127,7 @@ export default {
           })
     },
     onDelete(id) {
-      this.$confirm('是否确定删除此分类?', '提示', {
+      this.$confirm('删除此分类会导致此分类下的所有产品都将被删除!!是否确定删除此分类?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
