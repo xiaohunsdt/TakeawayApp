@@ -102,7 +102,7 @@ Page({
               'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
-            if(this.data.address){
+            if (this.data.address) {
               this.setData({
                 'orderDetail.phone': this.data.address.phone
               })
@@ -313,12 +313,21 @@ Page({
 
         if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
           if (canDeliveryNow) {
-            times['今天'] = Object.assign({}, {
-              '尽快配送': []
-            }, times['今天'])
-            if (!hours.includes('尽快配送')) {
-              hours.splice(0, 0, '尽快配送')
+            if (!Object.keys(times).includes('今天')) {
+              times = Object.assign({}, {
+                '今天': {
+                  '尽快配送': []
+                }
+              }, times)
+            } else {
+              times['今天'] = Object.assign({}, {
+                '尽快配送': []
+              }, times['今天'])
+              if (!hours.includes('尽快配送')) {
+                hours.splice(0, 0, '尽快配送')
+              }
             }
+
             minutes = []
           }
 
@@ -345,12 +354,21 @@ Page({
 
         if (orderType === 'SELF') {
           if (canDeliveryNow) {
-            times['今天'] = Object.assign({}, {
-              '立刻取餐': []
-            }, times['今天'])
-            if (!hours.includes('立刻取餐')) {
-              hours.splice(0, 0, '立刻取餐')
+            if (!Object.keys(times).includes('今天')) {
+              times = Object.assign({}, {
+                '今天': {
+                  '立刻取餐': []
+                }
+              }, times)
+            } else {
+              times['今天'] = Object.assign({}, {
+                '立刻取餐': []
+              }, times['今天'])
+              if (!hours.includes('立刻取餐')) {
+                hours.splice(0, 0, '立刻取餐')
+              }
             }
+
             minutes = []
           }
 
@@ -416,7 +434,7 @@ Page({
       this.getAppointmentTimes(orderType)
     }
   },
-  selfPhoneInput(event){
+  selfPhoneInput(event) {
     this.setData({
       'orderDetail.phone': event.detail.value
     })

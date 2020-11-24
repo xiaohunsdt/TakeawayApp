@@ -135,8 +135,8 @@ public class StoreController extends BaseController {
             if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
                 // 预定要提前2个小时
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
-//                    startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
-                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
+                    startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
+//                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
                 } else {
                     startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
                 }
