@@ -132,19 +132,6 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         return this.baseMapper.getTodayOrderCountByStateU(userId, orderState);
     }
 
-    //<<<<<<< HEAD
-//    public int getOrderCount(Date day, DeliveryType deliveryType) {
-//        return this.baseMapper.getOrderCount(null, day, deliveryType);
-//    }
-//
-//    @Override
-//    public int getOrderCount(Long storeId, Date day, DeliveryType deliveryType) {
-//        return this.baseMapper.getOrderCount(storeId, day, deliveryType);
-//    }
-//
-//    @Override
-//=======
-//>>>>>>> master
     @Override
     public void setDiscount(Order order, List<OrderItem> orderItemList, Long couponId) {
         couponService.getDiscountMoney(order, orderItemList, couponId);
