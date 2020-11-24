@@ -7,12 +7,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.admin.web.wrapper.CategoryWrapper;
 import net.novaborn.takeaway.category.entity.Category;
 import net.novaborn.takeaway.category.service.impl.CategoryService;
-import net.novaborn.takeaway.admin.web.wrapper.CategoryWrapper;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.goods.entity.Goods;
+import net.novaborn.takeaway.goods.entity.Produce;
+import net.novaborn.takeaway.goods.service.impl.GoodsService;
+import net.novaborn.takeaway.goods.service.impl.ProduceService;
+import net.novaborn.takeaway.goods.service.impl.ProduceSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,8 +35,13 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/api/admin/category")
 public class CategoryController extends BaseController {
+    private ProduceService produceService;
 
-    CategoryService categoryService;
+    private ProduceSpecService produceSpecService;
+
+    private GoodsService goodsService;
+
+    private CategoryService categoryService;
 
     @GetMapping("getAllCategory")
     public ResponseEntity getAllCategory() {
@@ -81,8 +91,14 @@ public class CategoryController extends BaseController {
 
     @ResponseBody
     @PostMapping("deleteCategory")
-    public Tip deleteCategory(String id) {
+    public Tip deleteCategory(Long id) {
         if (categoryService.removeById(id)) {
+            List<Produce> produceList = produceService.getListByCategoryId(id);
+            produceList.parallelStream().forEach(produce -> {
+                produceSpecService.removeById(produce.getId());
+                goodsService.deleteByProduceId(produce.getId());
+                produceService.removeById(produce.getId());
+            });
             return new SuccessTip("删除成功!");
         } else {
             return new ErrorTip(-1, "删除失败!");
