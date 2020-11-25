@@ -13,16 +13,15 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.utils.MapDistanceUtil;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.order.enums.OrderType;
-import net.novaborn.takeaway.system.service.impl.SettingService;
-import net.novaborn.takeaway.user.web.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.store.entity.Store;
 import net.novaborn.takeaway.store.enums.State;
 import net.novaborn.takeaway.store.exception.StoreExceptionEnum;
 import net.novaborn.takeaway.store.service.impl.StoreService;
 import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import net.novaborn.takeaway.user.entity.Coordinate;
+import net.novaborn.takeaway.user.web.dto.AppointmentTimesDto;
 import net.novaborn.takeaway.user.web.wrapper.StoreWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -67,13 +66,13 @@ public class StoreController extends BaseController {
 
         LambdaQueryWrapper<Store> query = Wrappers.lambdaQuery();
         query.eq(Store::getState, State.ON)
-                .between(Store::getX, rectangle.getMinX(), rectangle.getMaxX())
-                .between(Store::getY, rectangle.getMinY(), rectangle.getMaxY());
+            .between(Store::getX, rectangle.getMinX(), rectangle.getMaxX())
+            .between(Store::getY, rectangle.getMinY(), rectangle.getMaxY());
 
         List<Store> storeList = storeService.list(query).stream()
-                .filter(store -> MapDistanceUtil.getDistance(coordinate.getX(), coordinate.getY(), store.getX(), store.getY()) < store.getMaxDeliveryDistance())
-                .sorted(Comparator.comparing(Store::getCreateDate))
-                .collect(Collectors.toList());
+            .filter(store -> MapDistanceUtil.getDistance(coordinate.getX(), coordinate.getY(), store.getX(), store.getY()) < store.getMaxDeliveryDistance())
+            .sorted(Comparator.comparing(Store::getCreateDate))
+            .collect(Collectors.toList());
         return new StoreWrapper(storeList).warp();
     }
 
@@ -84,8 +83,8 @@ public class StoreController extends BaseController {
         query.eq(Store::getState, State.ON);
 
         List<Store> storeList = storeService.list(query).stream()
-                .sorted(Comparator.comparing(Store::getCreateDate).reversed())
-                .collect(Collectors.toList());
+            .sorted(Comparator.comparing(Store::getCreateDate).reversed())
+            .collect(Collectors.toList());
         return new StoreWrapper(storeList).warp();
     }
 
@@ -110,20 +109,34 @@ public class StoreController extends BaseController {
     @PostMapping("getAppointmentTimes")
     @ResponseBody
     public AppointmentTimesDto getAppointmentTimes(Long storeId, OrderType orderType) {
-        Date currentDate = DateUtil.date();
-        String store_open_date = settingService.getSettingByName(storeId,"store_open_date", SettingScope.STORE).getValue();
-        String store_open_time = settingService.getSettingByName(storeId,"store_open_time", SettingScope.STORE).getValue();
-        String store_close_time = settingService.getSettingByName(storeId,"store_close_time", SettingScope.STORE).getValue();
-        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time);
-        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time);
+        boolean canDeliveryNow = false;
+        DateTime currentDate = DateUtil.date();
+        String store_open_date = settingService.getSettingByName(storeId, "store_open_date", SettingScope.STORE).getValue();
+        String store_open_time = settingService.getSettingByName(storeId, "store_open_time", SettingScope.STORE).getValue();
+        String store_close_time = settingService.getSettingByName(storeId, "store_close_time", SettingScope.STORE).getValue();
+
+        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
+
         List<Map<String, Date>> timePairs = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             if (i != 0) {
-                currentDate = DateUtil.offsetDay(currentDate, 1)
-                    .setField(DateField.HOUR_OF_DAY, 0)
-                    .setField(DateField.MINUTE, 0)
-                    .setField(DateField.SECOND, 0);
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, 1);
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
             }
             // 指定日期是否营业
             if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
@@ -132,39 +145,25 @@ public class StoreController extends BaseController {
 
             DateTime startDate;
             DateTime endDate;
-            if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+            if (DateUtil.isIn(currentDate, storeOpenTime, storeCloseTime)) {
+                canDeliveryNow = true;
+                startDate = new DateTime(currentDate);
+                endDate = new DateTime(storeCloseTime);
+
                 // 预定要提前2个小时
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
-                    startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
-//                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
+                    startDate.offset(DateField.HOUR_OF_DAY, 2);
                 } else {
-                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
+                    startDate.offset(DateField.MINUTE, 20);
                 }
-                endDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+            } else if (currentDate.before(storeOpenTime)) {
+                startDate = new DateTime(storeOpenTime);
+                endDate = new DateTime(storeCloseTime);
 
-                if (startDate.getTime() > endDate.getTime()) {
-                    endDate = DateUtil.offsetDay(endDate, 1);
-                }
-            } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
-                startDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND));
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
                     startDate.offset(DateField.MINUTE, 20);
                 } else {
                     startDate.offset(DateField.MINUTE, 10);
-                }
-                endDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
-
-                if (startDate.getTime() > endDate.getTime()) {
-                    endDate = DateUtil.offsetDay(endDate, 1);
                 }
 
                 long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
@@ -187,6 +186,6 @@ public class StoreController extends BaseController {
             timePair.put("end", endDate);
             timePairs.add(timePair);
         }
-        return new AppointmentTimesDto(timePairs, TimeUtil.isBetween(store_open_time, store_close_time));
+        return new AppointmentTimesDto(timePairs, canDeliveryNow);
     }
 }

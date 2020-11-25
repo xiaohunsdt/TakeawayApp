@@ -2,6 +2,7 @@ package net.novaborn.takeaway.admin.task;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,7 +12,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -77,6 +77,7 @@ public class WechatAutoTask {
         sysContext.setCurrentStoreId(1302193963869949953L);
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
         String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
+
         storeOpenTime = DateUtil.parseDateTime(store_open_time);
         storeCloseTime = DateUtil.parseDateTime(store_close_time);
 
@@ -114,10 +115,25 @@ public class WechatAutoTask {
 
     public void goodsShow() {
         sysContext.setCurrentStoreId(1302193963869949953L);
-
-        Date currentDate = DateUtil.date();
+        DateTime currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+
+        storeOpenTime = storeOpenTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        storeCloseTime = storeCloseTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
 
         if (!Boolean.parseBoolean(service_running.getValue())) {
             return;
@@ -127,7 +143,7 @@ public class WechatAutoTask {
             return;
         }
 
-        if (!TimeUtil.isBetween(currentDate, DateUtil.offsetHour(storeOpenTime, -1), storeCloseTime)) {
+        if (!DateUtil.isIn(currentDate, DateUtil.offsetHour(storeOpenTime, -1), storeCloseTime)) {
             return;
         }
 
@@ -173,9 +189,25 @@ public class WechatAutoTask {
     public void activityShow() {
         sysContext.setCurrentStoreId(1302193963869949953L);
 
-        Date currentDate = DateUtil.date();
+        DateTime currentDate = DateUtil.date();
         Setting service_running = settingService.getSettingByName("service_running", SettingScope.SYSTEM);
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
+
+        storeOpenTime = storeOpenTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        storeCloseTime = storeCloseTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
 
         if (!Boolean.parseBoolean(service_running.getValue())) {
             return;
@@ -185,7 +217,7 @@ public class WechatAutoTask {
             return;
         }
 
-        if (!TimeUtil.isBetween(currentDate, DateUtil.offsetHour(storeOpenTime, -1), storeCloseTime)) {
+        if (!DateUtil.isIn(currentDate, DateUtil.offsetHour(storeOpenTime, -1), storeCloseTime)) {
             return;
         }
 
@@ -224,7 +256,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
 //        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
-        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小程序架构更新!!有任何问题请联系我们微信客服哦~~[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
+        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小程序架构更新!!有任何问题请联系我们微信客服哦~~[拥抱][拥抱]", DateUtil.format(storeOpenTime, "HH:mm")));
         autoMessage.setImgUrlList(
             Arrays.asList(
                 "https://admin.cxy.novaborn.net/upload/images/banner/75e8d7a1f82346a58ae9ff164e4ca5ac.jpg",
@@ -237,6 +269,23 @@ public class WechatAutoTask {
     }
 
     public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
+        DateTime currentDate = DateUtil.date();
+        storeOpenTime = storeOpenTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        storeCloseTime = storeCloseTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
+
         String names = selectedOrderItems.stream().map(OrderItem::getProduceName).collect(Collectors.joining(", "));
         String desc = selectedOrderItems.stream()
             .map(orderItem -> {
@@ -257,9 +306,9 @@ public class WechatAutoTask {
 
         String message;
         message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n同款\uD83C\uDE51安排哦,现在点餐30-40分钟送达[哇][哇][哇]", names, desc);
-        long offend = TimeUtil.between(new Date(), storeCloseTime);
+        long offend = DateUtil.between(currentDate, storeCloseTime, DateUnit.SECOND);
         if (offend < 60 * 60 && offend > 0) {
-            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
+            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, DateUtil.format(storeCloseTime, "HH:mm"));
         }
 
         if (names.contains("暑假特惠")) {
@@ -275,6 +324,23 @@ public class WechatAutoTask {
     }
 
     public void sendAutoMessage(List<Produce> selectedProduces) {
+        DateTime currentDate = DateUtil.date();
+        storeOpenTime = storeOpenTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        storeCloseTime = storeCloseTime
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
+
         String names = selectedProduces.stream().map(Produce::getName).collect(Collectors.joining(", "));
         String desc = selectedProduces.stream()
             .map(goods -> {
@@ -295,9 +361,9 @@ public class WechatAutoTask {
         String message;
         message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n现在点餐30-40分钟送达[哇][哇][哇]");
 
-        long offend = TimeUtil.between(new Date(), storeCloseTime);
+        long offend = DateUtil.between(currentDate, storeCloseTime, DateUnit.SECOND);
         if (offend < 60 * 60 && offend > 0) {
-            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, TimeUtil.toString(storeCloseTime));
+            message += StrUtil.format("\r\n最后接单{}分钟, 接单到{}, 还没吃饭的宝宝们抓紧啦！！！", offend / 60, DateUtil.format(storeCloseTime, "HH:mm"));
         }
 
         if (names.contains("暑假特惠")) {

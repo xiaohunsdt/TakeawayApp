@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.store.service.impl;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -10,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.entity.BaseKVO;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.utils.MapDistanceUtil;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.store.dao.IStoreDao;
 import net.novaborn.takeaway.store.dto.ServiceStateDto;
 import net.novaborn.takeaway.store.entity.Store;
@@ -25,7 +26,10 @@ import net.novaborn.takeaway.user.service.impl.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -62,10 +66,26 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
         Setting service_running = settingService.getSettingByName(storeId, "service_running", SettingScope.SYSTEM);
         Setting service_close_notice = settingService.getSettingByName(storeId, "service_close_notice", SettingScope.SYSTEM);
 
-        Date currentDate = DateUtil.date();
         String store_open_date = settingService.getSettingByName(storeId, "store_open_date", SettingScope.STORE).getValue();
         String store_open_time = settingService.getSettingByName(storeId, "store_open_time", SettingScope.STORE).getValue();
         String store_close_time = settingService.getSettingByName(storeId, "store_close_time", SettingScope.STORE).getValue();
+
+        DateTime currentDate = DateUtil.date();
+        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
 
         if (!Boolean.parseBoolean(service_running.getValue())) {
             return new ServiceStateDto(-1, service_close_notice.getValue());
@@ -75,7 +95,7 @@ public class StoreService extends ServiceImpl<IStoreDao, Store> implements IStor
             return new ServiceStateDto(State.CLOSED.getCode(), "今日休息!不营业");
         }
 
-        if (!TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+        if (!DateUtil.isIn(currentDate, storeOpenTime, storeCloseTime)) {
             return new ServiceStateDto(State.CLOSED.getCode(), "当前不在营业时间段!");
         }
 

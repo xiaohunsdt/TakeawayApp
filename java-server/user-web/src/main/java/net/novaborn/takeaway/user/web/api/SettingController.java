@@ -1,12 +1,7 @@
 package net.novaborn.takeaway.user.web.api;
 
-import cn.hutool.core.date.DateUtil;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.tips.ErrorTip;
-import net.novaborn.takeaway.common.tips.SuccessTip;
-import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -16,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
