@@ -12,7 +12,6 @@ import net.novaborn.takeaway.common.entity.BaseKVO;
 import net.novaborn.takeaway.common.enums.From;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -141,20 +140,34 @@ public class IndexController extends BaseController {
     @PostMapping("getAppointmentTimes")
     @ResponseBody
     public AppointmentTimesDto getAppointmentTimes(OrderType orderType) {
-        Date currentDate = DateUtil.date();
+        boolean canDeliveryNow = false;
+        DateTime currentDate = DateUtil.date();
         String store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
         String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
-        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time);
-        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time);
+
+        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
+
         List<Map<String, Date>> timePairs = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             if (i != 0) {
-                currentDate = DateUtil.offsetDay(currentDate, 1)
-                    .setField(DateField.HOUR_OF_DAY, 0)
-                    .setField(DateField.MINUTE, 0)
-                    .setField(DateField.SECOND, 0);
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, 1);
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
             }
             // 指定日期是否营业
             if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
@@ -163,38 +176,25 @@ public class IndexController extends BaseController {
 
             DateTime startDate;
             DateTime endDate;
-            if (i == 0 && TimeUtil.isBetween(currentDate, store_open_time, store_close_time)) {
+            if (DateUtil.isIn(currentDate, storeOpenTime, storeCloseTime)) {
+                canDeliveryNow = true;
+                startDate = new DateTime(currentDate);
+                endDate = new DateTime(storeCloseTime);
+
                 // 预定要提前2个小时
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
-                    startDate = new DateTime(currentDate).offset(DateField.HOUR_OF_DAY, 2);
+                    startDate.offset(DateField.HOUR_OF_DAY, 2);
                 } else {
-                    startDate = new DateTime(currentDate).offset(DateField.MINUTE, 20);
+                    startDate.offset(DateField.MINUTE, 20);
                 }
-                endDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
+            } else if (currentDate.before(storeOpenTime)) {
+                startDate = new DateTime(storeOpenTime);
+                endDate = new DateTime(storeCloseTime);
 
-                if (startDate.getTime() > endDate.getTime()) {
-                    endDate = DateUtil.offsetDay(endDate, 1);
-                }
-            } else if (TimeUtil.isBefore(currentDate, storeOpenTime)) {
-                startDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeOpenTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeOpenTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeOpenTime.getField(DateField.SECOND));
                 if (orderType == OrderType.APPOINTMENT || orderType == OrderType.NORMAL) {
                     startDate.offset(DateField.MINUTE, 20);
                 } else {
                     startDate.offset(DateField.MINUTE, 10);
-                }
-                endDate = new DateTime(currentDate)
-                    .setField(DateField.HOUR_OF_DAY, storeCloseTime.getField(DateField.HOUR_OF_DAY))
-                    .setField(DateField.MINUTE, storeCloseTime.getField(DateField.MINUTE))
-                    .setField(DateField.SECOND, storeCloseTime.getField(DateField.SECOND));
-
-                if (startDate.getTime() > endDate.getTime()) {
-                    endDate = DateUtil.offsetDay(endDate, 1);
                 }
 
                 long diffMinutes = DateUtil.between(currentDate, startDate, DateUnit.MINUTE);
@@ -217,7 +217,7 @@ public class IndexController extends BaseController {
             timePair.put("end", endDate);
             timePairs.add(timePair);
         }
-        return new AppointmentTimesDto(timePairs, TimeUtil.isBetween(store_open_time, store_close_time));
+        return new AppointmentTimesDto(timePairs, canDeliveryNow);
     }
 
     @GetMapping("getFormerNotice")

@@ -1,5 +1,7 @@
 package net.novaborn.takeaway.user.web.api;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
@@ -12,7 +14,6 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.common.utils.CommonUtil;
-import net.novaborn.takeaway.common.utils.TimeUtil;
 import net.novaborn.takeaway.coupon.entity.Coupon;
 import net.novaborn.takeaway.coupon.enums.CouponState;
 import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
@@ -264,10 +265,27 @@ public class OrderController extends BaseController {
         String store_open_time = settingService.getSettingByName("store_open_time", SettingScope.STORE).getValue();
         String store_close_time = settingService.getSettingByName("store_close_time", SettingScope.STORE).getValue();
 
+        DateTime currentDate = DateUtil.date();
+        DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time)
+            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+        if (storeOpenTime.isAfter(storeCloseTime)) {
+            if (currentDate.isBefore(storeCloseTime)) {
+                storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
+            } else {
+                storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
+            }
+        }
+
         if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(now)))) {
             return false;
         }
-        return TimeUtil.isBetween(store_open_time, store_close_time);
+        return DateUtil.isIn(currentDate, storeOpenTime, storeCloseTime);
     }
 
     @ResponseBody
