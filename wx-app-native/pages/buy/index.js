@@ -101,11 +101,6 @@ Page({
               'orderDetail.appointmentDate': indexService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
-            if (this.data.address) {
-              this.setData({
-                'orderDetail.phone': this.data.address.phone
-              })
-            }
           }
         }
       }
@@ -124,6 +119,13 @@ Page({
           this.checkExpressState(this.data.order.addressId, this.data.cartAllPrice)
         }
       } else {
+        if('SELF' === newVal){
+          if (this.data.address) {
+            this.setData({
+              'orderDetail.phone': this.data.address.phone
+            })
+          }
+        }
         this.setData({
           disableService: false,
           disableNotice: ''
@@ -301,42 +303,41 @@ Page({
 
         // init
         if (canDeliveryNow) {
+          let deliveryStr = ''
+          if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
+            deliveryStr = '尽快配送'
+          }else if(orderType === 'SELF'){
+            deliveryStr = '立刻取餐'
+          }
+
           if (!Object.keys(times).includes('今天')) {
-            if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
-              times = Object.assign({}, {
-                '今天': {
-                  '尽快配送': []
-                }
-              }, times)
-            } else if (orderType === 'SELF') {
-              times = Object.assign({}, {
-                '今天': {
-                  '立刻取餐': []
-                }
-              }, times)
-            }
+            times = Object.assign({}, {
+              '今天': {
+                [deliveryStr]: []
+              }
+            }, times)
           } else {
-            if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
-              times['今天'] = Object.assign({}, {
-                '尽快配送': []
-              }, times['今天'])
-            } else if (orderType === 'SELF') {
-              times['今天'] = Object.assign({}, {
-                '立刻取餐': []
-              }, times['今天'])
-            }
+            times['今天'] = Object.assign({}, {
+              [deliveryStr]: []
+            }, times['今天'])
           }
         }
 
         const days = Object.keys(times)
-        const day = days[0]
+        const day = days.contains('今天')? '今天' : days[0]
         const hours = Object.keys(times[day])
-        const hour = hours[0]
+        let hour = hours[0]
         let minutes = times[day][hour]
 
+        if(hours.contains('尽快配送') || hours.contains('立刻取餐')){
+          hour = hours[hours.length - 1]
+          hours.splice(hours.length - 1, 1)
+          hours.splice(0, 0, hour)
+          minutes = []
+        }
 
         if ((orderType === 'NORMAL' || orderType === 'APPOINTMENT')) {
-          if (days[0] === '今天' && hours[0] === '尽快配送') {
+          if (day === '今天' && hour === '尽快配送') {
             this.setData({
               'order.orderType': 'NORMAL',
               'orderDetail.appointmentDate': null,
@@ -358,7 +359,7 @@ Page({
         }
 
         if (orderType === 'SELF') {
-          if (days[0] === '今天' && hours[0] === '立刻取餐') {
+          if (day === '今天' && hour === '立刻取餐') {
             this.setData({
               'orderDetail.appointmentDate': null,
               deliveryArriveTime: '立刻取餐'
