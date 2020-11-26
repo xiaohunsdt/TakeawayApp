@@ -102,11 +102,6 @@ Page({
               'orderDetail.appointmentDate': storeService.formatAppointmentTime('APPOINTMENT', this.data.appointment),
               deliveryArriveTime: `${day} ${hour}:${minute}`
             })
-            if (this.data.address) {
-              this.setData({
-                'orderDetail.phone': this.data.address.phone
-              })
-            }
           }
         }
       }
@@ -125,6 +120,13 @@ Page({
           this.checkExpressState(this.data.order.addressId, this.data.cartAllPrice)
         }
       } else {
+        if('SELF' === newVal){
+          if (this.data.address) {
+            this.setData({
+              'orderDetail.phone': this.data.address.phone
+            })
+          }
+        }
         this.setData({
           disableService: false,
           disableNotice: ''
