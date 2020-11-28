@@ -185,24 +185,24 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
             Goods gift = null;
             String giftName = null;
-            if (orderDto.getOrder().getRealPrice() >= 40000) {
-                if (goodsStockService.checkStock(gifts.get("麻辣香锅"), 1)) {
-                    gift = gifts.get("麻辣香锅");
-                    giftName = "麻辣香锅";
-                }
-            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
-                if (goodsStockService.checkStock(gifts.get("麻辣烫"), 1)) {
-                    gift = gifts.get("麻辣烫");
-                    giftName = "麻辣烫";
-                }
-            }
+//            if (orderDto.getOrder().getRealPrice() >= 40000) {
+//                if (goodsStockService.checkStock(gifts.get("麻辣香锅"), 1)) {
+//                    gift = gifts.get("麻辣香锅");
+//                    giftName = "麻辣香锅";
+//                }
+//            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
+//                if (goodsStockService.checkStock(gifts.get("麻辣烫"), 1)) {
+//                    gift = gifts.get("麻辣烫");
+//                    giftName = "麻辣烫";
+//                }
+//            }
 //            else if (orderDto.getOrder().getRealPrice() >= 25000) {
 //                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
 //                    gift = gifts.get("鸭翅");
 //                    giftName = "鸭翅";
 //                }
 //            }
-            else if (orderDto.getOrder().getRealPrice() >= 20000) {
+            if (orderDto.getOrder().getRealPrice() >= 20000) {
                 if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
                     gift = gifts.get("饮料");
                     giftName = "饮料";
