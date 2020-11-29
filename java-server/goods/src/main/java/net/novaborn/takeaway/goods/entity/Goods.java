@@ -56,9 +56,9 @@ public class Goods extends Model<Goods> {
     @JSONField(serialize = false)
     private Integer version;
 
-    @JSONField(serialize = false)
-    @TableLogic
-    private Integer deleted;
+//    @JSONField(serialize = false)
+//    @TableLogic
+//    private Integer deleted;
 
     public Goods(Long id) {
         this.id = id;
