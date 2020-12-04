@@ -170,7 +170,7 @@ public class IndexController extends BaseController {
                 storeCloseTime.offset(DateField.DAY_OF_YEAR, 1);
             }
             // 指定日期是否营业
-            if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(currentDate)))) {
+            if (!store_open_date.contains(String.valueOf(DateUtil.dayOfWeek(storeOpenTime)))) {
                 continue;
             }
 

@@ -164,7 +164,12 @@
           label="总金额"
           prop="allPrice">
           <template v-slot="scope">
-            <div>₩ {{ scope.row.allPrice.toLocaleString() }}</div>
+            <div>
+              ₩ {{ scope.row.allPrice.toLocaleString() }}
+              <el-tag size="mini" type="success">
+                ￥ {{ (scope.row.allPrice/1000 * 6).toFixed(2) }}
+              </el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -173,14 +178,24 @@
           width="160">
           <template v-slot="scope">
             <div v-if="scope.row.discount > 0">{{ scope.row.discount }}折</div>
-            <div v-if="scope.row.discountedPrices > 0">₩ {{ scope.row.discountedPrices.toLocaleString() }}</div>
+            <div v-if="scope.row.discountedPrices > 0">
+              ₩ {{ scope.row.discountedPrices.toLocaleString() }}
+              <el-tag size="mini" type="success">
+                ￥ {{ (scope.row.discountedPrices/1000 * 6).toFixed(2) }}
+              </el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
           align="center"
           label="实际金额">
           <template v-slot="scope">
-            <div>₩ {{ scope.row.realPrice.toLocaleString() }}</div>
+            <div>
+              ₩ {{ scope.row.realPrice.toLocaleString() }}
+              <el-tag size="mini" type="success">
+                ￥ {{ (scope.row.realPrice/1000 * 6).toFixed(2) }}
+              </el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
