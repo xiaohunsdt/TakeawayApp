@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.admin.utils;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.order.entity.Order;
@@ -101,11 +102,11 @@ public class PrinterUtil {
         sf.append("<BOLD>--------------菜品--------------\n");
         for (OrderItem item : orderItemList) {
             sf.append("<BR>");
-            int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + 1;
+            int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + getKoreaCharCount(item.getProduceName()) + 1;
             String formatStr = "<BOLD><L>%s" + addSpecSymbol(32 - allLength % 32) + "x%d\n";
-            sf.append(String.format(formatStr, item.getProduceName(), item.getGoodsCount()));
+            sf.append(String.format(formatStr, formatKoreaChar(item.getProduceName()), item.getGoodsCount()));
             if (StrUtil.isNotBlank(item.getGoodsTitle())) {
-                sf.append(String.format("<BOLD><L>%s\n", item.getGoodsTitle()));
+                sf.append(String.format("<BOLD><L>%s\n", formatKoreaChar(item.getGoodsTitle())));
             }
         }
         sf.append("<BR><BOLD>--------------------------------\n");
@@ -182,11 +183,11 @@ public class PrinterUtil {
         sf.append("<BOLD>--------------菜品--------------\n");
         for (OrderItem item : orderItemList) {
             sf.append("<BR>");
-            int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + 1;
+            int allLength = (item.getProduceName() + item.getGoodsCount()).getBytes(Charset.forName("GBK")).length + getKoreaCharCount(item.getProduceName()) + 1;
             String formatStr = "<BOLD><B><L>%s" + addSpecSymbol(16 - allLength % 16) + "x%d\n";
-            sf.append(String.format(formatStr, item.getProduceName(), item.getGoodsCount()));
+            sf.append(String.format(formatStr, formatKoreaChar(item.getProduceName()), item.getGoodsCount()));
             if (StrUtil.isNotBlank(item.getGoodsTitle())) {
-                sf.append(String.format("<BOLD><L>%s\n", item.getGoodsTitle()));
+                sf.append(String.format("<BOLD><L>%s\n", formatKoreaChar(item.getGoodsTitle())));
             }
         }
         sf.append("<BR>");
@@ -262,6 +263,11 @@ public class PrinterUtil {
             }
         }
         return inputStr;
+    }
+
+    private int getKoreaCharCount(String inputStr) {
+        String regex = "[ㄱ-ㅎㅏ-ㅣ가-힣]";
+        return ReUtil.findAllGroup0(regex, inputStr).size();
     }
 
     /**
