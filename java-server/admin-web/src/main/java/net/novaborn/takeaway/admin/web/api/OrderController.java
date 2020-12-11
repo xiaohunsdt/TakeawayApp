@@ -261,7 +261,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("refundOrder")
-    public Tip refundOrder(@RequestParam Long orderId) {
+    public Tip refundOrder(@RequestParam Long orderId, @RequestParam Integer money) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 

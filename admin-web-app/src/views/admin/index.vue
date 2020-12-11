@@ -147,7 +147,7 @@ export default {
       this.$refs['admin-dialog'].openDialog(id)
     },
     onUpdatedAdmin() {
-      this.onSearch()
+      this.getList()
     }
   }
 }

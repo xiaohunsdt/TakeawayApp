@@ -161,7 +161,7 @@
             <div>
               ₩ {{ scope.row.allPrice.toLocaleString() }}
               <el-tag size="mini" type="success">
-                ￥ {{ (scope.row.allPrice/1000 * 6).toFixed(2) }}
+                ￥ {{ (scope.row.allPrice / 1000 * 6).toFixed(2) }}
               </el-tag>
             </div>
           </template>
@@ -175,7 +175,7 @@
             <div v-if="scope.row.discountedPrices > 0">
               ₩ {{ scope.row.discountedPrices.toLocaleString() }}
               <el-tag size="mini" type="success">
-                ￥ {{ (scope.row.discountedPrices/1000 * 6).toFixed(2) }}
+                ￥ {{ (scope.row.discountedPrices / 1000 * 6).toFixed(2) }}
               </el-tag>
             </div>
           </template>
@@ -187,7 +187,7 @@
             <div>
               ₩ {{ scope.row.realPrice.toLocaleString() }}
               <el-tag size="mini" type="success">
-                ￥ {{ (scope.row.realPrice/1000 * 6).toFixed(2) }}
+                ￥ {{ (scope.row.realPrice / 1000 * 6).toFixed(2) }}
               </el-tag>
             </div>
           </template>
@@ -323,26 +323,15 @@
 <script>
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
-import orderApi from '@/api/order'
-import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
+import orderOperation from '@v/order/mixin/order-operation'
 
 export default {
   name: 'SelfOrder',
-  filters: {
-    orderStateFormat: function(value) {
-      return formatOrderState(value)
-    },
-    payStateFormat: function(value) {
-      return formatPayState(value)
-    },
-    paymentWayFormat: function(value) {
-      return formatPaymentWay(value)
-    }
-  },
   components: {
     BaseCard,
     EditOrderDialog
   },
+  mixins: [orderOperation],
   data() {
     return {
       page: {
@@ -369,145 +358,7 @@ export default {
     this.formData.formDate[1] = new Date()
     this.onSearch()
   },
-  methods: {
-    onSearch() {
-      this.page.current = 1
-      this.getList()
-    },
-    getList() {
-      this.listLoading = true
-
-      const params = Object.assign({}, this.formData)
-      params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
-      params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
-
-      orderApi.getOrderListByPage(this.page, params)
-        .then(response => {
-          const datas = response.records
-          datas.forEach(item => {
-            item.detail = {}
-          })
-          this.tableData = datas
-          this.page.total = parseInt(response.total)
-        })
-        .finally(() => {
-          this.listLoading = false
-        })
-    },
-    async getOrderDetail(row, expandedRows) {
-      const currentRow = expandedRows.find(item => item.id === row.id)
-      // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-      if (currentRow !== undefined) {
-        await orderApi.getOrderDetail(row.id)
-          .then(response => {
-            this.$set(currentRow, 'detail', response)
-          })
-      }
-    },
-    handleSizeChange(val) {
-      this.page.size = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.page.current = val
-      this.getList()
-    },
-    onEditOrder(orderId) {
-      this.$refs['edit-order-dialog'].openDialog(orderId)
-    },
-    onPrintOrder(order) {
-      const loading = this.$loading({
-        lock: true,
-        fullscreen: true,
-        text: '打印中...'
-      })
-      orderApi.printOrder(order)
-        .then(res => {
-          this.$message.success('打印成功')
-          order.payState = 'PAID'
-        })
-        .catch(err => {
-          this.$message.error(err)
-        })
-        .finally(() => {
-          loading.close()
-        })
-    },
-    onConfirmPay(order) {
-      this.$confirm('确定此账户已付款?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.confirmPay(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.payState = 'PAID'
-          })
-      })
-    },
-    onReceiveOrder(order) {
-      const loading = this.$loading({
-        lock: true,
-        fullscreen: true,
-        text: '正在处理,请稍等...'
-      })
-      orderApi.receiveOrder(order.id)
-        .then(res => {
-          this.$message.success(res.message)
-          order.orderState = 'PRODUCING'
-        })
-        .finally(() => {
-          loading.close()
-        })
-    },
-    onDeliveryOrder(order) {
-      orderApi.deliveryOrder(order.id)
-        .then(res => {
-          this.$message.success(res.message)
-          order.orderState = 'DELIVERING'
-        })
-    },
-    onFinishOrder(order) {
-      this.$confirm('确定当前订单已完成?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.finishOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'FINISHED'
-          })
-      })
-    },
-    onRefundOrder(order) {
-      this.$confirm('确定要退款吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.refundOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'REFUND'
-          })
-      })
-    },
-    onDeleteOrder(order) {
-      this.$confirm('确定要删除这个订单吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.deleteOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            this.getList()
-          })
-      })
-    }
-  }
+  methods: {}
 }
 </script>
 

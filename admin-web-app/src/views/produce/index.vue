@@ -125,10 +125,8 @@
           @size-change="handleSizeChange">
       </el-pagination>
     </base-card>
-    <goods-dialog ref="goods-dialog" @event-success="onSearch"/>
-    <goods-image-dialog
-        :dialogVisible.sync="imageUploaderVisible"
-        :goodsData.sync="currentGoods"/>
+    <goods-dialog ref="goods-dialog" @event-success="getList"/>
+    <goods-image-dialog :dialogVisible.sync="imageUploaderVisible" :goodsData.sync="currentGoods"/>
   </div>
 </template>
 
