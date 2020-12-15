@@ -1,21 +1,26 @@
 package net.novaborn.takeaway.pay.services.impl;
 
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.tips.ErrorTip;
+import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
+import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.pay.enums.PayExceptionEnum;
-import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.pay.exception.PayServiceException;
 import net.novaborn.takeaway.pay.services.IPayService;
 import net.novaborn.takeaway.system.entity.Setting;
@@ -32,17 +37,12 @@ import java.util.Optional;
 @Service
 @Setter(onMethod_ = {@Autowired})
 public class PayService implements IPayService {
-    private OrderService orderService;
-
-    private SettingService settingService;
-
-    private OrderAutoReceiveSender orderAutoReceiveSender;
-
-    private OrderPayStatusSender orderPayStatusSender;
-
-    private WxPayService wxPayService;
-
     private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
+    private OrderService orderService;
+    private SettingService settingService;
+    private OrderAutoReceiveSender orderAutoReceiveSender;
+    private OrderPayStatusSender orderPayStatusSender;
+    private WxPayService wxPayService;
 
     @Override
     public WxPayMpOrderResult createPayInfo(String openId, Long orderId, String ipAddr) {
@@ -118,6 +118,26 @@ public class PayService implements IPayService {
         if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
             orderAutoReceiveSender.send(order.get());
         }
+    }
+
+    @Override
+    public Tip refundPay(String orderId, int money) {
+        Order order = orderService.getById(orderId);
+
+        WxPayRefundRequest request = new WxPayRefundRequest();
+        request.setOutTradeNo(orderId);
+        request.setOutRefundNo("R_" + orderId);
+        request.setTotalFee(order.getRealPrice());
+        request.setRefundFee(money);
+
+        WxPayRefundResult result;
+        try {
+            result = wxPayService.refund(request);
+        } catch (WxPayException e) {
+            return new ErrorTip(-1, e.getReturnMsg());
+        }
+
+        return new SuccessTip();
     }
 
     /**
