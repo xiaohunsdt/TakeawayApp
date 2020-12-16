@@ -16,19 +16,18 @@ import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.goods.entity.Goods;
-import net.novaborn.takeaway.goods.service.impl.GoodsService;
-import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderSignInSender;
 import net.novaborn.takeaway.mq.sender.OrderSubscribeMessageSender;
 import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.DeliveryService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.order.service.impl.RefundLogService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
@@ -54,11 +53,9 @@ public class OrderController extends BaseController {
 
     private UserService userService;
 
-    private GoodsService goodsService;
-
-    private GoodsStockService goodsStockService;
-
     private OrderService orderService;
+
+    private RefundLogService refundLogService;
 
     private OrderItemService orderItemService;
 
@@ -261,6 +258,7 @@ public class OrderController extends BaseController {
 
     @ResponseBody
     @PostMapping("refundOrder")
+    @Transactional(rollbackFor = Exception.class)
     public Tip refundOrder(@RequestParam Long orderId, @RequestParam Integer money) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
@@ -271,19 +269,43 @@ public class OrderController extends BaseController {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
-        order.get().setOrderState(OrderState.REFUND);
-        if (!orderService.updateById(order.get())) {
+        RefundLog refundLog = new RefundLog();
+        refundLog.setOrderId(orderId);
+        refundLog.setAdminId(Long.parseLong(jwtTokenUtil.getUserIdFromToken(request)));
+        refundLog.setUserId(order.get().getUserId());
+        refundLog.setPaymentWay(order.get().getPaymentWay());
+        refundLog.setAllPrice(order.get().getRealPrice());
+        refundLog.setRefundMoney(money);
+
+        boolean result = refundLogService.save(refundLog);
+        if (!result) {
+            return new ErrorTip(-1, "添加退款记录失败!");
+        }
+
+
+        if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
+
+        }
+
+        if (money.equals(order.get().getRealPrice())) {
+            order.get().setOrderState(OrderState.REFUND);
+        } else {
+            order.get().setOrderState(OrderState.PART_REFUND);
+        }
+
+        if (orderService.updateById(order.get())) {
             // 恢复库存
-            orderItemService.selectByOrderId(orderId).parallelStream().forEach(item -> {
-                Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
-                if (goods.isEmpty()) {
-                    return;
-                }
-                goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
-            });
+//            orderItemService.selectByOrderId(orderId).parallelStream().forEach(item -> {
+//                Optional<Goods> goods = Optional.ofNullable(goodsService.getById(item.getGoodsId()));
+//                if (goods.isEmpty()) {
+//                    return;
+//                }
+//                goodsStockService.recoverStock(goods.get(), item.getGoodsCount());
+//            });
+            return new SuccessTip();
+        } else {
             return new ErrorTip(-1, "操作失败!");
         }
-        return new SuccessTip();
     }
 
     @ResponseBody

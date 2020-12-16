@@ -138,6 +138,13 @@ export const asyncRoutes = [
                 meta: { title: '订单地图', icon: 'order' }
             },
             {
+                path: 'refund',
+                name: 'RefundOrder',
+                // props: true,
+                component: () => import('@/views/order/refund'),
+                meta: { title: '退款查询', icon: 'order' }
+            },
+            {
                 path: 'comment',
                 name: 'CommentManagement',
                 // props: true,

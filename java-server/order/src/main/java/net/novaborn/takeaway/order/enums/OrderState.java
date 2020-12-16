@@ -31,6 +31,11 @@ public enum OrderState {
     REFUND(4),
 
     /**
+     * 部分退款
+     */
+    PART_REFUND(6),
+
+    /**
      * 过期
      */
     EXPIRED(5);

@@ -222,7 +222,7 @@
             <el-tag v-if="scope.row.orderState === 'FINISHED'" type="success">
               {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
-            <el-tag v-else-if="scope.row.orderState === 'REFUND'" type="danger">
+            <el-tag v-else-if="scope.row.orderState === 'REFUND' || scope.row.orderState === 'PART_REFUND'" type="danger">
               {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
             <el-tag v-else-if="scope.row.orderState === 'EXPIRED'" type="info">
@@ -286,17 +286,17 @@
                   @click="onFinishOrder(scope.row)">完成
               </el-button>
               <el-button
-                  v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
-                  size="mini"
-                  type="danger"
-                  @click="onRefundOrder(scope.row)">
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED') || scope.row.orderState==='PART_REFUND')"
+                size="mini"
+                type="danger"
+                @click="onRefundOrder(scope.row)">
                 退款
               </el-button>
               <el-button
-                  v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
-                  size="mini"
-                  type="danger"
-                  @click="onDeleteOrder(scope.row)">
+                v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
+                size="mini"
+                type="danger"
+                @click="onDeleteOrder(scope.row)">
                 删除
               </el-button>
             </div>
