@@ -56,7 +56,7 @@ public class AuthFilter extends OncePerRequestFilter {
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
                 if (flag) {
-                    log.warn("id: {} token 已过期!",jwtTokenUtil.getUsernameFromToken(request));
+                    log.warn("id: {} token 已过期!", jwtTokenUtil.getUsernameFromToken(request));
                     RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     return;
                 }
