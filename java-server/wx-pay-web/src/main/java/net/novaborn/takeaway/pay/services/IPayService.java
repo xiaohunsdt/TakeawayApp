@@ -2,6 +2,7 @@ package net.novaborn.takeaway.pay.services;
 
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import net.novaborn.takeaway.common.tips.Tip;
+import net.novaborn.takeaway.order.entity.RefundLog;
 
 public interface IPayService {
     /**
@@ -21,5 +22,5 @@ public interface IPayService {
      */
     void confirmPay(Long orderId);
 
-    Tip refundPay(String orderId, int money);
+    Tip refundPay(RefundLog refundLog);
 }

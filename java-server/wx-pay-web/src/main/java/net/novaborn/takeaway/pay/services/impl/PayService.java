@@ -16,10 +16,12 @@ import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.order.service.impl.RefundLogService;
 import net.novaborn.takeaway.pay.enums.PayExceptionEnum;
 import net.novaborn.takeaway.pay.exception.PayServiceException;
 import net.novaborn.takeaway.pay.services.IPayService;
@@ -39,6 +41,7 @@ import java.util.Optional;
 public class PayService implements IPayService {
     private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
     private OrderService orderService;
+    private RefundLogService refundLogService;
     private SettingService settingService;
     private OrderAutoReceiveSender orderAutoReceiveSender;
     private OrderPayStatusSender orderPayStatusSender;
@@ -121,14 +124,12 @@ public class PayService implements IPayService {
     }
 
     @Override
-    public Tip refundPay(String orderId, int money) {
-        Order order = orderService.getById(orderId);
-
+    public Tip refundPay(RefundLog refundLog) {
         WxPayRefundRequest request = new WxPayRefundRequest();
-        request.setOutTradeNo(orderId);
-        request.setOutRefundNo("R_" + orderId);
-        request.setTotalFee(order.getRealPrice());
-        request.setRefundFee(money);
+        request.setOutTradeNo(refundLog.getOrderId().toString());
+        request.setOutRefundNo(String.format("R_%d_%d", refundLogService.getRefundLogCountByOrderId(refundLog.getOrderId()), refundLog.getOrderId()));
+        request.setTotalFee(refundLog.getAllPrice());
+        request.setRefundFee(refundLog.getRefundMoney());
 
         WxPayRefundResult result;
         try {
