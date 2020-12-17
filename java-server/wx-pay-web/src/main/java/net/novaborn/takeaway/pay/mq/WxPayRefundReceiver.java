@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
-import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.RefundState;
 import net.novaborn.takeaway.order.service.impl.RefundLogService;
@@ -54,6 +53,7 @@ public class WxPayRefundReceiver {
             target.setState(RefundState.FAILED);
             refundLogService.updateById(target);
         }
+
         channel.basicAck(deliveryTag, false);
     }
 }

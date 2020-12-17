@@ -7,11 +7,12 @@ import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.enums.RefundState;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("`refund_log`")
-public class RefundLog {
+public class RefundLog implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
@@ -20,6 +21,8 @@ public class RefundLog {
     private Long orderId;
 
     private Long userId;
+
+    private String refundNo;
 
     private PaymentWay paymentWay;
 

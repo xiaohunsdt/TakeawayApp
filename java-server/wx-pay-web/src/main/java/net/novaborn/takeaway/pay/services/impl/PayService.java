@@ -128,12 +128,12 @@ public class PayService implements IPayService {
         WxPayRefundRequest request = new WxPayRefundRequest();
         request.setOutTradeNo(refundLog.getOrderId().toString());
         request.setOutRefundNo(String.format("R_%d_%d", refundLogService.getRefundLogCountByOrderId(refundLog.getOrderId()), refundLog.getOrderId()));
-        request.setTotalFee(refundLog.getAllPrice());
-        request.setRefundFee(refundLog.getRefundMoney());
+        request.setTotalFee(getWonToRmb(refundLog.getAllPrice()));
+        request.setRefundFee(getWonToRmb(refundLog.getRefundMoney()));
 
-        WxPayRefundResult result;
         try {
-            result = wxPayService.refund(request);
+            wxPayService.refund(request);
+            refundLog.setRefundNo(request.getOutRefundNo());
         } catch (WxPayException e) {
             return new ErrorTip(-1, e.getReturnMsg());
         }
@@ -148,7 +148,11 @@ public class PayService implements IPayService {
      * @return
      */
     private int getOrderPrice(Order order) {
-        return order.getRealPrice() * 6 / 10;
+        return getWonToRmb(order.getRealPrice());
 //        return 1;
+    }
+
+    private int getWonToRmb(int kWon){
+        return kWon * 6 / 10;
     }
 }

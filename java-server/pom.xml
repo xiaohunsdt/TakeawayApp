@@ -43,7 +43,7 @@
         <fastjson.version>1.2.73</fastjson.version>
         <druid.version>1.1.24</druid.version>
         <ehcache.version>2.10.6</ehcache.version>
-        <wx-java.version>3.7.0</wx-java.version>
+        <wx-java.version>4.0.0</wx-java.version>
     </properties>
 
     <dependencies>
@@ -151,16 +151,19 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-resources-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <delimiters>-->
-<!--                        <delimiter>@</delimiter>-->
-<!--                    </delimiters>-->
-<!--                    <useDefaultDelimiters>false</useDefaultDelimiters>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!-- 过滤后缀为pem、pfx的证书文件 -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
