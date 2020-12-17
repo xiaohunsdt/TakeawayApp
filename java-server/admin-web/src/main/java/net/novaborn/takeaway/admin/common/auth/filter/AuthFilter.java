@@ -2,6 +2,7 @@ package net.novaborn.takeaway.admin.common.auth.filter;
 
 import io.jsonwebtoken.JwtException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.auth.util.RenderUtil;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
@@ -25,6 +26,7 @@ import java.util.Set;
  * @author xiaohun
  * @Date 2017/8/24 14:04
  */
+@Slf4j
 @Data
 public class AuthFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
@@ -59,6 +61,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 String redisKey = jwtTokenUtil.getRedisKey(authToken);
 
                 if (flag || !redisTemplate.hasKey(redisKey)) {
+                    log.warn("id: {} token 已过期!",jwtTokenUtil.getUserIdFromToken(request));
                     RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     return;
                 }
