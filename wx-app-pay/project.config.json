@@ -29,9 +29,11 @@
     "useIsolateContext": true,
     "useCompilerModule": false,
     "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "bundle": false
   },
   "miniprogramRoot": "dist/wx/",
   "compileType": "miniprogram",
@@ -61,6 +63,11 @@
             "appId": "wxdd0eeefb8c1c5ceb",
             "extraData": "{}"
           }
+        },
+        {
+          "name": "pages/auth/main",
+          "pathName": "pages/auth/main",
+          "scene": null
         }
       ]
     }

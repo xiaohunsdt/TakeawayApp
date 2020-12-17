@@ -51,15 +51,15 @@ public class PayController extends BaseController {
         log.info("订单:{},支付验证成功!!", orderId);
         return new SuccessTip();
     }
-
-    @RequestMapping("refundOrder")
-    @ResponseBody
-    public SuccessTip refundOrder(@RequestParam Long orderId, Integer money) {
-        payService.refundPay(orderId.toString(), money);
-
-        log.info("订单:{},退款成功!!", orderId);
-        return new SuccessTip();
-    }
+//
+//    @RequestMapping("refundOrder")
+//    @ResponseBody
+//    public SuccessTip refundOrder(@RequestParam Long orderId, Integer money) {
+//        payService.refundPay(orderId.toString(), money);
+//
+//        log.info("订单:{},退款成功!!", orderId);
+//        return new SuccessTip();
+//    }
 
     @RequestMapping("notice")
     @ResponseBody

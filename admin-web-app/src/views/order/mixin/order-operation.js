@@ -144,7 +144,6 @@ export default {
                       })
                 })
             })
-
         },
         onDeleteOrder(order) {
             this.$confirm('确定要删除这个订单吗?', '提示', {

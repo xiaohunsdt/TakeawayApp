@@ -40,7 +40,8 @@ function login () {
 function showErrorToast (msg) {
   mpvue.showToast({
     title: msg,
-    image: '/static/images/icon_error.png'
+    image: '/static/images/error.png',
+    duration: 1500
   })
 }
 
