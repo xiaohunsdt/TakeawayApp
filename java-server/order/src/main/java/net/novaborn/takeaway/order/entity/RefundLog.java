@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import net.novaborn.takeaway.order.enums.PaymentWay;
 import net.novaborn.takeaway.order.enums.RefundState;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -22,13 +23,14 @@ public class RefundLog implements Serializable {
 
     private Long userId;
 
-    private String refundNo;
-
     private PaymentWay paymentWay;
 
     private Integer allPrice;
 
     private Integer refundMoney;
+
+    @Length(max = 254)
+    private String rejectMsg;
 
     private RefundState state;
 

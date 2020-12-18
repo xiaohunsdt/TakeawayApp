@@ -54,12 +54,12 @@ export function doneRefund(refundId) {
     })
 }
 
-export function rejectRefund(refundId) {
+export function rejectRefund(refundId, rejectMsg) {
     return request({
         url: '/refund/log/rejectRefund',
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        data: { refundId },
+        data: { refundId, rejectMsg },
         transformRequest: [function(data) {
             data = Qs.stringify(data)
             return data

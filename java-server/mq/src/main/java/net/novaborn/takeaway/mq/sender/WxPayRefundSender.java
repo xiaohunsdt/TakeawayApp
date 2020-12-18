@@ -1,10 +1,8 @@
 package net.novaborn.takeaway.mq.sender;
 
-import com.alibaba.fastjson.JSON;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
-import net.novaborn.takeaway.mq.config.SmsQueueConfig;
-import net.novaborn.takeaway.mq.dto.SmsDto;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,9 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class WePayRefundSender {
-    @Autowired
+@Setter(onMethod_ = {@Autowired})
+public class WxPayRefundSender {
+
     private RabbitTemplate rabbitTemplate;
 
     public void send(RefundLog refundLog) {

@@ -87,9 +87,10 @@ public class RefundLogController extends BaseController {
 
     @ResponseBody
     @PostMapping("rejectRefund")
-    public Tip rejectRefund(Long refundId) {
+    public Tip rejectRefund(Long refundId, String rejectMsg) {
         RefundLog refundLog = refundLogService.getById(refundId);
         refundLog.setState(RefundState.FAILED);
+        refundLog.setRejectMsg(rejectMsg);
         refundLogService.updateById(refundLog);
         return new SuccessTip();
     }

@@ -22,6 +22,7 @@
       BasePanel
     },
     onShow () {
+      console.log(Promise.prototype)
       console.log(this.dataList[0].title)
     },
     data () {

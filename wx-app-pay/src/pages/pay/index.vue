@@ -55,16 +55,9 @@ export default {
                   this.loading = false
                   payService.callWxPayApi(res)
                       .then(res => {
-                        payService.confirmOrder(this.orderId)
-                        wx.navigateBackMiniProgram({
-                          extraData: {
-                            orderId: this_.orderId,
-                            res
-                          }
-                        })
+                        // payService.confirmOrder(this.orderId)
                       })
-                      .catch((res) => {
-                        console.log(res)
+                      .finally(() => {
                         wx.navigateBackMiniProgram({
                           extraData: {
                             orderId: this_.orderId,

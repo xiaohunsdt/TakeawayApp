@@ -99,6 +99,11 @@
         </el-table-column>
         <el-table-column
           align="center"
+          label="附加信息"
+          prop="rejectMsg">
+        </el-table-column>
+        <el-table-column
+          align="center"
           label="退款状态">
           <template v-slot="scope">
             <el-tag v-if="scope.row.state === 'PROCESSING'">
@@ -241,9 +246,19 @@ export default {
       })
     },
     onReject(refundLog) {
-      refundLogApi.rejectRefund(refundLog.id).then(res => {
-        this.$message.success(res.message)
-        refundLog.state = 'FAILED'
+      this.$prompt('请输入拒绝理由(可不填写)', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValidator: (value) => {
+          return value.length < 255
+        },
+        inputErrorMessage: '拒绝理由不允许超过255个字符'
+      }).then(({ value }) => {
+        refundLogApi.rejectRefund(refundLog.id, value).then(res => {
+          this.$message.success(res.message)
+          refundLog.rejectMsg = value
+          refundLog.state = 'FAILED'
+        })
       })
     }
   }

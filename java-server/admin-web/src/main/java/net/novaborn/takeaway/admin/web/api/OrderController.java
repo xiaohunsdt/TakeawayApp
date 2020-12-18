@@ -19,7 +19,7 @@ import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderSignInSender;
 import net.novaborn.takeaway.mq.sender.OrderSubscribeMessageSender;
-import net.novaborn.takeaway.mq.sender.WePayRefundSender;
+import net.novaborn.takeaway.mq.sender.WxPayRefundSender;
 import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.RefundLog;
@@ -62,17 +62,17 @@ public class OrderController extends BaseController {
 
     private SettingService settingService;
 
+    private DeliveryService deliveryService;
+
     private WechatAutoTask wechatAutoTask;
 
     private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private OrderSignInSender orderSignInSender;
 
-    private DeliveryService deliveryService;
-
     private OrderSubscribeMessageSender orderSubscribeMessageSender;
 
-    private WePayRefundSender wePayRefundSender;
+    private WxPayRefundSender wxPayRefundSender;
 
     private PrinterUtil printerUtil;
 
@@ -84,8 +84,8 @@ public class OrderController extends BaseController {
         // 根据昵称获取订单
         if (StrUtil.isNotBlank((String) args.get("nickName"))) {
             List<Long> ids = userService.getByNickName((String) args.get("nickName")).stream()
-                    .map(User::getId)
-                    .collect(Collectors.toList());
+                .map(User::getId)
+                .collect(Collectors.toList());
             if (ids.size() > 0) {
                 args.put("userIds", ids);
             } else {
@@ -113,8 +113,8 @@ public class OrderController extends BaseController {
     @PostMapping("getTodayOrderList")
     public ResponseEntity getTodayOrderList() {
         List<Order> orderList = orderService.getTodayOrderByStateU(null, null).stream()
-                .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
-                .collect(Collectors.toList());
+            .filter(order -> order.getOrderState() != OrderState.REFUND && order.getPayState() != PayState.UN_PAY)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(new OrderWrapperEx(orderList).warp());
     }
 
@@ -235,8 +235,8 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getOrderState() == OrderState.FINISHED
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
@@ -267,9 +267,14 @@ public class OrderController extends BaseController {
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (order.get().getPayState() == PayState.UN_PAY
-                || order.get().getOrderState() == OrderState.REFUND
-                || order.get().getOrderState() == OrderState.EXPIRED) {
+            || order.get().getOrderState() == OrderState.REFUND
+            || order.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
+        }
+
+        int canRefundMoney = order.get().getRealPrice() - refundLogService.getAllRefundMoneyByOrderId(orderId);
+        if (canRefundMoney < money) {
+            return new ErrorTip(-1, "退款金额超出最大允许值!");
         }
 
         RefundLog refundLog = new RefundLog();
@@ -286,10 +291,10 @@ public class OrderController extends BaseController {
         }
 
         if (order.get().getPaymentWay() == PaymentWay.WEIXIN_PAY) {
-            wePayRefundSender.send(refundLog);
+            wxPayRefundSender.send(refundLog);
         }
 
-        if (money.equals(order.get().getRealPrice())) {
+        if (money.equals(canRefundMoney)) {
             order.get().setOrderState(OrderState.REFUND);
         } else {
             order.get().setOrderState(OrderState.PART_REFUND);

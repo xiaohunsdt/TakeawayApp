@@ -22,5 +22,9 @@ public interface IPayService {
      */
     void confirmPay(Long orderId);
 
+    void confirmPay(Long orderId, int totalPrice, String state);
+
     Tip refundPay(RefundLog refundLog);
+
+    void confirmRefund(Long refundId, int refundPrice, String state);
 }

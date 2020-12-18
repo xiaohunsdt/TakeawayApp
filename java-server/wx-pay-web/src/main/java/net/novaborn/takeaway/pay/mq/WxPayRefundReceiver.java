@@ -42,7 +42,7 @@ public class WxPayRefundReceiver {
 
     @RabbitHandler
     public void process(@Payload RefundLog refundLog, Channel channel, @Headers Map<String, Object> headers) throws IOException {
-        log.debug("微信退款订单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+        log.debug("微信退款队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         RefundLog target = refundLogService.getById(refundLog.getId());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
@@ -50,6 +50,8 @@ public class WxPayRefundReceiver {
         Tip tip = payService.refundPay(target);
         if (tip.getCode() != 0) {
             log.error((String) tip.getMessage());
+
+            target.setRejectMsg((String) tip.getMessage());
             target.setState(RefundState.FAILED);
             refundLogService.updateById(target);
         }
