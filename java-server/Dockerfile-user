@@ -1,4 +1,4 @@
-FROM openjdk:11.0.9.1-jdk-buster
+FROM openjdk:11.0.1-jdk-stretch
 
 RUN echo "Asia/Seoul" > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata
