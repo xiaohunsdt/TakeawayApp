@@ -14,6 +14,8 @@ wx:
     appid: wxdd0eeefb8c1c5ceb
     secret: e831970f2e6949ba0f7e3b7d1a8e5a6e
     msgDataFormat: JSON
+    config-storage:
+      type: memory
   pay:
     appId: wxdd0eeefb8c1c5ceb
     mchId: 1553192321

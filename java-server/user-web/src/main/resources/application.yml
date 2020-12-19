@@ -19,6 +19,8 @@ wx:
     token: takeaway_token_mini_program
     aesKey: orkh4QFZlWvTBLMG7hjVI9VYrPqVJoUP6vAPpH9JORy
     msgDataFormat: JSON
+    config-storage:
+      type: memory
 
 server:
   port: 8081
