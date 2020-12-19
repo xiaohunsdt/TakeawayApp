@@ -328,6 +328,7 @@
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
 import orderOperation from '@v/order/mixin/order-operation'
+import RefundSubmitDialog from './components/RefundSubmitDialog'
 
 export default {
   name: 'AppointmentOrder',
@@ -358,6 +359,7 @@ export default {
     }
   },
   created() {
+    this.$refundSubmitDialog = RefundSubmitDialog
     let temp = new Date()
     temp = temp.setHours(temp.getHours() + 3 * 24)
     this.formData.formDate[0] = new Date()

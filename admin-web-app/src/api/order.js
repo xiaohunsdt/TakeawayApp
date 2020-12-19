@@ -146,12 +146,12 @@ export function finishOrder(orderId) {
     })
 }
 
-export function refundOrder(orderId, money) {
+export function refundOrder(orderId, money, refundRes) {
     return request({
         url: '/order/refundOrder',
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        data: { orderId, money },
+        data: { orderId, money, refundRes },
         transformRequest: [function(data) {
             data = Qs.stringify(data)
             return data

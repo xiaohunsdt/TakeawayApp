@@ -49,8 +49,7 @@
         element-loading-text="正在加载中..."
         highlight-current-row
         stripe
-        style="width: 100%"
-        @expand-change="getOrderDetail">
+        style="width: 100%">
         <el-table-column
           align="center"
           label="Id"
@@ -99,7 +98,12 @@
         </el-table-column>
         <el-table-column
           align="center"
-          label="附加信息"
+          label="退款备注"
+          prop="refundRes">
+        </el-table-column>
+        <el-table-column
+          align="center"
+          label="拒绝信息"
           prop="rejectMsg">
         </el-table-column>
         <el-table-column

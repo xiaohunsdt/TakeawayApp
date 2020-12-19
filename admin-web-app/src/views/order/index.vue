@@ -324,6 +324,7 @@
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
 import orderOperation from './mixin/order-operation'
+import RefundSubmitDialog from '@v/order/components/RefundSubmitDialog'
 
 export default {
   name: 'NormalOrder',
@@ -357,6 +358,7 @@ export default {
     }
   },
   created() {
+    this.$refundSubmitDialog = RefundSubmitDialog
     this.onSearch()
   },
   methods: {}

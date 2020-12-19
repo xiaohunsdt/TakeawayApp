@@ -1,6 +1,5 @@
 import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@u/index'
 import orderApi from '@a/order'
-import refundLogApi from '@a/refund-log'
 
 export default {
     filters: {
@@ -116,34 +115,42 @@ export default {
             })
         },
         onRefundOrder(order) {
-            refundLogApi.getAllRefundMoneyByOrderId(order.id).then(res => {
-                const canRefundMoney = order.realPrice - parseInt(res.message)
-                this.$prompt(`请输入要退款的金额，最多只能退款 ₩${canRefundMoney.toLocaleString()}`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    inputPattern: /[0-9]+/,
-                    inputErrorMessage: '请输入退款金额'
-                }).then(({ value }) => {
-                    value = parseInt(value)
-                    if (value === 0) {
-                        this.$message.error('退款金额必须大于0')
-                        return
-                    }
-                    if (value > canRefundMoney) {
-                        this.$message.error(`最多只能退款 ₩${canRefundMoney.toLocaleString()}`)
-                        return
-                    }
-                    orderApi.refundOrder(order.id, value)
-                      .then(res => {
-                          this.$message.success(res.message)
-                          if (canRefundMoney === value) {
-                              order.orderState = 'REFUND'
-                          } else {
-                              order.orderState = 'PART_REFUND'
-                          }
-                      })
-                })
+            this.$refundSubmitDialog(order).then(res => {
+                this.$message.success(res.res.message)
+                if (res.res.code === 0) {
+                    order.orderState = res.orderState
+                }
             })
+
+            // refundLogApi.getAllRefundMoneyByOrderId(order.id).then(res => {
+            //     const canRefundMoney = order.realPrice - parseInt(res.message)
+            //
+            //     this.$prompt(`请输入要退款的金额，最多只能退款 ₩${canRefundMoney.toLocaleString()}`, '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         inputPattern: /[0-9]+/,
+            //         inputErrorMessage: '请输入退款金额'
+            //     }).then(({ value }) => {
+            //         value = parseInt(value)
+            //         if (value === 0) {
+            //             this.$message.error('退款金额必须大于0')
+            //             return
+            //         }
+            //         if (value > canRefundMoney) {
+            //             this.$message.error(`最多只能退款 ₩${canRefundMoney.toLocaleString()}`)
+            //             return
+            //         }
+            //         orderApi.refundOrder(order.id, value)
+            //           .then(res => {
+            //               this.$message.success(res.message)
+            //               if (canRefundMoney === value) {
+            //                   order.orderState = 'REFUND'
+            //               } else {
+            //                   order.orderState = 'PART_REFUND'
+            //               }
+            //           })
+            //     })
+            // })
         },
         onDeleteOrder(order) {
             this.$confirm('确定要删除这个订单吗?', '提示', {

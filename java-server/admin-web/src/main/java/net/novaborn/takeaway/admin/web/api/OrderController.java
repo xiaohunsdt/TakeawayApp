@@ -262,7 +262,7 @@ public class OrderController extends BaseController {
     @ResponseBody
     @PostMapping("refundOrder")
     @Transactional(rollbackFor = Exception.class)
-    public Tip refundOrder(@RequestParam Long orderId, @RequestParam Integer money) {
+    public Tip refundOrder(@RequestParam Long orderId, @RequestParam Integer money, @RequestParam String refundRes) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -284,6 +284,9 @@ public class OrderController extends BaseController {
         refundLog.setPaymentWay(order.get().getPaymentWay());
         refundLog.setAllPrice(order.get().getRealPrice());
         refundLog.setRefundMoney(money);
+        if(StrUtil.isNotBlank(refundRes)){
+            refundLog.setRefundRes(refundRes);
+        }
 
         boolean result = refundLogService.save(refundLog);
         if (!result) {

@@ -29,7 +29,10 @@ public class RefundLog implements Serializable {
 
     private Integer refundMoney;
 
-    @Length(max = 254)
+    @Length(max = 255)
+    private String refundRes;
+
+    @Length(max = 255)
     private String rejectMsg;
 
     private RefundState state;
