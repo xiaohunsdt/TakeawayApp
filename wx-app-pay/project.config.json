@@ -29,9 +29,11 @@
     "useIsolateContext": true,
     "useCompilerModule": false,
     "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true
+    "minifyWXSS": true,
+    "bundle": false
   },
   "miniprogramRoot": "dist/wx/",
   "compileType": "miniprogram",
@@ -55,12 +57,18 @@
         {
           "name": "pages/pay/main",
           "pathName": "pages/pay/main",
-          "query": "orderId=1325468570172252162",
+          "query": "orderId=1339576528778788866",
           "scene": 1037,
           "referrerInfo": {
             "appId": "wxdd0eeefb8c1c5ceb",
             "extraData": "{}"
           }
+        },
+        {
+          "name": "pages/auth/main",
+          "pathName": "pages/auth/main",
+          "query": "",
+          "scene": null
         }
       ]
     }

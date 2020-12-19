@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/pay/main"
+    "pages/pay/main",
+    "pages/auth/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

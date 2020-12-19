@@ -152,7 +152,7 @@
           <el-tag v-if="scope.row.orderState === 'FINISHED'" type="success">
             {{ scope.row.orderState | orderStateFormat }}
           </el-tag>
-          <el-tag v-else-if="scope.row.orderState === 'REFUND'" type="danger">
+          <el-tag v-else-if="scope.row.orderState === 'REFUND' || scope.row.orderState === 'PART_REFUND'" type="danger">
             {{ scope.row.orderState | orderStateFormat }}
           </el-tag>
           <el-tag v-else-if="scope.row.orderState === 'EXPIRED'" type="info">

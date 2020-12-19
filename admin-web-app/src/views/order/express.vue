@@ -222,7 +222,7 @@
             <el-tag v-if="scope.row.orderState === 'FINISHED'" type="success">
               {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
-            <el-tag v-else-if="scope.row.orderState === 'REFUND'" type="danger">
+            <el-tag v-else-if="scope.row.orderState === 'REFUND' || scope.row.orderState === 'PART_REFUND'" type="danger">
               {{ scope.row.orderState | orderStateFormat }}
             </el-tag>
             <el-tag v-else-if="scope.row.orderState === 'EXPIRED'" type="info">
@@ -286,17 +286,17 @@
                   @click="onFinishOrder(scope.row)">完成
               </el-button>
               <el-button
-                  v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED'))"
-                  size="mini"
-                  type="danger"
-                  @click="onRefundOrder(scope.row)">
+                v-if="scope.row.orderState!=='EXPIRED' && scope.row.orderState!=='REFUND' && (scope.row.payState==='PAID' || (scope.row.payState==='PAY_LATER' && scope.row.orderState==='FINISHED') || scope.row.orderState==='PART_REFUND')"
+                size="mini"
+                type="danger"
+                @click="onRefundOrder(scope.row)">
                 退款
               </el-button>
               <el-button
-                  v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
-                  size="mini"
-                  type="danger"
-                  @click="onDeleteOrder(scope.row)">
+                v-if="(scope.row.orderState==='EXPIRED' || scope.row.orderState==='REFUND') && scope.row.deleted === 0"
+                size="mini"
+                type="danger"
+                @click="onDeleteOrder(scope.row)">
                 删除
               </el-button>
             </div>
@@ -322,26 +322,16 @@
 <script>
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
-import orderApi from '@/api/order'
-import { formatOrderState, formatPaymentWay, formatPayState, parseTime } from '@/utils/index'
+import orderOperation from '@v/order/mixin/order-operation'
+import RefundSubmitDialog from '@v/order/components/RefundSubmitDialog'
 
 export default {
   name: 'ExpressOrder',
-  filters: {
-    orderStateFormat: function(value) {
-      return formatOrderState(value)
-    },
-    payStateFormat: function(value) {
-      return formatPayState(value)
-    },
-    paymentWayFormat: function(value) {
-      return formatPaymentWay(value)
-    }
-  },
   components: {
     BaseCard,
     EditOrderDialog
   },
+  mixins: [orderOperation],
   data() {
     return {
       page: {
@@ -367,137 +357,10 @@ export default {
     }
   },
   created() {
+    this.$refundSubmitDialog = RefundSubmitDialog
     this.onSearch()
   },
-  methods: {
-    getList() {
-      this.listLoading = true
-
-      const params = Object.assign({}, this.formData)
-      params.startDate = parseTime(params.formDate[0], '{y}-{m}-{d}')
-      params.endDate = parseTime(params.formDate[1], '{y}-{m}-{d}')
-
-      orderApi.getOrderListByPage(this.page, params)
-          .then(response => {
-            const datas = response.records
-            datas.forEach(item => {
-              item.detail = {}
-            })
-            this.tableData = datas
-            this.page.total = parseInt(response.total)
-          })
-          .finally(() => {
-            this.listLoading = false
-          })
-    },
-    async getOrderDetail(row, expandedRows) {
-      const currentRow = expandedRows.find(item => item.id === row.id)
-      // if (currentRow !== undefined && !currentRow.hasOwnProperty('detail')) {
-      if (currentRow !== undefined) {
-        await orderApi.getOrderDetail(row.id)
-            .then(response => {
-              this.$set(currentRow, 'detail', response)
-            })
-      }
-    },
-    handleSizeChange(val) {
-      this.page.size = val
-      this.getList()
-    },
-    handleCurrentChange(val) {
-      this.page.current = val
-      this.getList()
-    },
-    onSearch() {
-      this.page.current = 1
-      this.getList()
-    },
-    onEditOrder(orderId) {
-      this.$refs['edit-order-dialog'].openDialog(orderId)
-    },
-    onPrintOrder(order) {
-      const loading = this.$loading({
-        lock: true,
-        text: '打印中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-      orderApi.printOrder(order)
-          .then(res => {
-            this.$message.success('打印成功')
-            // order.payState = 'PAID'
-          })
-          .finally(() => {
-            loading.close()
-          })
-    },
-    onConfirmPay(order) {
-      this.$confirm('确定此账户已付款?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.confirmPay(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.payState = 'PAID'
-            })
-      })
-    },
-    onReceiveOrder(order) {
-      orderApi.receiveOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'PRODUCING'
-          })
-    },
-    onDeliveryOrder(order) {
-      orderApi.deliveryOrder(order.id)
-          .then(res => {
-            this.$message.success(res.message)
-            order.orderState = 'DELIVERING'
-          })
-    },
-    onFinishOrder(order) {
-      this.$confirm('确定当前订单已完成?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.finishOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.orderState = 'FINISHED'
-            })
-      })
-    },
-    onRefundOrder(order) {
-      this.$confirm('确定要退款吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.refundOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              order.orderState = 'REFUND'
-            })
-      })
-    },
-    onDeleteOrder(order) {
-      this.$confirm('确定要删除这个订单吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        orderApi.deleteOrder(order.id)
-            .then(res => {
-              this.$message.success(res.message)
-              this.getList()
-            })
-      })
-    }
-  }
+  methods: {}
 }
 </script>
 

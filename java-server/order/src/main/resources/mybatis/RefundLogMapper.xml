@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.novaborn.takeaway.order.dao.IRefundLogDao">
+    <select id="getListByPage" resultType="RefundLog">
+        SELECT * FROM `refund_log`
+        <where>
+            <if test="args.userIds != null">
+                `user_id` IN
+                <foreach collection="args.userIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="args.orderId != null and args.orderId != ''">
+                AND `order_id` = #{args.orderId}
+            </if>
+            <if test="args.paymentWay != null">
+                AND `payment_way` = #{args.paymentWay.code}
+            </if>
+            <if test="args.state != null">
+                AND `state` = #{args.state.code}
+            </if>
+            <if test="args.startDate !=null and args.startDate != '' and args.endDate != null and args.endDate != ''">
+                AND `create_date` BETWEEN #{args.startDate} AND DATE_ADD(#{args.endDate},INTERVAL 1 DAY)
+            </if>
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+
+    <select id="getRefundLogsByOrderId" resultType="RefundLog">
+        SELECT * FROM `refund_log`
+        <where>
+            `order_id` = #{orderId}
+        </where>
+        ORDER BY `create_date` DESC
+    </select>
+
+    <select id="getAllRefundMoneyByOrderId" resultType="int">
+        SELECT COALESCE(SUM(`refund_money`),0) FROM `refund_log`
+        <where>
+            `order_id` = #{orderId}
+            AND `state` &lt;&gt; 2
+        </where>
+    </select>
+
+    <select id="getRefundLogCountByOrderId" resultType="int">
+        SELECT count(*) FROM `refund_log`
+        <where>
+            `order_id` = #{orderId}
+        </where>
+    </select>
+</mapper>

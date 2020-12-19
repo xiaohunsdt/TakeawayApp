@@ -63,7 +63,7 @@ public class IndexController extends BaseController {
         List<Order> waitDeliveryOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.WAITING_RECEIVE || order.getOrderState() == OrderState.PRODUCING).collect(Collectors.toList());
         List<Order> deliveringOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.DELIVERING).collect(Collectors.toList());
         List<Order> finishOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.FINISHED).collect(Collectors.toList());
-        List<Order> refundOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.REFUND).collect(Collectors.toList());
+        List<Order> refundOrderList = orderList.stream().filter(order -> order.getOrderState() == OrderState.REFUND || order.getOrderState() == OrderState.PART_REFUND).collect(Collectors.toList());
 
         DashboardDto dashboardDto = new DashboardDto();
         dashboardDto.setWechatOrderAllCount(wechatOrderList.size());

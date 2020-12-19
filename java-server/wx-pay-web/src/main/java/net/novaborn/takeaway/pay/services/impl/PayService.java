@@ -1,6 +1,7 @@
 package net.novaborn.takeaway.pay.services.impl;
 
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayOrderQueryResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -8,13 +9,19 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.tips.ErrorTip;
+import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.PayState;
+import net.novaborn.takeaway.order.enums.RefundState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderService;
+import net.novaborn.takeaway.order.service.impl.RefundLogService;
 import net.novaborn.takeaway.pay.enums.PayExceptionEnum;
 import net.novaborn.takeaway.pay.exception.PayServiceException;
 import net.novaborn.takeaway.pay.services.IPayService;
@@ -27,26 +34,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @Setter(onMethod_ = {@Autowired})
 public class PayService implements IPayService {
-    private final String NOTICE_URL = "http://pay.cxy.novaborn.net/api/wx/pay/notice";
+
+    private final String PAY_NOTICE_URL = "https://pay.cxy.novaborn.net/api/wx/pay/notice";
+
+    private final String REFUND_NOTICE_URL = "https://pay.cxy.novaborn.net/api/wx/pay/refund/notice";
 
     private OrderService orderService;
+
+    private RefundLogService refundLogService;
+
+    private SettingService settingService;
 
     private BalanceService balanceService;
 
     private BalanceLogService balanceLogService;
 
-    private SettingService settingService;
-
     private OrderAutoReceiveSender orderAutoReceiveSender;
-
-    private OrderPayStatusSender orderPayStatusSender;
 
     private WxPayService wxPayService;
 
@@ -62,7 +71,7 @@ public class PayService implements IPayService {
         // 精确到分
         request.setTotalFee(getOrderPrice(order.get()));
         request.setSpbillCreateIp(ipAddr);
-        request.setNotifyUrl(NOTICE_URL);
+        request.setNotifyUrl(PAY_NOTICE_URL);
         request.setTradeType("JSAPI");
 
         WxPayMpOrderResult result;
@@ -74,7 +83,7 @@ public class PayService implements IPayService {
             throw sysException;
         }
 
-        orderPayStatusSender.send(order.get(), new Date(), 15);
+//        orderPayStatusSender.send(order.get(), new Date(), 15);
         log.info("订单:{},创建微信支付预信息成功!!", orderId);
         return result;
     }
@@ -93,10 +102,12 @@ public class PayService implements IPayService {
 
         int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
-        this.confirmOrder(orderId, totalPrice, state);
+        this.confirmPay(orderId, totalPrice, state);
     }
 
-    private void confirmOrder(Long orderId, int totalPrice, String state) {
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void confirmPay(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new PayServiceException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -107,8 +118,19 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
+
+                    // 设置店铺资金和记录
+                    long money = order.get().getRealPrice().longValue();
+                    long afterMoney = balanceService.add(order.get().getStoreId(), money);
+                    balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), order.get().getNumber(), money);
+
+                    // 系统是否允许自动接单
+                    Setting orderAutoReceive = settingService.getSettingByName(order.get().getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
+                    if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                        orderAutoReceiveSender.send(order.get());
+                    }
                 } else {
-                    throw new PayServiceException(PayExceptionEnum.PAY_PAID_ERROR);
+                    log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
                 }
             } else {
                 throw new PayServiceException(PayExceptionEnum.PAY_PRICE_ERROR);
@@ -116,16 +138,45 @@ public class PayService implements IPayService {
         } else {
             throw new PayServiceException(PayExceptionEnum.PAY_ERROR, state);
         }
+    }
 
-        // 设置店铺资金和记录
-        long money = order.get().getRealPrice().longValue();
-        long afterMoney = balanceService.add(order.get().getStoreId(), money);
-        balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), order.get().getNumber(), money);
+    @Override
+    public Tip refundPay(RefundLog refundLog) {
+        WxPayRefundRequest request = new WxPayRefundRequest();
+        request.setOutTradeNo(refundLog.getOrderId().toString());
+        request.setOutRefundNo(refundLog.getId().toString());
+//        request.setOutRefundNo(String.format("R_%d_%d", refundLogService.getRefundLogCountByOrderId(refundLog.getOrderId()), refundLog.getOrderId()));
+        request.setTotalFee(getWonToRmb(refundLog.getAllPrice()));
+        request.setRefundFee(getWonToRmb(refundLog.getRefundMoney()));
+        request.setNotifyUrl(REFUND_NOTICE_URL);
+        try {
+            wxPayService.refund(request);
+        } catch (WxPayException e) {
+            return new ErrorTip(-1, e.getCustomErrorMsg());
+        }
 
-        // 系统是否允许自动接单
-        Setting orderAutoReceive = settingService.getSettingByName(order.get().getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
-        if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-            orderAutoReceiveSender.send(order.get());
+        return new SuccessTip();
+    }
+
+    @Override
+    public void confirmRefund(Long refundId, int refundPrice, String state) {
+        Optional<RefundLog> refundLog = Optional.ofNullable(refundLogService.getById(refundId));
+        refundLog.orElseThrow(() -> new PayServiceException(PayExceptionEnum.REFUND_LOG_NOT_EXIST));
+
+        // 确认订单已经支付并且支付
+        if ("SUCCESS".equals(state)) {
+            if (getWonToRmb(refundLog.get().getRefundMoney()) == refundPrice) {
+                if (refundLog.get().getState() == RefundState.PROCESSING) {
+                    refundLog.get().setState(RefundState.DONE);
+                    refundLogService.updateById(refundLog.get());
+                } else {
+                    log.warn("退款ID: {}, {}", refundId, PayExceptionEnum.REFUND_HAD_DONE_ERROR.getMessage());
+                }
+            } else {
+                throw new PayServiceException(PayExceptionEnum.REFUND_PRICE_ERROR);
+            }
+        } else {
+            throw new PayServiceException(PayExceptionEnum.REFUND_ERROR, state);
         }
     }
 
@@ -136,7 +187,11 @@ public class PayService implements IPayService {
      * @return
      */
     private int getOrderPrice(Order order) {
-        return order.getRealPrice() * 6 / 10;
+        return getWonToRmb(order.getRealPrice());
 //        return 1;
+    }
+
+    private int getWonToRmb(int kWon) {
+        return kWon * 6 / 10;
     }
 }

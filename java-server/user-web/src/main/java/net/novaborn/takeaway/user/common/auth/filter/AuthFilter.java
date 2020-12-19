@@ -2,6 +2,7 @@ package net.novaborn.takeaway.user.common.auth.filter;
 
 import io.jsonwebtoken.JwtException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
@@ -25,6 +26,7 @@ import java.util.Set;
  * @author xiaohun
  * @Date 2017/8/24 14:04
  */
+@Slf4j
 @Data
 public class AuthFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
@@ -55,29 +57,18 @@ public class AuthFilter extends OncePerRequestFilter {
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
                 if (flag) {
-                    RenderUtil.renderJson(
-                            response,
-                            new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()),
-                            HttpStatus.BAD_REQUEST
-                    );
+                    log.warn("id: {} token 已过期!",jwtTokenUtil.getUsernameFromToken(request));
+                    RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_EXPIRED.getCode(), SysExceptionEnum.TOKEN_EXPIRED.getMessage()), HttpStatus.BAD_REQUEST);
                     return;
                 }
             } catch (JwtException e) {
                 //有异常就是token解析失败
-                RenderUtil.renderJson(
-                        response,
-                        new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()),
-                        HttpStatus.BAD_REQUEST
-                );
+                RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()), HttpStatus.BAD_REQUEST);
                 return;
             }
         } else {
             //header没有带Bearer字段
-            RenderUtil.renderJson(
-                    response,
-                    new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()),
-                    HttpStatus.BAD_REQUEST
-            );
+            RenderUtil.renderJson(response, new ErrorTip(SysExceptionEnum.TOKEN_ERROR.getCode(), SysExceptionEnum.TOKEN_ERROR.getMessage()), HttpStatus.BAD_REQUEST);
             return;
         }
         chain.doFilter(request, response);

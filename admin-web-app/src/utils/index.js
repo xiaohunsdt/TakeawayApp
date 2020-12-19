@@ -373,6 +373,7 @@ orderStateMap.set('WAITING_RECEIVE', '等待接单')
 orderStateMap.set('PRODUCING', '制作中')
 orderStateMap.set('DELIVERING', '配送中')
 orderStateMap.set('FINISHED', '已完成')
+orderStateMap.set('PART_REFUND', '部分退款')
 orderStateMap.set('REFUND', '退款')
 orderStateMap.set('EXPIRED', '过期')
 
@@ -404,6 +405,11 @@ produceStateMap.set('OFF', '下架')
 produceStateMap.set('SHORTAGE', '缺货')
 produceStateMap.set('PART_SHORTAGE', '部分缺货')
 
+const refundLogStateMap = new Map()
+refundLogStateMap.set('PROCESSING', '处理中')
+refundLogStateMap.set('DONE', '完成')
+refundLogStateMap.set('FAILED', '失败')
+
 export function formatOrderState(orderState) {
     return orderStateMap.get(orderState)
 }
@@ -426,5 +432,9 @@ export function formatCouponState(couponType) {
 
 export function formatProduceState(produceState) {
     return produceStateMap.get(produceState)
+}
+
+export function formatRefundLogState(refundLogState) {
+    return refundLogStateMap.get(refundLogState)
 }
 

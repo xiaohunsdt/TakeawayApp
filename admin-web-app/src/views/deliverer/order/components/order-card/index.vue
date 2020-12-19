@@ -11,7 +11,7 @@
       </div>
       <div class="info">
         <div class="user-name">{{ order.userName }}</div>
-        <div v-if="order.appointmentDate===''" class="create-date">{{ order.createDate }}</div>
+        <div v-if="!order.appointmentDate" class="create-date">{{ order.createDate }}</div>
         <div v-else class="appointment">
           <van-icon color="#ffd200" name="clock"/>
           <div class="create-date">{{ order.appointmentDate }}</div>

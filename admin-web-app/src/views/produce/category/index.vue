@@ -13,8 +13,7 @@
           </el-form>
         </el-col>
         <el-col :span="6" style="text-align: right">
-          <add-category-dialog
-              @createSuccess="onSearch"/>
+          <add-category-dialog @createSuccess="onSearch"/>
         </el-col>
       </el-row>
     </base-card>
