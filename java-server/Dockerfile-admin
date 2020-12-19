@@ -1,4 +1,4 @@
-FROM store/oracle/jdk:11
+FROM openjdk:11.0.9.1-jdk-buster
 
 RUN echo "Asia/Seoul" > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata
