@@ -324,6 +324,7 @@
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
 import orderOperation from '@v/order/mixin/order-operation'
+import RefundSubmitDialog from '@v/order/components/RefundSubmitDialog'
 
 export default {
   name: 'SelfOrder',
@@ -354,6 +355,8 @@ export default {
     }
   },
   created() {
+    this.$refundSubmitDialog = RefundSubmitDialog
+
     this.formData.formDate[0] = new Date()
     this.formData.formDate[1] = new Date()
     this.onSearch()

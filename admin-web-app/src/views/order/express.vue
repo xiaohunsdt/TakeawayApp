@@ -323,6 +323,7 @@
 import BaseCard from '@/components/BaseCard'
 import EditOrderDialog from './components/EditOrderDialog'
 import orderOperation from '@v/order/mixin/order-operation'
+import RefundSubmitDialog from '@v/order/components/RefundSubmitDialog'
 
 export default {
   name: 'ExpressOrder',
@@ -356,6 +357,7 @@ export default {
     }
   },
   created() {
+    this.$refundSubmitDialog = RefundSubmitDialog
     this.onSearch()
   },
   methods: {}
