@@ -31,10 +31,10 @@ services:
       - ~/server_data/redisdata:/data
 
   rabbitmq:
-    image: xiaohunsdt/rabbitmq-deloy:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-rabbitemp-deloy
+#    image: xiaohunsdt/rabbitmq-deloy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-rabbitemp-deloy
     environment:
       TZ: Asia/Seoul
       RABBITMQ_DEFAULT_USER: xiaohun
