@@ -57,6 +57,8 @@ public class PayService implements IPayService {
 
     private WxPayService wxPayService;
 
+    private OrderAutoReceiveSender orderAutoReceiveSender;
+
     @Override
     public WxPayMpOrderResult createPayInfo(String openId, Long orderId, String ipAddr) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
