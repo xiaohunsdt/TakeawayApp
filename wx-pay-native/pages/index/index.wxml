@@ -1,0 +1,13 @@
+<view class="container">
+    <view class="gradient-view"></view>
+    <view class="container-contain">
+      <view id="header">诺本网络 <br/> 欢迎您</view>
+      <view style="padding-bottom: 40rpx">
+        <view style="padding: 40rpx">公司公告</view>
+        <view :key="item.title" class="notice-list" wx:for="{{dataList}}">
+          <view>{{item.title}}</view>
+          <view>{{item.content}}</view>
+        </view>
+      </view>
+    </view>
+  </view>

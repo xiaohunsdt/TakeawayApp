@@ -1,0 +1,6 @@
+<view class="container">
+	<view class="gradient-view"></view>
+	<view class="container-contain">
+		<button bind:tap="login" class="login-btn">微信登陆</button>
+	</view>
+</view>
