@@ -55,8 +55,6 @@ public class PayService implements IPayService {
 
     private BalanceLogService balanceLogService;
 
-    private OrderAutoReceiveSender orderAutoReceiveSender;
-
     private WxPayService wxPayService;
 
     @Override

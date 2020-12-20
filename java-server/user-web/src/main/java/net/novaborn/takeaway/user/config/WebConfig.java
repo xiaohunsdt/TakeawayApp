@@ -1,11 +1,6 @@
 package net.novaborn.takeaway.user.config;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
-import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
-import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.user.common.auth.filter.AuthFilter;
 import net.novaborn.takeaway.user.common.auth.security.DataSecurityAction;
@@ -14,15 +9,10 @@ import net.novaborn.takeaway.user.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.user.common.xss.XssFilter;
 import net.novaborn.takeaway.user.config.properties.JwtProperties;
 import net.novaborn.takeaway.user.config.properties.RestProperties;
-import net.novaborn.takeaway.user.config.properties.SystemProperties;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -52,10 +42,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-            .maxAge(3600)
-            .allowCredentials(true);
+                .allowedOriginPatterns("*")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .maxAge(3600)
+                .allowCredentials(true);
     }
 
     @Bean

@@ -1,0 +1,4 @@
+.container-contain {
+  padding: 30rpx 30rpx;
+  text-align: center;
+}

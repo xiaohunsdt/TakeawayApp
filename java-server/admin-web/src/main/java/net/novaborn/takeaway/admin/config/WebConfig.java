@@ -2,7 +2,6 @@ package net.novaborn.takeaway.admin.config;
 
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.common.auth.filter.AuthFilter;
 import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
 import net.novaborn.takeaway.admin.common.auth.security.impl.Base64SecurityAction;
@@ -10,6 +9,7 @@ import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.xss.XssFilter;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import net.novaborn.takeaway.admin.config.properties.RestProperties;
+import net.novaborn.takeaway.common.entity.SysContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -71,10 +71,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-            .maxAge(3600)
-            .allowCredentials(true);
+                .allowedOriginPatterns("*")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .maxAge(3600)
+                .allowCredentials(true);
     }
 
     @Bean

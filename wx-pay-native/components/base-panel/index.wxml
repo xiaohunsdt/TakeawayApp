@@ -1,0 +1,5 @@
+<view class="base-panel">
+    <view class="panel-content">
+      <slot></slot>
+    </view>
+</view>
