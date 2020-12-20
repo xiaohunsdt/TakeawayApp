@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/pay/index",
+    "pages/auth/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FFD200",
+    "navigationStyle": "default",
+    "navigationBarTitleText": "诺本支付",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFD200"
+  },
+  "usingComponents": {
+    "base-panel": "/components/base-panel/index",
+    "van-button": "@vant/weapp/button/index"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

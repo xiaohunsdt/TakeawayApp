@@ -3,6 +3,7 @@ package net.novaborn.takeaway.user.common.auth.util;
 import com.alibaba.fastjson.JSON;
 import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.common.exception.SysExceptionEnum;
+import net.novaborn.takeaway.common.tips.ErrorTip;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,9 @@ public class RenderUtil {
 
     public static void renderJson(HttpServletResponse response, Object jsonObject, HttpStatus httpStatus) {
         try {
+            if (jsonObject instanceof ErrorTip) {
+                response.setStatus(500);
+            }
             response.setContentType("application/json");
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Headers", "*");

@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="gradient-view"></view>
+  <view class="container-contain">
+    <base-panel>
+      <view style="text-overflow:ellipsis;word-wrap:break-word">
+        {{ orderId }}
+      </view>
+    </base-panel>
+    <van-button size="normal" disabled="{{loading}}" loading="{{loading}}" loading-text="数据请求中..." type="primary"bind:click="pay">
+      支付
+    </van-button>
+  </view>
+</view>
