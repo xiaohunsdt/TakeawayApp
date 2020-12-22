@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.config.properties.SystemProperties;
+import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.goods.entity.Produce;
 import net.novaborn.takeaway.goods.enums.ProduceState;
 import net.novaborn.takeaway.goods.service.impl.GoodsService;
@@ -223,17 +223,14 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-            "川香苑菜品大升级！！！精选菜品，打造最正宗的川菜！！在新品分类中可以查看精选菜品![拥抱][拥抱]\n" +
-            "签到活动持续进行中~~点餐满12000即可当天签到!\n" +
-                "今日点餐满15000送卤蛋，满20000送500ml饮料"
+            "川香苑新菜品来啦！！！水煮毛肚，酸辣粉！小伙伴们快来尝鲜哈~~\n" +
+                "签到活动持续进行中~~点餐满12000即可当天签到!\n"
         );
         autoMessage.setImgUrlList(
             Arrays.asList(
                 "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png",
-                "https://admin.cxy.novaborn.net/upload/images/761c3384008549edbf90e0c59692b5b3.jpeg",
-                "https://admin.cxy.novaborn.net/upload/images/b272b4ad4a694cac8130f087c27d777f.jpeg",
-                "https://admin.cxy.novaborn.net/upload/images/d40f15d6e3fa46319933b6b205272dd9.jpeg",
-                "https://admin.cxy.novaborn.net/upload/images/1a013c1bc8ed4de8a326c84b1b4a7bc6.jpg"
+                "https://admin.cxy.novaborn.net/upload/images/f35fbd7789cc457887491a27b81bd3b0.jpeg",
+                "https://admin.cxy.novaborn.net/upload/images/7fd0903979ca4697b7a8c1782c43eca6.jpeg"
             )
         );
 
