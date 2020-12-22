@@ -46,7 +46,7 @@ public class OrderAutoReceiveReceiver {
     @RabbitHandler
     @Transactional(rollbackFor = Exception.class)
     public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
-        log.debug("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+        log.info("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
 
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
