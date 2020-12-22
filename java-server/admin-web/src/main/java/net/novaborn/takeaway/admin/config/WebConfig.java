@@ -1,11 +1,6 @@
 package net.novaborn.takeaway.admin.config;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
-import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
-import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.common.auth.filter.AuthFilter;
 import net.novaborn.takeaway.admin.common.auth.security.DataSecurityAction;
@@ -14,18 +9,13 @@ import net.novaborn.takeaway.admin.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.admin.common.xss.XssFilter;
 import net.novaborn.takeaway.admin.config.properties.JwtProperties;
 import net.novaborn.takeaway.admin.config.properties.RestProperties;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -54,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
     private JwtProperties jwtProperties;
 
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -77,10 +67,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-                .maxAge(3600)
-                .allowCredentials(true);
+            .allowedOriginPatterns("*")
+            .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+            .maxAge(3600)
+            .allowCredentials(true);
     }
 
     @Bean

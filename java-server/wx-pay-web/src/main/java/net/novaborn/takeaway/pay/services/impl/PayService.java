@@ -114,6 +114,12 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
+
+                    // 系统是否允许自动接单
+                    Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
+                    if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                        orderAutoReceiveSender.send(order.get());
+                    }
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
                 }
@@ -122,12 +128,6 @@ public class PayService implements IPayService {
             }
         } else {
             throw new PayServiceException(PayExceptionEnum.PAY_ERROR, state);
-        }
-
-        // 系统是否允许自动接单
-        Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
-        if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-            orderAutoReceiveSender.send(order.get());
         }
     }
 
