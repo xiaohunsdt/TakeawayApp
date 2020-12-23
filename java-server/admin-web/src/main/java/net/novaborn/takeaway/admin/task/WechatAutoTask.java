@@ -120,13 +120,13 @@ public class WechatAutoTask {
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
 
         storeOpenTime = storeOpenTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         storeCloseTime = storeCloseTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         if (storeOpenTime.isAfter(storeCloseTime)) {
             if (currentDate.isBefore(storeCloseTime)) {
                 storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
@@ -153,9 +153,9 @@ public class WechatAutoTask {
             query.eq(Produce::getStoreId, sysContext.getCurrentStoreId());
 
             produceList = produceService.list(query).parallelStream()
-                .filter(produce -> produce.getState() == ProduceState.ON || produce.getState() == ProduceState.PART_SHORTAGE)
-                .sorted(Comparator.comparing(Produce::getCategoryId))
-                .collect(Collectors.toList());
+                    .filter(produce -> produce.getState() == ProduceState.ON || produce.getState() == ProduceState.PART_SHORTAGE)
+                    .sorted(Comparator.comparing(Produce::getCategoryId))
+                    .collect(Collectors.toList());
         }
 
         int index = RandomUtil.randomInt(produceList.size());
@@ -194,13 +194,13 @@ public class WechatAutoTask {
         store_open_date = settingService.getSettingByName("store_open_date", SettingScope.STORE).getValue();
 
         storeOpenTime = storeOpenTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         storeCloseTime = storeCloseTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         if (storeOpenTime.isAfter(storeCloseTime)) {
             if (currentDate.isBefore(storeCloseTime)) {
                 storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
@@ -223,15 +223,21 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-            "川香苑新菜品来啦！！！水煮毛肚，酸辣粉！小伙伴们快来尝鲜哈~~\n" +
-                "签到活动持续进行中~~点餐满12000即可当天签到!\n"
+                "川香苑双旦活动来啦!!![社会社会][社会社会]\n" +
+                        "超值套餐~满赠福利~应有尽有！！[拥抱][拥抱][拥抱]\n" +
+                        "点餐的时候千万别忘记把海报保存，发到自己的朋友圈哦，还可以再拿一枚卤蛋~~~[哇][哇][哇]\n"
         );
         autoMessage.setImgUrlList(
-            Arrays.asList(
-                "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png",
-                "https://admin.cxy.novaborn.net/upload/images/f35fbd7789cc457887491a27b81bd3b0.jpeg",
-                "https://admin.cxy.novaborn.net/upload/images/7fd0903979ca4697b7a8c1782c43eca6.jpeg"
-            )
+                Arrays.asList(
+                        "https://admin.cxy.novaborn.net//upload/images/activity/6ad326e8bac74168bbe3e9c2555a1f5e.png",
+                        "https://admin.cxy.novaborn.net/upload/images/81a03db04e174b02baec78e577fa8faa.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/6115d8e486864d0ebb7ab39a90c15b46.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/f35fbd7789cc457887491a27b81bd3b0.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/22da6d92c1c34ce8ad5b441714aa0b7a.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/761c3384008549edbf90e0c59692b5b3.jpeg",
+                        "https://admin.cxy.novaborn.net/upload/images/1a013c1bc8ed4de8a326c84b1b4a7bc6.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/18d01f6bfca34a1686177bea22f0cef3.jpeg"
+                )
         );
 
         wechatAutoSender.send(autoMessage);
@@ -257,10 +263,10 @@ public class WechatAutoTask {
 //        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心下课吃不到饭啦！！[拥抱][拥抱]", TimeUtil.toString(storeOpenTime)));
         autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小程序架构更新!!有任何问题请联系我们微信客服哦~~[拥抱][拥抱]", DateUtil.format(storeOpenTime, "HH:mm")));
         autoMessage.setImgUrlList(
-            Arrays.asList(
-                "https://admin.cxy.novaborn.net/upload/images/banner/75e8d7a1f82346a58ae9ff164e4ca5ac.jpg",
-                "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"
-            )
+                Arrays.asList(
+                        "https://admin.cxy.novaborn.net/upload/images/banner/75e8d7a1f82346a58ae9ff164e4ca5ac.jpg",
+                        "https://admin.cxy.novaborn.net/upload/images/banner/75cb5085875f41a68430ed3117ad5786.jpg"
+                )
         );
 
         wechatAutoSender.send(autoMessage);
@@ -270,13 +276,13 @@ public class WechatAutoTask {
     public void sendOrderMessage(List<OrderItem> selectedOrderItems) {
         DateTime currentDate = DateUtil.date();
         storeOpenTime = storeOpenTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         storeCloseTime = storeCloseTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         if (storeOpenTime.isAfter(storeCloseTime)) {
             if (currentDate.isBefore(storeCloseTime)) {
                 storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
@@ -287,21 +293,21 @@ public class WechatAutoTask {
 
         String names = selectedOrderItems.stream().map(OrderItem::getProduceName).collect(Collectors.joining(", "));
         String desc = selectedOrderItems.stream()
-            .map(orderItem -> {
-                Produce produce = produceService.getById(orderItem.getProduceId());
-                if (StrUtil.isBlank(produce.getDesc())) {
+                .map(orderItem -> {
+                    Produce produce = produceService.getById(orderItem.getProduceId());
+                    if (StrUtil.isBlank(produce.getDesc())) {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0", produce.getName(), goods.getPrice());
-                    return StrUtil.format("{}", produce.getName());
-                } else {
+                        return StrUtil.format("{}", produce.getName());
+                    } else {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", produce.getName(), goods.getPrice(), produce.getDesc());
-                    return StrUtil.format("{}, {}", produce.getName(), produce.getDesc());
-                }
-            })
-            .collect(Collectors.joining("\r\n"));
+                        return StrUtil.format("{}, {}", produce.getName(), produce.getDesc());
+                    }
+                })
+                .collect(Collectors.joining("\r\n"));
         List<String> imgs = selectedOrderItems.stream()
-            .filter(item -> StrUtil.isNotBlank(item.getGoodsThumb()))
-            .map(item -> systemProperties.getUploadServerUrl() + item.getGoodsThumb())
-            .collect(Collectors.toList());
+                .filter(item -> StrUtil.isNotBlank(item.getGoodsThumb()))
+                .map(item -> systemProperties.getUploadServerUrl() + item.getGoodsThumb())
+                .collect(Collectors.toList());
 
         String message;
         message = StrUtil.format("{}\r\n超级\uD83D\uDD25的人气菜品安排走单！！\uD83D\uDE0B\r\n{}\r\n同款\uD83C\uDE51安排哦,现在点餐30-40分钟送达[哇][哇][哇]", names, desc);
@@ -325,13 +331,13 @@ public class WechatAutoTask {
     public void sendAutoMessage(List<Produce> selectedProduces) {
         DateTime currentDate = DateUtil.date();
         storeOpenTime = storeOpenTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         storeCloseTime = storeCloseTime
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         if (storeOpenTime.isAfter(storeCloseTime)) {
             if (currentDate.isBefore(storeCloseTime)) {
                 storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
@@ -342,20 +348,20 @@ public class WechatAutoTask {
 
         String names = selectedProduces.stream().map(Produce::getName).collect(Collectors.joining(", "));
         String desc = selectedProduces.stream()
-            .map(goods -> {
-                if (StrUtil.isBlank(goods.getDesc())) {
+                .map(goods -> {
+                    if (StrUtil.isBlank(goods.getDesc())) {
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0", goods.getName(), goods.getPrice());
-                    return StrUtil.format("{}", goods.getName());
-                } else {
-                    return StrUtil.format("{}, {}", goods.getName(), goods.getDesc());
+                        return StrUtil.format("{}", goods.getName());
+                    } else {
+                        return StrUtil.format("{}, {}", goods.getName(), goods.getDesc());
 //                        return StrUtil.format("{}, {}\uD83D\uDCB0, {}", goods.getName(), goods.getPrice(), goods.getDesc());
-                }
-            })
-            .collect(Collectors.joining("\r\n"));
+                    }
+                })
+                .collect(Collectors.joining("\r\n"));
         List<String> imgs = selectedProduces.stream()
-            .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
-            .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
-            .collect(Collectors.toList());
+                .filter(goods -> StrUtil.isNotBlank(goods.getThumb()))
+                .map(goods -> systemProperties.getUploadServerUrl() + goods.getThumb())
+                .collect(Collectors.toList());
 
         String message;
         message = StrUtil.format("{}\r\n{}\r\n{}", names, desc, "\n现在点餐30-40分钟送达[哇][哇][哇]");
