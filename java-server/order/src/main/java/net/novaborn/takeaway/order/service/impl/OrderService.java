@@ -183,10 +183,19 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
     }
 
+    private int getRealPriceWithoutSet(List<OrderItem> orderItemList) {
+        return orderItemList.stream().filter(orderItem -> {
+            Produce produce = produceService.getById(orderItem.getProduceId());
+            return produce.getCategoryId() != 1301894880592736258L;
+        }).mapToInt(orderItem -> orderItem.getGoodsPrice() * orderItem.getGoodsCount()).sum();
+    }
+
     @Override
     public void postCheckOrder(OrderDto orderDto) {
         // 设置优惠
         if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
+            int realPrice = getRealPriceWithoutSet(orderDto.getOrderItems());
+
             Goods gift = null;
             String giftName = null;
 //            gifts.put("口水鸡", goodsService.getFirstByProduceId(1301894895893557250L));
@@ -210,43 +219,42 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                    giftName = "鸭翅";
 //                }
 //            }
-            if (orderDto.getOrder().getRealPrice() >= 80000) {
+            if (realPrice >= 80000) {
                 if (goodsStockService.checkStock(gifts.get("双椒烤鱼"), 1)) {
                     gift = gifts.get("双椒烤鱼");
                     giftName = "双椒烤鱼";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 70000) {
+            } else if (realPrice >= 70000) {
                 if (goodsStockService.checkStock(gifts.get("川香烤鱼"), 1)) {
                     gift = gifts.get("川香烤鱼");
                     giftName = "川香烤鱼";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 60000) {
+            } else if (realPrice >= 60000) {
                 if (goodsStockService.checkStock(gifts.get("水煮鱼"), 1)) {
                     gift = gifts.get("水煮鱼");
                     giftName = "水煮鱼";
                 }
-            }
-            if (orderDto.getOrder().getRealPrice() >= 50000) {
+            } else if (realPrice>= 50000) {
                 if (goodsStockService.checkStock(gifts.get("水煮毛肚"), 1)) {
                     gift = gifts.get("水煮毛肚");
                     giftName = "水煮毛肚";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 40000) {
+            } else if (realPrice >= 40000) {
                 if (goodsStockService.checkStock(gifts.get("毛血旺"), 1)) {
                     gift = gifts.get("毛血旺");
                     giftName = "毛血旺";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
+            } else if (realPrice >= 30000) {
                 if (goodsStockService.checkStock(gifts.get("口水鸡"), 1)) {
                     gift = gifts.get("口水鸡");
                     giftName = "口水鸡";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 20000) {
+            } else if (realPrice >= 20000) {
                 if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
                     gift = gifts.get("饮料");
                     giftName = "饮料";
                 }
-            } else if (orderDto.getOrder().getRealPrice() >= 15000) {
+            } else if (realPrice >= 15000) {
                 if (goodsStockService.checkStock(gifts.get("川香卤蛋"), 1)) {
                     gift = gifts.get("川香卤蛋");
                     giftName = "川香卤蛋";
