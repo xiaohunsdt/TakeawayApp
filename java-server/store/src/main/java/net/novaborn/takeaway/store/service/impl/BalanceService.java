@@ -3,9 +3,9 @@ package net.novaborn.takeaway.store.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import net.novaborn.takeaway.common.exception.SysException;
 import net.novaborn.takeaway.store.dao.IBalanceDao;
 import net.novaborn.takeaway.store.entity.Balance;
+import net.novaborn.takeaway.store.exception.StoreBalanceException;
 import net.novaborn.takeaway.store.exception.StoreBalanceExceptionEnum;
 import net.novaborn.takeaway.store.service.IBalanceService;
 import org.springframework.aop.framework.AopContext;
@@ -28,7 +28,7 @@ public class BalanceService extends ServiceImpl<IBalanceDao, Balance> implements
     @Override
     public boolean updateById(Balance entity) {
         if (!super.updateById(entity)) {
-            throw new SysException(StoreBalanceExceptionEnum.UPDATE_FAILED);
+            throw new StoreBalanceException(StoreBalanceExceptionEnum.UPDATE_FAILED);
         }
 
         return true;
@@ -38,7 +38,7 @@ public class BalanceService extends ServiceImpl<IBalanceDao, Balance> implements
     public long add(Long storeId, Long money) {
         Balance balance = this.getById(storeId);
         if (balance == null) {
-            throw new SysException(StoreBalanceExceptionEnum.NOT_EXIST);
+            throw new StoreBalanceException(StoreBalanceExceptionEnum.NOT_EXIST);
         }
 
         balance.setMoney(balance.getMoney() + money);
@@ -50,7 +50,7 @@ public class BalanceService extends ServiceImpl<IBalanceDao, Balance> implements
     public long sub(Long storeId, Long money) {
         Balance balance = this.getById(storeId);
         if (balance == null) {
-            throw new SysException(StoreBalanceExceptionEnum.NOT_EXIST);
+            throw new StoreBalanceException(StoreBalanceExceptionEnum.NOT_EXIST);
         }
 
         balance.setMoney(balance.getMoney() - money);

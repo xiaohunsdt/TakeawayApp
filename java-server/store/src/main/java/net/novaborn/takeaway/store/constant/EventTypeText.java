@@ -10,6 +10,7 @@ public class EventTypeText {
         typeText.put(2, "[服务费]订单id: %d(#%d), 订单金额: %d, 收取 %d 韩币!");
         typeText.put(3, "[提现服务]申请提现 %d 韩币, 手续费 %d 韩币!");
         typeText.put(4, "[提现服务]提现退回! 退还 %d 韩币!");
+        typeText.put(5, "[微信退款]退款Id: %d, 退还 %d 韩币!");
     }
 
     public static String get(Integer eventType) {

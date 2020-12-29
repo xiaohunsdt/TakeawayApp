@@ -23,6 +23,8 @@ public class RefundLog implements Serializable {
 
     private Long userId;
 
+    private Long storeId;
+
     private PaymentWay paymentWay;
 
     private Integer allPrice;

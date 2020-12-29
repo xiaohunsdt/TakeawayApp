@@ -13,7 +13,6 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
-import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.OrderState;
@@ -158,6 +157,7 @@ public class PayService implements IPayService {
         return new SuccessTip();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void confirmRefund(Long refundId, int refundPrice, String state) {
         Optional<RefundLog> refundLog = Optional.ofNullable(refundLogService.getById(refundId));
@@ -169,6 +169,11 @@ public class PayService implements IPayService {
                 if (refundLog.get().getState() == RefundState.PROCESSING) {
                     refundLog.get().setState(RefundState.DONE);
                     refundLogService.updateById(refundLog.get());
+
+                    // 设置店铺资金和记录
+                    long money = refundPrice;
+                    long afterMoney = balanceService.sub(refundLog.get().getStoreId(), money);
+                    balanceLogService.setMoneyLog(refundLog.get().getStoreId(), money, afterMoney, 5, refundLog.get().getId(), money);
                 } else {
                     log.warn("退款ID: {}, {}", refundId, PayExceptionEnum.REFUND_HAD_DONE_ERROR.getMessage());
                 }
