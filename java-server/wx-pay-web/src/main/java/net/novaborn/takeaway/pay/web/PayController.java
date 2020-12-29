@@ -71,12 +71,13 @@ public class PayController extends BaseController {
 
         try {
             payService.confirmPay(orderId, totalPrice, state);
+
+            log.debug("回调信息:{},支付回调验证成功!!", xmlData);
+            return WxPayNotifyResponse.success("成功");
         } catch (Exception e) {
             log.error("", e);
+            return WxPayNotifyResponse.fail("失败");
         }
-
-        log.debug("回调信息:{},支付回调验证成功!!", xmlData);
-        return WxPayNotifyResponse.success("成功");
     }
 
     @RequestMapping("refund/notice")
@@ -91,8 +92,10 @@ public class PayController extends BaseController {
 
         try {
             payService.confirmRefund(refundId, refundFee, state);
+
+            log.debug("回调信息:{},退款回调验证成功!!", xmlData);
+            return WxPayNotifyResponse.success("成功");
         } catch (Exception e) {
-            log.error("", e);
             if (e instanceof PayServiceException) {
                 RefundLog refundLog = refundLogService.getById(refundId);
                 if (refundLog.getState() == RefundState.PROCESSING) {
@@ -101,9 +104,9 @@ public class PayController extends BaseController {
                     refundLogService.updateById(refundLog);
                 }
             }
-        }
 
-        log.debug("回调信息:{},退款回调验证成功!!", xmlData);
-        return WxPayNotifyResponse.success("成功");
+            log.error("", e);
+            return WxPayNotifyResponse.fail("失败");
+        }
     }
 }
