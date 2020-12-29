@@ -171,7 +171,7 @@ public class PayService implements IPayService {
                     refundLogService.updateById(refundLog.get());
 
                     // 设置店铺资金和记录
-                    long money = refundPrice;
+                    long money = refundLog.get().getRefundMoney();
                     long afterMoney = balanceService.sub(refundLog.get().getStoreId(), money);
                     balanceLogService.setMoneyLog(refundLog.get().getStoreId(), money, afterMoney, 5, refundLog.get().getId(), money);
                 } else {
