@@ -40,11 +40,7 @@ import java.util.*;
 public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrderService {
     private OrderItemService orderItemService;
 
-    private GoodsService goodsService;
-
     private ProduceService produceService;
-
-    private GoodsStockService goodsStockService;
 
     private CouponService couponService;
 
@@ -140,12 +136,14 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
             .filter(orderItem -> orderItem.getGoodsId() != null)
             .map(orderItem -> {
                 Produce produce = produceService.getById(orderItem.getProduceId());
+                return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+
                 // 鸭货除外
-                if (produce.getCategoryId().equals(1301894880743731201L)) {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                } else {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                }
+//                if (produce.getCategoryId().equals(1301894880743731201L)) {
+//                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+//                } else {
+//                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+//                }
             })
             .reduce(0, (x, y) -> x + y);
 
