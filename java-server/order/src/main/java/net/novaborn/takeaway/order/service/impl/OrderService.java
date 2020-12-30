@@ -151,7 +151,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int realPrice = orderItemList.parallelStream()
             .filter(orderItem -> orderItem.getGoodsId() != null)
             .map(orderItem -> {
-                Produce produce = produceService.getById(orderItem.getProduceId());
+//                Produce produce = produceService.getById(orderItem.getProduceId());
                 return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
 
                 // 鸭货除外
