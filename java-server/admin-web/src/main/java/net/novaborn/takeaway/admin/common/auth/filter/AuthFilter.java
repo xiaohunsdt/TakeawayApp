@@ -53,6 +53,11 @@ public class AuthFilter extends OncePerRequestFilter {
             return;
         }
 
+        if("OPTIONS".equals(request.getMethod())){
+            chain.doFilter(request, response);
+            return;
+        }
+
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {

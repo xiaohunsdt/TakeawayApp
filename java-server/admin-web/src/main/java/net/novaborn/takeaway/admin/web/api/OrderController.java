@@ -22,10 +22,12 @@ import net.novaborn.takeaway.mq.sender.OrderSubscribeMessageSender;
 import net.novaborn.takeaway.mq.sender.WxPayRefundSender;
 import net.novaborn.takeaway.order.entity.Delivery;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.DeliveryService;
+import net.novaborn.takeaway.order.service.impl.OrderDetailService;
 import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.store.service.impl.BalanceLogService;
@@ -57,6 +59,8 @@ public class OrderController extends BaseController {
     private UserService userService;
 
     private OrderService orderService;
+
+    private OrderDetailService orderDetailService;
 
     private RefundLogService refundLogService;
 
@@ -134,24 +138,28 @@ public class OrderController extends BaseController {
         return orderService.getWaitingReceiveOrderCount(orderType);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @ResponseBody
     @PostMapping("editOrder")
-    public Tip editOrder(@ModelAttribute Order order) {
-        Optional<Order> targetOrder = Optional.ofNullable(orderService.getById(order.getId()));
+    public Tip editOrder(Long id, Short discount, String ps) {
+        Optional<Order> targetOrder = Optional.ofNullable(orderService.getById(id));
         targetOrder.orElseThrow(() -> new SysException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
         if (targetOrder.get().getOrderState() == OrderState.FINISHED || targetOrder.get().getOrderState() == OrderState.REFUND || targetOrder.get().getOrderState() == OrderState.EXPIRED) {
             throw new SysException(OrderExceptionEnum.ORDER_STATE_ERROR);
         }
 
-        if (order.getDiscount() != null && !order.getDiscount().equals(targetOrder.get().getDiscount())) {
-            orderService.setDiscount(targetOrder.get(), orderItemService.selectByOrderId(targetOrder.get().getId()), order.getDiscount());
+        if (discount != null && !discount.equals(targetOrder.get().getDiscount())) {
+            orderService.setDiscount(targetOrder.get(), orderItemService.selectByOrderId(targetOrder.get().getId()), discount);
         }
-        BeanUtil.copyProperties(order, targetOrder.get(), CopyOptions.create().setIgnoreNullValue(true));
 
-        if (!orderService.updateById(targetOrder.get())) {
-            return new ErrorTip(-1, "操作失败!");
+        if(StrUtil.isNotBlank(ps)){
+            OrderDetail detail = orderDetailService.getById(id);
+            detail.setPs(ps);
+            orderDetailService.updateById(detail);
         }
+
+        orderService.updateById(targetOrder.get());
         return new SuccessTip();
     }
 
