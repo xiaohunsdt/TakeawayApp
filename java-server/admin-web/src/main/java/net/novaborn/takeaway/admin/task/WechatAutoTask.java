@@ -223,20 +223,17 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "川香苑双旦活动来啦!!![社会社会][社会社会]\n" +
-                        "超值套餐~满赠福利~应有尽有！！[拥抱][拥抱][拥抱]\n" +
+                "川香苑签到活动，满赠送鸭货活动又来了哦!!![社会社会][社会社会]\n" +
                         "点餐的时候千万别忘记把海报保存，发到自己的朋友圈哦，还可以再拿一枚卤蛋~~~[哇][哇][哇]\n"
         );
         autoMessage.setImgUrlList(
                 Arrays.asList(
-                        "https://admin.cxy.novaborn.net//upload/images/activity/6ad326e8bac74168bbe3e9c2555a1f5e.png",
-                        "https://admin.cxy.novaborn.net/upload/images/81a03db04e174b02baec78e577fa8faa.jpeg",
-                        "https://admin.cxy.novaborn.net/upload/images/6115d8e486864d0ebb7ab39a90c15b46.jpg",
-                        "https://admin.cxy.novaborn.net/upload/images/f35fbd7789cc457887491a27b81bd3b0.jpeg",
-                        "https://admin.cxy.novaborn.net/upload/images/22da6d92c1c34ce8ad5b441714aa0b7a.jpg",
-                        "https://admin.cxy.novaborn.net/upload/images/761c3384008549edbf90e0c59692b5b3.jpeg",
-                        "https://admin.cxy.novaborn.net/upload/images/1a013c1bc8ed4de8a326c84b1b4a7bc6.jpg",
-                        "https://admin.cxy.novaborn.net/upload/images/18d01f6bfca34a1686177bea22f0cef3.jpeg"
+                    "https://admin.cxy.novaborn.net/upload/images/activity/4f09112c713a478ca8b9dba2cf290ab6.png",
+                    "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png",
+                    "https://admin.cxy.novaborn.net/upload/images/d532aad8ac714a09bd93da0825ad2713.jpeg",
+                    "https://admin.cxy.novaborn.net/upload/images/0434968ceb6c4c6f8d298bf87403dc24.jpeg",
+                    "https://admin.cxy.novaborn.net/upload/images/e389ba593aed4f119c51a49623ab5d2f.jpeg",
+                    "https://admin.cxy.novaborn.net/upload/images/50f33b4172e84d45b477589770aec59d.jpeg"
                 )
         );
 

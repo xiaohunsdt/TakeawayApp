@@ -54,16 +54,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         gifts = new HashMap<>();
         gifts.put("川香卤蛋", goodsService.getFirstByProduceId(1301894882715054082L));
         gifts.put("饮料", goodsService.getFirstByProduceId(1301894885395214337L));
-        gifts.put("口水鸡", goodsService.getFirstByProduceId(1301894895893557250L));
+/*        gifts.put("口水鸡", goodsService.getFirstByProduceId(1301894895893557250L));
         gifts.put("毛血旺", goodsService.getFirstByProduceId(1301894888289284097L));
         gifts.put("水煮毛肚", goodsService.getFirstByProduceId(1341387293693435906L));
         gifts.put("水煮鱼", goodsService.getFirstByProduceId(1301894884791234561L));
         gifts.put("川香烤鱼", goodsService.getFirstByProduceId(1301894885168721921L));
-        gifts.put("双椒烤鱼", goodsService.getFirstByProduceId(1332216962323963905L));
-
-//        gifts.put("鸭翅", goodsService.getFirstByProduceId(1301894884405358594L));
-//        gifts.put("鸭锁骨", goodsService.getFirstByProduceId(1301894884560547841L));
-//        gifts.put("鸭脖", goodsService.getFirstByProduceId(1301894883776212994L));
+        gifts.put("双椒烤鱼", goodsService.getFirstByProduceId(1332216962323963905L));*/
+        gifts.put("鸭翅", goodsService.getFirstByProduceId(1301894884405358594L));
+        gifts.put("鸭锁骨", goodsService.getFirstByProduceId(1301894884560547841L));
+        gifts.put("鸭脖", goodsService.getFirstByProduceId(1301894883776212994L));
+        gifts.put("猪蹄(2份)", goodsService.getFirstByProduceId(1301894884166283266L));
     }
 
     @Override
@@ -200,56 +200,25 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
             Goods gift = null;
             String giftName = null;
-//            gifts.put("口水鸡", goodsService.getFirstByProduceId(1301894895893557250L));
-//            gifts.put("毛血旺", goodsService.getFirstByProduceId(1301894888289284097L));
-//            gifts.put("水煮毛肚", goodsService.getFirstByProduceId(1341387293693435906L));
-//            gifts.put("水煮鱼", goodsService.getFirstByProduceId(1301894884791234561L));
-//            if (orderDto.getOrder().getRealPrice() >= 40000) {
-//                if (goodsStockService.checkStock(gifts.get("麻辣香锅"), 1)) {
-//                    gift = gifts.get("麻辣香锅");
-//                    giftName = "麻辣香锅";
-//                }
-//            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
-//                if (goodsStockService.checkStock(gifts.get("麻辣烫"), 1)) {
-//                    gift = gifts.get("麻辣烫");
-//                    giftName = "麻辣烫";
-//                }
-//            }
-//            else if (orderDto.getOrder().getRealPrice() >= 25000) {
-//                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
-//                    gift = gifts.get("鸭翅");
-//                    giftName = "鸭翅";
-//                }
-//            }
-            if (realPrice >= 80000) {
-                if (goodsStockService.checkStock(gifts.get("双椒烤鱼"), 1)) {
-                    gift = gifts.get("双椒烤鱼");
-                    giftName = "双椒烤鱼";
+            if (orderDto.getOrder().getRealPrice() >= 50000) {
+                if (goodsStockService.checkStock(gifts.get("猪蹄(2份)"), 1)) {
+                    gift = gifts.get("猪蹄(2份)");
+                    giftName = "猪蹄(2份)";
                 }
-            } else if (realPrice >= 70000) {
-                if (goodsStockService.checkStock(gifts.get("川香烤鱼"), 1)) {
-                    gift = gifts.get("川香烤鱼");
-                    giftName = "川香烤鱼";
+            } else if (orderDto.getOrder().getRealPrice() >= 40000) {
+                if (goodsStockService.checkStock(gifts.get("鸭脖"), 1)) {
+                    gift = gifts.get("鸭脖");
+                    giftName = "鸭脖";
                 }
-            } else if (realPrice >= 60000) {
-                if (goodsStockService.checkStock(gifts.get("水煮鱼"), 1)) {
-                    gift = gifts.get("水煮鱼");
-                    giftName = "水煮鱼";
+            } else if (orderDto.getOrder().getRealPrice() >= 30000) {
+                if (goodsStockService.checkStock(gifts.get("鸭锁骨"), 1)) {
+                    gift = gifts.get("鸭锁骨");
+                    giftName = "鸭锁骨";
                 }
-            } else if (realPrice>= 50000) {
-                if (goodsStockService.checkStock(gifts.get("水煮毛肚"), 1)) {
-                    gift = gifts.get("水煮毛肚");
-                    giftName = "水煮毛肚";
-                }
-            } else if (realPrice >= 40000) {
-                if (goodsStockService.checkStock(gifts.get("毛血旺"), 1)) {
-                    gift = gifts.get("毛血旺");
-                    giftName = "毛血旺";
-                }
-            } else if (realPrice >= 30000) {
-                if (goodsStockService.checkStock(gifts.get("口水鸡"), 1)) {
-                    gift = gifts.get("口水鸡");
-                    giftName = "口水鸡";
+            } else if (orderDto.getOrder().getRealPrice() >= 25000) {
+                if (goodsStockService.checkStock(gifts.get("鸭翅"), 1)) {
+                    gift = gifts.get("鸭翅");
+                    giftName = "鸭翅";
                 }
             } else if (realPrice >= 20000) {
                 if (goodsStockService.checkStock(gifts.get("饮料"), 1)) {
@@ -262,6 +231,39 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
                     giftName = "川香卤蛋";
                 }
             }
+
+            //            if (realPrice >= 80000) {
+//                if (goodsStockService.checkStock(gifts.get("双椒烤鱼"), 1)) {
+//                    gift = gifts.get("双椒烤鱼");
+//                    giftName = "双椒烤鱼";
+//                }
+//            } else if (realPrice >= 70000) {
+//                if (goodsStockService.checkStock(gifts.get("川香烤鱼"), 1)) {
+//                    gift = gifts.get("川香烤鱼");
+//                    giftName = "川香烤鱼";
+//                }
+//            } else if (realPrice >= 60000) {
+//                if (goodsStockService.checkStock(gifts.get("水煮鱼"), 1)) {
+//                    gift = gifts.get("水煮鱼");
+//                    giftName = "水煮鱼";
+//                }
+//            } else if (realPrice>= 50000) {
+//                if (goodsStockService.checkStock(gifts.get("水煮毛肚"), 1)) {
+//                    gift = gifts.get("水煮毛肚");
+//                    giftName = "水煮毛肚";
+//                }
+//            } else if (realPrice >= 40000) {
+//                if (goodsStockService.checkStock(gifts.get("毛血旺"), 1)) {
+//                    gift = gifts.get("毛血旺");
+//                    giftName = "毛血旺";
+//                }
+//            } else if (realPrice >= 30000) {
+//                if (goodsStockService.checkStock(gifts.get("口水鸡"), 1)) {
+//                    gift = gifts.get("口水鸡");
+//                    giftName = "口水鸡";
+//                }
+//            }
+
             if (gift != null) {
                 OrderItem orderItem = new OrderItem();
                 orderItem.setGoodsId(gift.getId());
@@ -330,16 +332,16 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         TreeMap<String, Integer> goodsSale = new TreeMap<>();
 
         orderList.stream()
-                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
-                .forEach(order -> {
-                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                        Integer count = orderItem.getGoodsCount();
-                        if (goodsSale.containsKey(orderItem.getProduceName())) {
-                            count += goodsSale.get(orderItem.getProduceName());
-                        }
-                        goodsSale.put(orderItem.getProduceName(), count);
-                    });
+            .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
+            .forEach(order -> {
+                orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                    Integer count = orderItem.getGoodsCount();
+                    if (goodsSale.containsKey(orderItem.getProduceName())) {
+                        count += goodsSale.get(orderItem.getProduceName());
+                    }
+                    goodsSale.put(orderItem.getProduceName(), count);
                 });
+            });
 
         List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
         Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
