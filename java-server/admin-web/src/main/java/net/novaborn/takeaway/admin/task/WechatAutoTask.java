@@ -103,14 +103,14 @@ public class WechatAutoTask {
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
 
-        sysJob = new SysJob();
-        sysJob.setJobId(3L);
-        sysJob.setJobGroup(jobGroup);
-        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
-        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
-        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-        sysJob.setConcurrent(false);
-        sysJobService.insertJob(sysJob);
+//        sysJob = new SysJob();
+//        sysJob.setJobId(3L);
+//        sysJob.setJobGroup(jobGroup);
+//        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+//        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
+//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+//        sysJob.setConcurrent(false);
+//        sysJobService.insertJob(sysJob);
     }
 
     public void goodsShow() {
@@ -252,7 +252,7 @@ public class WechatAutoTask {
         }
 
         AutoMessage autoMessage = new AutoMessage();
-        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]\r\n小伙伴们现在就可以下预约单(提前2小时预约)!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心不能准时就餐啦！！[拥抱][拥抱]", DateUtil.format(storeOpenTime, "HH:mm")));
+        autoMessage.setMessage(StrUtil.format("今天正常营业哦～[社会社会][社会社会][社会社会]用过小程序的朋友们,在微信首页下拉页面就可以快速进入我们的小程序哦！\r\n小伙伴们现在就可以下预约单(提前2小时预约)!![机智][机智]{}开始接单配送～～\r\n优先准时配送！！再也不用担心不能准时就餐啦！！[拥抱][拥抱]", DateUtil.format(storeOpenTime, "HH:mm")));
         autoMessage.setImgUrlList(
             Arrays.asList(
                 "https://admin.cxy.novaborn.net/upload/images/banner/75e8d7a1f82346a58ae9ff164e4ca5ac.jpg",
