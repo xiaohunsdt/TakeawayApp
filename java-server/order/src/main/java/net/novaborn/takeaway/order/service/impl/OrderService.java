@@ -195,8 +195,8 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Override
     public void postCheckOrder(OrderDto orderDto) {
         // 设置优惠
-        if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
-            int realPrice = getRealPriceWithoutSet(orderDto.getOrderItems());
+//        if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
+//            int realPrice = getRealPriceWithoutSet(orderDto.getOrderItems());
 
 //            Goods gift = null;
 //            String giftName = null;
@@ -276,7 +276,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                orderDto.getOrderItems().add(orderItem);
 //                orderDto.getOrder().setGoodsCount(orderDto.getOrder().getGoodsCount() + 1);
 //            }
-        }
+//        }
 
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null) {
