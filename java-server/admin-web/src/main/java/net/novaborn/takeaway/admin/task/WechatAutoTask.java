@@ -103,14 +103,14 @@ public class WechatAutoTask {
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
 
-//        sysJob = new SysJob();
-//        sysJob.setJobId(3L);
-//        sysJob.setJobGroup(jobGroup);
-//        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
-//        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
-//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-//        sysJob.setConcurrent(false);
-//        sysJobService.insertJob(sysJob);
+        sysJob = new SysJob();
+        sysJob.setJobId(3L);
+        sysJob.setJobGroup(jobGroup);
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
+        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+        sysJob.setConcurrent(false);
+        sysJobService.insertJob(sysJob);
     }
 
     public void goodsShow() {
@@ -223,14 +223,14 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-            "川香苑大年三十不休息！\uD83D\uDD25\uD83D\uDD25\r\n为了保证大家按时就餐，现在就可以下预约订单！[拥抱][拥抱]\r\n预约订单优先准时配送,大年三十将有两位外卖全力为大家配送,请大家放心下单！！[社会社会][社会社会][社会社会]"
+                "川香苑周六特别活动，全部菜品88折！刷卡鸭货除外，仅此一天！！小程序(微信搜索: 聚韩外卖)内直接下单即可，后台自动打折！下单时请留意大概送达时间，以免耽误大家就餐！"
         );
-        autoMessage.setImgUrlList(
-            Arrays.asList(
-                "https://admin.cxy.novaborn.net/upload/images/activity/4f09112c713a478ca8b9dba2cf290ab6.png",
-                "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png"
-            )
-        );
+//        autoMessage.setImgUrlList(
+//            Arrays.asList(
+//                "https://admin.cxy.novaborn.net/upload/images/activity/4f09112c713a478ca8b9dba2cf290ab6.png",
+//                "https://admin.cxy.novaborn.net/upload/images/activity/df686941b39d4d788c3ceb09f0cf0cc8.png"
+//            )
+//        );
 
         wechatAutoSender.send(autoMessage);
         log.info("WechatAuto: 已发送给队列 {}", autoMessage);
