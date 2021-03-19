@@ -151,15 +151,15 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         int realPrice = orderItemList.parallelStream()
             .filter(orderItem -> orderItem.getGoodsId() != null)
             .map(orderItem -> {
-//                Produce produce = produceService.getById(orderItem.getProduceId());
-                return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                Produce produce = produceService.getById(orderItem.getProduceId());
+//                return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
 
                 // 鸭货除外
-//                if (produce.getCategoryId().equals(1301894880743731201L)) {
-//                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-//                } else {
-//                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-//                }
+                if (produce.getCategoryId().equals(1301894880743731201L)) {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                } else {
+                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                }
             })
             .reduce(0, (x, y) -> x + y);
 
@@ -277,6 +277,10 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                orderDto.getOrder().setGoodsCount(orderDto.getOrder().getGoodsCount() + 1);
 //            }
 //        }
+
+
+        //设置活动折扣
+        this.setDiscount(orderDto.getOrder(),orderDto.getOrderItems(),88);
 
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null) {
