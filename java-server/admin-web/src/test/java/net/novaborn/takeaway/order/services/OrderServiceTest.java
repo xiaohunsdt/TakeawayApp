@@ -58,16 +58,16 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderListByDateTest() {
-        Date start = DateUtil.parseDateTime("2019-11-22 00:00:00");
-        Date end = DateUtil.parseDateTime("2020-10-30 23:00:00");
+        Date start = DateUtil.parseDateTime("2020-10-22 00:00:00");
+        Date end = DateUtil.parseDateTime("2021-03-30 23:00:00");
 
         Map<String, Object> args = new HashMap<>();
-        args.put("orderState", OrderState.FINISHED.getCode());
+        args.put("orderState", OrderState.FINISHED);
         args.put("startDate", DateUtil.formatDateTime(start));
         args.put("endDate", DateUtil.formatDateTime(end));
 
         Set<Long> userIds = new CopyOnWriteArraySet<>();
-        List<Order> orderList = orderService.getOrderList(args).stream().sorted(Comparator.comparing(Order::getCreateDate)).collect(Collectors.toList());
+        List<Order> orderList = orderService.getOrderList(args).stream().sorted(Comparator.comparing(Order::getCreateDate).reversed()).collect(Collectors.toList());
         System.out.println(orderList.size());
         orderList = orderList.parallelStream()
             .filter(order -> userIds.add(order.getUserId()))

@@ -280,7 +280,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
 
         //设置 活动折扣
-        this.setDiscount(orderDto.getOrder(),orderDto.getOrderItems(),88);
+//        this.setDiscount(orderDto.getOrder(),orderDto.getOrderItems(),88);
 
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null) {
