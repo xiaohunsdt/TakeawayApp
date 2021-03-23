@@ -22,7 +22,14 @@ public interface IPayService {
      */
     void confirmPay(Long orderId);
 
-    void confirmPay(Long orderId, int totalPrice, String state);
+    /**
+     *
+     * @param orderId
+     * @param totalPrice
+     * @param state
+     * @return 确认成功返回true, 否则返回false
+     */
+    boolean confirmPay(Long orderId, int totalPrice, String state);
 
     Tip refundPay(RefundLog refundLog);
 

@@ -13,7 +13,6 @@ import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
-import net.novaborn.takeaway.mq.sender.OrderPayStatusSender;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.OrderState;
@@ -98,12 +97,18 @@ public class PayService implements IPayService {
 
         int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
-        this.confirmPay(orderId, totalPrice, state);
+        if (this.confirmPay(orderId, totalPrice, state)) {
+            // 系统是否允许自动接单
+            Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
+            if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                orderAutoReceiveSender.send(orderId);
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void confirmPay(Long orderId, int totalPrice, String state) {
+    public boolean confirmPay(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new PayServiceException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -115,11 +120,7 @@ public class PayService implements IPayService {
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
 
-                    // 系统是否允许自动接单
-                    Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
-                    if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-                        orderAutoReceiveSender.send(order.get());
-                    }
+                    return true;
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
                 }
@@ -129,6 +130,7 @@ public class PayService implements IPayService {
         } else {
             throw new PayServiceException(PayExceptionEnum.PAY_ERROR, state);
         }
+        return false;
     }
 
     @Override

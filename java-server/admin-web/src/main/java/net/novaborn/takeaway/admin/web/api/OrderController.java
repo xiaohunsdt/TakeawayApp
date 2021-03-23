@@ -171,7 +171,7 @@ public class OrderController extends BaseController {
         // 系统是否允许自动接单
         Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
         if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-            orderAutoReceiveSender.send(order.get());
+            orderAutoReceiveSender.send(order.get().getId());
         }
 
         return new SuccessTip();

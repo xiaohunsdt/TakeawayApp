@@ -20,9 +20,9 @@ public class OrderAutoReceiveSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(Order order) {
+    public void send(Long orderId) {
         try {
-            rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE, order);
+            rabbitTemplate.convertAndSend(OrderQueueConfig.DIRECT_EXCHANGE, OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE, orderId);
         } catch (Exception e) {
             log.error("投递队列失败！！", e);
         }
