@@ -8,6 +8,7 @@ import net.novaborn.takeaway.common.entity.SysContext;
 import net.novaborn.takeaway.admin.web.api.OrderController;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.service.impl.OrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -39,6 +40,8 @@ import java.util.Map;
 //                key = PrinterQueueConfig.QUEUE_NAME)
 //)
 public class OrderAutoReceiveReceiver {
+    private OrderService orderService;
+
     private OrderController orderController;
 
     private SysContext sysContext;
@@ -46,13 +49,11 @@ public class OrderAutoReceiveReceiver {
     @RabbitHandler
     @Transactional(rollbackFor = Exception.class)
     public void process(@Payload Order order, Channel channel, @Headers Map<String, Object> headers) throws IOException {
-        log.info("OrderId: {}, 自动接单队列接收时间: {}", order.getId(), DateUtil.formatDateTime(new Date()));
-
+        log.debug("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
 
-        sysContext.setCurrentStoreId(order.getStoreId());
-
         try {
+            sysContext.setCurrentStoreId(order.getStoreId());
             orderController.receiveOrder(order.getId());
         } catch (Exception e) {
             log.error(null, e);

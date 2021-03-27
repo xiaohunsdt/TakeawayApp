@@ -3,8 +3,6 @@ package net.novaborn.takeaway.user.web.api;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,27 +11,18 @@ import net.novaborn.takeaway.common.exception.SysExceptionEnum;
 import net.novaborn.takeaway.common.tips.ErrorTip;
 import net.novaborn.takeaway.common.tips.SuccessTip;
 import net.novaborn.takeaway.common.tips.Tip;
-import net.novaborn.takeaway.common.utils.CommonUtil;
-import net.novaborn.takeaway.coupon.entity.Coupon;
-import net.novaborn.takeaway.coupon.enums.CouponState;
-import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
-import net.novaborn.takeaway.coupon.services.impl.CouponService;
-import net.novaborn.takeaway.goods.service.impl.GoodsService;
-import net.novaborn.takeaway.goods.service.impl.GoodsStockService;
 import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
 import net.novaborn.takeaway.mq.sender.OrderPayExpiredSender;
 import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Comment;
 import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.OrderDetail;
-import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.OrderState;
 import net.novaborn.takeaway.order.enums.OrderStateEx;
 import net.novaborn.takeaway.order.enums.OrderType;
 import net.novaborn.takeaway.order.enums.PayState;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
 import net.novaborn.takeaway.order.service.impl.OrderDetailService;
-import net.novaborn.takeaway.order.service.impl.OrderItemService;
 import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.system.entity.Setting;
 import net.novaborn.takeaway.system.enums.SettingScope;
@@ -46,7 +35,6 @@ import net.novaborn.takeaway.user.web.wrapper.OrderDetailWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,19 +53,9 @@ import java.util.stream.Collectors;
 public class OrderController extends BaseController {
     private UserService userService;
 
-    private GoodsService goodsService;
-
-    private GoodsStockService goodsStockService;
-
-    private CouponService couponService;
-
-    private CouponLogService couponLogService;
-
     private OrderService orderService;
 
     private OrderDetailService orderDetailService;
-
-    private OrderItemService orderItemService;
 
     private SettingService settingService;
 
@@ -143,7 +121,6 @@ public class OrderController extends BaseController {
     }
 
     @ResponseBody
-    @Transactional(rollbackFor = Exception.class)
     @PostMapping("createOrder")
     public Tip createOrder(@RequestBody @Validated OrderDto orderDto) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
@@ -151,63 +128,17 @@ public class OrderController extends BaseController {
         user.orElseThrow(() -> new SysException(SysExceptionEnum.AUTH_HAVE_NO_USER));
 
         Order order = orderDto.getOrder();
-        OrderDetail orderDetail = orderDto.getOrderDetail();
-        List<OrderItem> orderItems = orderDto.getOrderItems();
+        order.setUserId(user.get().getId());
 
         if (order.getOrderType() == OrderType.NORMAL && !this.getCanOrderNow(order.getStoreId())) {
             throw new SysException(OrderExceptionEnum.ORDER_CAN_NOT_CREATE_FOR_NOW);
         }
 
-        //订单为自取订单的情况检测
-        if (order.getOrderType() == OrderType.SELF) {
-            if (orderDetail.getAppointmentDate() != null) {
-                if (orderDetail.getPhone() == null || StrUtil.isBlank(orderDetail.getPhone())) {
-                    throw new SysException(OrderExceptionEnum.ORDER_SELF_HAVE_NO_PHONE);
-                }
+        // 生成订单
+        order = orderService.createOrder(orderDto);
 
-                if (!CommonUtil.validateKoreaPhone(orderDetail.getPhone())) {
-                    throw new SysException(OrderExceptionEnum.PHONE_FORMAT_ERROR);
-                }
-            }
-        }
-
-        order.setUserId(user.get().getId());
-
-        //检测订单商品项是否可以下单
-        orderItemService.checkOrderItems(order.getOrderType(), orderItems);
-        orderService.checkOrder(order, orderItems);
-        orderService.postCheckOrder(orderDto);
-
-        //先生成订单，再生成订单产品详情
-        if (order.insert()) {
-            // 生成订单详情
-            orderDetail.setOrderId(order.getId());
-            orderDetailService.save(orderDetail);
-
-            //生成订购项
-            orderItems.parallelStream().forEach(item -> {
-                item.setOrderId(order.getId());
-                if (StrUtil.isNotBlank(item.getGoodsThumb())) {
-                    item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
-                }
-                item.insert();
-
-                // 减少库存
-                goodsStockService.reduceStock(goodsService.getById(item.getGoodsId()), item.getGoodsCount());
-            });
-
-            // 对优惠卷进行后续处理
-            if (orderDto.getCouponId() != null && orderDto.getCouponId() != null) {
-                Coupon coupon = couponService.getById(orderDto.getCouponId());
-                coupon.setState(CouponState.USED);
-                couponService.updateById(coupon);
-
-                // 添加优惠卷使用记录
-                couponLogService.makeNewCouponLog(order, coupon);
-            }
-        }
-
-        //将未支付的订单丢给订单过期队列
+        // 判断订单的状态并处理
+        // 将未支付的订单丢给订单过期队列
         if (order.getPayState() == PayState.UN_PAY) {
             orderPayExpiredSender.send(order, 30 * 60);
         } else {
@@ -268,13 +199,13 @@ public class OrderController extends BaseController {
 
         DateTime currentDate = DateUtil.date();
         DateTime storeOpenTime = DateUtil.parseDateTime(store_open_time)
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         DateTime storeCloseTime = DateUtil.parseDateTime(store_close_time)
-            .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
-            .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
-            .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
+                .setField(DateField.YEAR, currentDate.getField(DateField.YEAR))
+                .setField(DateField.MONTH, currentDate.getField(DateField.MONTH))
+                .setField(DateField.DAY_OF_MONTH, currentDate.getField(DateField.DAY_OF_MONTH));
         if (storeOpenTime.isAfter(storeCloseTime)) {
             if (currentDate.isBefore(storeCloseTime)) {
                 storeOpenTime.offset(DateField.DAY_OF_YEAR, -1);
@@ -303,26 +234,26 @@ public class OrderController extends BaseController {
 
         Date current = new Date();
         List<Order> orderList = orderService.getTodayOrderByStateU(null, OrderStateEx.WAIT_EAT).stream()
-            .filter(item -> item.getOrderType() == OrderType.NORMAL || item.getOrderType() == OrderType.APPOINTMENT)
-            .filter(item -> {
-                // 返回今天的要配送的订单
-                Date target;
-                if (item.getOrderType() == OrderType.NORMAL) {
-                    target = item.getCreateDate();
-                } else {
-                    target = orderDetailService.getById(item.getId()).getAppointmentDate();
-                    item.setCreateDate(target);
-                }
-                return DateUtil.isSameDay(target, current);
-            })
-            .sorted((o1, o2) -> {
-                Date dateForO1 = o1.getCreateDate();
-                Date dateForO2 = o2.getCreateDate();
-                return dateForO1.compareTo(dateForO2);
-            })
-            .collect(Collectors.toList());
+                .filter(item -> item.getOrderType() == OrderType.NORMAL || item.getOrderType() == OrderType.APPOINTMENT)
+                .filter(item -> {
+                    // 返回今天的要配送的订单
+                    Date target;
+                    if (item.getOrderType() == OrderType.NORMAL) {
+                        target = item.getCreateDate();
+                    } else {
+                        target = orderDetailService.getById(item.getId()).getAppointmentDate();
+                        item.setCreateDate(target);
+                    }
+                    return DateUtil.isSameDay(target, current);
+                })
+                .sorted((o1, o2) -> {
+                    Date dateForO1 = o1.getCreateDate();
+                    Date dateForO2 = o2.getCreateDate();
+                    return dateForO1.compareTo(dateForO2);
+                })
+                .collect(Collectors.toList());
 
-        int index = 0;
+        int index;
         if (order.isPresent()) {
             if (orderDetail.get().getAppointmentDate() != null) {
                 return new DeliveryArriveTimeDto(orderDetail.get().getAppointmentDate());

@@ -171,13 +171,20 @@ public interface IOrderService extends IService<Order> {
      * @param orderItemList 预检查的订单商品项
      */
     void checkOrder(Order order, List<OrderItem> orderItemList);
+//
+//    /**
+//     * 检查完订单后的后续操作
+//     *
+//     * @param orderDto      预检查的订单
+//     */
+//    void postCheckOrder(OrderDto orderDto);
 
     /**
-     * 检查完订单后的后续操作
-     *
-     * @param orderDto      预检查的订单
+     * 生成订单
+     * @param orderDto
+     * @return 返回生成的订单
      */
-    void postCheckOrder(OrderDto orderDto);
+    Order createOrder(OrderDto orderDto);
 
     /**
      * 对指定订单列表的商品进行排名 从高到低

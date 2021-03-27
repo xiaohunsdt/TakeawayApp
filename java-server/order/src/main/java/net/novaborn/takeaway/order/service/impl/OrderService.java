@@ -1,11 +1,18 @@
 package net.novaborn.takeaway.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.novaborn.takeaway.common.exception.SysException;
+import net.novaborn.takeaway.common.utils.CommonUtil;
+import net.novaborn.takeaway.coupon.entity.Coupon;
+import net.novaborn.takeaway.coupon.enums.CouponState;
+import net.novaborn.takeaway.coupon.services.impl.CouponLogService;
 import net.novaborn.takeaway.coupon.services.impl.CouponService;
 import net.novaborn.takeaway.goods.entity.Goods;
 import net.novaborn.takeaway.goods.entity.Produce;
@@ -15,6 +22,7 @@ import net.novaborn.takeaway.goods.service.impl.ProduceService;
 import net.novaborn.takeaway.order.dao.IOrderDao;
 import net.novaborn.takeaway.order.dto.OrderDto;
 import net.novaborn.takeaway.order.entity.Order;
+import net.novaborn.takeaway.order.entity.OrderDetail;
 import net.novaborn.takeaway.order.entity.OrderItem;
 import net.novaborn.takeaway.order.enums.*;
 import net.novaborn.takeaway.order.exception.OrderExceptionEnum;
@@ -24,6 +32,7 @@ import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -43,10 +52,19 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     @Setter
     protected Map<String, Goods> gifts;
     private OrderItemService orderItemService;
+
+    private OrderDetailService orderDetailService;
+
     private GoodsService goodsService;
+
     private ProduceService produceService;
+
     private GoodsStockService goodsStockService;
+
     private CouponService couponService;
+
+    private CouponLogService couponLogService;
+
     private SettingService settingService;
 
     @PostConstruct
@@ -149,19 +167,19 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
         }
 
         int realPrice = orderItemList.parallelStream()
-            .filter(orderItem -> orderItem.getGoodsId() != null)
-            .map(orderItem -> {
-                Produce produce = produceService.getById(orderItem.getProduceId());
+                .filter(orderItem -> orderItem.getGoodsId() != null)
+                .map(orderItem -> {
+                    Produce produce = produceService.getById(orderItem.getProduceId());
 //                return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
 
-                // 鸭货除外
-                if (produce.getCategoryId().equals(1301894880743731201L)) {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
-                } else {
-                    return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
-                }
-            })
-            .reduce(0, (x, y) -> x + y);
+                    // 鸭货除外
+                    if (produce.getCategoryId().equals(1301894880743731201L)) {
+                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount();
+                    } else {
+                        return orderItem.getGoodsPrice() * orderItem.getGoodsCount() * discount / 100;
+                    }
+                })
+                .reduce(0, (x, y) -> x + y);
 
         order.setDiscount((short) discount);
         order.setDiscountedPrices(order.getAllPrice() - realPrice);
@@ -193,7 +211,85 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
     }
 
     @Override
-    public void postCheckOrder(OrderDto orderDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public Order createOrder(OrderDto orderDto) {
+        Order order = orderDto.getOrder();
+
+        OrderDetail orderDetail = orderDto.getOrderDetail();
+        List<OrderItem> orderItems = orderDto.getOrderItems();
+
+        //订单为自取订单的情况检测
+        if (order.getOrderType() == OrderType.SELF) {
+            if (orderDetail.getAppointmentDate() != null) {
+                if (orderDetail.getPhone() == null || StrUtil.isBlank(orderDetail.getPhone())) {
+                    throw new SysException(OrderExceptionEnum.ORDER_SELF_HAVE_NO_PHONE);
+                }
+
+                if (!CommonUtil.validateKoreaPhone(orderDetail.getPhone())) {
+                    throw new SysException(OrderExceptionEnum.PHONE_FORMAT_ERROR);
+                }
+            }
+        }
+
+        //检测订单商品项是否可以下单
+        orderItemService.checkOrderItems(order.getOrderType(), orderItems);
+        this.checkOrder(order, orderItems);
+        this.postCheckOrder(orderDto);
+
+        //先生成订单，再生成订单产品详情
+        if (order.insert()) {
+            // 生成订单详情
+            orderDetail.setOrderId(order.getId());
+            orderDetailService.save(orderDetail);
+
+            //生成订购项
+            orderItems.parallelStream().forEach(item -> {
+                item.setOrderId(order.getId());
+                if (StrUtil.isNotBlank(item.getGoodsThumb())) {
+                    item.setGoodsThumb(URLUtil.getPath(item.getGoodsThumb()));
+                }
+                item.insert();
+
+                // 减少库存
+                goodsStockService.reduceStock(goodsService.getById(item.getGoodsId()), item.getGoodsCount());
+            });
+
+            // 对优惠卷进行后续处理
+            if (orderDto.getCouponId() != null && orderDto.getCouponId() != null) {
+                Coupon coupon = couponService.getById(orderDto.getCouponId());
+                coupon.setState(CouponState.USED);
+                couponService.updateById(coupon);
+
+                // 添加优惠卷使用记录
+                couponLogService.makeNewCouponLog(order, coupon);
+            }
+        }
+
+        return order;
+    }
+
+    @Override
+    public List<Map.Entry<String, Integer>> getGoodsSales(List<Order> orderList) {
+        TreeMap<String, Integer> goodsSale = new TreeMap<>();
+
+        orderList.stream()
+                .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
+                .forEach(order -> {
+                    orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
+                        Integer count = orderItem.getGoodsCount();
+                        if (goodsSale.containsKey(orderItem.getProduceName())) {
+                            count += goodsSale.get(orderItem.getProduceName());
+                        }
+                        goodsSale.put(orderItem.getProduceName(), count);
+                    });
+                });
+
+        List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
+        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        return list;
+    }
+
+    private void postCheckOrder(OrderDto orderDto) {
         // 设置优惠
 //        if (orderDto.getOrder().getStoreId() == 1302193963869949953L && orderDto.getOrder().getPaymentWay() != PaymentWay.CREDIT_CARD) {
 //            int realPrice = getRealPriceWithoutSet(orderDto.getOrderItems());
@@ -232,7 +328,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 //                }
 //            }
 
-            //            if (realPrice >= 80000) {
+        //            if (realPrice >= 80000) {
 //                if (goodsStockService.checkStock(gifts.get("双椒烤鱼"), 1)) {
 //                    gift = gifts.get("双椒烤鱼");
 //                    giftName = "双椒烤鱼";
@@ -280,7 +376,7 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
 
 
         //设置 活动折扣
-//        this.setDiscount(orderDto.getOrder(),orderDto.getOrderItems(),88);
+        this.setDiscount(orderDto.getOrder(),orderDto.getOrderItems(),88);
 
         //设置 优惠卷折扣
         if (orderDto.getCouponId() != null) {
@@ -329,26 +425,5 @@ public class OrderService extends ServiceImpl<IOrderDao, Order> implements IOrde
             orderDto.getOrder().setPaymentWay(PaymentWay.CASH);
             orderDto.getOrder().setPayState(PayState.PAID);
         }
-    }
-
-    @Override
-    public List<Map.Entry<String, Integer>> getGoodsSales(List<Order> orderList) {
-        TreeMap<String, Integer> goodsSale = new TreeMap<>();
-
-        orderList.stream()
-            .filter(order -> order.getPayState() != PayState.UN_PAY && order.getOrderState() != OrderState.REFUND)
-            .forEach(order -> {
-                orderItemService.selectByOrderId(order.getId()).forEach(orderItem -> {
-                    Integer count = orderItem.getGoodsCount();
-                    if (goodsSale.containsKey(orderItem.getProduceName())) {
-                        count += goodsSale.get(orderItem.getProduceName());
-                    }
-                    goodsSale.put(orderItem.getProduceName(), count);
-                });
-            });
-
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(goodsSale.entrySet());
-        Collections.sort(list, (o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-        return list;
     }
 }

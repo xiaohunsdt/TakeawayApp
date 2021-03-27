@@ -101,12 +101,26 @@ public class PayService implements IPayService {
 
         int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
-        this.confirmPay(orderId, totalPrice, state);
+
+        if (this.confirmPay(orderId, totalPrice, state)) {
+            Order order = orderService.getById(orderId);
+
+            // 设置店铺资金和记录
+            long money = order.getRealPrice().longValue();
+            long afterMoney = balanceService.add(order.getStoreId(), money);
+            balanceLogService.setMoneyLog(order.getStoreId(), money, afterMoney, 1, order.getId(), order.getNumber(), money);
+
+            // 系统是否允许自动接单
+            Setting orderAutoReceive = settingService.getSettingByName(order.getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
+            if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                orderAutoReceiveSender.send(order);
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void confirmPay(Long orderId, int totalPrice, String state) {
+    public boolean confirmPay(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
         order.orElseThrow(() -> new PayServiceException(OrderExceptionEnum.ORDER_NOT_EXIST));
 
@@ -117,17 +131,7 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
-
-                    // 设置店铺资金和记录
-                    long money = order.get().getRealPrice().longValue();
-                    long afterMoney = balanceService.add(order.get().getStoreId(), money);
-                    balanceLogService.setMoneyLog(order.get().getStoreId(), money, afterMoney, 1, order.get().getId(), order.get().getNumber(), money);
-
-                    // 系统是否允许自动接单
-                    Setting orderAutoReceive = settingService.getSettingByName(order.get().getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
-                    if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-                        orderAutoReceiveSender.send(order.get());
-                    }
+                    return true;
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
                 }
@@ -137,6 +141,7 @@ public class PayService implements IPayService {
         } else {
             throw new PayServiceException(PayExceptionEnum.PAY_ERROR, state);
         }
+        return false;
     }
 
     @Override

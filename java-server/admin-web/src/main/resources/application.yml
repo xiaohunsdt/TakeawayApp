@@ -27,7 +27,7 @@ server:
 
 spring:
   profiles:
-    active: test
+    active: dev
   mvc:
     static-path-pattern: /res/**
     view:
@@ -120,16 +120,21 @@ logging:
 
 ---
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://192.168.199.128:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: wy19960921!
   redis:
-    host: localhost
+    host: 192.168.199.128
     password: wy1996
   rabbitmq:
-    host: localhost
+    host: 192.168.199.128
     username: xiaohun
     password: wy1996
+
 
 logging:
     level:
@@ -138,7 +143,9 @@ logging:
 
 ---
 spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:mysql://cxy.novaborn.net:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: takeaway
@@ -158,7 +165,9 @@ logging:
 
 ---
 spring:
-  profiles: pro
+  config:
+    activate:
+      on-profile: pro
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/takeaway_b2b?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Seoul
     username: takeaway
