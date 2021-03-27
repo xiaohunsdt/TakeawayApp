@@ -1,5 +1,6 @@
 package net.novaborn.takeaway.pay.services.impl;
 
+import cn.hutool.core.lang.Pair;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
@@ -94,7 +95,6 @@ public class PayService implements IPayService {
             payServiceException.setMessage(e.getErrCodeDes());
             throw payServiceException;
         }
-
         int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
         if (this.confirmPay(orderId, totalPrice, state)) {
@@ -119,7 +119,6 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
-
                     return true;
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
