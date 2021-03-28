@@ -41,8 +41,6 @@ import java.util.Map;
 @Component
 @RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE)
 public class OrderAutoReceiveReceiver {
-    private OrderService orderService;
-
     private OrderController orderController;
 
     private SysContext sysContext;
