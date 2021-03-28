@@ -47,10 +47,6 @@ public class PayService implements IPayService {
 
     private RefundLogService refundLogService;
 
-    private SettingService settingService;
-
-    private OrderAutoReceiveSender orderAutoReceiveSender;
-
     private WxPayService wxPayService;
 
     @Override
@@ -83,9 +79,8 @@ public class PayService implements IPayService {
         return result;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void confirmPay(Long orderId) {
+    public boolean confirmPay(Long orderId) {
         WxPayOrderQueryResult result;
         try {
             result = wxPayService.queryOrder(null, orderId.toString());
@@ -95,18 +90,13 @@ public class PayService implements IPayService {
             payServiceException.setMessage(e.getErrCodeDes());
             throw payServiceException;
         }
+
         int totalPrice = result.getTotalFee();
         String state = result.getTradeState();
-        if (this.confirmPay(orderId, totalPrice, state)) {
-            // 系统是否允许自动接单
-            Setting orderAutoReceive = settingService.getSettingByName("auto_receive_order", SettingScope.SYSTEM);
-            if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
-                orderAutoReceiveSender.send(orderId);
-            }
-        }
+
+        return this.confirmPay(orderId, totalPrice, state);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean confirmPay(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));
@@ -119,6 +109,7 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
+
                     return true;
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
