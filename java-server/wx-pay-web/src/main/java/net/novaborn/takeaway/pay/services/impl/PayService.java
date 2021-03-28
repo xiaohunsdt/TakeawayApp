@@ -83,7 +83,6 @@ public class PayService implements IPayService {
         return result;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public void confirmPay(Long orderId) {
         WxPayOrderQueryResult result;
@@ -106,7 +105,6 @@ public class PayService implements IPayService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean confirmPay(Long orderId, int totalPrice, String state) {
         Optional<Order> order = Optional.ofNullable(orderService.getById(orderId));

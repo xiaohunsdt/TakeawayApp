@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.admin.web.api.OrderController;
 import net.novaborn.takeaway.mq.config.OrderQueueConfig;
-import net.novaborn.takeaway.order.entity.Order;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
@@ -27,23 +26,24 @@ import java.util.Map;
  * Time: 6:15 PM
  * Description:
  */
-@Slf4j
-@Setter(onMethod_ = {@Autowired})
-@Component
-@RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE)
+
 //@RabbitListener(
 //        bindings = @QueueBinding(
 //                value = @Queue(value = PrinterQueueConfig.QUEUE_NAME),
 //                exchange = @Exchange(value = PrinterQueueConfig.EXCHANGE_NAME),
 //                key = PrinterQueueConfig.QUEUE_NAME)
 //)
+@Slf4j
+@Setter(onMethod_ = {@Autowired})
+@Component
+@RabbitListener(queues = OrderQueueConfig.QUEUE_ORDER_AUTO_RECEIVE)
 public class OrderAutoReceiveReceiver {
     private OrderController orderController;
 
     @RabbitHandler
     @Transactional(rollbackFor = Exception.class)
     public void process(@Payload Long orderId, Channel channel, @Headers Map<String, Object> headers) throws IOException {
-        log.debug("自动接单队列接收时间: {}", DateUtil.formatDateTime(new Date()));
+        log.info("订单id: {}, 自动接单队列接收时间: {}", orderId, DateUtil.formatDateTime(new Date()));
 
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         try {
