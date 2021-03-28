@@ -46,8 +46,8 @@ public class PayController extends BaseController {
     @ResponseBody
     public SuccessTip confirmOrder(@RequestParam Long orderId) {
         payService.confirmPay(orderId);
+        log.info("订单: {}, 支付验证成功!!", orderId);
 
-        log.debug("订单:{},支付验证成功!!", orderId);
         return new SuccessTip();
     }
 
@@ -71,8 +71,8 @@ public class PayController extends BaseController {
 
         try {
             payService.confirmPay(orderId, totalPrice, state);
-
             log.debug("回调信息:{},支付回调验证成功!!", xmlData);
+
             return WxPayNotifyResponse.success("成功");
         } catch (Exception e) {
             log.error("", e);

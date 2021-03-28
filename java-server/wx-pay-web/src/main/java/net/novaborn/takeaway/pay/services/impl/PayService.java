@@ -31,7 +31,6 @@ import net.novaborn.takeaway.system.enums.SettingScope;
 import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -129,6 +128,7 @@ public class PayService implements IPayService {
                     order.get().setPayState(PayState.PAID);
                     order.get().setOrderState(OrderState.WAITING_RECEIVE);
                     orderService.updateById(order.get());
+
                     return true;
                 } else {
                     log.warn("订单ID: {}, {}", orderId, PayExceptionEnum.PAY_PAID_ERROR.getMessage());
