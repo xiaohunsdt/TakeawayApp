@@ -9,12 +9,18 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.novaborn.takeaway.common.tips.SuccessTip;
+import net.novaborn.takeaway.mq.sender.OrderAutoReceiveSender;
+import net.novaborn.takeaway.order.entity.Order;
 import net.novaborn.takeaway.order.entity.RefundLog;
 import net.novaborn.takeaway.order.enums.RefundState;
+import net.novaborn.takeaway.order.service.impl.OrderService;
 import net.novaborn.takeaway.order.service.impl.RefundLogService;
 import net.novaborn.takeaway.pay.common.auth.util.JwtTokenUtil;
 import net.novaborn.takeaway.pay.exception.PayServiceException;
 import net.novaborn.takeaway.pay.services.impl.PayService;
+import net.novaborn.takeaway.system.entity.Setting;
+import net.novaborn.takeaway.system.enums.SettingScope;
+import net.novaborn.takeaway.system.service.impl.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +37,19 @@ public class PayController extends BaseController {
 
     private PayService payService;
 
+    private OrderService orderService;
+
     private RefundLogService refundLogService;
+
+    private SettingService settingService;
+
+    private OrderAutoReceiveSender orderAutoReceiveSender;
 
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("createPayInfo")
     @ResponseBody
-    public WxPayMpOrderResult createPayInfo(@RequestParam Long orderId) throws WxPayException {
+    public WxPayMpOrderResult createPayInfo(@RequestParam Long orderId) {
         String openId = jwtTokenUtil.getUsernameFromToken(request);
         return payService.createPayInfo(openId, orderId, this.request.getLocalAddr());
     }
@@ -45,9 +57,17 @@ public class PayController extends BaseController {
     @RequestMapping("confirmOrder")
     @ResponseBody
     public SuccessTip confirmOrder(@RequestParam Long orderId) {
-        payService.confirmPay(orderId);
-        log.info("订单: {}, 支付验证成功!!", orderId);
+        boolean result = payService.confirmPay(orderId);
+        if (result) {
+            log.info("订单: {}, 支付验证成功!!", orderId);
 
+            // 系统是否允许自动接单
+            Order order = orderService.getById(orderId);
+            Setting orderAutoReceive = settingService.getSettingByName(order.getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
+            if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                orderAutoReceiveSender.send(order);
+            }
+        }
         return new SuccessTip();
     }
 
@@ -70,9 +90,19 @@ public class PayController extends BaseController {
         String state = notifyResult.getResultCode();
 
         try {
-            payService.confirmPay(orderId, totalPrice, state);
-            log.debug("回调信息:{},支付回调验证成功!!", xmlData);
+            boolean result = payService.confirmPay(orderId, totalPrice, state);
+            if (result) {
+                log.info("订单: {}, 支付验证成功!!", orderId);
 
+                // 系统是否允许自动接单
+                Order order = orderService.getById(orderId);
+                Setting orderAutoReceive = settingService.getSettingByName(order.getStoreId(), "auto_receive_order", SettingScope.SYSTEM);
+                if (orderAutoReceive != null && "true".equals(orderAutoReceive.getValue())) {
+                    orderAutoReceiveSender.send(order);
+                }
+            }
+
+            log.debug("回调信息: {}", xmlData);
             return WxPayNotifyResponse.success("成功");
         } catch (Exception e) {
             log.error("", e);

@@ -20,7 +20,7 @@ public interface IPayService {
      *
      * @param orderId
      */
-    void confirmPay(Long orderId);
+    boolean confirmPay(Long orderId);
 
     /**
      *
