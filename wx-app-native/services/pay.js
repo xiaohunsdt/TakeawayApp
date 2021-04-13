@@ -18,7 +18,7 @@ export function payOrder (orderId, paymentWay) {
       switch (paymentWay) {
         case 'WEIXIN_PAY':
           wx.navigateToMiniProgram({
-            appId: 'wxdd0eeefb8c1c5ceb',
+            appId: 'wx3fd4928bf3b79f97',
             path: `/pages/pay/index?orderId=${orderId}`
           })
           break

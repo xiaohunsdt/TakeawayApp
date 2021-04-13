@@ -6,8 +6,8 @@ var Fly = require('flyio/index')
 const request = new Fly()
 
 // 设置请求基地址
-request.config.baseURL = 'http://localhost:8081/api/user'
-// request.config.baseURL = 'https://cxy.novaborn.net/api/user'
+// request.config.baseURL = 'http://localhost:8081/api/user'
+request.config.baseURL = 'https://cxy.novaborn.net/api/user'
 
 request.interceptors.request.use((request) => {
   // 给所有请求添加自定义header，带上token信息让服务器验证用户登陆
