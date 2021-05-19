@@ -103,14 +103,14 @@ public class WechatAutoTask {
         sysJob.setConcurrent(false);
         sysJobService.insertJob(sysJob);
 
-//        sysJob = new SysJob();
-//        sysJob.setJobId(3L);
-//        sysJob.setJobGroup(jobGroup);
-//        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
-//        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
-//        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
-//        sysJob.setConcurrent(false);
-//        sysJobService.insertJob(sysJob);
+        sysJob = new SysJob();
+        sysJob.setJobId(3L);
+        sysJob.setJobGroup(jobGroup);
+        sysJob.setCronExpression(StrUtil.format("0 0 {}-{} * * ?", DateUtil.offsetHour(storeOpenTime, -1).getField(DateField.HOUR_OF_DAY), storeCloseTime.getField(DateField.HOUR_OF_DAY) + 1));
+        sysJob.setInvokeTarget("wechatAutoTask.activityShow()");
+        sysJob.setStatus(ScheduleConstants.Status.NORMAL);
+        sysJob.setConcurrent(false);
+        sysJobService.insertJob(sysJob);
     }
 
     public void goodsShow() {
@@ -223,7 +223,7 @@ public class WechatAutoTask {
 
         AutoMessage autoMessage = new AutoMessage();
         autoMessage.setMessage(
-                "川香苑特别活动，3/28-3/30号,全部菜品88折！刷卡鸭货除外！！小程序(微信搜索: 聚韩外卖)内直接下单即可，后台自动打折！下单时请留意大概送达时间，以免耽误大家就餐！"
+                "川香苑特别活动,今天全部菜品88折！刷卡鸭货除外！！小程序(微信搜索: 聚韩外卖)内直接下单即可，后台自动打折！下单时请留意大概送达时间，以免耽误大家就餐！"
         );
 //        autoMessage.setImgUrlList(
 //            Arrays.asList(
